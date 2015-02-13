@@ -8,3 +8,4 @@ Release_lpc1769
 unittest
 *.launch
 .settings/
+.metadata
