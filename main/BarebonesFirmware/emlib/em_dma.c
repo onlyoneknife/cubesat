@@ -30,7 +30,6 @@
  *
  ******************************************************************************/
 
-
 #include "em_dma.h"
 #if defined( DMA_PRESENT )
 
@@ -169,91 +168,87 @@
  * @param[in] nMinus1
  *   Number of elements (minus 1) to transfer (<= 1023).
  ******************************************************************************/
-static void DMA_Prepare(unsigned int channel,
-                        DMA_CycleCtrl_TypeDef cycleCtrl,
-                        bool primary,
-                        bool useBurst,
-                        void *dst,
-                        void *src,
-                        unsigned int nMinus1)
+static void
+DMA_Prepare(unsigned int channel, DMA_CycleCtrl_TypeDef cycleCtrl, bool primary,
+    bool useBurst, void *dst, void *src, unsigned int nMinus1)
 {
   DMA_DESCRIPTOR_TypeDef *descr;
   DMA_DESCRIPTOR_TypeDef *primDescr;
-  DMA_CB_TypeDef         *cb;
-  uint32_t               inc;
-  uint32_t               chBit;
-  uint32_t               tmp;
+  DMA_CB_TypeDef *cb;
+  uint32_t inc;
+  uint32_t chBit;
+  uint32_t tmp;
 
-  primDescr = ((DMA_DESCRIPTOR_TypeDef *)(DMA->CTRLBASE)) + channel;
+  primDescr = ((DMA_DESCRIPTOR_TypeDef *) (DMA ->CTRLBASE)) + channel;
 
   /* Find descriptor to configure */
   if (primary)
-  {
-    descr = primDescr;
-  }
+    {
+      descr = primDescr;
+    }
   else
-  {
-    descr = ((DMA_DESCRIPTOR_TypeDef *)(DMA->ALTCTRLBASE)) + channel;
-  }
+    {
+      descr = ((DMA_DESCRIPTOR_TypeDef *) (DMA ->ALTCTRLBASE)) + channel;
+    }
 
   /* If callback defined, update info on whether callback is issued */
   /* for primary or alternate descriptor. Mainly needed for ping-pong */
   /* cycles. */
-  cb = (DMA_CB_TypeDef *)(primDescr->USER);
+  cb = (DMA_CB_TypeDef *) (primDescr->USER);
   if (cb)
-  {
-    cb->primary = (uint8_t)primary;
-  }
+    {
+      cb->primary = (uint8_t) primary;
+    }
 
   if (src)
-  {
-    inc = (descr->CTRL & _DMA_CTRL_SRC_INC_MASK) >> _DMA_CTRL_SRC_INC_SHIFT;
-    if (inc == _DMA_CTRL_SRC_INC_NONE)
     {
-      descr->SRCEND = src;
+      inc = (descr->CTRL & _DMA_CTRL_SRC_INC_MASK) >> _DMA_CTRL_SRC_INC_SHIFT;
+      if (inc == _DMA_CTRL_SRC_INC_NONE)
+        {
+          descr->SRCEND = src;
+        }
+      else
+        {
+          descr->SRCEND = (void *) ((uint32_t) src + (nMinus1 << inc));
+        }
     }
-    else
-    {
-      descr->SRCEND = (void *)((uint32_t)src + (nMinus1 << inc));
-    }
-  }
 
   if (dst)
-  {
-    inc = (descr->CTRL & _DMA_CTRL_DST_INC_MASK) >> _DMA_CTRL_DST_INC_SHIFT;
-    if (inc == _DMA_CTRL_DST_INC_NONE)
     {
-      descr->DSTEND = dst;
+      inc = (descr->CTRL & _DMA_CTRL_DST_INC_MASK) >> _DMA_CTRL_DST_INC_SHIFT;
+      if (inc == _DMA_CTRL_DST_INC_NONE)
+        {
+          descr->DSTEND = dst;
+        }
+      else
+        {
+          descr->DSTEND = (void *) ((uint32_t) dst + (nMinus1 << inc));
+        }
     }
-    else
-    {
-      descr->DSTEND = (void *)((uint32_t)dst + (nMinus1 << inc));
-    }
-  }
 
   chBit = 1 << channel;
   if (useBurst)
-  {
-    DMA->CHUSEBURSTS = chBit;
-  }
+    {
+      DMA ->CHUSEBURSTS = chBit;
+    }
   else
-  {
-    DMA->CHUSEBURSTC = chBit;
-  }
+    {
+      DMA ->CHUSEBURSTC = chBit;
+    }
 
   if (primary)
-  {
-    DMA->CHALTC = chBit;
-  }
+    {
+      DMA ->CHALTC = chBit;
+    }
   else
-  {
-    DMA->CHALTS = chBit;
-  }
+    {
+      DMA ->CHALTS = chBit;
+    }
 
   /* Set cycle control */
-  tmp         = descr->CTRL & ~(_DMA_CTRL_CYCLE_CTRL_MASK | _DMA_CTRL_N_MINUS_1_MASK);
-  tmp        |= nMinus1 << _DMA_CTRL_N_MINUS_1_SHIFT;
-  tmp        |= (uint32_t)cycleCtrl << _DMA_CTRL_CYCLE_CTRL_SHIFT;
+  tmp = descr->CTRL & ~(_DMA_CTRL_CYCLE_CTRL_MASK | _DMA_CTRL_N_MINUS_1_MASK);
+  tmp |= nMinus1 << _DMA_CTRL_N_MINUS_1_SHIFT;
+  tmp |= (uint32_t) cycleCtrl << _DMA_CTRL_CYCLE_CTRL_SHIFT;
   descr->CTRL = tmp;
 }
 
@@ -282,76 +277,76 @@ static void DMA_Prepare(unsigned int channel,
  *   with a \#define statement or with the compiler option -D.
  *
  ******************************************************************************/
-void DMA_IRQHandler(void)
+void
+DMA_IRQHandler(void)
 {
-  int                    channel;
-  DMA_CB_TypeDef         *cb;
-  uint32_t               pending;
-  uint32_t               pendingPrio;
-  uint32_t               prio;
-  uint32_t               primaryCpy;
-  int                    i;
+  int channel;
+  DMA_CB_TypeDef *cb;
+  uint32_t pending;
+  uint32_t pendingPrio;
+  uint32_t prio;
+  uint32_t primaryCpy;
+  int i;
 
   /* Get all pending and enabled interrupts */
-  pending  = DMA->IF;
-  pending &= DMA->IEN;
+  pending = DMA ->IF;
+  pending &= DMA ->IEN;
 
   /* Check for bus error */
   if (pending & DMA_IF_ERR)
-  {
-    /* Loop here to enable the debugger to see what has happened */
-    while (1)
-      ;
-  }
+    {
+      /* Loop here to enable the debugger to see what has happened */
+      while (1)
+        ;
+    }
 
   /* Process all pending channel interrupts. First process channels */
   /* defined with high priority, then those with default priority. */
-  prio        = DMA->CHPRIS;
+  prio = DMA ->CHPRIS;
   pendingPrio = pending & prio;
   for (i = 0; i < 2; i++)
-  {
-    channel = 0;
-    /* Process pending interrupts within high/default priority group */
-    /* honouring priority within group. */
-    while (pendingPrio)
     {
-      if (pendingPrio & 1)
-      {
-        DMA_DESCRIPTOR_TypeDef *descr = (DMA_DESCRIPTOR_TypeDef *)(DMA->CTRLBASE);
-        uint32_t chmask = 1 << channel;
-
-        /* Clear pending interrupt prior to invoking callback, in case it */
-        /* sets up another DMA cycle. */
-        DMA->IFC = chmask;
-
-        /* Normally, no point in enabling interrupt without callback, but */
-        /* check if callback is defined anyway. Callback info is always */
-        /* located in primary descriptor. */
-        cb = (DMA_CB_TypeDef *)(descr[channel].USER);
-        if (cb)
+      channel = 0;
+      /* Process pending interrupts within high/default priority group */
+      /* honouring priority within group. */
+      while (pendingPrio)
         {
-          /* Toggle next-descriptor indicator always prior to invoking */
-          /* callback (in case callback reconfigurs something) */
-          primaryCpy   = cb->primary;
-          cb->primary ^= 1;
-          if (cb->cbFunc)
-          {
-            cb->cbFunc(channel, (bool)primaryCpy, cb->userPtr);
-          }
+          if (pendingPrio & 1)
+            {
+              DMA_DESCRIPTOR_TypeDef *descr =
+                  (DMA_DESCRIPTOR_TypeDef *) (DMA ->CTRLBASE);
+              uint32_t chmask = 1 << channel;
+
+              /* Clear pending interrupt prior to invoking callback, in case it */
+              /* sets up another DMA cycle. */DMA ->IFC = chmask;
+
+              /* Normally, no point in enabling interrupt without callback, but */
+              /* check if callback is defined anyway. Callback info is always */
+              /* located in primary descriptor. */
+              cb = (DMA_CB_TypeDef *) (descr[channel].USER);
+              if (cb)
+                {
+                  /* Toggle next-descriptor indicator always prior to invoking */
+                  /* callback (in case callback reconfigurs something) */
+                  primaryCpy = cb->primary;
+                  cb->primary ^= 1;
+                  if (cb->cbFunc)
+                    {
+                      cb->cbFunc(channel, (bool) primaryCpy, cb->userPtr);
+                    }
+                }
+            }
+
+          pendingPrio >>= 1;
+          channel++;
         }
-      }
 
-      pendingPrio >>= 1;
-      channel++;
+      /* On second iteration, process default priority channels */
+      pendingPrio = pending & ~prio;
     }
-
-    /* On second iteration, process default priority channels */
-    pendingPrio = pending & ~prio;
-  }
 }
 
 #endif /* EXCLUDE_DEFAULT_DMA_IRQ_HANDLER */
-
 
 /*******************************************************************************
  **************************   GLOBAL FUNCTIONS   *******************************
@@ -389,30 +384,22 @@ void DMA_IRQHandler(void)
  *   size of the DMA transfer element (1, 2 or 4 bytes) is configured with
  *   DMA_CfgDescr().
  ******************************************************************************/
-void DMA_ActivateAuto(unsigned int channel,
-                      bool primary,
-                      void *dst,
-                      void *src,
-                      unsigned int nMinus1)
+void
+DMA_ActivateAuto(unsigned int channel, bool primary, void *dst, void *src,
+    unsigned int nMinus1)
 {
   uint32_t chBit;
 
   EFM_ASSERT(channel < DMA_CHAN_COUNT);
-  EFM_ASSERT(nMinus1 <= (_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT));
+  EFM_ASSERT(
+      nMinus1 <= (_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT));
 
-  DMA_Prepare(channel,
-              dmaCycleCtrlAuto,
-              primary,
-              false,
-              dst,
-              src,
-              nMinus1);
+  DMA_Prepare(channel, dmaCycleCtrlAuto, primary, false, dst, src, nMinus1);
 
-  chBit        = 1 << channel;
-  DMA->CHENS   = chBit; /* Enable channel */
-  DMA->CHSWREQ = chBit; /* Activate with SW request */
+  chBit = 1 << channel;
+  DMA ->CHENS = chBit; /* Enable channel */
+  DMA ->CHSWREQ = chBit; /* Activate with SW request */
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -452,28 +439,19 @@ void DMA_ActivateAuto(unsigned int channel,
  *   size of the DMA transfer element (1, 2 or 4 bytes) is configured with
  *   DMA_CfgDescr().
  ******************************************************************************/
-void DMA_ActivateBasic(unsigned int channel,
-                       bool primary,
-                       bool useBurst,
-                       void *dst,
-                       void *src,
-                       unsigned int nMinus1)
+void
+DMA_ActivateBasic(unsigned int channel, bool primary, bool useBurst, void *dst,
+    void *src, unsigned int nMinus1)
 {
   EFM_ASSERT(channel < DMA_CHAN_COUNT);
-  EFM_ASSERT(nMinus1 <= (_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT));
+  EFM_ASSERT(
+      nMinus1 <= (_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT));
 
-  DMA_Prepare(channel,
-              dmaCycleCtrlBasic,
-              primary,
-              useBurst,
-              dst,
-              src,
-              nMinus1);
+  DMA_Prepare(channel, dmaCycleCtrlBasic, primary, useBurst, dst, src, nMinus1);
 
   /* Enable channel, request signal is provided by peripheral device */
-  DMA->CHENS = 1 << channel;
+  DMA ->CHENS = 1 << channel;
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -524,41 +502,28 @@ void DMA_ActivateBasic(unsigned int channel,
  *   alternate descriptor. The size of the DMA transfer element (1, 2 or 4 bytes)
  *   is configured with DMA_CfgDescr().
  ******************************************************************************/
-void DMA_ActivatePingPong(unsigned int channel,
-                          bool useBurst,
-                          void *primDst,
-                          void *primSrc,
-                          unsigned int primNMinus1,
-                          void *altDst,
-                          void *altSrc,
-                          unsigned int altNMinus1)
+void
+DMA_ActivatePingPong(unsigned int channel, bool useBurst, void *primDst,
+    void *primSrc, unsigned int primNMinus1, void *altDst, void *altSrc,
+    unsigned int altNMinus1)
 {
   EFM_ASSERT(channel < DMA_CHAN_COUNT);
-  EFM_ASSERT(primNMinus1 <= (_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT));
-  EFM_ASSERT(altNMinus1 <= (_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT));
+  EFM_ASSERT(
+      primNMinus1 <= (_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT));
+  EFM_ASSERT(
+      altNMinus1 <= (_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT));
 
   /* Prepare alternate descriptor first */
-  DMA_Prepare(channel,
-              dmaCycleCtrlPingPong,
-              false,
-              useBurst,
-              altDst,
-              altSrc,
-              altNMinus1);
+  DMA_Prepare(channel, dmaCycleCtrlPingPong, false, useBurst, altDst, altSrc,
+      altNMinus1);
 
   /* Prepare primary descriptor last in order to start cycle using it */
-  DMA_Prepare(channel,
-              dmaCycleCtrlPingPong,
-              true,
-              useBurst,
-              primDst,
-              primSrc,
-              primNMinus1);
+  DMA_Prepare(channel, dmaCycleCtrlPingPong, true, useBurst, primDst, primSrc,
+      primNMinus1);
 
   /* Enable channel, request signal is provided by peripheral device */
-  DMA->CHENS = 1 << channel;
+  DMA ->CHENS = 1 << channel;
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -594,15 +559,14 @@ void DMA_ActivatePingPong(unsigned int channel,
  *   Number of alternate descriptors in @p altDescr array. Maximum number of
  *   alternate descriptors is 256.
  ******************************************************************************/
-void DMA_ActivateScatterGather(unsigned int channel,
-                               bool useBurst,
-                               DMA_DESCRIPTOR_TypeDef *altDescr,
-                               unsigned int count)
+void
+DMA_ActivateScatterGather(unsigned int channel, bool useBurst,
+    DMA_DESCRIPTOR_TypeDef *altDescr, unsigned int count)
 {
   DMA_DESCRIPTOR_TypeDef *descr;
-  DMA_CB_TypeDef         *cb;
-  uint32_t               cycleCtrl;
-  uint32_t               chBit;
+  DMA_CB_TypeDef *cb;
+  uint32_t cycleCtrl;
+  uint32_t chBit;
 
   EFM_ASSERT(channel < DMA_CHAN_COUNT);
   EFM_ASSERT(altDescr);
@@ -611,79 +575,78 @@ void DMA_ActivateScatterGather(unsigned int channel,
   /* We have to configure the primary descriptor properly in order to */
   /* transfer one complete alternate descriptor from the alternate */
   /* descriptor table into the actual alternate descriptor. */
-  descr = (DMA_DESCRIPTOR_TypeDef *)(DMA->CTRLBASE) + channel;
+  descr = (DMA_DESCRIPTOR_TypeDef *) (DMA ->CTRLBASE) + channel;
 
   /* Set source end address to point to alternate descriptor array */
-  descr->SRCEND = (uint32_t *)altDescr + (count * 4) - 1;
+  descr->SRCEND = (uint32_t *) altDescr + (count * 4) - 1;
 
   /* The destination end address in the primary descriptor MUST point */
   /* to the corresponding alternate descriptor in scatter-gather mode. */
-  descr->DSTEND = (uint32_t *)((DMA_DESCRIPTOR_TypeDef *)(DMA->ALTCTRLBASE) +
-                               channel + 1) - 1;
+  descr->DSTEND = (uint32_t *) ((DMA_DESCRIPTOR_TypeDef *) (DMA ->ALTCTRLBASE)
+      + channel + 1) - 1;
 
   /* The user field of the descriptor is used for callback configuration, */
   /* and already configured when channel is configured. Do not modify it. */
 
   /* Determine from alternate configuration whether this is a memory or */
   /* peripheral scatter-gather, by looking at the first alternate descriptor. */
-  cycleCtrl  = altDescr->CTRL & _DMA_CTRL_CYCLE_CTRL_MASK;
+  cycleCtrl = altDescr->CTRL & _DMA_CTRL_CYCLE_CTRL_MASK;
   cycleCtrl &= ~(1 << _DMA_CTRL_CYCLE_CTRL_SHIFT);
 
-  EFM_ASSERT((cycleCtrl == dmaCycleCtrlMemScatterGather) ||
-             (cycleCtrl == dmaCycleCtrlPerScatterGather));
+  EFM_ASSERT(
+      (cycleCtrl == dmaCycleCtrlMemScatterGather)
+          || (cycleCtrl == dmaCycleCtrlPerScatterGather));
 
   /* Set last alternate descriptor to basic or auto-request cycle type in */
   /* order to have dma_done signal asserted when complete. Otherwise interrupt */
   /* will not be triggered when done. */
   altDescr[count - 1].CTRL &= ~_DMA_CTRL_CYCLE_CTRL_MASK;
   if (cycleCtrl == dmaCycleCtrlMemScatterGather)
-  {
-    altDescr[count - 1].CTRL |= (uint32_t)dmaCycleCtrlAuto << _DMA_CTRL_CYCLE_CTRL_SHIFT;
-  }
+    {
+      altDescr[count - 1].CTRL |= (uint32_t) dmaCycleCtrlAuto
+          << _DMA_CTRL_CYCLE_CTRL_SHIFT;
+    }
   else
-  {
-    altDescr[count - 1].CTRL |= (uint32_t)dmaCycleCtrlBasic << _DMA_CTRL_CYCLE_CTRL_SHIFT;
-  }
+    {
+      altDescr[count - 1].CTRL |= (uint32_t) dmaCycleCtrlBasic
+          << _DMA_CTRL_CYCLE_CTRL_SHIFT;
+    }
 
   /* If callback defined, update info on whether callback is issued for */
   /* primary or alternate descriptor. Not really useful for scatter-gather, */
   /* but do for consistency. Always set to alternate, since that is the last */
   /* descriptor actually used. */
-  cb = (DMA_CB_TypeDef *)(descr->USER);
+  cb = (DMA_CB_TypeDef *) (descr->USER);
   if (cb)
-  {
-    cb->primary = false;
-  }
+    {
+      cb->primary = false;
+    }
 
   /* Configure primary descriptor control word */
-  descr->CTRL =
-    ((uint32_t)dmaDataInc4 << _DMA_CTRL_DST_INC_SHIFT) |
-    ((uint32_t)dmaDataSize4 << _DMA_CTRL_DST_SIZE_SHIFT) |
-    ((uint32_t)dmaDataInc4 << _DMA_CTRL_SRC_INC_SHIFT) |
-    ((uint32_t)dmaDataSize4 << _DMA_CTRL_SRC_SIZE_SHIFT) |
-    /* Use same protection scheme as for alternate descriptors */
-    (altDescr->CTRL & _DMA_CTRL_SRC_PROT_CTRL_MASK) |
-    ((uint32_t)dmaArbitrate4 << _DMA_CTRL_R_POWER_SHIFT) |
-    (((count * 4) - 1) << _DMA_CTRL_N_MINUS_1_SHIFT) |
-    (((uint32_t)useBurst & 1) << _DMA_CTRL_NEXT_USEBURST_SHIFT) |
-    cycleCtrl;
+  descr->CTRL = ((uint32_t) dmaDataInc4 << _DMA_CTRL_DST_INC_SHIFT)
+      | ((uint32_t) dmaDataSize4 << _DMA_CTRL_DST_SIZE_SHIFT)
+      | ((uint32_t) dmaDataInc4 << _DMA_CTRL_SRC_INC_SHIFT)
+      | ((uint32_t) dmaDataSize4 << _DMA_CTRL_SRC_SIZE_SHIFT) |
+      /* Use same protection scheme as for alternate descriptors */
+      (altDescr->CTRL & _DMA_CTRL_SRC_PROT_CTRL_MASK)
+      | ((uint32_t) dmaArbitrate4 << _DMA_CTRL_R_POWER_SHIFT)
+      | (((count * 4) - 1) << _DMA_CTRL_N_MINUS_1_SHIFT)
+      | (((uint32_t) useBurst & 1) << _DMA_CTRL_NEXT_USEBURST_SHIFT)
+      | cycleCtrl;
 
   chBit = 1 << channel;
 
-  /* Start with primary descriptor */
-  DMA->CHALTC = chBit;
+  /* Start with primary descriptor */DMA ->CHALTC = chBit;
 
-  /* Enable channel */
-  DMA->CHENS = chBit;
+  /* Enable channel */DMA ->CHENS = chBit;
 
   /* Send request if memory scatter-gather, otherwise request signal is */
   /* provided by peripheral. */
   if (cycleCtrl == dmaCycleCtrlMemScatterGather)
-  {
-    DMA->CHSWREQ = chBit;
-  }
+    {
+      DMA ->CHSWREQ = chBit;
+    }
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -703,7 +666,8 @@ void DMA_ActivateScatterGather(unsigned int channel,
  * @param[in] cfg
  *   Configuration to use.
  ******************************************************************************/
-void DMA_CfgChannel(unsigned int channel, DMA_CfgChannel_TypeDef *cfg)
+void
+DMA_CfgChannel(unsigned int channel, DMA_CfgChannel_TypeDef *cfg)
 {
   DMA_DESCRIPTOR_TypeDef *descr;
 
@@ -711,34 +675,32 @@ void DMA_CfgChannel(unsigned int channel, DMA_CfgChannel_TypeDef *cfg)
   EFM_ASSERT(cfg);
 
   /* Always keep callback configuration reference in primary descriptor */
-  descr               = (DMA_DESCRIPTOR_TypeDef *)(DMA->CTRLBASE);
-  descr[channel].USER = (uint32_t)(cfg->cb);
+  descr = (DMA_DESCRIPTOR_TypeDef *) (DMA ->CTRLBASE);
+  descr[channel].USER = (uint32_t) (cfg->cb);
 
   /* Set to specified priority for channel */
   if (cfg->highPri)
-  {
-    DMA->CHPRIS = 1 << channel;
-  }
+    {
+      DMA ->CHPRIS = 1 << channel;
+    }
   else
-  {
-    DMA->CHPRIC = 1 << channel;
-  }
+    {
+      DMA ->CHPRIC = 1 << channel;
+    }
 
-  /* Set DMA signal source select */
-  DMA->CH[channel].CTRL = cfg->select;
+  /* Set DMA signal source select */DMA ->CH[channel].CTRL = cfg->select;
 
   /* Enable/disable interrupt as specified */
   if (cfg->enableInt)
-  {
-    DMA->IFC = (1 << channel);
-    BITBAND_Peripheral(&(DMA->IEN), channel, 1);
-  }
+    {
+      DMA ->IFC = (1 << channel);
+      BITBAND_Peripheral(&(DMA ->IEN), channel, 1);
+    }
   else
-  {
-    BITBAND_Peripheral(&(DMA->IEN), channel, 0);
-  }
+    {
+      BITBAND_Peripheral(&(DMA ->IEN), channel, 0);
+    }
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -778,9 +740,8 @@ void DMA_CfgChannel(unsigned int channel, DMA_CfgChannel_TypeDef *cfg)
  * @param[in] cfg
  *   Configuration to use.
  ******************************************************************************/
-void DMA_CfgDescr(unsigned int channel,
-                  bool primary,
-                  DMA_CfgDescr_TypeDef *cfg)
+void
+DMA_CfgDescr(unsigned int channel, bool primary, DMA_CfgDescr_TypeDef *cfg)
 {
   DMA_DESCRIPTOR_TypeDef *descr;
 
@@ -789,29 +750,27 @@ void DMA_CfgDescr(unsigned int channel,
 
   /* Find descriptor to configure */
   if (primary)
-  {
-    descr = (DMA_DESCRIPTOR_TypeDef *)DMA->CTRLBASE;
-  }
+    {
+      descr = (DMA_DESCRIPTOR_TypeDef *) DMA ->CTRLBASE;
+    }
   else
-  {
-    descr = (DMA_DESCRIPTOR_TypeDef *)DMA->ALTCTRLBASE;
-  }
+    {
+      descr = (DMA_DESCRIPTOR_TypeDef *) DMA ->ALTCTRLBASE;
+    }
   descr += channel;
 
   /* Prepare the descriptor */
   /* Source/destination end addresses set when started */
-  descr->CTRL =
-    (cfg->dstInc << _DMA_CTRL_DST_INC_SHIFT) |
-    (cfg->size << _DMA_CTRL_DST_SIZE_SHIFT) |
-    (cfg->srcInc << _DMA_CTRL_SRC_INC_SHIFT) |
-    (cfg->size << _DMA_CTRL_SRC_SIZE_SHIFT) |
-    ((uint32_t)(cfg->hprot) << _DMA_CTRL_SRC_PROT_CTRL_SHIFT) |
-    (cfg->arbRate << _DMA_CTRL_R_POWER_SHIFT) |
-    (0 << _DMA_CTRL_N_MINUS_1_SHIFT) |         /* Set when activated */
-    (0 << _DMA_CTRL_NEXT_USEBURST_SHIFT) |     /* Set when activated */
-    DMA_CTRL_CYCLE_CTRL_INVALID;               /* Set when activated */
+  descr->CTRL = (cfg->dstInc << _DMA_CTRL_DST_INC_SHIFT)
+      | (cfg->size << _DMA_CTRL_DST_SIZE_SHIFT)
+      | (cfg->srcInc << _DMA_CTRL_SRC_INC_SHIFT)
+      | (cfg->size << _DMA_CTRL_SRC_SIZE_SHIFT)
+      | ((uint32_t) (cfg->hprot) << _DMA_CTRL_SRC_PROT_CTRL_SHIFT)
+      | (cfg->arbRate << _DMA_CTRL_R_POWER_SHIFT)
+      | (0 << _DMA_CTRL_N_MINUS_1_SHIFT) | /* Set when activated */
+      (0 << _DMA_CTRL_NEXT_USEBURST_SHIFT) | /* Set when activated */
+      DMA_CTRL_CYCLE_CTRL_INVALID; /* Set when activated */
 }
-
 
 #if defined( _DMA_LOOP0_MASK ) && defined( _DMA_LOOP1_MASK )
 /***************************************************************************//**
@@ -827,26 +786,26 @@ void DMA_CfgDescr(unsigned int channel,
  * @param[in] cfg
  *   Configuration to use.
  ******************************************************************************/
-void DMA_CfgLoop(unsigned int channel, DMA_CfgLoop_TypeDef *cfg)
+void
+DMA_CfgLoop(unsigned int channel, DMA_CfgLoop_TypeDef *cfg)
 {
   EFM_ASSERT(channel <= 1);
   EFM_ASSERT(cfg->nMinus1 <= 1023);
 
   /* Configure LOOP setting */
-  switch( channel )
-  {
+  switch (channel)
+    {
   case 0:
-    DMA->LOOP0 = (cfg->enable << _DMA_LOOP0_EN_SHIFT|
-                  cfg->nMinus1 << _DMA_LOOP0_WIDTH_SHIFT);
+    DMA ->LOOP0 = (cfg->enable << _DMA_LOOP0_EN_SHIFT
+        | cfg->nMinus1 << _DMA_LOOP0_WIDTH_SHIFT);
     break;
   case 1:
-    DMA->LOOP1 = (cfg->enable << _DMA_LOOP1_EN_SHIFT|
-                  cfg->nMinus1 << _DMA_LOOP1_WIDTH_SHIFT);
+    DMA ->LOOP1 = (cfg->enable << _DMA_LOOP1_EN_SHIFT
+        | cfg->nMinus1 << _DMA_LOOP1_WIDTH_SHIFT);
     break;
-  }
+    }
 }
 #endif
-
 
 #if defined( _DMA_RECT0_MASK )
 /***************************************************************************//**
@@ -858,9 +817,10 @@ void DMA_CfgLoop(unsigned int channel, DMA_CfgLoop_TypeDef *cfg)
  * @param[in] cfg
  *   Configuration to use.
  ******************************************************************************/
-void DMA_CfgRect(unsigned int channel, DMA_CfgRect_TypeDef *cfg)
+void
+DMA_CfgRect(unsigned int channel, DMA_CfgRect_TypeDef *cfg)
 {
-  (void)channel;                            /* Unused parameter */
+  (void) channel; /* Unused parameter */
 
   EFM_ASSERT(channel == 0);
   EFM_ASSERT(cfg->dstStride <= 2047);
@@ -868,12 +828,11 @@ void DMA_CfgRect(unsigned int channel, DMA_CfgRect_TypeDef *cfg)
   EFM_ASSERT(cfg->height <= 1023);
 
   /* Configure rectangular/2D copy */
-  DMA->RECT0 = (cfg->dstStride << _DMA_RECT0_DSTSTRIDE_SHIFT|
-                cfg->srcStride << _DMA_RECT0_SRCSTRIDE_SHIFT|
-                cfg->height << _DMA_RECT0_HEIGHT_SHIFT);
+  DMA ->RECT0 = (cfg->dstStride << _DMA_RECT0_DSTSTRIDE_SHIFT
+      | cfg->srcStride << _DMA_RECT0_SRCSTRIDE_SHIFT
+      | cfg->height << _DMA_RECT0_HEIGHT_SHIFT);
 }
 #endif
-
 
 /***************************************************************************//**
  * @brief
@@ -901,9 +860,9 @@ void DMA_CfgRect(unsigned int channel, DMA_CfgRect_TypeDef *cfg)
  * @param[in] cfg
  *   Configuration to use.
  ******************************************************************************/
-void DMA_CfgDescrScatterGather(DMA_DESCRIPTOR_TypeDef *descr,
-                               unsigned int indx,
-                               DMA_CfgDescrSGAlt_TypeDef *cfg)
+void
+DMA_CfgDescrScatterGather(DMA_DESCRIPTOR_TypeDef *descr, unsigned int indx,
+    DMA_CfgDescrSGAlt_TypeDef *cfg)
 {
   uint32_t cycleCtrl;
 
@@ -914,51 +873,51 @@ void DMA_CfgDescrScatterGather(DMA_DESCRIPTOR_TypeDef *descr,
   descr += indx;
 
   if (cfg->srcInc == dmaDataIncNone)
-  {
-    descr->SRCEND = cfg->src;
-  }
+    {
+      descr->SRCEND = cfg->src;
+    }
   else
-  {
-    descr->SRCEND = (void *)((uint32_t)(cfg->src) + ((uint32_t)(cfg->nMinus1) << cfg->srcInc));
-  }
+    {
+      descr->SRCEND = (void *) ((uint32_t) (cfg->src)
+          + ((uint32_t) (cfg->nMinus1) << cfg->srcInc));
+    }
 
   if (cfg->dstInc == dmaDataIncNone)
-  {
-    descr->DSTEND = cfg->dst;
-  }
+    {
+      descr->DSTEND = cfg->dst;
+    }
   else
-  {
-    descr->DSTEND = (void *)((uint32_t)(cfg->dst) + ((uint32_t)(cfg->nMinus1) << cfg->dstInc));
-  }
+    {
+      descr->DSTEND = (void *) ((uint32_t) (cfg->dst)
+          + ((uint32_t) (cfg->nMinus1) << cfg->dstInc));
+    }
 
   /* User definable part not used */
   descr->USER = 0;
 
   if (cfg->peripheral)
-  {
-    cycleCtrl = (uint32_t)dmaCycleCtrlPerScatterGather + 1;
-  }
+    {
+      cycleCtrl = (uint32_t) dmaCycleCtrlPerScatterGather + 1;
+    }
   else
-  {
-    cycleCtrl = (uint32_t)dmaCycleCtrlMemScatterGather + 1;
-  }
+    {
+      cycleCtrl = (uint32_t) dmaCycleCtrlMemScatterGather + 1;
+    }
 
-  descr->CTRL =
-    (cfg->dstInc << _DMA_CTRL_DST_INC_SHIFT) |
-    (cfg->size << _DMA_CTRL_DST_SIZE_SHIFT) |
-    (cfg->srcInc << _DMA_CTRL_SRC_INC_SHIFT) |
-    (cfg->size << _DMA_CTRL_SRC_SIZE_SHIFT) |
-    ((uint32_t)(cfg->hprot) << _DMA_CTRL_SRC_PROT_CTRL_SHIFT) |
-    (cfg->arbRate << _DMA_CTRL_R_POWER_SHIFT) |
-    ((uint32_t)(cfg->nMinus1) << _DMA_CTRL_N_MINUS_1_SHIFT) |
-    /* Never set next useburst bit, since the descriptor used after the */
-    /* alternate descriptor is the primary descriptor which operates on */
-    /* memory. If the alternate descriptors need to have useBurst set, this */
-    /* done when setting up the primary descriptor, ie when activating. */
-    (0 << _DMA_CTRL_NEXT_USEBURST_SHIFT) |
-    (cycleCtrl << _DMA_CTRL_CYCLE_CTRL_SHIFT);
+  descr->CTRL = (cfg->dstInc << _DMA_CTRL_DST_INC_SHIFT)
+      | (cfg->size << _DMA_CTRL_DST_SIZE_SHIFT)
+      | (cfg->srcInc << _DMA_CTRL_SRC_INC_SHIFT)
+      | (cfg->size << _DMA_CTRL_SRC_SIZE_SHIFT)
+      | ((uint32_t) (cfg->hprot) << _DMA_CTRL_SRC_PROT_CTRL_SHIFT)
+      | (cfg->arbRate << _DMA_CTRL_R_POWER_SHIFT)
+      | ((uint32_t) (cfg->nMinus1) << _DMA_CTRL_N_MINUS_1_SHIFT) |
+      /* Never set next useburst bit, since the descriptor used after the */
+      /* alternate descriptor is the primary descriptor which operates on */
+      /* memory. If the alternate descriptors need to have useBurst set, this */
+      /* done when setting up the primary descriptor, ie when activating. */
+      (0 << _DMA_CTRL_NEXT_USEBURST_SHIFT)
+      | (cycleCtrl << _DMA_CTRL_CYCLE_CTRL_SHIFT);
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -976,20 +935,20 @@ void DMA_CfgDescrScatterGather(DMA_DESCRIPTOR_TypeDef *descr,
  *   If 'true' the channel will be enabled. If 'false' the channel will be
  *   disabled.
  ******************************************************************************/
-void DMA_ChannelEnable(unsigned int channel, bool enable)
+void
+DMA_ChannelEnable(unsigned int channel, bool enable)
 {
   EFM_ASSERT(channel < DMA_CHAN_COUNT);
 
   if (enable)
-  {
-    DMA->CHENS = 1<<channel;
-  }
+    {
+      DMA ->CHENS = 1 << channel;
+    }
   else
-  {
-    DMA->CHENC = 1<<channel;
-  }
+    {
+      DMA ->CHENC = 1 << channel;
+    }
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -1004,14 +963,13 @@ void DMA_ChannelEnable(unsigned int channel, bool enable)
  *
  * @return
  *   true if channel is enabled, false if not.
- ******************************************************************************/
-bool DMA_ChannelEnabled(unsigned int channel)
+ ******************************************************************************/bool
+DMA_ChannelEnabled(unsigned int channel)
 {
   EFM_ASSERT(channel < DMA_CHAN_COUNT);
 
-  return (bool)((DMA->CHENS >> channel) & 1);
+  return (bool) ((DMA ->CHENS >> channel) & 1);
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -1030,12 +988,13 @@ bool DMA_ChannelEnabled(unsigned int channel)
  * @param[in] init
  *   Pointer to a structure containing DMA init information.
  ******************************************************************************/
-void DMA_Init(DMA_Init_TypeDef *init)
+void
+DMA_Init(DMA_Init_TypeDef *init)
 {
   EFM_ASSERT(init);
 
   /* Make sure control block is properly aligned */
-  EFM_ASSERT(!((uint32_t)(init->controlBlock) & (256 - 1)));
+  EFM_ASSERT(!((uint32_t )(init->controlBlock) & (256 - 1)));
 
   /* Make sure DMA clock is enabled prior to accessing DMA module */
   CMU_ClockEnable(cmuClock_DMA, true);
@@ -1047,18 +1006,16 @@ void DMA_Init(DMA_Init_TypeDef *init)
   NVIC_ClearPendingIRQ(DMA_IRQn);
   NVIC_EnableIRQ(DMA_IRQn);
 
-  /* Enable bus error interrupt */
-  DMA->IEN = DMA_IEN_ERR;
+  /* Enable bus error interrupt */DMA ->IEN = DMA_IEN_ERR;
 
   /* Set pointer to control block, notice that this ptr must have been */
   /* properly aligned, according to requirements defined in the reference */
-  /* manual. */
-  DMA->CTRLBASE = (uint32_t)(init->controlBlock);
+  /* manual. */DMA ->CTRLBASE = (uint32_t) (init->controlBlock);
 
   /* Configure and enable the DMA controller */
-  DMA->CONFIG = ((uint32_t)(init->hprot) << _DMA_CONFIG_CHPROT_SHIFT) | DMA_CONFIG_EN;
+  DMA ->CONFIG = ((uint32_t) (init->hprot) << _DMA_CONFIG_CHPROT_SHIFT)
+      | DMA_CONFIG_EN;
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -1101,86 +1058,82 @@ void DMA_Init(DMA_Init_TypeDef *init)
  *   Indicate that the DMA ping-pong cycle shall stop @b after completing use
  *   of this descriptor.
  ******************************************************************************/
-void DMA_RefreshPingPong(unsigned int channel,
-                         bool primary,
-                         bool useBurst,
-                         void *dst,
-                         void *src,
-                         unsigned int nMinus1,
-                         bool stop)
+void
+DMA_RefreshPingPong(unsigned int channel, bool primary, bool useBurst,
+    void *dst, void *src, unsigned int nMinus1, bool stop)
 {
-  DMA_CycleCtrl_TypeDef  cycleCtrl;
+  DMA_CycleCtrl_TypeDef cycleCtrl;
   DMA_DESCRIPTOR_TypeDef *descr;
-  uint32_t               inc;
-  uint32_t               chBit;
-  uint32_t               tmp;
+  uint32_t inc;
+  uint32_t chBit;
+  uint32_t tmp;
 
   EFM_ASSERT(channel < DMA_CHAN_COUNT);
-  EFM_ASSERT(nMinus1 <= (_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT));
+  EFM_ASSERT(
+      nMinus1 <= (_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT));
 
   /* The ping-pong DMA cycle may be stopped by issuing a basic cycle type */
   if (stop)
-  {
-    cycleCtrl = dmaCycleCtrlBasic;
-  }
+    {
+      cycleCtrl = dmaCycleCtrlBasic;
+    }
   else
-  {
-    cycleCtrl = dmaCycleCtrlPingPong;
-  }
+    {
+      cycleCtrl = dmaCycleCtrlPingPong;
+    }
 
   /* Find descriptor to configure */
   if (primary)
-  {
-    descr = ((DMA_DESCRIPTOR_TypeDef *)(DMA->CTRLBASE)) + channel;
-  }
+    {
+      descr = ((DMA_DESCRIPTOR_TypeDef *) (DMA ->CTRLBASE)) + channel;
+    }
   else
-  {
-    descr = ((DMA_DESCRIPTOR_TypeDef *)(DMA->ALTCTRLBASE)) + channel;
-  }
+    {
+      descr = ((DMA_DESCRIPTOR_TypeDef *) (DMA ->ALTCTRLBASE)) + channel;
+    }
 
   if (src)
-  {
-    inc = (descr->CTRL & _DMA_CTRL_SRC_INC_MASK) >> _DMA_CTRL_SRC_INC_SHIFT;
-    if (inc == _DMA_CTRL_SRC_INC_NONE)
     {
-      descr->SRCEND = src;
+      inc = (descr->CTRL & _DMA_CTRL_SRC_INC_MASK) >> _DMA_CTRL_SRC_INC_SHIFT;
+      if (inc == _DMA_CTRL_SRC_INC_NONE)
+        {
+          descr->SRCEND = src;
+        }
+      else
+        {
+          descr->SRCEND = (void *) ((uint32_t) src + (nMinus1 << inc));
+        }
     }
-    else
-    {
-      descr->SRCEND = (void *)((uint32_t)src + (nMinus1 << inc));
-    }
-  }
 
   if (dst)
-  {
-    inc = (descr->CTRL & _DMA_CTRL_DST_INC_MASK) >> _DMA_CTRL_DST_INC_SHIFT;
-    if (inc == _DMA_CTRL_DST_INC_NONE)
     {
-      descr->DSTEND = dst;
+      inc = (descr->CTRL & _DMA_CTRL_DST_INC_MASK) >> _DMA_CTRL_DST_INC_SHIFT;
+      if (inc == _DMA_CTRL_DST_INC_NONE)
+        {
+          descr->DSTEND = dst;
+        }
+      else
+        {
+          descr->DSTEND = (void *) ((uint32_t) dst + (nMinus1 << inc));
+        }
     }
-    else
-    {
-      descr->DSTEND = (void *)((uint32_t)dst + (nMinus1 << inc));
-    }
-  }
 
   chBit = 1 << channel;
   if (useBurst)
-  {
-    DMA->CHUSEBURSTS = chBit;
-  }
+    {
+      DMA ->CHUSEBURSTS = chBit;
+    }
   else
-  {
-    DMA->CHUSEBURSTC = chBit;
-  }
+    {
+      DMA ->CHUSEBURSTC = chBit;
+    }
 
   /* Set cycle control */
-  tmp         = descr->CTRL & ~(_DMA_CTRL_CYCLE_CTRL_MASK | _DMA_CTRL_N_MINUS_1_MASK);
-  tmp        |= nMinus1 << _DMA_CTRL_N_MINUS_1_SHIFT;
-  tmp        |= cycleCtrl << _DMA_CTRL_CYCLE_CTRL_SHIFT;
+  tmp = descr->CTRL & ~(_DMA_CTRL_CYCLE_CTRL_MASK | _DMA_CTRL_N_MINUS_1_MASK);
+  tmp |= nMinus1 << _DMA_CTRL_N_MINUS_1_SHIFT;
+  tmp |= cycleCtrl << _DMA_CTRL_CYCLE_CTRL_SHIFT;
   descr->CTRL = tmp;
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -1193,31 +1146,31 @@ void DMA_RefreshPingPong(unsigned int channel,
  * @note
  *   Notice that any ongoing transfers will be aborted.
  ******************************************************************************/
-void DMA_Reset(void)
+void
+DMA_Reset(void)
 {
   int i;
 
   /* Disable DMA interrupts */
   NVIC_DisableIRQ(DMA_IRQn);
 
-  /* Put the DMA controller into a known state, first disabling it. */
-  DMA->CONFIG      = _DMA_CONFIG_RESETVALUE;
-  DMA->CHUSEBURSTC = _DMA_CHUSEBURSTC_MASK;
-  DMA->CHREQMASKC  = _DMA_CHREQMASKC_MASK;
-  DMA->CHENC       = _DMA_CHENC_MASK;
-  DMA->CHALTC      = _DMA_CHALTC_MASK;
-  DMA->CHPRIC      = _DMA_CHPRIC_MASK;
-  DMA->ERRORC      = DMA_ERRORC_ERRORC;
-  DMA->IEN         = _DMA_IEN_RESETVALUE;
-  DMA->IFC         = _DMA_IFC_MASK;
+  /* Put the DMA controller into a known state, first disabling it. */DMA ->CONFIG =
+      _DMA_CONFIG_RESETVALUE;
+  DMA ->CHUSEBURSTC = _DMA_CHUSEBURSTC_MASK;
+  DMA ->CHREQMASKC = _DMA_CHREQMASKC_MASK;
+  DMA ->CHENC = _DMA_CHENC_MASK;
+  DMA ->CHALTC = _DMA_CHALTC_MASK;
+  DMA ->CHPRIC = _DMA_CHPRIC_MASK;
+  DMA ->ERRORC = DMA_ERRORC_ERRORC;
+  DMA ->IEN = _DMA_IEN_RESETVALUE;
+  DMA ->IFC = _DMA_IFC_MASK;
 
   /* Clear channel control flags */
   for (i = 0; i < DMA_CHAN_COUNT; i++)
-  {
-    DMA->CH[i].CTRL = _DMA_CH_CTRL_RESETVALUE;
-  }
+    {
+      DMA ->CH[i].CTRL = _DMA_CH_CTRL_RESETVALUE;
+    }
 }
-
 
 /** @} (end addtogroup DMA) */
 /** @} (end addtogroup EM_Library) */

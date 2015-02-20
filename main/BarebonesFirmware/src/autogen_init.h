@@ -11,4 +11,5 @@
 #include "autogen_usart1.h"
 #include "autogen_usart2.h"
 
-void eADesigner_Init(void);
+void
+eADesigner_Init(void);

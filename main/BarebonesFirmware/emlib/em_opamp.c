@@ -30,7 +30,6 @@
  *
  ******************************************************************************/
 
-
 #include "em_device.h"
 #if defined( OPAMP_PRESENT ) && ( OPAMP_COUNT == 1 )
 
@@ -42,7 +41,6 @@
  * @addtogroup EM_Library
  * @{
  ******************************************************************************/
-
 
 /***************************************************************************//**
  * @addtogroup OPAMP
@@ -70,47 +68,47 @@
  * @ref OPA_INIT_UNITY_GAIN_OPA2.
  * @verbatim
 
-                       |\
+ |\
             ___________|+\
                        |  \_______
-                    ___|_ /    |
-                   |   | /     |
-                   |   |/      |
-                   |___________|
-   @endverbatim
+ ___|_ /    |
+ |   | /     |
+ |   |/      |
+ |___________|
+ @endverbatim
  *
  * \n<b>Non-inverting amplifier.</b>\n
  * Use predefined macros @ref OPA_INIT_NON_INVERTING and
  * @ref OPA_INIT_NON_INVERTING_OPA2.
  * @verbatim
 
-                       |\
+ |\
             ___________|+\
                        |  \_______
-                    ___|_ /    |
-                   |   | /     |
-                   |   |/      |
-                   |_____R2____|
-                   |
-                   R1
-                   |
-                 NEGPAD @endverbatim
+ ___|_ /    |
+ |   | /     |
+ |   |/      |
+ |_____R2____|
+ |
+ R1
+ |
+ NEGPAD @endverbatim
  *
  * \n<b>Inverting amplifier.</b>\n
  * Use predefined macros @ref OPA_INIT_INVERTING and
  * @ref OPA_INIT_INVERTING_OPA2.
  * @verbatim
 
-                    _____R2____
-                   |           |
-                   |   |\      |
-            ____R1_|___|_\     |
-                       |  \____|___
-                    ___|  /
-                   |   |+/
-                   |   |/
-                   |
-                 POSPAD @endverbatim
+ _____R2____
+ |           |
+ |   |\      |
+ ____R1_|___|_\     |
+ |  \____|___
+ ___|  /
+ |   |+/
+ |   |/
+ |
+ POSPAD @endverbatim
  *
  * \n<b>Cascaded non-inverting amplifiers.</b>\n
  * Use predefined macros @ref OPA_INIT_CASCADED_NON_INVERTING_OPA0,
@@ -118,17 +116,17 @@
  * @ref OPA_INIT_CASCADED_NON_INVERTING_OPA2.
  * @verbatim
 
-                       |\                       |\                       |\
+ |\                       |\                       |\
             ___________|+\ OPA0      ___________|+\ OPA1      ___________|+\ OPA2
-                       |  \_________|           |  \_________|           |  \_______
-                    ___|_ /    |             ___|_ /    |             ___|_ /    |
-                   |   | /     |            |   | /     |            |   | /     |
-                   |   |/      |            |   |/      |            |   |/      |
-                   |_____R2____|            |_____R2____|            |_____R2____|
-                   |                        |                        |
-                   R1                       R1                       R1
-                   |                        |                        |
-                 NEGPAD                   NEGPAD                   NEGPAD @endverbatim
+ |  \_________|           |  \_________|           |  \_______
+ ___|_ /    |             ___|_ /    |             ___|_ /    |
+ |   | /     |            |   | /     |            |   | /     |
+ |   |/      |            |   |/      |            |   |/      |
+ |_____R2____|            |_____R2____|            |_____R2____|
+ |                        |                        |
+ R1                       R1                       R1
+ |                        |                        |
+ NEGPAD                   NEGPAD                   NEGPAD @endverbatim
  *
  * \n<b>Cascaded inverting amplifiers.</b>\n
  * Use predefined macros @ref OPA_INIT_CASCADED_INVERTING_OPA0,
@@ -136,56 +134,56 @@
  * @ref OPA_INIT_CASCADED_INVERTING_OPA2.
  * @verbatim
 
-                    _____R2____              _____R2____              _____R2____
-                   |           |            |           |            |           |
-                   |   |\      |            |   |\      |            |   |\      |
-            ____R1_|___|_\     |     ____R1_|___|_\     |     ____R1_|___|_\     |
-                       |  \____|____|           |  \____|___|            |  \____|__
-                    ___|  /                  ___|  /                  ___|  /
-                   |   |+/ OPA0             |   |+/ OPA1             |   |+/ OPA2
-                   |   |/                   |   |/                   |   |/
-                   |                        |                        |
-                 POSPAD                   POSPAD                   POSPAD @endverbatim
+ _____R2____              _____R2____              _____R2____
+ |           |            |           |            |           |
+ |   |\      |            |   |\      |            |   |\      |
+ ____R1_|___|_\     |     ____R1_|___|_\     |     ____R1_|___|_\     |
+ |  \____|____|           |  \____|___|            |  \____|__
+ ___|  /                  ___|  /                  ___|  /
+ |   |+/ OPA0             |   |+/ OPA1             |   |+/ OPA2
+ |   |/                   |   |/                   |   |/
+ |                        |                        |
+ POSPAD                   POSPAD                   POSPAD @endverbatim
  *
  * \n<b>Differential driver with two opamp's.</b>\n
  * Use predefined macros @ref OPA_INIT_DIFF_DRIVER_OPA0 and
  * @ref OPA_INIT_DIFF_DRIVER_OPA1.
  * @verbatim
 
-                                     __________________________
-                                    |                          +
-                                    |        _____R2____
-                       |\           |       |           |
-            ___________|+\ OPA0     |       |   |\ OPA1 |
-                       |  \_________|____R1_|___|_\     |      _
-                    ___|_ /         |           |  \____|______
-                   |   | /          |        ___|  /
-                   |   |/           |       |   |+/
-                   |________________|       |   |/
-                                            |
-                                          POSPAD @endverbatim
+ __________________________
+ |                          +
+ |        _____R2____
+ |\           |       |           |
+ ___________|+\ OPA0     |       |   |\ OPA1 |
+ |  \_________|____R1_|___|_\     |      _
+ ___|_ /         |           |  \____|______
+ |   | /          |        ___|  /
+ |   |/           |       |   |+/
+ |________________|       |   |/
+ |
+ POSPAD @endverbatim
  *
  * \n<b>Differential receiver with three opamp's.</b>\n
  * Use predefined macros @ref OPA_INIT_DIFF_RECEIVER_OPA0,
  * @ref OPA_INIT_DIFF_RECEIVER_OPA1 and @ref OPA_INIT_DIFF_RECEIVER_OPA2.
  * @verbatim
 
-                       |\
+ |\
              __________|+\ OPA1
-            _          |  \_________
-                    ___|_ /    |    |        _____R2____
-                   |   | /     |    |       |           |
-                   |   |/      |    |       |   |\      |
-                   |___________|    |____R1_|___|_\     |
-                                                |  \____|___
-                       |\            ____R1_ ___|  /
-            +__________|+\ OPA0     |       |   |+/ OPA2
-                       |  \_________|       |   |/
-                    ___|_ /    |            R2
-                   |   | /     |            |
-                   |   |/      |          NEGPAD OPA0
-                   |___________|
-   @endverbatim
+ _          |  \_________
+ ___|_ /    |    |        _____R2____
+ |   | /     |    |       |           |
+ |   |/      |    |       |   |\      |
+ |___________|    |____R1_|___|_\     |
+ |  \____|___
+ |\            ____R1_ ___|  /
+ +__________|+\ OPA0     |       |   |+/ OPA2
+ |  \_________|       |   |/
+ ___|_ /    |            R2
+ |   | /     |            |
+ |   |/      |          NEGPAD OPA0
+ |___________|
+ @endverbatim
  *
  * @{
  ******************************************************************************/
@@ -204,27 +202,27 @@
  * @param[in] opa
  *   Selects an OPA, valid vaules are @ref OPA0, @ref OPA1 and @ref OPA2.
  ******************************************************************************/
-void OPAMP_Disable( DAC_TypeDef *dac, OPAMP_TypeDef opa )
+void
+OPAMP_Disable(DAC_TypeDef *dac, OPAMP_TypeDef opa)
 {
-  EFM_ASSERT( DAC_REF_VALID( dac ) );
-  EFM_ASSERT( DAC_OPA_VALID( opa ) );
+  EFM_ASSERT(DAC_REF_VALID( dac ));
+  EFM_ASSERT(DAC_OPA_VALID( opa ));
 
-  if ( opa == OPA0 )
-  {
-    dac->CH0CTRL &= ~DAC_CH0CTRL_EN;
-    dac->OPACTRL &= ~DAC_OPACTRL_OPA0EN;
-  }
-  else if ( opa == OPA1 )
-  {
-    dac->CH1CTRL &= ~DAC_CH1CTRL_EN;
-    dac->OPACTRL &= ~DAC_OPACTRL_OPA1EN;
-  }
+  if (opa == OPA0)
+    {
+      dac->CH0CTRL &= ~DAC_CH0CTRL_EN;
+      dac->OPACTRL &= ~DAC_OPACTRL_OPA0EN;
+    }
+  else if (opa == OPA1)
+    {
+      dac->CH1CTRL &= ~DAC_CH1CTRL_EN;
+      dac->OPACTRL &= ~DAC_OPACTRL_OPA1EN;
+    }
   else /* OPA2 */
-  {
-    dac->OPACTRL &= ~DAC_OPACTRL_OPA2EN;
-  }
+    {
+      dac->OPACTRL &= ~DAC_OPACTRL_OPA2EN;
+    }
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -265,164 +263,140 @@ void OPAMP_Disable( DAC_TypeDef *dac, OPAMP_TypeDef opa )
  * @param[in] init
  *   Pointer to a structure containing OPAMP init information.
  ******************************************************************************/
-void OPAMP_Enable( DAC_TypeDef *dac, OPAMP_TypeDef opa, const OPAMP_Init_TypeDef *init )
+void
+OPAMP_Enable(DAC_TypeDef *dac, OPAMP_TypeDef opa,
+    const OPAMP_Init_TypeDef *init)
 {
   uint32_t offset;
 
-  EFM_ASSERT( DAC_REF_VALID( dac ) );
-  EFM_ASSERT( DAC_OPA_VALID( opa ) );
-  EFM_ASSERT( init->bias <= ( _DAC_BIASPROG_BIASPROG_MASK  >>
-                              _DAC_BIASPROG_BIASPROG_SHIFT    ) );
+  EFM_ASSERT(DAC_REF_VALID( dac ));
+  EFM_ASSERT(DAC_OPA_VALID( opa ));
+  EFM_ASSERT(
+      init->bias <= ( _DAC_BIASPROG_BIASPROG_MASK >> _DAC_BIASPROG_BIASPROG_SHIFT ));
 
-  if ( opa == OPA0 )
-  {
-    EFM_ASSERT( ( init->outPen & ~_DAC_OPA0MUX_OUTPEN_MASK ) == 0 );
-
-    dac->BIASPROG = ( dac->BIASPROG
-                      & ~( _DAC_BIASPROG_BIASPROG_MASK             |
-                            DAC_BIASPROG_HALFBIAS                    )  ) |
-                    ( init->bias      << _DAC_BIASPROG_BIASPROG_SHIFT   ) |
-                    ( init->halfBias   ? DAC_BIASPROG_HALFBIAS      : 0 );
-
-    if ( init->defaultOffset )
+  if (opa == OPA0)
     {
-      offset = SYSTEM_GetCalibrationValue( &dac->CAL );
-      dac->CAL = ( dac->CAL & ~_DAC_CAL_CH0OFFSET_MASK ) |
-                 ( offset   &  _DAC_CAL_CH0OFFSET_MASK );
+      EFM_ASSERT(( init->outPen & ~_DAC_OPA0MUX_OUTPEN_MASK ) == 0);
+
+      dac->BIASPROG = (dac->BIASPROG
+          & ~(_DAC_BIASPROG_BIASPROG_MASK | DAC_BIASPROG_HALFBIAS))
+          | (init->bias << _DAC_BIASPROG_BIASPROG_SHIFT)
+          | (init->halfBias ? DAC_BIASPROG_HALFBIAS : 0);
+
+      if (init->defaultOffset)
+        {
+          offset = SYSTEM_GetCalibrationValue(&dac->CAL);
+          dac->CAL = (dac->CAL & ~_DAC_CAL_CH0OFFSET_MASK)
+              | (offset & _DAC_CAL_CH0OFFSET_MASK);
+        }
+      else
+        {
+          EFM_ASSERT(
+              init->offset <= ( _DAC_CAL_CH0OFFSET_MASK >> _DAC_CAL_CH0OFFSET_SHIFT ));
+
+          dac->CAL = (dac->CAL & ~_DAC_CAL_CH0OFFSET_MASK)
+              | (init->offset << _DAC_CAL_CH0OFFSET_SHIFT);
+        }
+
+      dac->OPA0MUX = (uint32_t) init->resSel | (uint32_t) init->outMode
+          | init->outPen | (uint32_t) init->resInMux | (uint32_t) init->negSel
+          | (uint32_t) init->posSel | (init->nextOut ? DAC_OPA0MUX_NEXTOUT : 0)
+          | (init->npEn ? DAC_OPA0MUX_NPEN : 0)
+          | (init->ppEn ? DAC_OPA0MUX_PPEN : 0);
+
+      dac->CH0CTRL |= DAC_CH0CTRL_EN;
+      dac->OPACTRL = (dac->OPACTRL
+          & ~(DAC_OPACTRL_OPA0SHORT | _DAC_OPACTRL_OPA0LPFDIS_MASK
+              | DAC_OPACTRL_OPA0HCMDIS))
+          | (init->shortInputs ? DAC_OPACTRL_OPA0SHORT : 0)
+          | (init->lpfPosPadDisable ? DAC_OPACTRL_OPA0LPFDIS_PLPFDIS : 0)
+          | (init->lpfNegPadDisable ? DAC_OPACTRL_OPA0LPFDIS_NLPFDIS : 0)
+          | (init->hcmDisable ? DAC_OPACTRL_OPA0HCMDIS : 0)
+          | (DAC_OPACTRL_OPA0EN);
     }
-    else
+  else if (opa == OPA1)
     {
-      EFM_ASSERT( init->offset <= ( _DAC_CAL_CH0OFFSET_MASK >>
-                                    _DAC_CAL_CH0OFFSET_SHIFT   ) );
+      EFM_ASSERT(( init->outPen & ~_DAC_OPA1MUX_OUTPEN_MASK ) == 0);
 
-      dac->CAL = ( dac->CAL      & ~_DAC_CAL_CH0OFFSET_MASK  ) |
-                 ( init->offset <<  _DAC_CAL_CH0OFFSET_SHIFT );
+      dac->BIASPROG = (dac->BIASPROG
+          & ~(_DAC_BIASPROG_BIASPROG_MASK | DAC_BIASPROG_HALFBIAS))
+          | (init->bias << _DAC_BIASPROG_BIASPROG_SHIFT)
+          | (init->halfBias ? DAC_BIASPROG_HALFBIAS : 0);
+
+      if (init->defaultOffset)
+        {
+          offset = SYSTEM_GetCalibrationValue(&dac->CAL);
+          dac->CAL = (dac->CAL & ~_DAC_CAL_CH1OFFSET_MASK)
+              | (offset & _DAC_CAL_CH1OFFSET_MASK);
+        }
+      else
+        {
+          EFM_ASSERT(
+              init->offset <= ( _DAC_CAL_CH1OFFSET_MASK >> _DAC_CAL_CH1OFFSET_SHIFT ));
+
+          dac->CAL = (dac->CAL & ~_DAC_CAL_CH1OFFSET_MASK)
+              | (init->offset << _DAC_CAL_CH1OFFSET_SHIFT);
+        }
+
+      dac->OPA1MUX = (uint32_t) init->resSel | (uint32_t) init->outMode
+          | init->outPen | (uint32_t) init->resInMux | (uint32_t) init->negSel
+          | (uint32_t) init->posSel | (init->nextOut ? DAC_OPA1MUX_NEXTOUT : 0)
+          | (init->npEn ? DAC_OPA1MUX_NPEN : 0)
+          | (init->ppEn ? DAC_OPA1MUX_PPEN : 0);
+
+      dac->CH1CTRL |= DAC_CH1CTRL_EN;
+      dac->OPACTRL = (dac->OPACTRL
+          & ~(DAC_OPACTRL_OPA1SHORT | _DAC_OPACTRL_OPA1LPFDIS_MASK
+              | DAC_OPACTRL_OPA1HCMDIS))
+          | (init->shortInputs ? DAC_OPACTRL_OPA1SHORT : 0)
+          | (init->lpfPosPadDisable ? DAC_OPACTRL_OPA1LPFDIS_PLPFDIS : 0)
+          | (init->lpfNegPadDisable ? DAC_OPACTRL_OPA1LPFDIS_NLPFDIS : 0)
+          | (init->hcmDisable ? DAC_OPACTRL_OPA1HCMDIS : 0)
+          | (DAC_OPACTRL_OPA1EN);
     }
-
-    dac->OPA0MUX  = (uint32_t)init->resSel                                |
-                    (uint32_t)init->outMode                               |
-                    init->outPen                                          |
-                    (uint32_t)init->resInMux                              |
-                    (uint32_t)init->negSel                                |
-                    (uint32_t)init->posSel                                |
-                    ( init->nextOut     ? DAC_OPA0MUX_NEXTOUT       : 0 ) |
-                    ( init->npEn        ? DAC_OPA0MUX_NPEN          : 0 ) |
-                    ( init->ppEn        ? DAC_OPA0MUX_PPEN          : 0 );
-
-    dac->CH0CTRL |= DAC_CH0CTRL_EN;
-    dac->OPACTRL  = ( dac->OPACTRL
-                      & ~(  DAC_OPACTRL_OPA0SHORT                  |
-                           _DAC_OPACTRL_OPA0LPFDIS_MASK            |
-                            DAC_OPACTRL_OPA0HCMDIS                   )  ) |
-                    ( init->shortInputs ?  DAC_OPACTRL_OPA0SHORT    : 0 ) |
-                    ( init->lpfPosPadDisable ?
-                                     DAC_OPACTRL_OPA0LPFDIS_PLPFDIS : 0 ) |
-                    ( init->lpfNegPadDisable ?
-                                     DAC_OPACTRL_OPA0LPFDIS_NLPFDIS : 0 ) |
-                    ( init->hcmDisable  ?  DAC_OPACTRL_OPA0HCMDIS   : 0 ) |
-                    ( DAC_OPACTRL_OPA0EN                                );
-  }
-  else if ( opa == OPA1 )
-  {
-    EFM_ASSERT( ( init->outPen & ~_DAC_OPA1MUX_OUTPEN_MASK ) == 0 );
-
-    dac->BIASPROG = ( dac->BIASPROG
-                      & ~( _DAC_BIASPROG_BIASPROG_MASK             |
-                            DAC_BIASPROG_HALFBIAS                    )  ) |
-                    ( init->bias      << _DAC_BIASPROG_BIASPROG_SHIFT   ) |
-                    ( init->halfBias   ? DAC_BIASPROG_HALFBIAS      : 0 );
-
-    if ( init->defaultOffset )
-    {
-      offset = SYSTEM_GetCalibrationValue( &dac->CAL );
-      dac->CAL = ( dac->CAL & ~_DAC_CAL_CH1OFFSET_MASK ) |
-                 ( offset   &  _DAC_CAL_CH1OFFSET_MASK );
-    }
-    else
-    {
-      EFM_ASSERT( init->offset <= ( _DAC_CAL_CH1OFFSET_MASK >>
-                                    _DAC_CAL_CH1OFFSET_SHIFT   ) );
-
-      dac->CAL = ( dac->CAL      & ~_DAC_CAL_CH1OFFSET_MASK  ) |
-                 ( init->offset <<  _DAC_CAL_CH1OFFSET_SHIFT );
-    }
-
-    dac->OPA1MUX  = (uint32_t)init->resSel                                |
-                    (uint32_t)init->outMode                               |
-                    init->outPen                                          |
-                    (uint32_t)init->resInMux                              |
-                    (uint32_t)init->negSel                                |
-                    (uint32_t)init->posSel                                |
-                    ( init->nextOut     ? DAC_OPA1MUX_NEXTOUT       : 0 ) |
-                    ( init->npEn        ? DAC_OPA1MUX_NPEN          : 0 ) |
-                    ( init->ppEn        ? DAC_OPA1MUX_PPEN          : 0 );
-
-    dac->CH1CTRL |= DAC_CH1CTRL_EN;
-    dac->OPACTRL  = ( dac->OPACTRL
-                      & ~(  DAC_OPACTRL_OPA1SHORT                  |
-                           _DAC_OPACTRL_OPA1LPFDIS_MASK            |
-                             DAC_OPACTRL_OPA1HCMDIS                  )  ) |
-                    ( init->shortInputs ?  DAC_OPACTRL_OPA1SHORT    : 0 ) |
-                    ( init->lpfPosPadDisable ?
-                                     DAC_OPACTRL_OPA1LPFDIS_PLPFDIS : 0 ) |
-                    ( init->lpfNegPadDisable ?
-                                     DAC_OPACTRL_OPA1LPFDIS_NLPFDIS : 0 ) |
-                    ( init->hcmDisable  ?  DAC_OPACTRL_OPA1HCMDIS   : 0 ) |
-                    ( DAC_OPACTRL_OPA1EN                                );
-  }
   else /* OPA2 */
-  {
-    EFM_ASSERT( ( init->posSel == DAC_OPA2MUX_POSSEL_DISABLE ) ||
-                ( init->posSel == DAC_OPA2MUX_POSSEL_POSPAD  ) ||
-                ( init->posSel == DAC_OPA2MUX_POSSEL_OPA1INP ) ||
-                ( init->posSel == DAC_OPA2MUX_POSSEL_OPATAP  )    );
-
-    EFM_ASSERT( ( init->outMode & ~DAC_OPA2MUX_OUTMODE ) == 0 );
-
-    EFM_ASSERT( ( init->outPen & ~_DAC_OPA2MUX_OUTPEN_MASK ) == 0 );
-
-    dac->BIASPROG = ( dac->BIASPROG
-                      & ~( _DAC_BIASPROG_OPA2BIASPROG_MASK         |
-                            DAC_BIASPROG_OPA2HALFBIAS                )  ) |
-                    ( init->bias   << _DAC_BIASPROG_OPA2BIASPROG_SHIFT  ) |
-                    ( init->halfBias   ? DAC_BIASPROG_OPA2HALFBIAS  : 0 );
-
-    if ( init->defaultOffset )
     {
-      offset = SYSTEM_GetCalibrationValue( &dac->OPAOFFSET );
-      dac->OPAOFFSET = ( dac->OPAOFFSET & ~_DAC_OPAOFFSET_OPA2OFFSET_MASK ) |
-                       ( offset         &  _DAC_OPAOFFSET_OPA2OFFSET_MASK );
-    }
-    else
-    {
-      EFM_ASSERT( init->offset <= ( _DAC_OPAOFFSET_OPA2OFFSET_MASK >>
-                                    _DAC_OPAOFFSET_OPA2OFFSET_SHIFT   ) );
-      dac->OPAOFFSET = ( dac->OPAOFFSET & ~_DAC_OPAOFFSET_OPA2OFFSET_MASK ) |
-                       ( init->offset <<  _DAC_OPAOFFSET_OPA2OFFSET_SHIFT );
-    }
+      EFM_ASSERT(
+          ( init->posSel == DAC_OPA2MUX_POSSEL_DISABLE ) || ( init->posSel == DAC_OPA2MUX_POSSEL_POSPAD ) || ( init->posSel == DAC_OPA2MUX_POSSEL_OPA1INP ) || ( init->posSel == DAC_OPA2MUX_POSSEL_OPATAP ));
 
-    dac->OPA2MUX  = (uint32_t)init->resSel                                |
-                    (uint32_t)init->outMode                               |
-                    init->outPen                                          |
-                    (uint32_t)init->resInMux                              |
-                    (uint32_t)init->negSel                                |
-                    (uint32_t)init->posSel                                |
-                    ( init->nextOut     ? DAC_OPA2MUX_NEXTOUT       : 0 ) |
-                    ( init->npEn        ? DAC_OPA2MUX_NPEN          : 0 ) |
-                    ( init->ppEn        ? DAC_OPA2MUX_PPEN          : 0 );
+      EFM_ASSERT(( init->outMode & ~DAC_OPA2MUX_OUTMODE ) == 0);
 
-    dac->OPACTRL  = ( dac->OPACTRL
-                      & ~(  DAC_OPACTRL_OPA2SHORT                  |
-                           _DAC_OPACTRL_OPA2LPFDIS_MASK            |
-                            DAC_OPACTRL_OPA2HCMDIS                   )  ) |
-                    ( init->shortInputs ?  DAC_OPACTRL_OPA2SHORT    : 0 ) |
-                    ( init->lpfPosPadDisable ?
-                                     DAC_OPACTRL_OPA2LPFDIS_PLPFDIS : 0 ) |
-                    ( init->lpfNegPadDisable ?
-                                     DAC_OPACTRL_OPA2LPFDIS_NLPFDIS : 0 ) |
-                    ( init->hcmDisable  ?  DAC_OPACTRL_OPA2HCMDIS   : 0 ) |
-                    ( DAC_OPACTRL_OPA2EN                                );
-  }
+      EFM_ASSERT(( init->outPen & ~_DAC_OPA2MUX_OUTPEN_MASK ) == 0);
+
+      dac->BIASPROG = (dac->BIASPROG
+          & ~(_DAC_BIASPROG_OPA2BIASPROG_MASK | DAC_BIASPROG_OPA2HALFBIAS))
+          | (init->bias << _DAC_BIASPROG_OPA2BIASPROG_SHIFT)
+          | (init->halfBias ? DAC_BIASPROG_OPA2HALFBIAS : 0);
+
+      if (init->defaultOffset)
+        {
+          offset = SYSTEM_GetCalibrationValue(&dac->OPAOFFSET);
+          dac->OPAOFFSET = (dac->OPAOFFSET & ~_DAC_OPAOFFSET_OPA2OFFSET_MASK)
+              | (offset & _DAC_OPAOFFSET_OPA2OFFSET_MASK);
+        }
+      else
+        {
+          EFM_ASSERT(
+              init->offset <= ( _DAC_OPAOFFSET_OPA2OFFSET_MASK >> _DAC_OPAOFFSET_OPA2OFFSET_SHIFT ));
+          dac->OPAOFFSET = (dac->OPAOFFSET & ~_DAC_OPAOFFSET_OPA2OFFSET_MASK)
+              | (init->offset << _DAC_OPAOFFSET_OPA2OFFSET_SHIFT);
+        }
+
+      dac->OPA2MUX = (uint32_t) init->resSel | (uint32_t) init->outMode
+          | init->outPen | (uint32_t) init->resInMux | (uint32_t) init->negSel
+          | (uint32_t) init->posSel | (init->nextOut ? DAC_OPA2MUX_NEXTOUT : 0)
+          | (init->npEn ? DAC_OPA2MUX_NPEN : 0)
+          | (init->ppEn ? DAC_OPA2MUX_PPEN : 0);
+
+      dac->OPACTRL = (dac->OPACTRL
+          & ~(DAC_OPACTRL_OPA2SHORT | _DAC_OPACTRL_OPA2LPFDIS_MASK
+              | DAC_OPACTRL_OPA2HCMDIS))
+          | (init->shortInputs ? DAC_OPACTRL_OPA2SHORT : 0)
+          | (init->lpfPosPadDisable ? DAC_OPACTRL_OPA2LPFDIS_PLPFDIS : 0)
+          | (init->lpfNegPadDisable ? DAC_OPACTRL_OPA2LPFDIS_NLPFDIS : 0)
+          | (init->hcmDisable ? DAC_OPACTRL_OPA2HCMDIS : 0)
+          | (DAC_OPACTRL_OPA2EN);
+    }
 }
 
 /** @} (end addtogroup OPAMP) */

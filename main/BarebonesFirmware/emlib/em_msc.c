@@ -30,7 +30,6 @@
  *
  ******************************************************************************/
 
-
 #include "em_msc.h"
 #if defined(MSC_COUNT) && (MSC_COUNT > 0)
 
@@ -63,8 +62,10 @@ __ramfunc msc_Return_TypeDef MscLoadAddress(uint32_t *address);
 msc_Return_TypeDef MscLoadData(uint32_t *data, int num) __attribute__ ((section(".fast")));
 msc_Return_TypeDef MscLoadAddress(uint32_t *address) __attribute__ ((section(".fast")));
 #else /* Sourcery G++ */
-msc_Return_TypeDef MscLoadData(uint32_t *data, int num) __attribute__ ((section(".ram")));
-msc_Return_TypeDef MscLoadAddress(uint32_t *address) __attribute__ ((section(".ram")));
+msc_Return_TypeDef
+MscLoadData(uint32_t *data, int num) __attribute__ ((section(".ram")));
+msc_Return_TypeDef
+MscLoadAddress(uint32_t *address) __attribute__ ((section(".ram")));
 #endif /* __CROSSWORKS_ARM */
 #endif /* __GNUC__ */
 
@@ -92,44 +93,41 @@ msc_Return_TypeDef MscLoadAddress(uint32_t *address) __attribute__ ((section(".r
  *   IMPORTANT: This function must be called before flash operations when
  *   AUXHFRCO clock has been changed from default 14MHz band.
  ******************************************************************************/
-void MSC_Init(void)
+void
+MSC_Init(void)
 {
 #if defined( _MSC_TIMEBASE_MASK )
   uint32_t freq, cycles;
 #endif
-  /* Unlock the MSC */
-  MSC->LOCK = MSC_UNLOCK_CODE;
-  /* Disable writing to the flash */
-  MSC->WRITECTRL &= ~MSC_WRITECTRL_WREN;
+  /* Unlock the MSC */MSC ->LOCK = MSC_UNLOCK_CODE;
+  /* Disable writing to the flash */MSC ->WRITECTRL &= ~MSC_WRITECTRL_WREN;
 
 #if defined( _MSC_TIMEBASE_MASK )
   /* Configure MSC->TIMEBASE according to selected frequency */
   freq = CMU_ClockFreqGet(cmuClock_AUX);
 
   if (freq > 7000000)
-  {
-    /* Calculate number of clock cycles for 1us as base period */
-    freq   = (freq * 11) / 10;
-    cycles = (freq / 1000000) + 1;
+    {
+      /* Calculate number of clock cycles for 1us as base period */
+      freq = (freq * 11) / 10;
+      cycles = (freq / 1000000) + 1;
 
-    /* Configure clock cycles for flash timing */
-    MSC->TIMEBASE = (MSC->TIMEBASE & ~(_MSC_TIMEBASE_BASE_MASK |
-                                       _MSC_TIMEBASE_PERIOD_MASK)) |
-                    MSC_TIMEBASE_PERIOD_1US |
-                    (cycles << _MSC_TIMEBASE_BASE_SHIFT);
-  }
+      /* Configure clock cycles for flash timing */
+      MSC ->TIMEBASE = (MSC ->TIMEBASE
+          & ~(_MSC_TIMEBASE_BASE_MASK | _MSC_TIMEBASE_PERIOD_MASK))
+          | MSC_TIMEBASE_PERIOD_1US | (cycles << _MSC_TIMEBASE_BASE_SHIFT);
+    }
   else
-  {
-    /* Calculate number of clock cycles for 5us as base period */
-    freq   = (freq * 5 * 11) / 10;
-    cycles = (freq / 1000000) + 1;
+    {
+      /* Calculate number of clock cycles for 5us as base period */
+      freq = (freq * 5 * 11) / 10;
+      cycles = (freq / 1000000) + 1;
 
-    /* Configure clock cycles for flash timing */
-    MSC->TIMEBASE = (MSC->TIMEBASE & ~(_MSC_TIMEBASE_BASE_MASK |
-                                       _MSC_TIMEBASE_PERIOD_MASK)) |
-                    MSC_TIMEBASE_PERIOD_5US |
-                    (cycles << _MSC_TIMEBASE_BASE_SHIFT);
-  }
+      /* Configure clock cycles for flash timing */
+      MSC ->TIMEBASE = (MSC ->TIMEBASE
+          & ~(_MSC_TIMEBASE_BASE_MASK | _MSC_TIMEBASE_PERIOD_MASK))
+          | MSC_TIMEBASE_PERIOD_5US | (cycles << _MSC_TIMEBASE_BASE_SHIFT);
+    }
 #endif
 }
 
@@ -137,14 +135,14 @@ void MSC_Init(void)
  * @brief
  *   Disables the flash controller for writing.
  ******************************************************************************/
-void MSC_Deinit(void)
+void
+MSC_Deinit(void)
 {
   /* Disable writing to the flash */
-  MSC->WRITECTRL &= ~MSC_WRITECTRL_WREN;
+  MSC ->WRITECTRL &= ~MSC_WRITECTRL_WREN;
   /* Lock the MSC */
-  MSC->LOCK = 0;
+  MSC ->LOCK = 0;
 }
-
 
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
@@ -182,36 +180,35 @@ void MSC_Deinit(void)
 #pragma diag_suppress=Ta023
 #endif
 
-msc_Return_TypeDef MscLoadAddress(uint32_t* address)
+msc_Return_TypeDef
+MscLoadAddress(uint32_t* address)
 {
   uint32_t status;
-  int      timeOut;
+  int timeOut;
 
   /* Wait for the MSC to become ready. */
   timeOut = MSC_PROGRAM_TIMEOUT;
-  while ((MSC->STATUS & MSC_STATUS_BUSY) && (timeOut != 0))
-  {
-    timeOut--;
-  }
+  while ((MSC ->STATUS & MSC_STATUS_BUSY)&& (timeOut != 0)){
+  timeOut--;
+}
 
   /* Check for timeout */
   if (timeOut == 0)
     return mscReturnTimeOut;
 
-  /* Load address */
-  MSC->ADDRB    = (uint32_t) (address);
-  MSC->WRITECMD = MSC_WRITECMD_LADDRIM;
+  /* Load address */MSC ->ADDRB = (uint32_t) (address);
+  MSC ->WRITECMD = MSC_WRITECMD_LADDRIM;
 
-  status = MSC->STATUS;
+  status = MSC ->STATUS;
   if (status & (MSC_STATUS_INVADDR | MSC_STATUS_LOCKED))
-  {
-    /* Check for invalid address */
-    if (status & MSC_STATUS_INVADDR)
-      return mscReturnInvalidAddr;
-    /* Check for write protected page */
-    if (status & MSC_STATUS_LOCKED)
-      return mscReturnLocked;
-  }
+    {
+      /* Check for invalid address */
+      if (status & MSC_STATUS_INVADDR)
+        return mscReturnInvalidAddr;
+      /* Check for write protected page */
+      if (status & MSC_STATUS_LOCKED)
+        return mscReturnLocked;
+    }
   return mscReturnOk;
 }
 
@@ -222,8 +219,6 @@ msc_Return_TypeDef MscLoadAddress(uint32_t* address)
 #ifdef __CC_ARM  /* MDK-ARM compiler */
 #pragma arm section code
 #endif /* __CC_ARM */
-
-
 
 /***************************************************************************//**
  * @brief
@@ -260,132 +255,123 @@ msc_Return_TypeDef MscLoadAddress(uint32_t* address)
 #pragma diag_suppress=Ta023
 #endif
 
-msc_Return_TypeDef MscLoadData(uint32_t* data, int num)
+msc_Return_TypeDef
+MscLoadData(uint32_t* data, int num)
 {
-  int      timeOut  = MSC_PROGRAM_TIMEOUT;
-  int      i;
-  int      wordsPerDataPhase;
+  int timeOut = MSC_PROGRAM_TIMEOUT;
+  int i;
+  int wordsPerDataPhase;
   msc_Return_TypeDef retval = mscReturnOk;
 
 #ifdef MSC_WRITECTRL_LPWRITE
   /* If LPWRITE (Low Power Write) is NOT enabled, set WDOUBLE (Write Double word) */
-  if (0 == (MSC->WRITECTRL & MSC_WRITECTRL_LPWRITE))
-  {
-    /* If the number of words to be written are odd, we need to align by writing
-       a single word first, before setting the WDOUBLE bit. */
-    if (num & 0x1)
+  if (0 == (MSC ->WRITECTRL & MSC_WRITECTRL_LPWRITE))
     {
-      /* Wait for the msc to be ready for the next word. */
-      timeOut = MSC_PROGRAM_TIMEOUT;
-      while ((0 == (MSC->STATUS & MSC_STATUS_WDATAREADY)) && (timeOut != 0))
-      {
-        timeOut--;
-      }
-      /* Check for timeout */
-      if (timeOut == 0)
-        return mscReturnTimeOut;
+      /* If the number of words to be written are odd, we need to align by writing
+       a single word first, before setting the WDOUBLE bit. */
+      if (num & 0x1)
+        {
+          /* Wait for the msc to be ready for the next word. */
+          timeOut = MSC_PROGRAM_TIMEOUT;
+          while ((0 == (MSC ->STATUS & MSC_STATUS_WDATAREADY))&& (timeOut != 0)){
+          timeOut--;
+        }
+          /* Check for timeout */
+          if (timeOut == 0)
+            return mscReturnTimeOut;
 
-      /* Clear double word option, in order to write one single word. */
-      MSC->WRITECTRL &= ~MSC_WRITECTRL_WDOUBLE;
-      /* Write first data word. */
-      MSC->WDATA = *data++;
-      /* Execute the write command for the first word. We use the WRITETRIG
-         command here, because we want the address to be updated, even though
-         we do not intend to write the next word within the WDATAREADY timeout.
-       */
-      MSC->WRITECMD = MSC_WRITECMD_WRITETRIG;
+          /* Clear double word option, in order to write one single word. */MSC ->WRITECTRL &=
+              ~MSC_WRITECTRL_WDOUBLE;
+          /* Write first data word. */MSC ->WDATA = *data++;
+          /* Execute the write command for the first word. We use the WRITETRIG
+           command here, because we want the address to be updated, even though
+           we do not intend to write the next word within the WDATAREADY timeout.
+           */MSC ->WRITECMD = MSC_WRITECMD_WRITETRIG;
 
-      /* Wait for the transaction to finish. */
-      timeOut = MSC_PROGRAM_TIMEOUT;
-      while ((MSC->STATUS & MSC_STATUS_BUSY) && (timeOut != 0))
-      {
-        timeOut--;
-      }
-      /* Check for timeout */
-      if (timeOut == 0)
-        return mscReturnTimeOut;
+          /* Wait for the transaction to finish. */
+          timeOut = MSC_PROGRAM_TIMEOUT;
+          while ((MSC ->STATUS & MSC_STATUS_BUSY)&& (timeOut != 0)){
+          timeOut--;
+        }
+          /* Check for timeout */
+          if (timeOut == 0)
+            return mscReturnTimeOut;
 
-      if (0 == --num)
-      {
-        retval = mscReturnOk;
-        goto msc_load_data_exit;
-      }
+          if (0 == --num)
+            {
+              retval = mscReturnOk;
+              goto msc_load_data_exit;
+            }
+        }
+
+      /* Now we can set the double word option in order to write two words per
+       data phase. */MSC ->WRITECTRL |= MSC_WRITECTRL_WDOUBLE;
+      wordsPerDataPhase = 2;
     }
-
-    /* Now we can set the double word option in order to write two words per
-       data phase. */
-    MSC->WRITECTRL |= MSC_WRITECTRL_WDOUBLE;
-    wordsPerDataPhase = 2;
-  }
   else
 #endif
-  {
-    wordsPerDataPhase = 1;
-  }
-
+    {
+      wordsPerDataPhase = 1;
+    }
 
   /* Wait for the MSC to be ready for a new data word.
    * Due to the timing of this function, the MSC should
    * already be ready */
   timeOut = MSC_PROGRAM_TIMEOUT;
-  while (((MSC->STATUS & MSC_STATUS_WDATAREADY) == 0) && (timeOut != 0))
-  {
-    timeOut--;
-  }
+  while (((MSC ->STATUS & MSC_STATUS_WDATAREADY)== 0)&&(timeOut != 0)){
+  timeOut--;
+}
 
   /* Check for timeout */
   if (timeOut == 0)
     return mscReturnTimeOut;
 
-  /* Write first data word. */
-  MSC->WDATA = *data;
+  /* Write first data word. */MSC ->WDATA = *data;
 
-  /* Execute the write command only for the first word. */
-  MSC->WRITECMD = MSC_WRITECMD_WRITETRIG;
+  /* Execute the write command only for the first word. */MSC ->WRITECMD =
+      MSC_WRITECMD_WRITETRIG;
 
   /* Loop through the rest of the data to be written. */
-  for (i=1, data++; i<num; i++, data++)
-  {
-    /* Only waut for WDATAREADY at the start of each data phase. */
-    if (0 == (i&(wordsPerDataPhase-1)))
+  for (i = 1, data++; i < num; i++, data++)
     {
-      /* Wait for the msc to be ready for the next word. */
-      timeOut = MSC_PROGRAM_TIMEOUT;
-      while ((0 == (MSC->STATUS & MSC_STATUS_WDATAREADY)) && (timeOut != 0))
-      {
-        timeOut--;
-      }
-      /* Check for timeout */
-      if (timeOut == 0)
-        return mscReturnTimeOut;
+      /* Only waut for WDATAREADY at the start of each data phase. */
+      if (0 == (i & (wordsPerDataPhase - 1)))
+        {
+          /* Wait for the msc to be ready for the next word. */
+          timeOut = MSC_PROGRAM_TIMEOUT;
+          while ((0 == (MSC ->STATUS & MSC_STATUS_WDATAREADY))&& (timeOut != 0)){
+          timeOut--;
+        }
+          /* Check for timeout */
+          if (timeOut == 0)
+            return mscReturnTimeOut;
+        }
+
+      /* Check if the WDATAREADY timeout has occurred. */
+      if (MSC ->STATUS & MSC_STATUS_WORDTIMEOUT)
+        {
+          retval = mscReturnTimeOut;
+          goto msc_load_data_exit;
+        }
+
+      /* Write next word. */
+      MSC ->WDATA = *data;
     }
 
-    /* Check if the WDATAREADY timeout has occurred. */
-    if (MSC->STATUS & MSC_STATUS_WORDTIMEOUT)
-    {
-      retval = mscReturnTimeOut;
-      goto msc_load_data_exit;
-    }
-
-    /* Write next word. */
-    MSC->WDATA = *data;
-  }
-
- msc_load_data_exit:
+  msc_load_data_exit:
 
   /* Wait for the transaction to finish. */
   timeOut = MSC_PROGRAM_TIMEOUT;
-  while ((MSC->STATUS & MSC_STATUS_BUSY) && (timeOut != 0))
-  {
-    timeOut--;
-  }
+  while ((MSC ->STATUS & MSC_STATUS_BUSY)&& (timeOut != 0)){
+  timeOut--;
+}
   /* Check for timeout */
   if (timeOut == 0)
     retval = mscReturnTimeOut;
 
 #ifdef MSC_WRITECTRL_WDOUBLE
-  /* Clear double word option, which should not be left on when returning. */
-  MSC->WRITECTRL &= ~MSC_WRITECTRL_WDOUBLE;
+  /* Clear double word option, which should not be left on when returning. */MSC ->WRITECTRL &=
+      ~MSC_WRITECTRL_WDOUBLE;
 #endif
 
   return retval;
@@ -399,7 +385,6 @@ msc_Return_TypeDef MscLoadData(uint32_t* data, int num)
 #endif /* __CC_ARM */
 
 /** @endcond */
-
 
 /***************************************************************************//**
  * @brief
@@ -433,54 +418,50 @@ msc_Return_TypeDef MscLoadData(uint32_t* data, int num)
 #pragma diag_suppress=Ta022
 #pragma diag_suppress=Ta023
 #endif
-msc_Return_TypeDef MSC_ErasePage(uint32_t *startAddress)
+msc_Return_TypeDef
+MSC_ErasePage(uint32_t *startAddress)
 {
-  int      timeOut  = MSC_PROGRAM_TIMEOUT;
+  int timeOut = MSC_PROGRAM_TIMEOUT;
 
   /* Address must be aligned to pages */
   EFM_ASSERT((((uint32_t) startAddress) & (FLASH_PAGE_SIZE - 1)) == 0);
 
-  /* Enable writing to the MSC */
-  MSC->WRITECTRL |= MSC_WRITECTRL_WREN;
+  /* Enable writing to the MSC */MSC ->WRITECTRL |= MSC_WRITECTRL_WREN;
 
-  /* Load address */
-  MSC->ADDRB    = (uint32_t) startAddress;
-  MSC->WRITECMD = MSC_WRITECMD_LADDRIM;
+  /* Load address */MSC ->ADDRB = (uint32_t) startAddress;
+  MSC ->WRITECMD = MSC_WRITECMD_LADDRIM;
 
   /* Check for invalid address */
-  if (MSC->STATUS & MSC_STATUS_INVADDR)
-  {
-    /* Disable writing to the MSC */
-    MSC->WRITECTRL &= ~MSC_WRITECTRL_WREN;
-    return mscReturnInvalidAddr;
-  }
+  if (MSC ->STATUS & MSC_STATUS_INVADDR)
+    {
+      /* Disable writing to the MSC */
+      MSC ->WRITECTRL &= ~MSC_WRITECTRL_WREN;
+      return mscReturnInvalidAddr;
+    }
 
   /* Check for write protected page */
-  if (MSC->STATUS & MSC_STATUS_LOCKED)
-  {
-    /* Disable writing to the MSC */
-    MSC->WRITECTRL &= ~MSC_WRITECTRL_WREN;
-    return mscReturnLocked;
-  }
+  if (MSC ->STATUS & MSC_STATUS_LOCKED)
+    {
+      /* Disable writing to the MSC */
+      MSC ->WRITECTRL &= ~MSC_WRITECTRL_WREN;
+      return mscReturnLocked;
+    }
 
-  /* Send erase page command */
-  MSC->WRITECMD = MSC_WRITECMD_ERASEPAGE;
+  /* Send erase page command */MSC ->WRITECMD = MSC_WRITECMD_ERASEPAGE;
 
   /* Wait for the erase to complete */
-  while ((MSC->STATUS & MSC_STATUS_BUSY) && (timeOut != 0))
-  {
-    timeOut--;
-  }
+  while ((MSC ->STATUS & MSC_STATUS_BUSY)&& (timeOut != 0)){
+  timeOut--;
+}
 
   if (timeOut == 0)
-  {
-    /* Disable writing to the MSC */
-    MSC->WRITECTRL &= ~MSC_WRITECTRL_WREN;
-    return mscReturnTimeOut;
-  }
+    {
+      /* Disable writing to the MSC */
+      MSC ->WRITECTRL &= ~MSC_WRITECTRL_WREN;
+      return mscReturnTimeOut;
+    }
 
-  /* Disable writing to the MSC */
-  MSC->WRITECTRL &= ~MSC_WRITECTRL_WREN;
+  /* Disable writing to the MSC */MSC ->WRITECTRL &= ~MSC_WRITECTRL_WREN;
   return mscReturnOk;
 }
 #if defined(__ICCARM__)
@@ -490,8 +471,6 @@ msc_Return_TypeDef MSC_ErasePage(uint32_t *startAddress)
 #ifdef __CC_ARM  /* MDK-ARM compiler */
 #pragma arm section code
 #endif /* __CC_ARM */
-
-
 
 /***************************************************************************//**
  * @brief
@@ -536,7 +515,8 @@ msc_Return_TypeDef MSC_ErasePage(uint32_t *startAddress)
 #pragma diag_suppress=Ta023
 #endif
 
-msc_Return_TypeDef MSC_WriteWord(uint32_t *address, void const *data, int numBytes)
+msc_Return_TypeDef
+MSC_WriteWord(uint32_t *address, void const *data, int numBytes)
 {
   int wordCount;
   int numWords;
@@ -545,52 +525,51 @@ msc_Return_TypeDef MSC_WriteWord(uint32_t *address, void const *data, int numByt
   msc_Return_TypeDef retval = mscReturnOk;
 
   /* Check alignment (Must be aligned to words) */
-  EFM_ASSERT(((uint32_t) address & 0x3) == 0);
+  EFM_ASSERT(((uint32_t ) address & 0x3) == 0);
 
   /* Check number of bytes. Must be divisable by four */
   EFM_ASSERT((numBytes & 0x3) == 0);
 
-  /* Enable writing to the MSC */
-  MSC->WRITECTRL |= MSC_WRITECTRL_WREN;
+  /* Enable writing to the MSC */MSC ->WRITECTRL |= MSC_WRITECTRL_WREN;
 
   /* Convert bytes to words */
   numWords = numBytes >> 2;
 
   /* The following loop splits the data into chunks corresponding to flash pages.
-     The address is loaded only once per page, because the hardware automatically
-     increments the address internally for each data load inside a page. */
-  for (wordCount = 0, pData = (uint32_t*) data; wordCount < numWords; )
-  {
-    /* First we load address. The address is auto-incremented within a page.
+   The address is loaded only once per page, because the hardware automatically
+   increments the address internally for each data load inside a page. */
+  for (wordCount = 0, pData = (uint32_t*) data; wordCount < numWords;)
+    {
+      /* First we load address. The address is auto-incremented within a page.
        Therefore the address phase is only needed once for each page. */
-    retval = MscLoadAddress(address+wordCount);
-    if (mscReturnOk != retval)
-      return retval;
+      retval = MscLoadAddress(address + wordCount);
+      if (mscReturnOk != retval)
+        return retval;
 
-    /* Compute the number of words to write to the current page. */
-    pageWords =
-      (FLASH_PAGE_SIZE -
-       (((uint32_t) (address + wordCount)) & (FLASH_PAGE_SIZE-1)))
-      / sizeof(uint32_t);
-    if (pageWords > numWords-wordCount)
-      pageWords = numWords-wordCount;
+      /* Compute the number of words to write to the current page. */
+      pageWords = (FLASH_PAGE_SIZE
+          - (((uint32_t) (address + wordCount)) & (FLASH_PAGE_SIZE - 1)))
+          / sizeof(uint32_t);
+      if (pageWords > numWords - wordCount)
+        pageWords = numWords - wordCount;
 
-    /* Now write the data in the current page. */
-    retval = MscLoadData(pData, pageWords);
-    if (mscReturnOk != retval) goto msc_write_word_exit;
+      /* Now write the data in the current page. */
+      retval = MscLoadData(pData, pageWords);
+      if (mscReturnOk != retval)
+        goto msc_write_word_exit;
 
-    wordCount += pageWords;
-    pData += pageWords;
-  }
+      wordCount += pageWords;
+      pData += pageWords;
+    }
 
- msc_write_word_exit:
+  msc_write_word_exit:
 
   /* Disable writing to the MSC */
-  MSC->WRITECTRL &= ~MSC_WRITECTRL_WREN;
+  MSC ->WRITECTRL &= ~MSC_WRITECTRL_WREN;
 
 #if (defined(_EFM32_GIANT_FAMILY) || defined(_EFM32_WONDER_FAMILY)) && (2==WORDS_PER_DATA_PHASE)
-  /* Turn off double word write cycle support. */
-  MSC->WRITECTRL &= ~MSC_WRITECTRL_WDOUBLE;
+  /* Turn off double word write cycle support. */MSC ->WRITECTRL &=
+      ~MSC_WRITECTRL_WDOUBLE;
 #endif
 
   return retval;
@@ -603,7 +582,6 @@ msc_Return_TypeDef MSC_WriteWord(uint32_t *address, void const *data, int numByt
 #ifdef __CC_ARM  /* MDK-ARM compiler */
 #pragma arm section code
 #endif /* __CC_ARM */
-
 
 #if defined( _MSC_MASSLOCK_MASK )
 /***************************************************************************//**
@@ -618,34 +596,31 @@ msc_Return_TypeDef MSC_WriteWord(uint32_t *address, void const *data, int numByt
 #ifdef __CC_ARM  /* MDK-ARM compiler */
 #pragma arm section code="ram_code"
 #endif /* __CC_ARM */
-msc_Return_TypeDef MSC_MassErase(void)
+msc_Return_TypeDef
+MSC_MassErase(void)
 {
   /* Enable writing to the MSC */
-  MSC->WRITECTRL |= MSC_WRITECTRL_WREN;
+  MSC ->WRITECTRL |= MSC_WRITECTRL_WREN;
 
-  /* Unlock device mass erase */
-  MSC->MASSLOCK = MSC_MASSLOCK_LOCKKEY_UNLOCK;
+  /* Unlock device mass erase */MSC ->MASSLOCK = MSC_MASSLOCK_LOCKKEY_UNLOCK;
 
-  /* Erase first 512K block */
-  MSC->WRITECMD = MSC_WRITECMD_ERASEMAIN0;
+  /* Erase first 512K block */MSC ->WRITECMD = MSC_WRITECMD_ERASEMAIN0;
 
   /* Waiting for erase to complete */
-  while ((MSC->STATUS & MSC_STATUS_BUSY))
-  {
-  }
+  while ((MSC ->STATUS & MSC_STATUS_BUSY))
+    {
+    }
 
 #if FLASH_SIZE >= (512 * 1024)
-  /* Erase second 512K block */
-  MSC->WRITECMD = MSC_WRITECMD_ERASEMAIN1;
+  /* Erase second 512K block */MSC ->WRITECMD = MSC_WRITECMD_ERASEMAIN1;
 
   /* Waiting for erase to complete */
-  while ((MSC->STATUS & MSC_STATUS_BUSY))
-  {
-  }
+  while ((MSC ->STATUS & MSC_STATUS_BUSY))
+    {
+    }
 #endif
 
-  /* Restore mass erase lock */
-  MSC->MASSLOCK = MSC_MASSLOCK_LOCKKEY_LOCK;
+  /* Restore mass erase lock */MSC ->MASSLOCK = MSC_MASSLOCK_LOCKKEY_LOCK;
 
   /* This will only successfully return if calling function is also in SRAM */
   return mscReturnOk;

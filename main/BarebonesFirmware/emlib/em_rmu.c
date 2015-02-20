@@ -31,7 +31,6 @@
  *
  ******************************************************************************/
 
-
 #include "em_rmu.h"
 #if defined(RMU_COUNT) && (RMU_COUNT > 0)
 
@@ -56,7 +55,7 @@
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
 /* Reset cause "don't care" definitions.
-   1's mark the bits that must be zero, zeros are "don't cares". */
+ 1's mark the bits that must be zero, zeros are "don't cares". */
 #define RMU_RSTCAUSE_PORST_XMASK         (0x00000000) /**0b0000000000000000  < Power On Reset */
 #define RMU_RSTCAUSE_BODUNREGRST_XMASK   (0x00000081) /**0b0000000010000001  < Brown Out Detector Unregulated Domain Reset */
 #define RMU_RSTCAUSE_BODREGRST_XMASK     (0x00000091) /**0b0000000010010001  < Brown Out Detector Regulated Domain Reset */
@@ -90,50 +89,47 @@
 /** Reset cause mask type. */
 typedef struct
 {
-  uint32_t    resetCauseMask;
-  uint32_t    dontCareMask;
+  uint32_t resetCauseMask;
+  uint32_t dontCareMask;
 } RMU_ResetCauseMasks_Typedef;
-
 
 /*******************************************************************************
  *******************************   TYPEDEFS   **********************************
  ******************************************************************************/
 
 /** Reset cause mask table. */
-static const RMU_ResetCauseMasks_Typedef  resetCauseMasks[NUM_RSTCAUSES] =
+static const RMU_ResetCauseMasks_Typedef resetCauseMasks[NUM_RSTCAUSES] =
   {
-    { RMU_RSTCAUSE_PORST,        RMU_RSTCAUSE_PORST_XMASK },
-    { RMU_RSTCAUSE_BODUNREGRST,  RMU_RSTCAUSE_BODUNREGRST_XMASK },
-    { RMU_RSTCAUSE_BODREGRST,    RMU_RSTCAUSE_BODREGRST_XMASK },
-    { RMU_RSTCAUSE_EXTRST,       RMU_RSTCAUSE_EXTRST_XMASK },
-    { RMU_RSTCAUSE_WDOGRST,      RMU_RSTCAUSE_WDOGRST_XMASK },
-    { RMU_RSTCAUSE_LOCKUPRST,    RMU_RSTCAUSE_LOCKUPRST_XMASK },
-    { RMU_RSTCAUSE_SYSREQRST,    RMU_RSTCAUSE_SYSREQRST_XMASK },
+    { RMU_RSTCAUSE_PORST, RMU_RSTCAUSE_PORST_XMASK },
+    { RMU_RSTCAUSE_BODUNREGRST, RMU_RSTCAUSE_BODUNREGRST_XMASK },
+    { RMU_RSTCAUSE_BODREGRST, RMU_RSTCAUSE_BODREGRST_XMASK },
+    { RMU_RSTCAUSE_EXTRST, RMU_RSTCAUSE_EXTRST_XMASK },
+    { RMU_RSTCAUSE_WDOGRST, RMU_RSTCAUSE_WDOGRST_XMASK },
+    { RMU_RSTCAUSE_LOCKUPRST, RMU_RSTCAUSE_LOCKUPRST_XMASK },
+    { RMU_RSTCAUSE_SYSREQRST, RMU_RSTCAUSE_SYSREQRST_XMASK },
 #ifndef _EFM32_GECKO_FAMILY
-    { RMU_RSTCAUSE_EM4RST,       RMU_RSTCAUSE_EM4RST_XMASK },
-    { RMU_RSTCAUSE_EM4WURST,     RMU_RSTCAUSE_EM4WURST_XMASK },
-    { RMU_RSTCAUSE_BODAVDD0,     RMU_RSTCAUSE_BODAVDD0_XMASK },
-    { RMU_RSTCAUSE_BODAVDD1,     RMU_RSTCAUSE_BODAVDD1_XMASK },
+        { RMU_RSTCAUSE_EM4RST, RMU_RSTCAUSE_EM4RST_XMASK },
+        { RMU_RSTCAUSE_EM4WURST, RMU_RSTCAUSE_EM4WURST_XMASK },
+        { RMU_RSTCAUSE_BODAVDD0, RMU_RSTCAUSE_BODAVDD0_XMASK },
+        { RMU_RSTCAUSE_BODAVDD1, RMU_RSTCAUSE_BODAVDD1_XMASK },
 #endif
 #ifdef BU_PRESENT
-    { RMU_RSTCAUSE_BUBODVDDDREG, RMU_RSTCAUSE_BUBODVDDDREG_XMASK },
-    { RMU_RSTCAUSE_BUBODBUVIN,   RMU_RSTCAUSE_BUBODBUVIN_XMASK },
-    { RMU_RSTCAUSE_BUBODUNREG,   RMU_RSTCAUSE_BUBODUNREG_XMASK },
-    { RMU_RSTCAUSE_BUBODREG,     RMU_RSTCAUSE_BUBODREG_XMASK },
-    { RMU_RSTCAUSE_BUMODERST,    RMU_RSTCAUSE_BUMODERST_XMASK },
+        { RMU_RSTCAUSE_BUBODVDDDREG, RMU_RSTCAUSE_BUBODVDDDREG_XMASK },
+        { RMU_RSTCAUSE_BUBODBUVIN, RMU_RSTCAUSE_BUBODBUVIN_XMASK },
+        { RMU_RSTCAUSE_BUBODUNREG, RMU_RSTCAUSE_BUBODUNREG_XMASK },
+        { RMU_RSTCAUSE_BUBODREG, RMU_RSTCAUSE_BUBODREG_XMASK },
+        { RMU_RSTCAUSE_BUMODERST, RMU_RSTCAUSE_BUMODERST_XMASK },
 #endif
-  };
-
+    };
 
 /*******************************************************************************
  ********************************     TEST     ********************************
  ******************************************************************************/
 #ifdef EMLIB_REGRESSION_TEST
 /* Test variable that replaces the RSTCAUSE cause register when testing
-   the RMU_ResetCauseGet function. */
+ the RMU_ResetCauseGet function. */
 extern uint32_t rstCause;
 #endif
-
 
 /** @endcond */
 
@@ -151,11 +147,11 @@ extern uint32_t rstCause;
  *   @li false - Disable reset signal or flag
  *   @li true - Enable reset signal or flag
  ******************************************************************************/
-void RMU_ResetControl(RMU_Reset_TypeDef reset, bool enable)
+void
+RMU_ResetControl(RMU_Reset_TypeDef reset, bool enable)
 {
-  BITBAND_Peripheral(&(RMU->CTRL), (uint32_t)reset, (uint32_t)enable);
+  BITBAND_Peripheral(&(RMU ->CTRL), (uint32_t) reset, (uint32_t) enable);
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -166,29 +162,29 @@ void RMU_ResetControl(RMU_Reset_TypeDef reset, bool enable)
  *   The reset cause bits must be cleared by SW before a new reset occurs,
  *   otherwise reset causes may accumulate. See @ref RMU_ResetCauseGet().
  ******************************************************************************/
-void RMU_ResetCauseClear(void)
+void
+RMU_ResetCauseClear(void)
 {
   uint32_t locked;
 
-  RMU->CMD = RMU_CMD_RCCLR;
+  RMU ->CMD = RMU_CMD_RCCLR;
 
   /* Clear some reset causes not cleared with RMU CMD register */
   /* (If EMU registers locked, they must be unlocked first) */
-  locked = EMU->LOCK & EMU_LOCK_LOCKKEY_LOCKED;
+  locked = EMU ->LOCK & EMU_LOCK_LOCKKEY_LOCKED;
   if (locked)
-  {
-    EMU_Unlock();
-  }
+    {
+      EMU_Unlock();
+    }
 
-  BITBAND_Peripheral(&(EMU->AUXCTRL), 0, 1);
-  BITBAND_Peripheral(&(EMU->AUXCTRL), 0, 0);
+  BITBAND_Peripheral(&(EMU ->AUXCTRL), 0, 1);
+  BITBAND_Peripheral(&(EMU ->AUXCTRL), 0, 0);
 
   if (locked)
-  {
-    EMU_Lock();
-  }
+    {
+      EMU_Lock();
+    }
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -219,28 +215,28 @@ void RMU_ResetCauseClear(void)
  *   @li RMU_RSTCAUSE_BUBODREG - Backup BOD on regulated powered has triggered
  *   @li RMU_RSTCAUSE_BUMODERST - System has been in Backup mode
  ******************************************************************************/
-uint32_t RMU_ResetCauseGet(void)
+uint32_t
+RMU_ResetCauseGet(void)
 {
 #ifndef EMLIB_REGRESSION_TEST
-  uint32_t rstCause      = RMU->RSTCAUSE;
+  uint32_t rstCause = RMU ->RSTCAUSE;
 #endif
   uint32_t validRstCause = 0;
-  int      i;
-  
-  for (i=0; i<NUM_RSTCAUSES; i++)
-  {
-    //Checks to see if rstCause matches a RSTCAUSE and is not excluded by the X-mask
-    if ((rstCause & resetCauseMasks[i].resetCauseMask) &&
-        !(rstCause & resetCauseMasks[i].dontCareMask))
+  int i;
+
+  for (i = 0; i < NUM_RSTCAUSES; i++)
     {
-      //Adds the reset-cause to list of real reset-causes
-      validRstCause |= resetCauseMasks[i].resetCauseMask;
+      //Checks to see if rstCause matches a RSTCAUSE and is not excluded by the X-mask
+      if ((rstCause & resetCauseMasks[i].resetCauseMask)
+          && !(rstCause & resetCauseMasks[i].dontCareMask))
+        {
+          //Adds the reset-cause to list of real reset-causes
+          validRstCause |= resetCauseMasks[i].resetCauseMask;
+        }
     }
-  }
-  
+
   return validRstCause;
 }
-
 
 /** @} (end addtogroup RMU) */
 /** @} (end addtogroup EM_Library) */

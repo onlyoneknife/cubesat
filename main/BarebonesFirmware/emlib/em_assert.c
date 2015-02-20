@@ -30,7 +30,6 @@
  *
  ******************************************************************************/
 
-
 #include "em_assert.h"
 
 #if defined(DEBUG_EFM)
@@ -58,12 +57,12 @@
  *   Line number in source file where assertion failed.
  ******************************************************************************/
 void assertEFM(const char *file, int line)
-{
-  (void)file;  /* Unused parameter */
-  (void)line;  /* Unused parameter */
+  {
+    (void)file; /* Unused parameter */
+    (void)line; /* Unused parameter */
 
-  while (1)
+    while (1)
     ;
-}
+  }
 
 #endif /* DEBUG_EFM */

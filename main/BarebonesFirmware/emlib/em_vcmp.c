@@ -30,7 +30,6 @@
  *
  ******************************************************************************/
 
-
 #include "em_vcmp.h"
 #if defined(VCMP_COUNT) && (VCMP_COUNT > 0)
 
@@ -54,7 +53,8 @@
  * @param[in] vcmpInit
  *   VCMP Initialization structure
  ******************************************************************************/
-void VCMP_Init(const VCMP_Init_TypeDef *vcmpInit)
+void
+VCMP_Init(const VCMP_Init_TypeDef *vcmpInit)
 {
   /* Verify input */
   EFM_ASSERT((vcmpInit->inactive == 0) || (vcmpInit->inactive == 1));
@@ -62,85 +62,83 @@ void VCMP_Init(const VCMP_Init_TypeDef *vcmpInit)
 
   /* Configure Half Bias setting */
   if (vcmpInit->halfBias)
-  {
-    VCMP->CTRL |= VCMP_CTRL_HALFBIAS;
-  }
+    {
+      VCMP ->CTRL |= VCMP_CTRL_HALFBIAS;
+    }
   else
-  {
-    VCMP->CTRL &= ~(VCMP_CTRL_HALFBIAS);
-  }
+    {
+      VCMP ->CTRL &= ~(VCMP_CTRL_HALFBIAS);
+    }
 
-  /* Configure bias prog */
-  VCMP->CTRL &= ~(_VCMP_CTRL_BIASPROG_MASK);
-  VCMP->CTRL |= (vcmpInit->biasProg << _VCMP_CTRL_BIASPROG_SHIFT);
+  /* Configure bias prog */VCMP ->CTRL &= ~(_VCMP_CTRL_BIASPROG_MASK);
+  VCMP ->CTRL |= (vcmpInit->biasProg << _VCMP_CTRL_BIASPROG_SHIFT);
 
   /* Configure sense for falling edge */
   if (vcmpInit->irqFalling)
-  {
-    VCMP->CTRL |= VCMP_CTRL_IFALL;
-  }
+    {
+      VCMP ->CTRL |= VCMP_CTRL_IFALL;
+    }
   else
-  {
-    VCMP->CTRL &= ~(VCMP_CTRL_IFALL);
-  }
+    {
+      VCMP ->CTRL &= ~(VCMP_CTRL_IFALL);
+    }
 
   /* Configure sense for rising edge */
   if (vcmpInit->irqRising)
-  {
-    VCMP->CTRL |= VCMP_CTRL_IRISE;
-  }
+    {
+      VCMP ->CTRL |= VCMP_CTRL_IRISE;
+    }
   else
-  {
-    VCMP->CTRL &= ~(VCMP_CTRL_IRISE);
-  }
+    {
+      VCMP ->CTRL &= ~(VCMP_CTRL_IRISE);
+    }
 
-  /* Configure warm-up time */
-  VCMP->CTRL &= ~(_VCMP_CTRL_WARMTIME_MASK);
-  VCMP->CTRL |= (vcmpInit->warmup << _VCMP_CTRL_WARMTIME_SHIFT);
+  /* Configure warm-up time */VCMP ->CTRL &= ~(_VCMP_CTRL_WARMTIME_MASK);
+  VCMP ->CTRL |= (vcmpInit->warmup << _VCMP_CTRL_WARMTIME_SHIFT);
 
   /* Configure hysteresis */
   switch (vcmpInit->hyst)
-  {
+    {
   case vcmpHyst20mV:
-    VCMP->CTRL |= VCMP_CTRL_HYSTEN;
+    VCMP ->CTRL |= VCMP_CTRL_HYSTEN;
     break;
   case vcmpHystNone:
-    VCMP->CTRL &= ~(VCMP_CTRL_HYSTEN);
+    VCMP ->CTRL &= ~(VCMP_CTRL_HYSTEN);
     break;
   default:
     break;
-  }
+    }
 
-  /* Configure inactive output value */
-  VCMP->CTRL |= (vcmpInit->inactive << _VCMP_CTRL_INACTVAL_SHIFT);
+  /* Configure inactive output value */VCMP ->CTRL |= (vcmpInit->inactive
+      << _VCMP_CTRL_INACTVAL_SHIFT);
 
   /* Configure trigger level */
   VCMP_TriggerSet(vcmpInit->triggerLevel);
 
   /* Enable or disable VCMP */
   if (vcmpInit->enable)
-  {
-    VCMP->CTRL |= VCMP_CTRL_EN;
-  }
+    {
+      VCMP ->CTRL |= VCMP_CTRL_EN;
+    }
   else
-  {
-    VCMP->CTRL &= ~(VCMP_CTRL_EN);
-  }
+    {
+      VCMP ->CTRL &= ~(VCMP_CTRL_EN);
+    }
 
   /* If Low Power Reference is enabled, wait until VCMP is ready */
   /* before enabling it, see reference manual for deatils        */
   /* Configuring Low Power Ref without enable has no effect      */
-  if(vcmpInit->lowPowerRef && vcmpInit->enable)
-  {
-    /* Poll for VCMP ready */
-    while(!VCMP_Ready());
-    VCMP_LowPowerRefSet(vcmpInit->lowPowerRef);
-  }
+  if (vcmpInit->lowPowerRef && vcmpInit->enable)
+    {
+      /* Poll for VCMP ready */
+      while (!VCMP_Ready())
+        ;
+      VCMP_LowPowerRefSet(vcmpInit->lowPowerRef);
+    }
 
   /* Clear edge interrupt */
   VCMP_IntClear(VCMP_IF_EDGE);
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -149,18 +147,18 @@ void VCMP_Init(const VCMP_Init_TypeDef *vcmpInit)
  * @param[in] enable
  *    If true, enables low power reference, if false disable low power reference
  ******************************************************************************/
-void VCMP_LowPowerRefSet(bool enable)
+void
+VCMP_LowPowerRefSet(bool enable)
 {
   if (enable)
-  {
-    VCMP->INPUTSEL |= VCMP_INPUTSEL_LPREF;
-  }
+    {
+      VCMP ->INPUTSEL |= VCMP_INPUTSEL_LPREF;
+    }
   else
-  {
-    VCMP->INPUTSEL &= ~(VCMP_INPUTSEL_LPREF);
-  }
+    {
+      VCMP ->INPUTSEL &= ~(VCMP_INPUTSEL_LPREF);
+    }
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -169,16 +167,16 @@ void VCMP_LowPowerRefSet(bool enable)
  * @param[in] level
  *    Trigger value, in range 0-63
  ******************************************************************************/
-void VCMP_TriggerSet(int level)
+void
+VCMP_TriggerSet(int level)
 {
   /* Trigger range is 6 bits, value from 0-63 */
   EFM_ASSERT((level > 0) && (level < 64));
 
   /* Set trigger level */
-  VCMP->INPUTSEL = (VCMP->INPUTSEL & ~(_VCMP_INPUTSEL_TRIGLEVEL_MASK)) |
-                   (level << _VCMP_INPUTSEL_TRIGLEVEL_SHIFT);
+  VCMP ->INPUTSEL = (VCMP ->INPUTSEL & ~(_VCMP_INPUTSEL_TRIGLEVEL_MASK))
+      | (level << _VCMP_INPUTSEL_TRIGLEVEL_SHIFT);
 }
-
 
 /** @} (end addtogroup VCMP) */
 /** @} (end addtogroup EM_Library) */

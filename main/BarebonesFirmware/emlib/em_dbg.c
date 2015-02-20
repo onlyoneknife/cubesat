@@ -30,7 +30,6 @@
  *
  ******************************************************************************/
 
-
 #include "em_dbg.h"
 
 #if defined ( CoreDebug_DHCSR_C_DEBUGEN_Msk )
@@ -85,7 +84,8 @@
  * @param[in] location
  *   Pin location used for SWO pin on the application in use.
  ******************************************************************************/
-void DBG_SWOEnable(unsigned int location)
+void
+DBG_SWOEnable(unsigned int location)
 {
   int port;
   int pin;
@@ -93,14 +93,14 @@ void DBG_SWOEnable(unsigned int location)
   EFM_ASSERT(location < AFCHANLOC_MAX);
 
   port = AF_DBG_SWO_PORT(location);
-  pin  = AF_DBG_SWO_PIN(location);
+  pin = AF_DBG_SWO_PIN(location);
 
   /* Port/pin location not defined for device? */
   if ((pin < 0) || (port < 0))
-  {
-    EFM_ASSERT(0);
-    return;
-  }
+    {
+      EFM_ASSERT(0);
+      return;
+    }
 
   /* Ensure auxiliary clock going to the Cortex debug trace module is enabled */
   CMU_OscillatorEnable(cmuOsc_AUXHFRCO, true, false);
@@ -110,7 +110,7 @@ void DBG_SWOEnable(unsigned int location)
   GPIO_DbgSWOEnable(true);
 
   /* Configure SWO pin for output */
-  GPIO_PinModeSet((GPIO_Port_TypeDef)port, pin, gpioModePushPull, 0);
+  GPIO_PinModeSet((GPIO_Port_TypeDef) port, pin, gpioModePushPull, 0);
 }
 
 /** @} (end addtogroup DBG) */

@@ -30,7 +30,6 @@
  *
  ******************************************************************************/
 
-
 #include "em_prs.h"
 #if defined(PRS_COUNT) && (PRS_COUNT > 0)
 
@@ -69,16 +68,14 @@
  * @param[in] edge
  *   Edge (for selected source/signal) to generate pulse for.
  ******************************************************************************/
-void PRS_SourceSignalSet(unsigned int ch,
-                         uint32_t source,
-                         uint32_t signal,
-                         PRS_Edge_TypeDef edge)
+void
+PRS_SourceSignalSet(unsigned int ch, uint32_t source, uint32_t signal,
+    PRS_Edge_TypeDef edge)
 {
   EFM_ASSERT(ch < PRS_CHAN_COUNT);
 
-  PRS->CH[ch].CTRL = (source & _PRS_CH_CTRL_SOURCESEL_MASK) |
-                     (signal & _PRS_CH_CTRL_SIGSEL_MASK) |
-                     (uint32_t)edge;
+  PRS ->CH[ch].CTRL = (source & _PRS_CH_CTRL_SOURCESEL_MASK)
+      | (signal & _PRS_CH_CTRL_SIGSEL_MASK) | (uint32_t) edge;
 }
 
 #if defined( PRS_CH_CTRL_ASYNC )
@@ -115,16 +112,13 @@ void PRS_SourceSignalSet(unsigned int ch,
  *   Asynchronous signal (for selected @p source) to use. Use one of the
  *   PRS_CH_CTRL_SIGSEL_x defines that support asynchronous operation.
  ******************************************************************************/
-void PRS_SourceAsyncSignalSet(unsigned int ch,
-                              uint32_t source,
-                              uint32_t signal)
+void
+PRS_SourceAsyncSignalSet(unsigned int ch, uint32_t source, uint32_t signal)
 {
   EFM_ASSERT(ch < PRS_CHAN_COUNT);
 
-  PRS->CH[ch].CTRL = PRS_CH_CTRL_ASYNC |
-                     (source & _PRS_CH_CTRL_SOURCESEL_MASK) |
-                     (signal & _PRS_CH_CTRL_SIGSEL_MASK) |
-                     PRS_CH_CTRL_EDSEL_OFF;
+  PRS ->CH[ch].CTRL = PRS_CH_CTRL_ASYNC | (source & _PRS_CH_CTRL_SOURCESEL_MASK)
+      | (signal & _PRS_CH_CTRL_SIGSEL_MASK) | PRS_CH_CTRL_EDSEL_OFF;
 }
 #endif
 

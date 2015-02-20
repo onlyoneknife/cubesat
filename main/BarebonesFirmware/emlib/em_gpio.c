@@ -31,7 +31,6 @@
  *
  ******************************************************************************/
 
-
 #include "em_gpio.h"
 
 #if defined(GPIO_COUNT) && (GPIO_COUNT > 0)
@@ -57,7 +56,6 @@
 
 /** @endcond */
 
-
 /*******************************************************************************
  **************************   GLOBAL FUNCTIONS   *******************************
  ******************************************************************************/
@@ -72,18 +70,18 @@
  * @param[in] location
  *   The debug pin location to use (0-3).
  ******************************************************************************/
-void GPIO_DbgLocationSet(unsigned int location)
+void
+GPIO_DbgLocationSet(unsigned int location)
 {
 #if defined ( _GPIO_ROUTE_SWLOCATION_MASK )
   EFM_ASSERT(location < AFCHANLOC_MAX);
 
-  GPIO->ROUTE = (GPIO->ROUTE & ~_GPIO_ROUTE_SWLOCATION_MASK) |
-                (location << _GPIO_ROUTE_SWLOCATION_SHIFT);
+  GPIO ->ROUTE = (GPIO ->ROUTE & ~_GPIO_ROUTE_SWLOCATION_MASK)
+      | (location << _GPIO_ROUTE_SWLOCATION_SHIFT);
 #else
   (void)location;
 #endif
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -95,14 +93,14 @@ void GPIO_DbgLocationSet(unsigned int location)
  * @param[in] mode
  *   Drive mode to use for port.
  ******************************************************************************/
-void GPIO_DriveModeSet(GPIO_Port_TypeDef port, GPIO_DriveMode_TypeDef mode)
+void
+GPIO_DriveModeSet(GPIO_Port_TypeDef port, GPIO_DriveMode_TypeDef mode)
 {
   EFM_ASSERT(GPIO_PORT_VALID(port) && GPIO_DRIVEMODE_VALID(mode));
 
-  GPIO->P[port].CTRL = (GPIO->P[port].CTRL & ~(_GPIO_P_CTRL_DRIVEMODE_MASK))
-                       | (mode << _GPIO_P_CTRL_DRIVEMODE_SHIFT);
+  GPIO ->P[port].CTRL = (GPIO ->P[port].CTRL & ~(_GPIO_P_CTRL_DRIVEMODE_MASK))
+      | (mode << _GPIO_P_CTRL_DRIVEMODE_SHIFT);
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -140,11 +138,9 @@ void GPIO_DriveModeSet(GPIO_Port_TypeDef port, GPIO_DriveMode_TypeDef mode)
  *   Set to true if interrupt shall be enabled after configuration completed,
  *   false to leave disabled. See GPIO_IntDisable() and GPIO_IntEnable().
  ******************************************************************************/
-void GPIO_IntConfig(GPIO_Port_TypeDef port,
-                    unsigned int pin,
-                    bool risingEdge,
-                    bool fallingEdge,
-                    bool enable)
+void
+GPIO_IntConfig(GPIO_Port_TypeDef port, unsigned int pin, bool risingEdge,
+    bool fallingEdge, bool enable)
 {
   uint32_t tmp;
 
@@ -154,30 +150,28 @@ void GPIO_IntConfig(GPIO_Port_TypeDef port,
    * The EXTIPSELL register controls pins 0-7 and EXTIPSELH controls
    * pins 8-15. */
   if (pin < 8)
-  {
-    GPIO->EXTIPSELL = (GPIO->EXTIPSELL & ~(0xF << (4 * pin))) |
-                      (port << (4 * pin));
-  }
+    {
+      GPIO ->EXTIPSELL = (GPIO ->EXTIPSELL & ~(0xF << (4 * pin)))
+          | (port << (4 * pin));
+    }
   else
-  {
-    tmp             = pin - 8;
-    GPIO->EXTIPSELH = (GPIO->EXTIPSELH & ~(0xF << (4 * tmp))) |
-                      (port << (4 * tmp));
-  }
+    {
+      tmp = pin - 8;
+      GPIO ->EXTIPSELH = (GPIO ->EXTIPSELH & ~(0xF << (4 * tmp)))
+          | (port << (4 * tmp));
+    }
 
   /* Enable/disable rising edge */
-  BITBAND_Peripheral(&(GPIO->EXTIRISE), pin, (unsigned int)risingEdge);
+  BITBAND_Peripheral(&(GPIO ->EXTIRISE), pin, (unsigned int) risingEdge);
 
   /* Enable/disable falling edge */
-  BITBAND_Peripheral(&(GPIO->EXTIFALL), pin, (unsigned int)fallingEdge);
+  BITBAND_Peripheral(&(GPIO ->EXTIFALL), pin, (unsigned int) fallingEdge);
 
-  /* Clear any pending interrupt */
-  GPIO->IFC = 1 << pin;
+  /* Clear any pending interrupt */GPIO ->IFC = 1 << pin;
 
   /* Finally enable/disable interrupt */
-  BITBAND_Peripheral(&(GPIO->IEN), pin, (unsigned int)enable);
+  BITBAND_Peripheral(&(GPIO ->IEN), pin, (unsigned int) enable);
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -196,51 +190,50 @@ void GPIO_IntConfig(GPIO_Port_TypeDef port,
  *   Value to set for pin in DOUT register. The DOUT setting is important for
  *   even some input mode configurations, determining pull-up/down direction.
  ******************************************************************************/
-void GPIO_PinModeSet(GPIO_Port_TypeDef port,
-                     unsigned int pin,
-                     GPIO_Mode_TypeDef mode,
-                     unsigned int out)
+void
+GPIO_PinModeSet(GPIO_Port_TypeDef port, unsigned int pin,
+    GPIO_Mode_TypeDef mode, unsigned int out)
 {
   EFM_ASSERT(GPIO_PORT_VALID(port) && GPIO_PIN_VALID(pin));
 
   /* If disabling pin, do not modify DOUT in order to reduce chance for */
   /* glitch/spike (may not be sufficient precaution in all use cases) */
   if (mode != gpioModeDisabled)
-  {
-    if (out)
     {
-      GPIO->P[port].DOUTSET = 1 << pin;
+      if (out)
+        {
+          GPIO ->P[port].DOUTSET = 1 << pin;
+        }
+      else
+        {
+          GPIO ->P[port].DOUTCLR = 1 << pin;
+        }
     }
-    else
-    {
-      GPIO->P[port].DOUTCLR = 1 << pin;
-    }
-  }
 
   /* There are two registers controlling the pins for each port. The MODEL
    * register controls pins 0-7 and MODEH controls pins 8-15. */
   if (pin < 8)
-  {
-    GPIO->P[port].MODEL = (GPIO->P[port].MODEL & ~(0xF << (pin * 4))) |
-                          (mode << (pin * 4));
-  }
+    {
+      GPIO ->P[port].MODEL = (GPIO ->P[port].MODEL & ~(0xF << (pin * 4)))
+          | (mode << (pin * 4));
+    }
   else
-  {
-    GPIO->P[port].MODEH = (GPIO->P[port].MODEH & ~(0xF << ((pin - 8) * 4))) |
-                          (mode << ((pin - 8) * 4));
-  }
+    {
+      GPIO ->P[port].MODEH = (GPIO ->P[port].MODEH & ~(0xF << ((pin - 8) * 4)))
+          | (mode << ((pin - 8) * 4));
+    }
 
   if (mode == gpioModeDisabled)
-  {
-    if (out)
     {
-      GPIO->P[port].DOUTSET = 1 << pin;
+      if (out)
+        {
+          GPIO ->P[port].DOUTSET = 1 << pin;
+        }
+      else
+        {
+          GPIO ->P[port].DOUTCLR = 1 << pin;
+        }
     }
-    else
-    {
-      GPIO->P[port].DOUTCLR = 1 << pin;
-    }
-  }
 }
 
 /** @} (end addtogroup GPIO) */
