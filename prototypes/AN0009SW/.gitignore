@@ -8,4 +8,5 @@ Release_lpc1769
 unittest
 *.launch
 .settings/
+.metadata
 GNU ARM v4.8.3 - Debug
