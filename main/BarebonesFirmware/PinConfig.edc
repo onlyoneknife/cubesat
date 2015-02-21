@@ -1313,7 +1313,7 @@
 		</item>
 		<item class_id_reference="7" object_id="_65">
 			<uniquePinId>EFM32GG280F1024@LQFP100@23</uniquePinId>
-			<pinConfigStateKey></pinConfigStateKey>
+			<pinConfigStateKey>4-2</pinConfigStateKey>
 		</item>
 		<item class_id_reference="7" object_id="_66">
 			<uniquePinId>EFM32GG280F1024@LQFP100@24</uniquePinId>
@@ -1417,7 +1417,7 @@
 		</item>
 		<item class_id_reference="7" object_id="_91">
 			<uniquePinId>EFM32GG280F1024@LQFP100@49</uniquePinId>
-			<pinConfigStateKey></pinConfigStateKey>
+			<pinConfigStateKey>4-2</pinConfigStateKey>
 		</item>
 		<item class_id_reference="7" object_id="_92">
 			<uniquePinId>EFM32GG280F1024@LQFP100@50</uniquePinId>
