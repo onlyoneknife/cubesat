@@ -311,7 +311,7 @@
 			<enabled>1</enabled>
 			<locationValue>0</locationValue>
 			<signalsWithEnableInvertedFromDefault>
-				<count>17</count>
+				<count>19</count>
 				<item_version>0</item_version>
 				<item>PA10</item>
 				<item>PA11</item>
@@ -325,7 +325,9 @@
 				<item>PC10</item>
 				<item>PC11</item>
 				<item>PC14</item>
+				<item>PC5</item>
 				<item>PC9</item>
+				<item>PD3</item>
 				<item>PD5</item>
 				<item>PD8</item>
 				<item>PF6</item>
@@ -504,7 +506,7 @@
 				</item>
 				<item>
 					<first>gpioname_PC5</first>
-					<second></second>
+					<second>US2_CS0</second>
 				</item>
 				<item>
 					<first>gpioname_PC6</first>
@@ -548,7 +550,7 @@
 				</item>
 				<item>
 					<first>gpioname_PD3</first>
-					<second></second>
+					<second>US1_CS0</second>
 				</item>
 				<item>
 					<first>gpioname_PD4</first>
@@ -1068,8 +1070,9 @@
 			<enabled>1</enabled>
 			<locationValue>1</locationValue>
 			<signalsWithEnableInvertedFromDefault>
-				<count>0</count>
+				<count>1</count>
 				<item_version>0</item_version>
+				<item>CS</item>
 			</signalsWithEnableInvertedFromDefault>
 			<customKeyValueStore>
 				<count>12</count>
@@ -1130,8 +1133,9 @@
 			<enabled>1</enabled>
 			<locationValue>0</locationValue>
 			<signalsWithEnableInvertedFromDefault>
-				<count>0</count>
+				<count>1</count>
 				<item_version>0</item_version>
+				<item>CS</item>
 			</signalsWithEnableInvertedFromDefault>
 			<customKeyValueStore>
 				<count>12</count>
