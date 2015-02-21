@@ -7,18 +7,17 @@
 
 #include "autogen_usart2.h"
 
-void
-USART2_setup(void)
+void USART2_setup(void)
 {
   USART_InitSync_TypeDef init = USART_INITSYNC_DEFAULT;
 
-  init.baudrate = 1000000;
-  init.databits = usartDatabits8;
-  init.msbf = 1;
-  init.master = 1;
-  init.clockMode = usartClockMode0;
-  init.prsRxEnable = 0;
-  init.autoTx = 0;
+  init.baudrate     = 1000000;
+  init.databits     = usartDatabits8;
+  init.msbf         = 1;
+  init.master       = 1;
+  init.clockMode    = usartClockMode0;
+  init.prsRxEnable  = 0;
+  init.autoTx       = 0;
 
   USART_InitSync(USART2, &init);
 }

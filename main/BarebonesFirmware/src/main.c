@@ -26,6 +26,14 @@ main(void)
   /* Initialize chip */
   eADesigner_Init();
 
+  /* Initialize other components */
+
+  // Initialize Code Flash
+  // Initialize SD Card
+  // Initialize FRAM
+  // Initialize Sensors
+  // Initialize External I2C?
+
   return 0;
 
 }
