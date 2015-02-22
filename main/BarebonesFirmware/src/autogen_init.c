@@ -74,6 +74,8 @@ void eADesigner_Init(void)
   GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE9_MASK) | GPIO_P_MODEH_MODE9_PUSHPULL;
   /* Pin PB10 is configured to Push-pull */
   GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE10_MASK) | GPIO_P_MODEH_MODE10_PUSHPULL;
+  /* Pin PB12 is configured to Push-pull */
+  GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE12_MASK) | GPIO_P_MODEH_MODE12_PUSHPULL;
   /* Pin PC0 is configured to Input enabled */
   GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE0_MASK) | GPIO_P_MODEL_MODE0_INPUT;
   /* Pin PC1 is configured to Input enabled */
@@ -162,8 +164,8 @@ void eADesigner_Init(void)
   GPIO->P[4].MODEH = (GPIO->P[4].MODEH & ~_GPIO_P_MODEH_MODE15_MASK) | GPIO_P_MODEH_MODE15_PUSHPULL;
   /* Pin PF2 is configured to Push-pull */
   GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE2_MASK) | GPIO_P_MODEL_MODE2_PUSHPULL;
-  /* Pin PF3 is configured to Push-pull */
-  GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE3_MASK) | GPIO_P_MODEL_MODE3_PUSHPULL;
+  /* Pin PF3 is configured to Open-drain */
+  GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE3_MASK) | GPIO_P_MODEL_MODE3_WIREDAND;
   /* Pin PF4 is configured to Push-pull */
   GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE4_MASK) | GPIO_P_MODEL_MODE4_PUSHPULL;
   /* Pin PF5 is configured to Push-pull */
@@ -186,7 +188,7 @@ void eADesigner_Init(void)
   /* Enable clock for EBI */
   CMU_ClockEnable(cmuClock_EBI, true);
   /* EBI I/O routing */
-  EBI->ROUTE |= EBI_ROUTE_APEN_A21 | EBI_ROUTE_ARDYPEN | EBI_ROUTE_ALEPEN | EBI_ROUTE_CS0PEN | EBI_ROUTE_EBIPEN;
+  EBI->ROUTE |= EBI_ROUTE_APEN_A21 | EBI_ROUTE_ARDYPEN | EBI_ROUTE_CS0PEN | EBI_ROUTE_EBIPEN;
   
   
   /* Enable clock for I2C0 */
