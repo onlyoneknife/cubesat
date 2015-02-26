@@ -1091,7 +1091,7 @@
 				</item>
 				<item>
 					<first>databits</first>
-					<second></second>
+					<second>usartDatabits16</second>
 				</item>
 				<item>
 					<first>master</first>
