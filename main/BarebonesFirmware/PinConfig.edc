@@ -264,7 +264,7 @@
 			<enabled>1</enabled>
 			<locationValue>0</locationValue>
 			<signalsWithEnableInvertedFromDefault>
-				<count>19</count>
+				<count>20</count>
 				<item_version>0</item_version>
 				<item>A21</item>
 				<item>A22</item>
@@ -273,6 +273,7 @@
 				<item>A25</item>
 				<item>A26</item>
 				<item>A27</item>
+				<item>ALE</item>
 				<item>BL0</item>
 				<item>BL1</item>
 				<item>CS1</item>
@@ -311,13 +312,11 @@
 			<enabled>1</enabled>
 			<locationValue>0</locationValue>
 			<signalsWithEnableInvertedFromDefault>
-				<count>19</count>
+				<count>18</count>
 				<item_version>0</item_version>
-				<item>PA10</item>
-				<item>PA11</item>
 				<item>PA7</item>
 				<item>PA8</item>
-				<item>PA9</item>
+				<item>PB12</item>
 				<item>PB5</item>
 				<item>PB6</item>
 				<item>PC0</item>
@@ -330,6 +329,7 @@
 				<item>PD3</item>
 				<item>PD5</item>
 				<item>PD8</item>
+				<item>PF3</item>
 				<item>PF6</item>
 				<item>PF7</item>
 			</signalsWithEnableInvertedFromDefault>
@@ -346,11 +346,11 @@
 				</item>
 				<item>
 					<first>gpioname_PA10</first>
-					<second>I2C1_A1</second>
+					<second>PA10</second>
 				</item>
 				<item>
 					<first>gpioname_PA11</first>
-					<second>I2C1_RST#</second>
+					<second>PA11</second>
 				</item>
 				<item>
 					<first>gpioname_PA12</first>
@@ -398,7 +398,7 @@
 				</item>
 				<item>
 					<first>gpioname_PA9</first>
-					<second>I2C1_A0</second>
+					<second>PA9</second>
 				</item>
 				<item>
 					<first>gpioname_PB0</first>
@@ -414,11 +414,11 @@
 				</item>
 				<item>
 					<first>gpioname_PB11</first>
-					<second></second>
+					<second>PB11</second>
 				</item>
 				<item>
 					<first>gpioname_PB12</first>
-					<second></second>
+					<second>US1_CS3</second>
 				</item>
 				<item>
 					<first>gpioname_PB13</first>
@@ -654,7 +654,7 @@
 				</item>
 				<item>
 					<first>gpioname_PF3</first>
-					<second></second>
+					<second>AUX_#ON</second>
 				</item>
 				<item>
 					<first>gpioname_PF4</first>
@@ -1091,7 +1091,7 @@
 				</item>
 				<item>
 					<first>databits</first>
-					<second></second>
+					<second>usartDatabits16</second>
 				</item>
 				<item>
 					<first>master</first>
@@ -1313,7 +1313,7 @@
 		</item>
 		<item class_id_reference="7" object_id="_65">
 			<uniquePinId>EFM32GG280F1024@LQFP100@23</uniquePinId>
-			<pinConfigStateKey></pinConfigStateKey>
+			<pinConfigStateKey>4-2</pinConfigStateKey>
 		</item>
 		<item class_id_reference="7" object_id="_66">
 			<uniquePinId>EFM32GG280F1024@LQFP100@24</uniquePinId>
@@ -1381,7 +1381,7 @@
 		</item>
 		<item class_id_reference="7" object_id="_82">
 			<uniquePinId>EFM32GG280F1024@LQFP100@40</uniquePinId>
-			<pinConfigStateKey></pinConfigStateKey>
+			<pinConfigStateKey>4-2</pinConfigStateKey>
 		</item>
 		<item class_id_reference="7" object_id="_83">
 			<uniquePinId>EFM32GG280F1024@LQFP100@41</uniquePinId>
@@ -1417,7 +1417,7 @@
 		</item>
 		<item class_id_reference="7" object_id="_91">
 			<uniquePinId>EFM32GG280F1024@LQFP100@49</uniquePinId>
-			<pinConfigStateKey></pinConfigStateKey>
+			<pinConfigStateKey>4-2</pinConfigStateKey>
 		</item>
 		<item class_id_reference="7" object_id="_92">
 			<uniquePinId>EFM32GG280F1024@LQFP100@50</uniquePinId>
@@ -1537,7 +1537,7 @@
 		</item>
 		<item class_id_reference="7" object_id="_121">
 			<uniquePinId>EFM32GG280F1024@LQFP100@79</uniquePinId>
-			<pinConfigStateKey></pinConfigStateKey>
+			<pinConfigStateKey>8-2</pinConfigStateKey>
 		</item>
 		<item class_id_reference="7" object_id="_122">
 			<uniquePinId>EFM32GG280F1024@LQFP100@80</uniquePinId>
