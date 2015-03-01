@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>EFM32GG280F1024_Blinky</name>
+	<name>EFM32GG280F1024_ADC</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -25,6 +25,11 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
 	<linkedResources>
+		<link>
+			<name>emlib/em_system.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/emlib/src/em_system.c</locationURI>
+		</link>
 		<link>
 			<name>CMSIS/efm32gg/startup_gcc_efm32gg.s</name>
 			<type>1</type>
