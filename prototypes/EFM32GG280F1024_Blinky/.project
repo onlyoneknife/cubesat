@@ -26,11 +26,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>emlib/em_system.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/emlib/src/em_system.c</locationURI>
-		</link>
-		<link>
 			<name>CMSIS/efm32gg/startup_gcc_efm32gg.s</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/Device/SiliconLabs/EFM32GG/Source/GCC/startup_efm32gg.S</locationURI>
