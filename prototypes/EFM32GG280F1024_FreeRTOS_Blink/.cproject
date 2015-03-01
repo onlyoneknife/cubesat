@@ -6,8 +6,8 @@
 		<cconfiguration id="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129" moduleId="org.eclipse.cdt.core.settings" name="GNU ARM v4.8.3 - Debug">
 				<macros>
-					<stringMacro name="StudioToolchainPath" type="VALUE_PATH_DIR" value="${StudioToolchainPathFromID:com.silabs.ide.si32.gcc:4.8.3.20131129}"/>
-					<stringMacro name="StudioSdkPath" type="VALUE_PATH_DIR" value="${StudioSdkPathFromID:com.silabs.sdk.si32.efm32.sls:2.0.4}"/>
+					<stringMacro name="StudioToolchainPath" type="VALUE_PATH_DIR" value="${workspace_loc}\lib3rdParty\SiliconLabs\GNU_ARM"/>
+					<stringMacro name="StudioSdkPath" type="VALUE_PATH_ANY" value="${workspace_loc}\lib3rdParty\SiliconLabs\EFM32"/>
 				</macros>
 				<externalSettings/>
 				<extensions>
@@ -60,7 +60,6 @@
 							</tool>
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base.1067439746" name="GNU ARM Assembler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base">
 								<option id="gnu.both.asm.option.include.paths.1854791213" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/CMSIS/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/drivers&quot;"/>
@@ -74,6 +73,7 @@
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/spidrv/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/reptile/FreeRTOS/Source/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/reptile/FreeRTOS/Source/portable/GCC/ARM_CM3&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/CMSIS/Include&quot;"/>
 								</option>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.674748679" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
