@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 /******************************************************************************
  * @file 2_leds_solution.c
  * @brief Blinking LEDs with STK solution
@@ -101,6 +104,7 @@ int main(void)
 
 
 
+<<<<<<< HEAD
 =======
 /******************************************************************************
  * @file 1_registers.c
@@ -166,3 +170,5 @@ int main(void)
   while (1) ;
 }
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs

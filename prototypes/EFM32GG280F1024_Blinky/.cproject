@@ -26,6 +26,7 @@
 					<folderInfo id="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129." name="/" resourcePath="">
 						<toolChain id="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.exe.306021578" name="Si32 GNU ARM" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.exe">
 <<<<<<< HEAD
+<<<<<<< HEAD
 							<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level.1808837617" name="Debug Level" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level" value="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level.default" valueType="enumerated"/>
 							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.platform.base.1023991517" isAbstract="false" name="Debug Platform" osList="win32,linux,macosx" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.platform.base"/>
 							<builder buildPath="${workspace_loc:/EFM32GG280F1024_Blinky}/GNU ARM v4.8.3 - Debug" id="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.builder.base.683663087" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Si32 GNU ARM Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.builder.base"/>
@@ -44,6 +45,16 @@
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.prolog.1476235460" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.prolog" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.include.paths.1623395689" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+							<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level.1808837617" name="Debug Level" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level" value="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level.default" valueType="enumerated"/>
+							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.platform.base.1023991517" isAbstract="false" name="Debug Platform" osList="win32,linux,macosx" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.platform.base"/>
+							<builder buildPath="${workspace_loc:/EFM32GG280F1024_Blinky}/GNU ARM v4.8.3 - Debug" id="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.builder.base.683663087" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Si32 GNU ARM Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.builder.base"/>
+							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.2005015203" name="GNU ARM C Compiler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base">
+								<option id="gnu.c.compiler.option.optimization.level.2081890044" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.none" valueType="enumerated"/>
+								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.builtin.1467190525" name="Always branch to builtin functions (-fno-builtin)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.builtin" value="true" valueType="boolean"/>
+								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.prolog.1476235460" name="Generate debugger-friendly prologs (-mno-sched-prolog)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.prolog" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.include.paths.1623395689" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/CMSIS/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
@@ -51,16 +62,21 @@
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
 								</option>
 <<<<<<< HEAD
+<<<<<<< HEAD
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols.792000530" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols" valueType="definedSymbols">
 =======
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols.792000530" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols" valueType="definedSymbols">
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols.792000530" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols" valueType="definedSymbols">
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
 									<listOptionValue builtIn="false" value="DEBUG=1"/>
 								</option>
 								<inputType id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.1273990100" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.base.370202820" name="GNU ARM C++ Compiler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.base">
+<<<<<<< HEAD
 <<<<<<< HEAD
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.debug.builtin.1518306239" name="Always branch to builtin functions (-fno-builtin)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.debug.builtin" value="true" valueType="boolean"/>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.debug.prolog.67474583" name="Generate debugger-friendly prologs (-mno-sched-prolog)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.debug.prolog" value="true" valueType="boolean"/>
@@ -74,6 +90,13 @@
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base.751633472" name="GNU ARM Assembler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base">
 								<option id="gnu.both.asm.option.include.paths.562664927" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.debug.builtin.1518306239" name="Always branch to builtin functions (-fno-builtin)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.debug.builtin" value="true" valueType="boolean"/>
+								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.debug.prolog.67474583" name="Generate debugger-friendly prologs (-mno-sched-prolog)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.debug.prolog" value="true" valueType="boolean"/>
+							</tool>
+							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base.751633472" name="GNU ARM Assembler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base">
+								<option id="gnu.both.asm.option.include.paths.562664927" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/CMSIS/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
@@ -81,15 +104,20 @@
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
 								</option>
 <<<<<<< HEAD
+<<<<<<< HEAD
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.783228603" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 =======
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.783228603" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.783228603" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1657707364" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.base.1955867816" name="GNU ARM C Linker" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.base">
+<<<<<<< HEAD
 <<<<<<< HEAD
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs.1394089490" name="No startup or default libs (-nostdlib)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs" value="false" valueType="boolean"/>
 								<option id="gnu.c.link.option.paths.1638831429" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths"/>
@@ -97,6 +125,11 @@
 =======
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs.1394089490" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs" value="false" valueType="boolean"/>
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs.1394089490" name="No startup or default libs (-nostdlib)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs" value="false" valueType="boolean"/>
+								<option id="gnu.c.link.option.paths.1638831429" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths"/>
+								<option id="gnu.c.link.option.libs.1217629026" name="Libraries (-l)" superClass="gnu.c.link.option.libs"/>
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.364150224" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -133,6 +166,7 @@
 					<folderInfo id="com.silabs.ide.si32.gcc.release#com.silabs.ide.si32.gcc:4.8.3.20131129." name="/" resourcePath="">
 						<toolChain id="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.exe.376510542" name="Si32 GNU ARM" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.exe">
 <<<<<<< HEAD
+<<<<<<< HEAD
 							<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level.104014336" name="Debug Level" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level" value="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level.default" valueType="enumerated"/>
 							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.platform.base.511996573" isAbstract="false" name="Debug Platform" osList="win32,linux,macosx" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.platform.base"/>
 							<builder buildPath="${workspace_loc:/EFM32GG280F1024_Blinky}/GNU ARM v4.8.3 - Release" id="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.builder.base.486627340" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Si32 GNU ARM Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.builder.base"/>
@@ -149,6 +183,15 @@
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.builtin.1810199432" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.builtin" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.include.paths.578199825" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+							<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level.104014336" name="Debug Level" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level" value="com.silabs.ide.si32.gcc.cdt.managedbuild.toolchain.debug.level.default" valueType="enumerated"/>
+							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.platform.base.511996573" isAbstract="false" name="Debug Platform" osList="win32,linux,macosx" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.platform.base"/>
+							<builder buildPath="${workspace_loc:/EFM32GG280F1024_Blinky}/GNU ARM v4.8.3 - Release" id="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.builder.base.486627340" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Si32 GNU ARM Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.target.gnu.builder.base"/>
+							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.8963432" name="GNU ARM C Compiler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base">
+								<option id="gnu.c.compiler.option.optimization.level.234422533" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.most" valueType="enumerated"/>
+								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.builtin.1810199432" name="Always branch to builtin functions (-fno-builtin)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.builtin" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.include.paths.578199825" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/CMSIS/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
@@ -156,10 +199,14 @@
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
 								</option>
 <<<<<<< HEAD
+<<<<<<< HEAD
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols.2008288121" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols" valueType="definedSymbols">
 =======
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols.2008288121" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols" valueType="definedSymbols">
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols.2008288121" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols" valueType="definedSymbols">
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
 									<listOptionValue builtIn="false" value="NDEBUG=1"/>
 								</option>
@@ -168,10 +215,14 @@
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.base.1019335456" name="GNU ARM C++ Compiler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.base"/>
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base.1508206664" name="GNU ARM Assembler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base">
 <<<<<<< HEAD
+<<<<<<< HEAD
 								<option id="gnu.both.asm.option.include.paths.647167204" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 =======
 								<option id="gnu.both.asm.option.include.paths.647167204" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+								<option id="gnu.both.asm.option.include.paths.647167204" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/CMSIS/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
@@ -179,20 +230,28 @@
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
 								</option>
 <<<<<<< HEAD
+<<<<<<< HEAD
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.36947723" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 =======
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.36947723" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.36947723" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1668796574" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.base.1197603947" name="GNU ARM C Linker" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.base">
 <<<<<<< HEAD
+<<<<<<< HEAD
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs.1215297827" name="No startup or default libs (-nostdlib)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs" value="false" valueType="boolean"/>
 =======
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs.1215297827" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs" value="false" valueType="boolean"/>
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs.1215297827" name="No startup or default libs (-nostdlib)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs" value="false" valueType="boolean"/>
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.664188293" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -222,6 +281,9 @@
 		</scannerConfigBuildInfo>
 	</storageModule>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="GNU ARM v4.8.3 - Release">
 			<resource resourceType="PROJECT" workspacePath="/EFM32GG280F1024_Blinky"/>
@@ -230,6 +292,9 @@
 			<resource resourceType="PROJECT" workspacePath="/EFM32GG280F1024_Blinky"/>
 		</configuration>
 	</storageModule>
+<<<<<<< HEAD
 =======
 >>>>>>> parent of 708d3b7... Messed a bunch of stuff up
+=======
+>>>>>>> remotes/origin/Stefan-Setup_3rdParty_Libs
 </cproject>
