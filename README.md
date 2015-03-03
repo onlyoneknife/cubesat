@@ -115,36 +115,31 @@ feature. For example, make a branch called Collin-mNLP_Driver to develop the mNL
 TBC
 
 ## Repository Structure ##
-The structure of the repo is as follows.
+The structure of the repository is as follows.
 
 ***lib3rdParty***
 
 * Contains 3rd party libraries to support our development. This includes the FreeRTOS kernal, etc.
 
-*** ports ***
+***hardware***
 
-* For production code and code for testing production code, that is specific for each target architecture.  
-* Each port should have its own subfolder, e.g., ports/linux 
-* This should only be committed to master on approval and should have full unit test coverage!
+* Contains hardware level code. This would include register level interaction with a sensor, etc.
+
+***liba***
+
+* Contains portable API code. This should not include any hardware specific code.
 
 ***prototypes***
 
 * This is where we develop code and work on features
 * Code here may or may not be used in the final product, this area is for testing and experimenting
 
-### FreeRTOS Notes ###
-This information is useful if you have never used FreeRTOS before. FreeRTOS is included in the prototype folder for use in 
-code development.
+## FreeRTOS Notes ##
+This information is useful if you have never used FreeRTOS before.
 
 * FreeRTOS has a config file that changes what is compiled via #define statements.   
 * Different architectures may have different config settings.  
-    * 3rdParty/FreeRTOS_Library is configured for use with the lpc1769.  
-It may more properly be put under 3rdParty/lpc1769/FreeRTOS_Library, but it isn't for now.
-    * 3rdParty/linux/posix_gcc_simulator has a copy of FreeRTOS for use with the linux port (for testing).
+    * 3rdParty/FreeRTOS is configured for use with the EFM32GG microcontroller series.
 
-* In both cases, FreeRTOS is built as a lib, and linked into the ports/lpc1769 or ports/linux project.
-* The version of FreeRTOS can be found in its freertos.h file.  As at this writing (Nov 22, 2014):
-    * Project FreeRTOS_Library (for the lpc1769) is version 6.1.1
-    * Project FreeRTOS_Posix (for linux) is version 6.0.4 (which I believe is the latest available for the posix port)
-    * The latest version of FreeRTOS used in lpcopen demos is 7.5.3
-    * We may need to reconcile the version of FreeRTOS we are using.
+* The FreeRTOS configuration used here automatically configures itself according to the specific EFM32GG microcontroller specified in main/.cproject
+* The version of FreeRTOS can be found in its freertos.h file.
