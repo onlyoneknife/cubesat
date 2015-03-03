@@ -1,6 +1,6 @@
 # AlbertaSat - Athena CubeSat OBC #
 
-This repository contains (or will contain) source code and relevant content for Athena - an open source on-board computer for Cube Satellites developed at the University of AlbertaSat
+This repository contains (or will contain) source code and relevant content for Athena - an open source on-board computer for Cube Satellites developed at the University of Alberta
 
 ## LISCENCE INFORMATION ##
 
