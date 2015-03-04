@@ -1,4 +1,5 @@
-emlib/em_gpio.o: ../emlib/em_gpio.c \
+emlib/em_gpio.o: \
+ C:/Users/sdamkjar/workspace/UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/emlib/src/em_gpio.c \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/emlib/inc/em_gpio.h \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/Device/SiliconLabs/EFM32GG/Include/em_device.h \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/Device/SiliconLabs/EFM32GG/Include/efm32gg280f1024.h \

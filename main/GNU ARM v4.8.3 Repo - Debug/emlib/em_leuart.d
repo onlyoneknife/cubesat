@@ -1,4 +1,5 @@
-emlib/em_leuart.o: ../emlib/em_leuart.c \
+emlib/em_leuart.o: \
+ C:/Users/sdamkjar/workspace/UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/emlib/src/em_leuart.c \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/emlib/inc/em_leuart.h \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/Device/SiliconLabs/EFM32GG/Include/em_device.h \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/Device/SiliconLabs/EFM32GG/Include/efm32gg280f1024.h \

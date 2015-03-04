@@ -1,4 +1,5 @@
-emlib/em_opamp.o: ../emlib/em_opamp.c \
+emlib/em_opamp.o: \
+ C:/Users/sdamkjar/workspace/UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/emlib/src/em_opamp.c \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/Device/SiliconLabs/EFM32GG/Include/em_device.h \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/Device/SiliconLabs/EFM32GG/Include/efm32gg280f1024.h \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/CMSIS/Include/core_cm3.h \

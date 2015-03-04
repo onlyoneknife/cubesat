@@ -79,6 +79,7 @@
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/usb/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libDrivers/inc}&quot;"/>
 								</option>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.1329041219" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
@@ -152,6 +153,7 @@
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/drivers&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/usb/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libDrivers/inc}&quot;"/>
 								</option>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.819519225" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
@@ -179,8 +181,8 @@
 					<stringMacro name="FreeRtosPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/FreeRTOS/"/>
 					<stringMacro name="StudioToolchainPath" type="VALUE_PATH_DIR" value="${StudioToolchainPathFromID:com.silabs.ide.si32.gcc:4.8.3.20131129}"/>
 					<stringMacro name="StudioSdkPath" type="VALUE_PATH_DIR" value="${StudioSdkPathFromID:com.silabs.sdk.si32.efm32.sls:2.0.4}"/>
-					<stringMacro name="SiliconLabsPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/SiliconLabs/EFM32"/>
 					<stringMacro name="GnuArmPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/GNU_ARM"/>
+					<stringMacro name="SiliconLabsPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/SiliconLabs/EFM32"/>
 				</macros>
 				<externalSettings>
 					<externalSetting/>
@@ -208,21 +210,23 @@
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.builtin.1516818689" name="Always branch to builtin functions (-fno-builtin)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.builtin" value="true" valueType="boolean"/>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.prolog.1550240986" name="Generate debugger-friendly prologs (-mno-sched-prolog)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.prolog" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.include.paths.2206093" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/portable/GCC/ARM_CM3&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/spidrv/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/sleep/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/rtcdrv/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/nvm/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/gpiointerrupt/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/config&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/portable/GCC/ARM_CM3&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/common/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/config&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/gpiointerrupt/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/nvm/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/rtcdrv/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/sleep/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/spidrv/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/usb/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/drivers&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/CMSIS/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/bsp&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emlib/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/bsp&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/CMSIS/Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libDrivers/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/autogen}&quot;"/>
 								</option>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols.1217773586" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
@@ -235,8 +239,6 @@
 							</tool>
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base.1805394642" name="GNU ARM Assembler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base">
 								<option id="gnu.both.asm.option.include.paths.1764067255" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/portable/GCC/ARM_CM3&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/common/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/config&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/gpiointerrupt/inc&quot;"/>
@@ -250,6 +252,10 @@
 									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/CMSIS/Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/portable/GCC/ARM_CM3&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libDrivers/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/autogen}&quot;"/>
 								</option>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.1950908788" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
@@ -260,6 +266,7 @@
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs.949816620" name="No startup or default libs (-nostdlib)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.nostdlibs" value="false" valueType="boolean"/>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.category.ordering.selection.1638025131" name="Linker input ordering" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.category.ordering.selection" value="./src/autogen_adc0.o;./src/autogen_hfxo.o;./src/autogen_init.o;./src/autogen_lfxo.o;./src/autogen_usart1.o;./src/autogen_usart2.o;./src/main.o;./emlib/em_acmp.o;./emlib/em_adc.o;./emlib/em_aes.o;./emlib/em_assert.o;./emlib/em_burtc.o;./emlib/em_cmu.o;./emlib/em_dac.o;./emlib/em_dbg.o;./emlib/em_dma.o;./emlib/em_ebi.o;./emlib/em_emu.o;./emlib/em_gpio.o;./emlib/em_i2c.o;./emlib/em_idac.o;./emlib/em_int.o;./emlib/em_lcd.o;./emlib/em_lesense.o;./emlib/em_letimer.o;./emlib/em_leuart.o;./emlib/em_mpu.o;./emlib/em_msc.o;./emlib/em_opamp.o;./emlib/em_pcnt.o;./emlib/em_prs.o;./emlib/em_rmu.o;./emlib/em_rtc.o;./emlib/em_system.o;./emlib/em_timer.o;./emlib/em_usart.o;./emlib/em_vcmp.o;./emlib/em_wdog.o;./CMSIS/efm32gg/startup_gcc_efm32gg.o;./CMSIS/efm32gg/system_efm32gg.o" valueType="string"/>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.floatingpoint.enable.1719405262" name="Enable Hardware Floating Point (-mfpu=)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.floatingpoint.enable" value="false" valueType="boolean"/>
+								<option id="gnu.c.link.option.paths.761639959" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1795130137" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -269,6 +276,57 @@
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base.461020750" name="GNU ARM Archiver" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129@0.148855511" name="main.c" rcbsApplicability="disable" resourcePath="main.c" toolsToInvoke="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1564937032.113605631">
+						<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1564937032.113605631" name="GNU ARM C Compiler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1564937032">
+							<option id="gnu.c.compiler.option.include.paths.1892441101" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+								<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/include&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/portable/GCC/ARM_CM3&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/common/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/config&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/gpiointerrupt/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/nvm/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/rtcdrv/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/sleep/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/spidrv/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/usb/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/drivers&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emlib/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/bsp&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/CMSIS/Include&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libDrivers/inc}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/autogen}&quot;"/>
+							</option>
+							<inputType id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.1145382389" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129@0.1385356557" name="codeflash.c" rcbsApplicability="disable" resourcePath="libDrivers/src/codeflash.c" toolsToInvoke="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1564937032.453598261">
+						<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1564937032.453598261" name="GNU ARM C Compiler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1564937032">
+							<option id="gnu.c.compiler.option.include.paths.1117962880" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+								<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/include&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/portable/GCC/ARM_CM3&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/common/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/config&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/gpiointerrupt/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/nvm/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/rtcdrv/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/sleep/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/spidrv/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/usb/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/drivers&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emlib/inc&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/bsp&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/CMSIS/Include&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libDrivers/inc}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/autogen}&quot;"/>
+							</option>
+							<inputType id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.133472745" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input"/>
+						</tool>
+					</fileInfo>
+					<sourceEntries>
+						<entry excluding="autogen2" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -289,13 +347,13 @@
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129;com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1106142351;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.1452913784">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.release#com.silabs.ide.si32.gcc:4.8.3.20131129;com.silabs.ide.si32.gcc.release#com.silabs.ide.si32.gcc:4.8.3.20131129.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.2017602764;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.489261329">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129@0;com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129@0.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1564937032;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.326016380">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129;com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1106142351;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.1452913784">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>

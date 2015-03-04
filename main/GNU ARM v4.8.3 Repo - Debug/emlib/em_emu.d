@@ -1,4 +1,5 @@
-emlib/em_emu.o: ../emlib/em_emu.c \
+emlib/em_emu.o: \
+ C:/Users/sdamkjar/workspace/UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/emlib/src/em_emu.c \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/emlib/inc/em_emu.h \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/Device/SiliconLabs/EFM32GG/Include/em_device.h \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/Device/SiliconLabs/EFM32GG/Include/efm32gg280f1024.h \

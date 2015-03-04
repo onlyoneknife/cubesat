@@ -1,4 +1,5 @@
-emlib/em_usart.o: ../emlib/em_usart.c \
+emlib/em_usart.o: \
+ C:/Users/sdamkjar/workspace/UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/emlib/src/em_usart.c \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/emlib/inc/em_usart.h \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/Device/SiliconLabs/EFM32GG/Include/em_device.h \
  C:\Users\sdamkjar\workspace\UALBERTA_ATHENA_CUBESATOBC/lib3rdParty/SiliconLabs/EFM32/Device/SiliconLabs/EFM32GG/Include/efm32gg280f1024.h \

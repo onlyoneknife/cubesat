@@ -14,8 +14,10 @@ EXECUTABLES :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-src \
+. \
+libDrivers/src \
 emlib \
-Drivers \
-CMSIS/efm32gg \
+autogen \
+CMSIS \
+CMSIS/GCC \
 

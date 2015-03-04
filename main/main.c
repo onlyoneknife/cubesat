@@ -18,7 +18,7 @@
  * @date 2015-02-20
  */
 
-#include "autogen_init.h"
+#include <autogen_init.h>
 
 int
 main(void)
