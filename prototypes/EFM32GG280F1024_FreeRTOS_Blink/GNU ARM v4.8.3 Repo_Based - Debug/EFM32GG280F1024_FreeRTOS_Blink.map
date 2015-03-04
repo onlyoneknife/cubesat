@@ -1,0 +1,1346 @@
+Archive member included because of file (symbol)
+
+c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-exit.o)
+                              c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/crt0.o (exit)
+c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-impure.o)
+                              c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-exit.o) (_global_impure_ptr)
+c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-init.o)
+                              c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/crt0.o (__libc_init_array)
+c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memcpy-stub.o)
+                              ./FreeRTOS/efm32gg/queue.o (memcpy)
+c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memset.o)
+                              c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/crt0.o (memset)
+c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libnosys.a(_exit.o)
+                              c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-exit.o) (_exit)
+
+Allocating common symbols
+Common symbol       size              file
+
+SystemCoreClock     0x4               ./CMSIS/efm32gg/system_efm32gg.o
+xQueueRegistry      0x50              ./FreeRTOS/efm32gg/queue.o
+
+Discarded input sections
+
+ .text          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crti.o
+ .data          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crti.o
+ .bss           0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crti.o
+ .data          0x00000000        0x4 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+ .data          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/crt0.o
+ .bss           0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/crt0.o
+ .ARM.extab     0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/crt0.o
+ .text          0x00000000        0x0 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .data          0x00000000        0x0 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .bss           0x00000000        0x0 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .text          0x00000000        0x0 ./src/autogen_init.o
+ .data          0x00000000        0x0 ./src/autogen_init.o
+ .bss           0x00000000        0x0 ./src/autogen_init.o
+ .text          0x00000000        0x0 ./src/autogen_lfxo.o
+ .data          0x00000000        0x0 ./src/autogen_lfxo.o
+ .bss           0x00000000        0x0 ./src/autogen_lfxo.o
+ .debug_line    0x00000000        0x0 ./src/autogen_lfxo.o
+ .debug_str     0x00000000        0x0 ./src/autogen_lfxo.o
+ .comment       0x00000000       0x71 ./src/autogen_lfxo.o
+ .ARM.attributes
+                0x00000000       0x33 ./src/autogen_lfxo.o
+ .text          0x00000000        0x0 ./src/low_power_tick_management.o
+ .data          0x00000000        0x0 ./src/low_power_tick_management.o
+ .bss           0x00000000        0x0 ./src/low_power_tick_management.o
+ .text          0x00000000        0x0 ./emlib/em_assert.o
+ .data          0x00000000        0x0 ./emlib/em_assert.o
+ .bss           0x00000000        0x0 ./emlib/em_assert.o
+ .debug_line    0x00000000        0x0 ./emlib/em_assert.o
+ .debug_str     0x00000000        0x0 ./emlib/em_assert.o
+ .comment       0x00000000       0x71 ./emlib/em_assert.o
+ .ARM.attributes
+                0x00000000       0x33 ./emlib/em_assert.o
+ .text          0x00000000        0x0 ./emlib/em_burtc.o
+ .data          0x00000000        0x0 ./emlib/em_burtc.o
+ .bss           0x00000000        0x0 ./emlib/em_burtc.o
+ .text.BITBAND_Peripheral
+                0x00000000       0x2c ./emlib/em_burtc.o
+ .text.BURTC_Enable
+                0x00000000       0x50 ./emlib/em_burtc.o
+ .text.BURTC_FreezeEnable
+                0x00000000       0x20 ./emlib/em_burtc.o
+ .text.BURTC_DivToLog2
+                0x00000000       0x3c ./emlib/em_burtc.o
+ .text.BURTC_Sync
+                0x00000000       0x34 ./emlib/em_burtc.o
+ .text.BURTC_Init
+                0x00000000       0xe8 ./emlib/em_burtc.o
+ .text.BURTC_CompareSet
+                0x00000000       0x20 ./emlib/em_burtc.o
+ .text.BURTC_CompareGet
+                0x00000000       0x1c ./emlib/em_burtc.o
+ .text.BURTC_CounterReset
+                0x00000000       0x20 ./emlib/em_burtc.o
+ .text.BURTC_Reset
+                0x00000000       0x48 ./emlib/em_burtc.o
+ .text.BURTC_ClockFreqGet
+                0x00000000       0x7c ./emlib/em_burtc.o
+ .debug_info    0x00000000      0x5e8 ./emlib/em_burtc.o
+ .debug_abbrev  0x00000000      0x224 ./emlib/em_burtc.o
+ .debug_loc     0x00000000      0x250 ./emlib/em_burtc.o
+ .debug_aranges
+                0x00000000       0x70 ./emlib/em_burtc.o
+ .debug_ranges  0x00000000       0x60 ./emlib/em_burtc.o
+ .debug_line    0x00000000      0x401 ./emlib/em_burtc.o
+ .debug_str     0x00000000      0x488 ./emlib/em_burtc.o
+ .comment       0x00000000       0x71 ./emlib/em_burtc.o
+ .ARM.attributes
+                0x00000000       0x33 ./emlib/em_burtc.o
+ .debug_frame   0x00000000      0x158 ./emlib/em_burtc.o
+ .text          0x00000000        0x0 ./emlib/em_cmu.o
+ .data          0x00000000        0x0 ./emlib/em_cmu.o
+ .bss           0x00000000        0x0 ./emlib/em_cmu.o
+ .text.CMU_Log2ToDiv
+                0x00000000       0x1c ./emlib/em_cmu.o
+ .text.CMU_Calibrate
+                0x00000000       0x88 ./emlib/em_cmu.o
+ .text.CMU_CalibrateConfig
+                0x00000000       0xd8 ./emlib/em_cmu.o
+ .text.CMU_ClockDivGet
+                0x00000000      0x134 ./emlib/em_cmu.o
+ .text.CMU_FreezeEnable
+                0x00000000       0x38 ./emlib/em_cmu.o
+ .text.CMU_AUXHFRCOBandGet
+                0x00000000       0x20 ./emlib/em_cmu.o
+ .text.CMU_AUXHFRCOBandSet
+                0x00000000       0xb0 ./emlib/em_cmu.o
+ .text.CMU_HFRCOBandGet
+                0x00000000       0x20 ./emlib/em_cmu.o
+ .text.CMU_HFRCOBandSet
+                0x00000000       0xcc ./emlib/em_cmu.o
+ .text.CMU_HFRCOStartupDelayGet
+                0x00000000       0x1c ./emlib/em_cmu.o
+ .text.CMU_HFRCOStartupDelaySet
+                0x00000000       0x30 ./emlib/em_cmu.o
+ .text.CMU_LCDClkFDIVGet
+                0x00000000       0x10 ./emlib/em_cmu.o
+ .text.CMU_LCDClkFDIVSet
+                0x00000000       0x14 ./emlib/em_cmu.o
+ .text.CMU_OscillatorTuningGet
+                0x00000000       0x50 ./emlib/em_cmu.o
+ .text.CMU_OscillatorTuningSet
+                0x00000000       0x74 ./emlib/em_cmu.o
+ .text.CMU_PCNTClockExternalGet
+                0x00000000       0x64 ./emlib/em_cmu.o
+ .text.CMU_PCNTClockExternalSet
+                0x00000000       0x34 ./emlib/em_cmu.o
+ .text          0x00000000        0x0 ./emlib/em_emu.o
+ .data          0x00000000        0x0 ./emlib/em_emu.o
+ .bss           0x00000000        0x0 ./emlib/em_emu.o
+ .text.BITBAND_Peripheral
+                0x00000000       0x2c ./emlib/em_emu.o
+ .text.EMU_BUPinEnable
+                0x00000000       0x20 ./emlib/em_emu.o
+ .text.EMU_MemPwrDown
+                0x00000000       0x1c ./emlib/em_emu.o
+ .text.EMU_EM4Init
+                0x00000000       0x50 ./emlib/em_emu.o
+ .text.EMU_BUPDInit
+                0x00000000       0xcc ./emlib/em_emu.o
+ .text.EMU_BUThresholdSet
+                0x00000000       0x4c ./emlib/em_emu.o
+ .text.EMU_BUThresRangeSet
+                0x00000000       0x50 ./emlib/em_emu.o
+ .text          0x00000000        0x0 ./emlib/em_gpio.o
+ .data          0x00000000        0x0 ./emlib/em_gpio.o
+ .bss           0x00000000        0x0 ./emlib/em_gpio.o
+ .text.BITBAND_Peripheral
+                0x00000000       0x2c ./emlib/em_gpio.o
+ .text.GPIO_DbgLocationSet
+                0x00000000       0x2c ./emlib/em_gpio.o
+ .text.GPIO_DriveModeSet
+                0x00000000       0x50 ./emlib/em_gpio.o
+ .text.GPIO_IntConfig
+                0x00000000       0xc0 ./emlib/em_gpio.o
+ .text          0x00000000        0x0 ./emlib/em_int.o
+ .data          0x00000000        0x0 ./emlib/em_int.o
+ .bss           0x00000000        0x0 ./emlib/em_int.o
+ .text          0x00000000        0x0 ./emlib/em_rmu.o
+ .data          0x00000000        0x0 ./emlib/em_rmu.o
+ .bss           0x00000000        0x0 ./emlib/em_rmu.o
+ .text.RMU_ResetControl
+                0x00000000       0x28 ./emlib/em_rmu.o
+ .text          0x00000000        0x0 ./emlib/em_rtc.o
+ .data          0x00000000        0x0 ./emlib/em_rtc.o
+ .bss           0x00000000        0x0 ./emlib/em_rtc.o
+ .text.RTC_CompareGet
+                0x00000000       0x3c ./emlib/em_rtc.o
+ .text.RTC_FreezeEnable
+                0x00000000       0x2c ./emlib/em_rtc.o
+ .text.RTC_Reset
+                0x00000000       0x34 ./emlib/em_rtc.o
+ .text          0x00000000        0x0 ./emlib/em_system.o
+ .data          0x00000000        0x0 ./emlib/em_system.o
+ .bss           0x00000000        0x0 ./emlib/em_system.o
+ .text.SYSTEM_GetCalibrationValue
+                0x00000000       0x54 ./emlib/em_system.o
+ .text          0x00000000        0x0 ./FreeRTOS/efm32gg/croutine.o
+ .data          0x00000000        0x0 ./FreeRTOS/efm32gg/croutine.o
+ .bss           0x00000000        0x0 ./FreeRTOS/efm32gg/croutine.o
+ .bss.pxReadyCoRoutineLists
+                0x00000000       0x14 ./FreeRTOS/efm32gg/croutine.o
+ .bss.xDelayedCoRoutineList1
+                0x00000000       0x14 ./FreeRTOS/efm32gg/croutine.o
+ .bss.xDelayedCoRoutineList2
+                0x00000000       0x14 ./FreeRTOS/efm32gg/croutine.o
+ .bss.pxDelayedCoRoutineList
+                0x00000000        0x4 ./FreeRTOS/efm32gg/croutine.o
+ .bss.pxOverflowDelayedCoRoutineList
+                0x00000000        0x4 ./FreeRTOS/efm32gg/croutine.o
+ .bss.xPendingReadyCoRoutineList
+                0x00000000       0x14 ./FreeRTOS/efm32gg/croutine.o
+ .bss.pxCurrentCoRoutine
+                0x00000000        0x4 ./FreeRTOS/efm32gg/croutine.o
+ .bss.uxTopCoRoutineReadyPriority
+                0x00000000        0x4 ./FreeRTOS/efm32gg/croutine.o
+ .bss.xCoRoutineTickCount
+                0x00000000        0x4 ./FreeRTOS/efm32gg/croutine.o
+ .bss.xLastTickCount
+                0x00000000        0x4 ./FreeRTOS/efm32gg/croutine.o
+ .bss.xPassedTicks
+                0x00000000        0x4 ./FreeRTOS/efm32gg/croutine.o
+ .text.xCoRoutineCreate
+                0x00000000       0xcc ./FreeRTOS/efm32gg/croutine.o
+ .text.vCoRoutineAddToDelayedList
+                0x00000000       0x84 ./FreeRTOS/efm32gg/croutine.o
+ .text.prvCheckPendingReadyList
+                0x00000000       0x78 ./FreeRTOS/efm32gg/croutine.o
+ .text.prvCheckDelayedList
+                0x00000000       0xf8 ./FreeRTOS/efm32gg/croutine.o
+ .text.vCoRoutineSchedule
+                0x00000000       0xa0 ./FreeRTOS/efm32gg/croutine.o
+ .text.prvInitialiseCoRoutineLists
+                0x00000000       0x68 ./FreeRTOS/efm32gg/croutine.o
+ .text.xCoRoutineRemoveFromEventList
+                0x00000000       0x50 ./FreeRTOS/efm32gg/croutine.o
+ .debug_info    0x00000000      0x49d ./FreeRTOS/efm32gg/croutine.o
+ .debug_abbrev  0x00000000      0x180 ./FreeRTOS/efm32gg/croutine.o
+ .debug_loc     0x00000000      0x188 ./FreeRTOS/efm32gg/croutine.o
+ .debug_aranges
+                0x00000000       0x50 ./FreeRTOS/efm32gg/croutine.o
+ .debug_ranges  0x00000000       0x40 ./FreeRTOS/efm32gg/croutine.o
+ .debug_line    0x00000000      0x29b ./FreeRTOS/efm32gg/croutine.o
+ .debug_str     0x00000000      0x4bd ./FreeRTOS/efm32gg/croutine.o
+ .comment       0x00000000       0x71 ./FreeRTOS/efm32gg/croutine.o
+ .ARM.attributes
+                0x00000000       0x33 ./FreeRTOS/efm32gg/croutine.o
+ .debug_frame   0x00000000       0xf0 ./FreeRTOS/efm32gg/croutine.o
+ .text          0x00000000        0x0 ./FreeRTOS/efm32gg/heap_1.o
+ .data          0x00000000        0x0 ./FreeRTOS/efm32gg/heap_1.o
+ .bss           0x00000000        0x0 ./FreeRTOS/efm32gg/heap_1.o
+ .text.vPortInitialiseBlocks
+                0x00000000       0x18 ./FreeRTOS/efm32gg/heap_1.o
+ .text.xPortGetFreeHeapSize
+                0x00000000       0x1c ./FreeRTOS/efm32gg/heap_1.o
+ .text          0x00000000        0x0 ./FreeRTOS/efm32gg/list.o
+ .data          0x00000000        0x0 ./FreeRTOS/efm32gg/list.o
+ .bss           0x00000000        0x0 ./FreeRTOS/efm32gg/list.o
+ .text          0x00000000        0x0 ./FreeRTOS/efm32gg/port.o
+ .data          0x00000000        0x0 ./FreeRTOS/efm32gg/port.o
+ .bss           0x00000000        0x0 ./FreeRTOS/efm32gg/port.o
+ .bss.ulTimerCountsForOneTick
+                0x00000000        0x4 ./FreeRTOS/efm32gg/port.o
+ .bss.xMaximumPossibleSuppressedTicks
+                0x00000000        0x4 ./FreeRTOS/efm32gg/port.o
+ .bss.ulStoppedTimerCompensation
+                0x00000000        0x4 ./FreeRTOS/efm32gg/port.o
+ .rodata.pcInterruptPriorityRegisters
+                0x00000000        0x4 ./FreeRTOS/efm32gg/port.o
+ .text.vPortEndScheduler
+                0x00000000        0xc ./FreeRTOS/efm32gg/port.o
+ .text.vPortSuppressTicksAndSleep
+                0x00000000      0x128 ./FreeRTOS/efm32gg/port.o
+ .text.vPortSetupTimerInterrupt
+                0x00000000       0x48 ./FreeRTOS/efm32gg/port.o
+ .text          0x00000000        0x0 ./FreeRTOS/efm32gg/queue.o
+ .data          0x00000000        0x0 ./FreeRTOS/efm32gg/queue.o
+ .bss           0x00000000        0x0 ./FreeRTOS/efm32gg/queue.o
+ .text.xQueueCreateMutex
+                0x00000000       0x7c ./FreeRTOS/efm32gg/queue.o
+ .text.xQueueReceiveFromISR
+                0x00000000       0x98 ./FreeRTOS/efm32gg/queue.o
+ .text.xQueuePeekFromISR
+                0x00000000       0x60 ./FreeRTOS/efm32gg/queue.o
+ .text.uxQueueMessagesWaiting
+                0x00000000       0x20 ./FreeRTOS/efm32gg/queue.o
+ .text.uxQueueMessagesWaitingFromISR
+                0x00000000       0x1c ./FreeRTOS/efm32gg/queue.o
+ .text.vQueueDelete
+                0x00000000       0x28 ./FreeRTOS/efm32gg/queue.o
+ .text.xQueueIsQueueEmptyFromISR
+                0x00000000       0x28 ./FreeRTOS/efm32gg/queue.o
+ .text.xQueueIsQueueFullFromISR
+                0x00000000       0x2c ./FreeRTOS/efm32gg/queue.o
+ .text.vQueueAddToRegistry
+                0x00000000       0x50 ./FreeRTOS/efm32gg/queue.o
+ .text.vQueueUnregisterQueue
+                0x00000000       0x44 ./FreeRTOS/efm32gg/queue.o
+ COMMON         0x00000000       0x50 ./FreeRTOS/efm32gg/queue.o
+ .text          0x00000000        0x0 ./FreeRTOS/efm32gg/tasks.o
+ .data          0x00000000        0x0 ./FreeRTOS/efm32gg/tasks.o
+ .bss           0x00000000        0x0 ./FreeRTOS/efm32gg/tasks.o
+ .text.vTaskDelete
+                0x00000000       0x8c ./FreeRTOS/efm32gg/tasks.o
+ .text.vTaskDelayUntil
+                0x00000000       0x98 ./FreeRTOS/efm32gg/tasks.o
+ .text.uxTaskPriorityGet
+                0x00000000       0x34 ./FreeRTOS/efm32gg/tasks.o
+ .text.vTaskPrioritySet
+                0x00000000      0x110 ./FreeRTOS/efm32gg/tasks.o
+ .text.vTaskSuspend
+                0x00000000       0x90 ./FreeRTOS/efm32gg/tasks.o
+ .text.xTaskIsTaskSuspended
+                0x00000000       0x5c ./FreeRTOS/efm32gg/tasks.o
+ .text.vTaskResume
+                0x00000000       0x90 ./FreeRTOS/efm32gg/tasks.o
+ .text.xTaskResumeFromISR
+                0x00000000       0xb0 ./FreeRTOS/efm32gg/tasks.o
+ .text.vTaskEndScheduler
+                0x00000000       0x18 ./FreeRTOS/efm32gg/tasks.o
+ .text.xTaskGetTickCountFromISR
+                0x00000000       0x2c ./FreeRTOS/efm32gg/tasks.o
+ .text.uxTaskGetNumberOfTasks
+                0x00000000       0x18 ./FreeRTOS/efm32gg/tasks.o
+ .text          0x00000000        0x0 ./FreeRTOS/efm32gg/timers.o
+ .data          0x00000000        0x0 ./FreeRTOS/efm32gg/timers.o
+ .bss           0x00000000        0x0 ./FreeRTOS/efm32gg/timers.o
+ .text.xTimerCreate
+                0x00000000       0x60 ./FreeRTOS/efm32gg/timers.o
+ .text.xTimerIsTimerActive
+                0x00000000       0x30 ./FreeRTOS/efm32gg/timers.o
+ .text.pvTimerGetTimerID
+                0x00000000       0x1c ./FreeRTOS/efm32gg/timers.o
+ .text          0x00000000        0x0 ./Drivers/sleep.o
+ .data          0x00000000        0x0 ./Drivers/sleep.o
+ .bss           0x00000000        0x0 ./Drivers/sleep.o
+ .text.EMU_EM2UnBlock
+                0x00000000       0x14 ./Drivers/sleep.o
+ .text.SLEEP_ForceSleepInEM4
+                0x00000000       0x10 ./Drivers/sleep.o
+ .text.SLEEP_SleepBlockEnd
+                0x00000000       0x4c ./Drivers/sleep.o
+ .data          0x00000000        0x0 ./CMSIS/efm32gg/startup_efm32gg.o
+ .bss           0x00000000        0x0 ./CMSIS/efm32gg/startup_efm32gg.o
+ .text          0x00000000        0x0 ./CMSIS/efm32gg/system_efm32gg.o
+ .data          0x00000000        0x0 ./CMSIS/efm32gg/system_efm32gg.o
+ .bss           0x00000000        0x0 ./CMSIS/efm32gg/system_efm32gg.o
+ .text.SystemHFXOClockSet
+                0x00000000       0x2c ./CMSIS/efm32gg/system_efm32gg.o
+ .text.SystemLFXOClockSet
+                0x00000000       0x2c ./CMSIS/efm32gg/system_efm32gg.o
+ .text          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-exit.o)
+ .data          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-exit.o)
+ .bss           0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-exit.o)
+ .text          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-impure.o)
+ .data          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-impure.o)
+ .bss           0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-impure.o)
+ .data._impure_ptr
+                0x00000000        0x4 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-impure.o)
+ .text          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-init.o)
+ .data          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-init.o)
+ .bss           0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-init.o)
+ .text          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memcpy-stub.o)
+ .data          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memcpy-stub.o)
+ .bss           0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memcpy-stub.o)
+ .text          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memset.o)
+ .data          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memset.o)
+ .bss           0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memset.o)
+ .text          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libnosys.a(_exit.o)
+ .data          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libnosys.a(_exit.o)
+ .bss           0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libnosys.a(_exit.o)
+ .text          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtend.o
+ .data          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtend.o
+ .bss           0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtend.o
+ .jcr           0x00000000        0x4 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtend.o
+ .text          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
+ .data          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
+ .bss           0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x00000000         0x00100000         xr
+RAM              0x20000000         0x00020000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crti.o
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/crt0.o
+LOAD ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+LOAD ./src/autogen_init.o
+LOAD ./src/autogen_lfxo.o
+LOAD ./src/low_power_tick_management.o
+LOAD ./emlib/em_assert.o
+LOAD ./emlib/em_burtc.o
+LOAD ./emlib/em_cmu.o
+LOAD ./emlib/em_emu.o
+LOAD ./emlib/em_gpio.o
+LOAD ./emlib/em_int.o
+LOAD ./emlib/em_rmu.o
+LOAD ./emlib/em_rtc.o
+LOAD ./emlib/em_system.o
+LOAD ./FreeRTOS/efm32gg/croutine.o
+LOAD ./FreeRTOS/efm32gg/heap_1.o
+LOAD ./FreeRTOS/efm32gg/list.o
+LOAD ./FreeRTOS/efm32gg/port.o
+LOAD ./FreeRTOS/efm32gg/queue.o
+LOAD ./FreeRTOS/efm32gg/tasks.o
+LOAD ./FreeRTOS/efm32gg/timers.o
+LOAD ./Drivers/sleep.o
+LOAD ./CMSIS/efm32gg/startup_efm32gg.o
+LOAD ./CMSIS/efm32gg/system_efm32gg.o
+START GROUP
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libnosys.a
+END GROUP
+START GROUP
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg_s.a
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a
+END GROUP
+START GROUP
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a
+END GROUP
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtend.o
+LOAD c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
+
+.text           0x00000000     0x3ccc
+ *(.isr_vector)
+ .isr_vector    0x00000000      0x100 ./CMSIS/efm32gg/startup_efm32gg.o
+                0x00000000                __isr_vector
+ *(.text*)
+ .text          0x00000100       0x54 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+ .text          0x00000154       0x74 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/crt0.o
+                0x00000154                _start
+                0x00000154                _mainCRTStartup
+ .text.CHIP_Init
+                0x000001c8       0x40 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .text.GPIO_PortOutSetVal
+                0x00000208       0x4c ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .text.LED_Init
+                0x00000254       0x20 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+                0x00000254                LED_Init
+ .text.LedBlink
+                0x00000274       0x2c ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .text.main     0x000002a0       0x88 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+                0x000002a0                main
+ .text.eADesigner_Init
+                0x00000328       0x40 ./src/autogen_init.o
+                0x00000328                eADesigner_Init
+ .text.NVIC_EnableIRQ
+                0x00000368       0x30 ./src/low_power_tick_management.o
+ .text.NVIC_ClearPendingIRQ
+                0x00000398       0x34 ./src/low_power_tick_management.o
+ .text.NVIC_SetPriority
+                0x000003cc       0x54 ./src/low_power_tick_management.o
+ .text.RTC_CounterGet
+                0x00000420       0x18 ./src/low_power_tick_management.o
+ .text.RTC_IntClear
+                0x00000438       0x1c ./src/low_power_tick_management.o
+ .text.RTC_IntDisable
+                0x00000454       0x24 ./src/low_power_tick_management.o
+ .text.RTC_IntEnable
+                0x00000478       0x24 ./src/low_power_tick_management.o
+ .text.INT_Disable
+                0x0000049c       0x2c ./src/low_power_tick_management.o
+ .text.INT_Enable
+                0x000004c8       0x3c ./src/low_power_tick_management.o
+ .text.RTC_IRQHandler
+                0x00000504       0x4c ./src/low_power_tick_management.o
+                0x00000504                RTC_IRQHandler
+ .text.vPortSetupTimerInterrupt
+                0x00000550       0xc4 ./src/low_power_tick_management.o
+                0x00000550                vPortSetupTimerInterrupt
+ .text.vPortSuppressTicksAndSleep
+                0x00000614      0x11c ./src/low_power_tick_management.o
+                0x00000614                vPortSuppressTicksAndSleep
+ .text.BITBAND_Peripheral
+                0x00000730       0x2c ./emlib/em_cmu.o
+ .text.CMU_MaxFreqHfle
+                0x0000075c       0x8c ./emlib/em_cmu.o
+ .text.CMU_FlashWaitStateMax
+                0x000007e8       0x64 ./emlib/em_cmu.o
+ .text.CMU_DivToLog2
+                0x0000084c       0x3c ./emlib/em_cmu.o
+ .text.CMU_FlashWaitStateControl
+                0x00000888       0xcc ./emlib/em_cmu.o
+ .text.CMU_AUXClkGet
+                0x00000954       0x8c ./emlib/em_cmu.o
+ .text.CMU_DBGClkGet
+                0x000009e0       0x58 ./emlib/em_cmu.o
+ .text.CMU_LFClkGet
+                0x00000a38       0xb4 ./emlib/em_cmu.o
+ .text.CMU_Sync
+                0x00000aec       0x34 ./emlib/em_cmu.o
+ .text.CMU_ClockDivSet
+                0x00000b20      0x1f8 ./emlib/em_cmu.o
+                0x00000b20                CMU_ClockDivSet
+ .text.CMU_ClockEnable
+                0x00000d18       0xe0 ./emlib/em_cmu.o
+                0x00000d18                CMU_ClockEnable
+ .text.CMU_ClockFreqGet
+                0x00000df8      0x180 ./emlib/em_cmu.o
+                0x00000df8                CMU_ClockFreqGet
+ .text.CMU_ClockSelectGet
+                0x00000f78      0x11c ./emlib/em_cmu.o
+                0x00000f78                CMU_ClockSelectGet
+ .text.CMU_ClockSelectSet
+                0x00001094      0x230 ./emlib/em_cmu.o
+                0x00001094                CMU_ClockSelectSet
+ .text.CMU_OscillatorEnable
+                0x000012c4       0xc0 ./emlib/em_cmu.o
+                0x000012c4                CMU_OscillatorEnable
+ .text.SystemCoreClockUpdate
+                0x00001384        0xc ./emlib/em_emu.o
+ .text.CMU_Lock
+                0x00001390       0x18 ./emlib/em_emu.o
+ .text.CMU_Unlock
+                0x000013a8       0x1c ./emlib/em_emu.o
+ .text.EMU_Restore
+                0x000013c4       0xac ./emlib/em_emu.o
+ .text.getErrataFixEmuE107En
+                0x00001470       0x68 ./emlib/em_emu.o
+ .text.EMU_EnterEM2
+                0x000014d8       0x9c ./emlib/em_emu.o
+                0x000014d8                EMU_EnterEM2
+ .text.EMU_EnterEM3
+                0x00001574       0xc0 ./emlib/em_emu.o
+                0x00001574                EMU_EnterEM3
+ .text.EMU_EnterEM4
+                0x00001634       0x40 ./emlib/em_emu.o
+                0x00001634                EMU_EnterEM4
+ .text.EMU_UpdateOscConfig
+                0x00001674       0x20 ./emlib/em_emu.o
+                0x00001674                EMU_UpdateOscConfig
+ .text.GPIO_PinModeSet
+                0x00001694      0x144 ./emlib/em_gpio.o
+                0x00001694                GPIO_PinModeSet
+ .text.BITBAND_Peripheral
+                0x000017d8       0x2c ./emlib/em_rmu.o
+ .text.EMU_Lock
+                0x00001804       0x18 ./emlib/em_rmu.o
+ .text.EMU_Unlock
+                0x0000181c       0x18 ./emlib/em_rmu.o
+ .text.RMU_ResetCauseClear
+                0x00001834       0x50 ./emlib/em_rmu.o
+                0x00001834                RMU_ResetCauseClear
+ .text.RMU_ResetCauseGet
+                0x00001884       0x68 ./emlib/em_rmu.o
+                0x00001884                RMU_ResetCauseGet
+ .text.BITBAND_Peripheral
+                0x000018ec       0x2c ./emlib/em_rtc.o
+ .text.RTC_CompareSet
+                0x00001918       0x4c ./emlib/em_rtc.o
+                0x00001918                RTC_CompareSet
+ .text.RTC_Enable
+                0x00001964       0x20 ./emlib/em_rtc.o
+                0x00001964                RTC_Enable
+ .text.RTC_Init
+                0x00001984       0x50 ./emlib/em_rtc.o
+                0x00001984                RTC_Init
+ .text.RTC_CounterReset
+                0x000019d4       0x14 ./emlib/em_rtc.o
+                0x000019d4                RTC_CounterReset
+ .text.SYSTEM_ChipRevisionGet
+                0x000019e8       0x74 ./emlib/em_system.o
+                0x000019e8                SYSTEM_ChipRevisionGet
+ .text.pvPortMalloc
+                0x00001a5c       0x8c ./FreeRTOS/efm32gg/heap_1.o
+                0x00001a5c                pvPortMalloc
+ .text.vPortFree
+                0x00001ae8       0x14 ./FreeRTOS/efm32gg/heap_1.o
+                0x00001ae8                vPortFree
+ .text.vListInitialise
+                0x00001afc       0x40 ./FreeRTOS/efm32gg/list.o
+                0x00001afc                vListInitialise
+ .text.vListInitialiseItem
+                0x00001b3c       0x18 ./FreeRTOS/efm32gg/list.o
+                0x00001b3c                vListInitialiseItem
+ .text.vListInsertEnd
+                0x00001b54       0x48 ./FreeRTOS/efm32gg/list.o
+                0x00001b54                vListInsertEnd
+ .text.vListInsert
+                0x00001b9c       0x70 ./FreeRTOS/efm32gg/list.o
+                0x00001b9c                vListInsert
+ .text.uxListRemove
+                0x00001c0c       0x54 ./FreeRTOS/efm32gg/list.o
+                0x00001c0c                uxListRemove
+ .text.pxPortInitialiseStack
+                0x00001c60       0x54 ./FreeRTOS/efm32gg/port.o
+                0x00001c60                pxPortInitialiseStack
+ .text.SVC_Handler
+                0x00001cb4       0x20 ./FreeRTOS/efm32gg/port.o
+                0x00001cb4                SVC_Handler
+ .text.prvPortStartFirstTask
+                0x00001cd4       0x14 ./FreeRTOS/efm32gg/port.o
+ .text.xPortStartScheduler
+                0x00001ce8       0xb8 ./FreeRTOS/efm32gg/port.o
+                0x00001ce8                xPortStartScheduler
+ .text.vPortYield
+                0x00001da0       0x20 ./FreeRTOS/efm32gg/port.o
+                0x00001da0                vPortYield
+ .text.vPortEnterCritical
+                0x00001dc0       0x20 ./FreeRTOS/efm32gg/port.o
+                0x00001dc0                vPortEnterCritical
+ .text.vPortExitCritical
+                0x00001de0       0x24 ./FreeRTOS/efm32gg/port.o
+                0x00001de0                vPortExitCritical
+ .text.ulPortSetInterruptMask
+                0x00001e04       0x14 ./FreeRTOS/efm32gg/port.o
+                0x00001e04                ulPortSetInterruptMask
+ .text.vPortClearInterruptMask
+                0x00001e18        0x8 ./FreeRTOS/efm32gg/port.o
+                0x00001e18                vPortClearInterruptMask
+ .text.PendSV_Handler
+                0x00001e20       0x3c ./FreeRTOS/efm32gg/port.o
+                0x00001e20                PendSV_Handler
+ .text.SysTick_Handler
+                0x00001e5c       0x28 ./FreeRTOS/efm32gg/port.o
+                0x00001e5c                SysTick_Handler
+ .text.vPortValidateInterruptPriority
+                0x00001e84       0x34 ./FreeRTOS/efm32gg/port.o
+                0x00001e84                vPortValidateInterruptPriority
+ .text.xQueueGenericReset
+                0x00001eb8       0xa4 ./FreeRTOS/efm32gg/queue.o
+                0x00001eb8                xQueueGenericReset
+ .text.xQueueGenericCreate
+                0x00001f5c       0x70 ./FreeRTOS/efm32gg/queue.o
+                0x00001f5c                xQueueGenericCreate
+ .text.xQueueGenericSend
+                0x00001fcc      0x138 ./FreeRTOS/efm32gg/queue.o
+                0x00001fcc                xQueueGenericSend
+ .text.xQueueGenericSendFromISR
+                0x00002104       0xac ./FreeRTOS/efm32gg/queue.o
+                0x00002104                xQueueGenericSendFromISR
+ .text.xQueueGenericReceive
+                0x000021b0      0x180 ./FreeRTOS/efm32gg/queue.o
+                0x000021b0                xQueueGenericReceive
+ .text.prvCopyDataToQueue
+                0x00002330       0xd0 ./FreeRTOS/efm32gg/queue.o
+ .text.prvCopyDataFromQueue
+                0x00002400       0x4c ./FreeRTOS/efm32gg/queue.o
+ .text.prvUnlockQueue
+                0x0000244c       0x98 ./FreeRTOS/efm32gg/queue.o
+ .text.prvIsQueueEmpty
+                0x000024e4       0x2c ./FreeRTOS/efm32gg/queue.o
+ .text.prvIsQueueFull
+                0x00002510       0x30 ./FreeRTOS/efm32gg/queue.o
+ .text.vQueueWaitForMessageRestricted
+                0x00002540       0x58 ./FreeRTOS/efm32gg/queue.o
+                0x00002540                vQueueWaitForMessageRestricted
+ .text.xTaskGenericCreate
+                0x00002598      0x138 ./FreeRTOS/efm32gg/tasks.o
+                0x00002598                xTaskGenericCreate
+ .text.vTaskDelay
+                0x000026d0       0x50 ./FreeRTOS/efm32gg/tasks.o
+                0x000026d0                vTaskDelay
+ .text.vTaskStartScheduler
+                0x00002720       0x60 ./FreeRTOS/efm32gg/tasks.o
+                0x00002720                vTaskStartScheduler
+ .text.vTaskSuspendAll
+                0x00002780       0x1c ./FreeRTOS/efm32gg/tasks.o
+                0x00002780                vTaskSuspendAll
+ .text.prvGetExpectedIdleTime
+                0x0000279c       0x50 ./FreeRTOS/efm32gg/tasks.o
+ .text.xTaskResumeAll
+                0x000027ec      0x10c ./FreeRTOS/efm32gg/tasks.o
+                0x000027ec                xTaskResumeAll
+ .text.xTaskGetTickCount
+                0x000028f8       0x24 ./FreeRTOS/efm32gg/tasks.o
+                0x000028f8                xTaskGetTickCount
+ .text.vTaskStepTick
+                0x0000291c       0x30 ./FreeRTOS/efm32gg/tasks.o
+                0x0000291c                vTaskStepTick
+ .text.xTaskIncrementTick
+                0x0000294c      0x180 ./FreeRTOS/efm32gg/tasks.o
+                0x0000294c                xTaskIncrementTick
+ .text.vTaskSwitchContext
+                0x00002acc       0x98 ./FreeRTOS/efm32gg/tasks.o
+                0x00002acc                vTaskSwitchContext
+ .text.vTaskPlaceOnEventList
+                0x00002b64       0x60 ./FreeRTOS/efm32gg/tasks.o
+                0x00002b64                vTaskPlaceOnEventList
+ .text.vTaskPlaceOnEventListRestricted
+                0x00002bc4       0x44 ./FreeRTOS/efm32gg/tasks.o
+                0x00002bc4                vTaskPlaceOnEventListRestricted
+ .text.xTaskRemoveFromEventList
+                0x00002c08       0xa0 ./FreeRTOS/efm32gg/tasks.o
+                0x00002c08                xTaskRemoveFromEventList
+ .text.vTaskSetTimeOutState
+                0x00002ca8       0x2c ./FreeRTOS/efm32gg/tasks.o
+                0x00002ca8                vTaskSetTimeOutState
+ .text.xTaskCheckForTimeOut
+                0x00002cd4       0x88 ./FreeRTOS/efm32gg/tasks.o
+                0x00002cd4                xTaskCheckForTimeOut
+ .text.vTaskMissedYield
+                0x00002d5c       0x18 ./FreeRTOS/efm32gg/tasks.o
+                0x00002d5c                vTaskMissedYield
+ .text.prvIdleTask
+                0x00002d74       0x48 ./FreeRTOS/efm32gg/tasks.o
+ .text.eTaskConfirmSleepModeStatus
+                0x00002dbc       0x3c ./FreeRTOS/efm32gg/tasks.o
+                0x00002dbc                eTaskConfirmSleepModeStatus
+ .text.prvInitialiseTCBVariables
+                0x00002df8       0x90 ./FreeRTOS/efm32gg/tasks.o
+ .text.prvInitialiseTaskLists
+                0x00002e88       0x7c ./FreeRTOS/efm32gg/tasks.o
+ .text.prvCheckTasksWaitingTermination
+                0x00002f04       0x74 ./FreeRTOS/efm32gg/tasks.o
+ .text.prvAddCurrentTaskToDelayedList
+                0x00002f78       0x6c ./FreeRTOS/efm32gg/tasks.o
+ .text.prvAllocateTCBAndStack
+                0x00002fe4       0x64 ./FreeRTOS/efm32gg/tasks.o
+ .text.prvDeleteTCB
+                0x00003048       0x20 ./FreeRTOS/efm32gg/tasks.o
+ .text.xTaskGetCurrentTaskHandle
+                0x00003068       0x20 ./FreeRTOS/efm32gg/tasks.o
+                0x00003068                xTaskGetCurrentTaskHandle
+ .text.xTaskGetSchedulerState
+                0x00003088       0x3c ./FreeRTOS/efm32gg/tasks.o
+                0x00003088                xTaskGetSchedulerState
+ .text.vTaskPriorityInherit
+                0x000030c4       0xb4 ./FreeRTOS/efm32gg/tasks.o
+                0x000030c4                vTaskPriorityInherit
+ .text.vTaskPriorityDisinherit
+                0x00003178       0x7c ./FreeRTOS/efm32gg/tasks.o
+                0x00003178                vTaskPriorityDisinherit
+ .text.xTimerCreateTimerTask
+                0x000031f4       0x4c ./FreeRTOS/efm32gg/timers.o
+                0x000031f4                xTimerCreateTimerTask
+ .text.xTimerGenericCommand
+                0x00003240       0x8c ./FreeRTOS/efm32gg/timers.o
+                0x00003240                xTimerGenericCommand
+ .text.prvProcessExpiredTimer
+                0x000032cc       0x64 ./FreeRTOS/efm32gg/timers.o
+ .text.prvTimerTask
+                0x00003330       0x24 ./FreeRTOS/efm32gg/timers.o
+ .text.prvProcessTimerOrBlockTask
+                0x00003354       0x6c ./FreeRTOS/efm32gg/timers.o
+ .text.prvGetNextExpireTime
+                0x000033c0       0x48 ./FreeRTOS/efm32gg/timers.o
+ .text.prvSampleTimeNow
+                0x00003408       0x44 ./FreeRTOS/efm32gg/timers.o
+ .text.prvInsertTimerInActiveList
+                0x0000344c       0x84 ./FreeRTOS/efm32gg/timers.o
+ .text.prvProcessReceivedCommands
+                0x000034d0       0xd8 ./FreeRTOS/efm32gg/timers.o
+ .text.prvSwitchTimerLists
+                0x000035a8       0xa8 ./FreeRTOS/efm32gg/timers.o
+ .text.prvCheckForValidListAndQueue
+                0x00003650       0x54 ./FreeRTOS/efm32gg/timers.o
+ .text.INT_Disable
+                0x000036a4       0x2c ./Drivers/sleep.o
+ .text.INT_Enable
+                0x000036d0       0x3c ./Drivers/sleep.o
+ .text.BITBAND_Peripheral
+                0x0000370c       0x2c ./Drivers/sleep.o
+ .text.EMU_EnterEM1
+                0x00003738       0x20 ./Drivers/sleep.o
+ .text.EMU_EM2Block
+                0x00003758       0x14 ./Drivers/sleep.o
+ .text.SLEEP_Init
+                0x0000376c       0x5c ./Drivers/sleep.o
+                0x0000376c                SLEEP_Init
+ .text.SLEEP_Sleep
+                0x000037c8       0x3c ./Drivers/sleep.o
+                0x000037c8                SLEEP_Sleep
+ .text.SLEEP_SleepBlockBegin
+                0x00003804       0x3c ./Drivers/sleep.o
+                0x00003804                SLEEP_SleepBlockBegin
+ .text.SLEEP_LowestEnergyModeGet
+                0x00003840       0x4c ./Drivers/sleep.o
+                0x00003840                SLEEP_LowestEnergyModeGet
+ .text.SLEEP_EnterEMx
+                0x0000388c       0x88 ./Drivers/sleep.o
+ .text          0x00003914       0x98 ./CMSIS/efm32gg/startup_efm32gg.o
+                0x00003914                Reset_Handler
+                0x00003948                Default_Handler
+                0x0000394a                NMI_Handler
+                0x0000394c                HardFault_Handler
+                0x0000394e                MemManage_Handler
+                0x00003950                BusFault_Handler
+                0x00003952                UsageFault_Handler
+                0x00003956                DebugMon_Handler
+                0x0000395c                DMA_IRQHandler
+                0x0000395e                GPIO_EVEN_IRQHandler
+                0x00003960                TIMER0_IRQHandler
+                0x00003962                USART0_RX_IRQHandler
+                0x00003964                USART0_TX_IRQHandler
+                0x00003966                USB_IRQHandler
+                0x00003968                ACMP0_IRQHandler
+                0x0000396a                ADC0_IRQHandler
+                0x0000396c                DAC0_IRQHandler
+                0x0000396e                I2C0_IRQHandler
+                0x00003970                I2C1_IRQHandler
+                0x00003972                GPIO_ODD_IRQHandler
+                0x00003974                TIMER1_IRQHandler
+                0x00003976                TIMER2_IRQHandler
+                0x00003978                TIMER3_IRQHandler
+                0x0000397a                USART1_RX_IRQHandler
+                0x0000397c                USART1_TX_IRQHandler
+                0x0000397e                LESENSE_IRQHandler
+                0x00003980                USART2_RX_IRQHandler
+                0x00003982                USART2_TX_IRQHandler
+                0x00003984                UART0_RX_IRQHandler
+                0x00003986                UART0_TX_IRQHandler
+                0x00003988                UART1_RX_IRQHandler
+                0x0000398a                UART1_TX_IRQHandler
+                0x0000398c                LEUART0_IRQHandler
+                0x0000398e                LEUART1_IRQHandler
+                0x00003990                LETIMER0_IRQHandler
+                0x00003992                PCNT0_IRQHandler
+                0x00003994                PCNT1_IRQHandler
+                0x00003996                PCNT2_IRQHandler
+                0x0000399a                BURTC_IRQHandler
+                0x0000399c                CMU_IRQHandler
+                0x0000399e                VCMP_IRQHandler
+                0x000039a0                LCD_IRQHandler
+                0x000039a2                MSC_IRQHandler
+                0x000039a4                AES_IRQHandler
+                0x000039a6                EBI_IRQHandler
+                0x000039a8                EMU_IRQHandler
+ .text.GetProdRev
+                0x000039ac       0x1c ./CMSIS/efm32gg/system_efm32gg.o
+ .text.SystemCoreClockGet
+                0x000039c8       0x48 ./CMSIS/efm32gg/system_efm32gg.o
+                0x000039c8                SystemCoreClockGet
+ .text.SystemHFClockGet
+                0x00003a10       0xf0 ./CMSIS/efm32gg/system_efm32gg.o
+                0x00003a10                SystemHFClockGet
+ .text.SystemHFXOClockGet
+                0x00003b00       0x18 ./CMSIS/efm32gg/system_efm32gg.o
+                0x00003b00                SystemHFXOClockGet
+ .text.SystemInit
+                0x00003b18        0xc ./CMSIS/efm32gg/system_efm32gg.o
+                0x00003b18                SystemInit
+ .text.SystemLFRCOClockGet
+                0x00003b24       0x14 ./CMSIS/efm32gg/system_efm32gg.o
+                0x00003b24                SystemLFRCOClockGet
+ .text.SystemULFRCOClockGet
+                0x00003b38       0x14 ./CMSIS/efm32gg/system_efm32gg.o
+                0x00003b38                SystemULFRCOClockGet
+ .text.SystemLFXOClockGet
+                0x00003b4c       0x18 ./CMSIS/efm32gg/system_efm32gg.o
+                0x00003b4c                SystemLFXOClockGet
+ .text.exit     0x00003b64       0x28 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-exit.o)
+                0x00003b64                exit
+ .text.__libc_init_array
+                0x00003b8c       0x4c c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-init.o)
+                0x00003b8c                __libc_init_array
+ .text.memcpy   0x00003bd8       0x12 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memcpy-stub.o)
+                0x00003bd8                memcpy
+ .text.memset   0x00003bea       0x10 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memset.o)
+                0x00003bea                memset
+ *fill*         0x00003bfa        0x2 
+ .text._exit    0x00003bfc        0x4 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libnosys.a(_exit.o)
+                0x00003bfc                _exit
+ *(.init)
+ .init          0x00003c00        0x4 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crti.o
+                0x00003c00                _init
+ .init          0x00003c04        0x8 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
+ *(.fini)
+ .fini          0x00003c0c        0x4 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crti.o
+                0x00003c0c                _fini
+ .fini          0x00003c10        0x8 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
+ *crtbegin.o(.ctors)
+ *crtbegin?.o(.ctors)
+ *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
+ *(SORT(.ctors.*))
+ *(.ctors)
+ *crtbegin.o(.dtors)
+ *crtbegin?.o(.dtors)
+ *(EXCLUDE_FILE(*crtend.o *crtend?.o) .dtors)
+ *(SORT(.dtors.*))
+ *(.dtors)
+ *(.rodata*)
+ .rodata        0x00003c18       0x18 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .rodata.resetCauseMasks
+                0x00003c30       0x80 ./emlib/em_rmu.o
+ .rodata        0x00003cb0        0x8 ./FreeRTOS/efm32gg/tasks.o
+ .rodata        0x00003cb8        0x8 ./FreeRTOS/efm32gg/timers.o
+ .rodata.str1.1
+                0x00003cc0        0x2 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-impure.o)
+ *fill*         0x00003cc2        0x2 
+ .rodata._global_impure_ptr
+                0x00003cc4        0x4 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-impure.o)
+                0x00003cc4                _global_impure_ptr
+ *(.eh_frame*)
+ .eh_frame      0x00003cc8        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+ .eh_frame      0x00003cc8        0x4 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtend.o
+
+.glue_7         0x00003ccc        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x00003ccc        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x00003ccc        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x00003ccc        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.iplt           0x00003ccc        0x0
+ .iplt          0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+                0x00003ccc                __exidx_start = .
+
+.ARM.exidx      0x00003ccc        0x8
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+ .ARM.exidx     0x00003ccc        0x8 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/crt0.o
+                0x00003cd4                __exidx_end = .
+                0x00003cd4                __etext = .
+
+.rel.dyn        0x00003cd4        0x0
+ .rel.iplt      0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+
+.data           0x20000000       0x88 load address 0x00003cd4
+                0x20000000                __data_start__ = .
+ *(vtable)
+ *(.data*)
+ .data.parametersToTask1.6554
+                0x20000000        0x8 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .data.parametersToTask2.6555
+                0x20000008        0x8 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .data.uxCriticalNesting
+                0x20000010        0x4 ./FreeRTOS/efm32gg/port.o
+ .data.xNextTaskUnblockTime
+                0x20000014        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .data.SystemHFXOClock
+                0x20000018        0x4 ./CMSIS/efm32gg/system_efm32gg.o
+ .data.SystemLFXOClock
+                0x2000001c        0x4 ./CMSIS/efm32gg/system_efm32gg.o
+ .data.impure_data
+                0x20000020       0x60 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-impure.o)
+                0x20000080                . = ALIGN (0x4)
+ *(.ram)
+                0x20000080                . = ALIGN (0x4)
+                0x20000080                PROVIDE (__preinit_array_start, .)
+ *(.preinit_array)
+                0x20000080                PROVIDE (__preinit_array_end, .)
+                0x20000080                . = ALIGN (0x4)
+                0x20000080                PROVIDE (__init_array_start, .)
+ *(SORT(.init_array.*))
+ *(.init_array)
+ .init_array    0x20000080        0x4 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+                0x20000084                PROVIDE (__init_array_end, .)
+                0x20000084                . = ALIGN (0x4)
+                0x20000084                PROVIDE (__fini_array_start, .)
+ *(SORT(.fini_array.*))
+ *(.fini_array)
+ .fini_array    0x20000084        0x4 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+                0x20000088                PROVIDE (__fini_array_end, .)
+                0x20000088                . = ALIGN (0x4)
+                0x20000088                __data_end__ = .
+
+.jcr            0x20000088        0x0 load address 0x00003d5c
+ .jcr           0x20000088        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+
+.igot.plt       0x20000088        0x0 load address 0x00003d5c
+ .igot.plt      0x00000000        0x0 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+
+.bss            0x20000088     0x2488 load address 0x00003d5c
+                0x20000088                __bss_start__ = .
+ *(.bss*)
+ .bss           0x20000088       0x1c c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+ .bss.intTickFlag
+                0x200000a4        0x1 ./src/low_power_tick_management.o
+ *fill*         0x200000a5        0x3 
+ .bss.ulTimerReloadValueForOneTick
+                0x200000a8        0x4 ./src/low_power_tick_management.o
+ .bss.xMaximumPossibleSuppressedTicks
+                0x200000ac        0x4 ./src/low_power_tick_management.o
+ .bss.ulStoppedTimerCompensation
+                0x200000b0        0x4 ./src/low_power_tick_management.o
+ .bss.cmuStatus
+                0x200000b4        0x2 ./emlib/em_emu.o
+ *fill*         0x200000b6        0x2 
+ .bss.INT_LockCnt
+                0x200000b8        0x4 ./emlib/em_int.o
+                0x200000b8                INT_LockCnt
+ .bss.ucHeap    0x200000bc     0x2328 ./FreeRTOS/efm32gg/heap_1.o
+ .bss.xNextFreeByte
+                0x200023e4        0x4 ./FreeRTOS/efm32gg/heap_1.o
+ .bss.pucAlignedHeap.4193
+                0x200023e8        0x4 ./FreeRTOS/efm32gg/heap_1.o
+ .bss.ucMaxSysCallPriority
+                0x200023ec        0x1 ./FreeRTOS/efm32gg/port.o
+ *fill*         0x200023ed        0x3 
+ .bss.ulMaxPRIGROUPValue
+                0x200023f0        0x4 ./FreeRTOS/efm32gg/port.o
+ .bss.pxCurrentTCB
+                0x200023f4        0x4 ./FreeRTOS/efm32gg/tasks.o
+                0x200023f4                pxCurrentTCB
+ .bss.pxReadyTasksLists
+                0x200023f8       0x3c ./FreeRTOS/efm32gg/tasks.o
+ .bss.xDelayedTaskList1
+                0x20002434       0x14 ./FreeRTOS/efm32gg/tasks.o
+ .bss.xDelayedTaskList2
+                0x20002448       0x14 ./FreeRTOS/efm32gg/tasks.o
+ .bss.pxDelayedTaskList
+                0x2000245c        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.pxOverflowDelayedTaskList
+                0x20002460        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.xPendingReadyList
+                0x20002464       0x14 ./FreeRTOS/efm32gg/tasks.o
+ .bss.xTasksWaitingTermination
+                0x20002478       0x14 ./FreeRTOS/efm32gg/tasks.o
+ .bss.uxTasksDeleted
+                0x2000248c        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.xSuspendedTaskList
+                0x20002490       0x14 ./FreeRTOS/efm32gg/tasks.o
+ .bss.uxCurrentNumberOfTasks
+                0x200024a4        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.xTickCount
+                0x200024a8        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.uxTopReadyPriority
+                0x200024ac        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.xSchedulerRunning
+                0x200024b0        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.uxSchedulerSuspended
+                0x200024b4        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.uxPendedTicks
+                0x200024b8        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.xYieldPending
+                0x200024bc        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.xNumOfOverflows
+                0x200024c0        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.uxTaskNumber
+                0x200024c4        0x4 ./FreeRTOS/efm32gg/tasks.o
+ .bss.xActiveTimerList1
+                0x200024c8       0x14 ./FreeRTOS/efm32gg/timers.o
+ .bss.xActiveTimerList2
+                0x200024dc       0x14 ./FreeRTOS/efm32gg/timers.o
+ .bss.pxCurrentTimerList
+                0x200024f0        0x4 ./FreeRTOS/efm32gg/timers.o
+ .bss.pxOverflowTimerList
+                0x200024f4        0x4 ./FreeRTOS/efm32gg/timers.o
+ .bss.xTimerQueue
+                0x200024f8        0x4 ./FreeRTOS/efm32gg/timers.o
+ .bss.xLastTime.4406
+                0x200024fc        0x4 ./FreeRTOS/efm32gg/timers.o
+ .bss.sleepCallback
+                0x20002500        0x4 ./Drivers/sleep.o
+ .bss.wakeUpCallback
+                0x20002504        0x4 ./Drivers/sleep.o
+ .bss.sleepBlockCnt
+                0x20002508        0x4 ./Drivers/sleep.o
+ *(COMMON)
+ COMMON         0x2000250c        0x4 ./CMSIS/efm32gg/system_efm32gg.o
+                0x2000250c                SystemCoreClock
+                0x20002510                __bss_end__ = .
+
+.heap           0x20002510      0xc00
+                0x20002510                __end__ = .
+                0x20002510                end = __end__
+                0x20002510                _end = __end__
+ *(.heap*)
+ .heap          0x20002510      0xc00 ./CMSIS/efm32gg/startup_efm32gg.o
+                0x20002510                __HeapBase
+                0x20003110                __HeapLimit = .
+
+.stack_dummy    0x20002510      0x400
+ *(.stack)
+ .stack         0x20002510      0x400 ./CMSIS/efm32gg/startup_efm32gg.o
+                0x20020000                __StackTop = (ORIGIN (RAM) + 0x20000)
+                0x2001fc00                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
+                0x20020000                PROVIDE (__stack, __StackTop)
+                0x00000001                ASSERT ((__StackLimit >= __HeapLimit), region RAM overflowed with stack)
+                0x00000001                ASSERT ((0x100000 >= (__etext + SIZEOF (.data))), FLASH memory overflowed !)
+OUTPUT(EFM32GG280F1024_FreeRTOS_Blink.axf elf32-littlearm)
+
+.ARM.attributes
+                0x00000000       0x29
+ .ARM.attributes
+                0x00000000       0x1d c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crti.o
+ .ARM.attributes
+                0x0000001d       0x2d c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+ .ARM.attributes
+                0x0000004a       0x1b c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/crt0.o
+ .ARM.attributes
+                0x00000065       0x33 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .ARM.attributes
+                0x00000098       0x33 ./src/autogen_init.o
+ .ARM.attributes
+                0x000000cb       0x33 ./src/low_power_tick_management.o
+ .ARM.attributes
+                0x000000fe       0x33 ./emlib/em_cmu.o
+ .ARM.attributes
+                0x00000131       0x33 ./emlib/em_emu.o
+ .ARM.attributes
+                0x00000164       0x33 ./emlib/em_gpio.o
+ .ARM.attributes
+                0x00000197       0x33 ./emlib/em_int.o
+ .ARM.attributes
+                0x000001ca       0x33 ./emlib/em_rmu.o
+ .ARM.attributes
+                0x000001fd       0x33 ./emlib/em_rtc.o
+ .ARM.attributes
+                0x00000230       0x33 ./emlib/em_system.o
+ .ARM.attributes
+                0x00000263       0x33 ./FreeRTOS/efm32gg/heap_1.o
+ .ARM.attributes
+                0x00000296       0x33 ./FreeRTOS/efm32gg/list.o
+ .ARM.attributes
+                0x000002c9       0x33 ./FreeRTOS/efm32gg/port.o
+ .ARM.attributes
+                0x000002fc       0x33 ./FreeRTOS/efm32gg/queue.o
+ .ARM.attributes
+                0x0000032f       0x33 ./FreeRTOS/efm32gg/tasks.o
+ .ARM.attributes
+                0x00000362       0x33 ./FreeRTOS/efm32gg/timers.o
+ .ARM.attributes
+                0x00000395       0x33 ./Drivers/sleep.o
+ .ARM.attributes
+                0x000003c8       0x1b ./CMSIS/efm32gg/startup_efm32gg.o
+ .ARM.attributes
+                0x000003e3       0x33 ./CMSIS/efm32gg/system_efm32gg.o
+ .ARM.attributes
+                0x00000416       0x2d c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-exit.o)
+ .ARM.attributes
+                0x00000443       0x2d c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-impure.o)
+ .ARM.attributes
+                0x00000470       0x2d c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-init.o)
+ .ARM.attributes
+                0x0000049d       0x2d c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memcpy-stub.o)
+ .ARM.attributes
+                0x000004ca       0x2d c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memset.o)
+ .ARM.attributes
+                0x000004f7       0x2d c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libnosys.a(_exit.o)
+ .ARM.attributes
+                0x00000524       0x2d c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtend.o
+ .ARM.attributes
+                0x00000551       0x1d c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
+
+.comment        0x00000000       0x70
+ .comment       0x00000000       0x70 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+                                 0x71 (size before relaxing)
+ .comment       0x00000000       0x71 ./src/autogen_init.o
+ .comment       0x00000000       0x71 ./src/low_power_tick_management.o
+ .comment       0x00000000       0x71 ./emlib/em_cmu.o
+ .comment       0x00000000       0x71 ./emlib/em_emu.o
+ .comment       0x00000000       0x71 ./emlib/em_gpio.o
+ .comment       0x00000000       0x71 ./emlib/em_int.o
+ .comment       0x00000000       0x71 ./emlib/em_rmu.o
+ .comment       0x00000000       0x71 ./emlib/em_rtc.o
+ .comment       0x00000000       0x71 ./emlib/em_system.o
+ .comment       0x00000000       0x71 ./FreeRTOS/efm32gg/heap_1.o
+ .comment       0x00000000       0x71 ./FreeRTOS/efm32gg/list.o
+ .comment       0x00000000       0x71 ./FreeRTOS/efm32gg/port.o
+ .comment       0x00000000       0x71 ./FreeRTOS/efm32gg/queue.o
+ .comment       0x00000000       0x71 ./FreeRTOS/efm32gg/tasks.o
+ .comment       0x00000000       0x71 ./FreeRTOS/efm32gg/timers.o
+ .comment       0x00000000       0x71 ./Drivers/sleep.o
+ .comment       0x00000000       0x71 ./CMSIS/efm32gg/system_efm32gg.o
+
+.debug_info     0x00000000     0x7c92
+ .debug_info    0x00000000      0x85b ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .debug_info    0x0000085b      0x5bd ./src/autogen_init.o
+ .debug_info    0x00000e18      0xd76 ./src/low_power_tick_management.o
+ .debug_info    0x00001b8e     0x1050 ./emlib/em_cmu.o
+ .debug_info    0x00002bde      0xce8 ./emlib/em_emu.o
+ .debug_info    0x000038c6      0x4d0 ./emlib/em_gpio.o
+ .debug_info    0x00003d96       0xa2 ./emlib/em_int.o
+ .debug_info    0x00003e38      0x3c9 ./emlib/em_rmu.o
+ .debug_info    0x00004201      0x329 ./emlib/em_rtc.o
+ .debug_info    0x0000452a      0x241 ./emlib/em_system.o
+ .debug_info    0x0000476b      0x164 ./FreeRTOS/efm32gg/heap_1.o
+ .debug_info    0x000048cf      0x2a6 ./FreeRTOS/efm32gg/list.o
+ .debug_info    0x00004b75      0x39a ./FreeRTOS/efm32gg/port.o
+ .debug_info    0x00004f0f      0x9e1 ./FreeRTOS/efm32gg/queue.o
+ .debug_info    0x000058f0      0xf16 ./FreeRTOS/efm32gg/tasks.o
+ .debug_info    0x00006806      0x75e ./FreeRTOS/efm32gg/timers.o
+ .debug_info    0x00006f64      0x6aa ./Drivers/sleep.o
+ .debug_info    0x0000760e      0x11e ./CMSIS/efm32gg/startup_efm32gg.o
+ .debug_info    0x0000772c      0x566 ./CMSIS/efm32gg/system_efm32gg.o
+
+.debug_abbrev   0x00000000     0x1c1f
+ .debug_abbrev  0x00000000      0x1af ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .debug_abbrev  0x000001af      0x108 ./src/autogen_init.o
+ .debug_abbrev  0x000002b7      0x214 ./src/low_power_tick_management.o
+ .debug_abbrev  0x000004cb      0x2ca ./emlib/em_cmu.o
+ .debug_abbrev  0x00000795      0x249 ./emlib/em_emu.o
+ .debug_abbrev  0x000009de      0x138 ./emlib/em_gpio.o
+ .debug_abbrev  0x00000b16       0x5a ./emlib/em_int.o
+ .debug_abbrev  0x00000b70      0x152 ./emlib/em_rmu.o
+ .debug_abbrev  0x00000cc2      0x196 ./emlib/em_rtc.o
+ .debug_abbrev  0x00000e58       0xed ./emlib/em_system.o
+ .debug_abbrev  0x00000f45       0xee ./FreeRTOS/efm32gg/heap_1.o
+ .debug_abbrev  0x00001033       0xbe ./FreeRTOS/efm32gg/list.o
+ .debug_abbrev  0x000010f1      0x1d6 ./FreeRTOS/efm32gg/port.o
+ .debug_abbrev  0x000012c7      0x1c9 ./FreeRTOS/efm32gg/queue.o
+ .debug_abbrev  0x00001490      0x203 ./FreeRTOS/efm32gg/tasks.o
+ .debug_abbrev  0x00001693      0x16e ./FreeRTOS/efm32gg/timers.o
+ .debug_abbrev  0x00001801      0x267 ./Drivers/sleep.o
+ .debug_abbrev  0x00001a68       0x14 ./CMSIS/efm32gg/startup_efm32gg.o
+ .debug_abbrev  0x00001a7c      0x1a3 ./CMSIS/efm32gg/system_efm32gg.o
+
+.debug_loc      0x00000000     0x2a7c
+ .debug_loc     0x00000000      0x10c ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .debug_loc     0x0000010c       0x2c ./src/autogen_init.o
+ .debug_loc     0x00000138      0x27c ./src/low_power_tick_management.o
+ .debug_loc     0x000003b4      0x6d0 ./emlib/em_cmu.o
+ .debug_loc     0x00000a84      0x350 ./emlib/em_emu.o
+ .debug_loc     0x00000dd4      0x118 ./emlib/em_gpio.o
+ .debug_loc     0x00000eec      0x138 ./emlib/em_rmu.o
+ .debug_loc     0x00001024      0x1a8 ./emlib/em_rtc.o
+ .debug_loc     0x000011cc       0x70 ./emlib/em_system.o
+ .debug_loc     0x0000123c       0xc8 ./FreeRTOS/efm32gg/heap_1.o
+ .debug_loc     0x00001304      0x118 ./FreeRTOS/efm32gg/list.o
+ .debug_loc     0x0000141c      0x1e8 ./FreeRTOS/efm32gg/port.o
+ .debug_loc     0x00001604      0x498 ./FreeRTOS/efm32gg/queue.o
+ .debug_loc     0x00001a9c      0x858 ./FreeRTOS/efm32gg/tasks.o
+ .debug_loc     0x000022f4      0x304 ./FreeRTOS/efm32gg/timers.o
+ .debug_loc     0x000025f8      0x29c ./Drivers/sleep.o
+ .debug_loc     0x00002894      0x1e8 ./CMSIS/efm32gg/system_efm32gg.o
+
+.debug_aranges  0x00000000      0x850
+ .debug_aranges
+                0x00000000       0x40 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .debug_aranges
+                0x00000040       0x20 ./src/autogen_init.o
+ .debug_aranges
+                0x00000060       0x78 ./src/low_power_tick_management.o
+ .debug_aranges
+                0x000000d8      0x118 ./emlib/em_cmu.o
+ .debug_aranges
+                0x000001f0       0x98 ./emlib/em_emu.o
+ .debug_aranges
+                0x00000288       0x40 ./emlib/em_gpio.o
+ .debug_aranges
+                0x000002c8       0x18 ./emlib/em_int.o
+ .debug_aranges
+                0x000002e0       0x48 ./emlib/em_rmu.o
+ .debug_aranges
+                0x00000328       0x58 ./emlib/em_rtc.o
+ .debug_aranges
+                0x00000380       0x28 ./emlib/em_system.o
+ .debug_aranges
+                0x000003a8       0x38 ./FreeRTOS/efm32gg/heap_1.o
+ .debug_aranges
+                0x000003e0       0x40 ./FreeRTOS/efm32gg/list.o
+ .debug_aranges
+                0x00000420       0x90 ./FreeRTOS/efm32gg/port.o
+ .debug_aranges
+                0x000004b0       0xc0 ./FreeRTOS/efm32gg/queue.o
+ .debug_aranges
+                0x00000570      0x150 ./FreeRTOS/efm32gg/tasks.o
+ .debug_aranges
+                0x000006c0       0x88 ./FreeRTOS/efm32gg/timers.o
+ .debug_aranges
+                0x00000748       0x80 ./Drivers/sleep.o
+ .debug_aranges
+                0x000007c8       0x20 ./CMSIS/efm32gg/startup_efm32gg.o
+ .debug_aranges
+                0x000007e8       0x68 ./CMSIS/efm32gg/system_efm32gg.o
+
+.debug_ranges   0x00000000      0x708
+ .debug_ranges  0x00000000       0x30 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .debug_ranges  0x00000030       0x10 ./src/autogen_init.o
+ .debug_ranges  0x00000040       0x68 ./src/low_power_tick_management.o
+ .debug_ranges  0x000000a8      0x108 ./emlib/em_cmu.o
+ .debug_ranges  0x000001b0       0x88 ./emlib/em_emu.o
+ .debug_ranges  0x00000238       0x30 ./emlib/em_gpio.o
+ .debug_ranges  0x00000268       0x38 ./emlib/em_rmu.o
+ .debug_ranges  0x000002a0       0x48 ./emlib/em_rtc.o
+ .debug_ranges  0x000002e8       0x18 ./emlib/em_system.o
+ .debug_ranges  0x00000300       0x28 ./FreeRTOS/efm32gg/heap_1.o
+ .debug_ranges  0x00000328       0x30 ./FreeRTOS/efm32gg/list.o
+ .debug_ranges  0x00000358       0x80 ./FreeRTOS/efm32gg/port.o
+ .debug_ranges  0x000003d8       0xb0 ./FreeRTOS/efm32gg/queue.o
+ .debug_ranges  0x00000488      0x140 ./FreeRTOS/efm32gg/tasks.o
+ .debug_ranges  0x000005c8       0x78 ./FreeRTOS/efm32gg/timers.o
+ .debug_ranges  0x00000640       0x70 ./Drivers/sleep.o
+ .debug_ranges  0x000006b0       0x58 ./CMSIS/efm32gg/system_efm32gg.o
+
+.debug_line     0x00000000     0x43b8
+ .debug_line    0x00000000      0x3e9 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .debug_line    0x000003e9      0x23e ./src/autogen_init.o
+ .debug_line    0x00000627      0x4af ./src/low_power_tick_management.o
+ .debug_line    0x00000ad6      0x7e3 ./emlib/em_cmu.o
+ .debug_line    0x000012b9      0x4ce ./emlib/em_emu.o
+ .debug_line    0x00001787      0x311 ./emlib/em_gpio.o
+ .debug_line    0x00001a98      0x158 ./emlib/em_int.o
+ .debug_line    0x00001bf0      0x313 ./emlib/em_rmu.o
+ .debug_line    0x00001f03      0x329 ./emlib/em_rtc.o
+ .debug_line    0x0000222c      0x2a9 ./emlib/em_system.o
+ .debug_line    0x000024d5      0x171 ./FreeRTOS/efm32gg/heap_1.o
+ .debug_line    0x00002646      0x1da ./FreeRTOS/efm32gg/list.o
+ .debug_line    0x00002820      0x2dc ./FreeRTOS/efm32gg/port.o
+ .debug_line    0x00002afc      0x552 ./FreeRTOS/efm32gg/queue.o
+ .debug_line    0x0000304e      0x804 ./FreeRTOS/efm32gg/tasks.o
+ .debug_line    0x00003852      0x310 ./FreeRTOS/efm32gg/timers.o
+ .debug_line    0x00003b62      0x476 ./Drivers/sleep.o
+ .debug_line    0x00003fd8       0xeb ./CMSIS/efm32gg/startup_efm32gg.o
+ .debug_line    0x000040c3      0x2f5 ./CMSIS/efm32gg/system_efm32gg.o
+
+.debug_str      0x00000000     0x33c0
+ .debug_str     0x00000000      0x86f ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+                                0x8c4 (size before relaxing)
+ .debug_str     0x0000086f      0x17d ./src/autogen_init.o
+                                0x6b0 (size before relaxing)
+ .debug_str     0x000009ec      0x533 ./src/low_power_tick_management.o
+                                0xba1 (size before relaxing)
+ .debug_str     0x00000f1f      0x612 ./emlib/em_cmu.o
+                                0xbf0 (size before relaxing)
+ .debug_str     0x00001531      0x3a8 ./emlib/em_emu.o
+                                0x7ae (size before relaxing)
+ .debug_str     0x000018d9      0x12a ./emlib/em_gpio.o
+                                0x539 (size before relaxing)
+ .debug_str     0x00001a03       0x4e ./emlib/em_int.o
+                                0x1d6 (size before relaxing)
+ .debug_str     0x00001a51      0x131 ./emlib/em_rmu.o
+                                0x36f (size before relaxing)
+ .debug_str     0x00001b82       0xb9 ./emlib/em_rtc.o
+                                0x2b5 (size before relaxing)
+ .debug_str     0x00001c3b       0xb7 ./emlib/em_system.o
+                                0x2a8 (size before relaxing)
+ .debug_str     0x00001cf2       0xef ./FreeRTOS/efm32gg/heap_1.o
+                                0x252 (size before relaxing)
+ .debug_str     0x00001de1      0x179 ./FreeRTOS/efm32gg/list.o
+                                0x2ef (size before relaxing)
+ .debug_str     0x00001f5a      0x299 ./FreeRTOS/efm32gg/port.o
+                                0x4c5 (size before relaxing)
+ .debug_str     0x000021f3      0x426 ./FreeRTOS/efm32gg/queue.o
+                                0x65d (size before relaxing)
+ .debug_str     0x00002619      0x766 ./FreeRTOS/efm32gg/tasks.o
+                                0xa43 (size before relaxing)
+ .debug_str     0x00002d7f      0x38c ./FreeRTOS/efm32gg/timers.o
+                                0x5fd (size before relaxing)
+ .debug_str     0x0000310b      0x168 ./Drivers/sleep.o
+                                0x476 (size before relaxing)
+ .debug_str     0x00003273      0x14d ./CMSIS/efm32gg/system_efm32gg.o
+                                0x481 (size before relaxing)
+
+.debug_frame    0x00000000     0x1954
+ .debug_frame   0x00000000       0xac ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .debug_frame   0x000000ac       0x2c ./src/autogen_init.o
+ .debug_frame   0x000000d8      0x160 ./src/low_power_tick_management.o
+ .debug_frame   0x00000238      0x3a8 ./emlib/em_cmu.o
+ .debug_frame   0x000005e0      0x1d8 ./emlib/em_emu.o
+ .debug_frame   0x000007b8       0xa8 ./emlib/em_gpio.o
+ .debug_frame   0x00000860       0xb8 ./emlib/em_rmu.o
+ .debug_frame   0x00000918       0xf0 ./emlib/em_rtc.o
+ .debug_frame   0x00000a08       0x48 ./emlib/em_system.o
+ .debug_frame   0x00000a50       0x7c ./FreeRTOS/efm32gg/heap_1.o
+ .debug_frame   0x00000acc       0x9c ./FreeRTOS/efm32gg/list.o
+ .debug_frame   0x00000b68      0x174 ./FreeRTOS/efm32gg/port.o
+ .debug_frame   0x00000cdc      0x29c ./FreeRTOS/efm32gg/queue.o
+ .debug_frame   0x00000f78      0x4b4 ./FreeRTOS/efm32gg/tasks.o
+ .debug_frame   0x0000142c      0x1c4 ./FreeRTOS/efm32gg/timers.o
+ .debug_frame   0x000015f0      0x188 ./Drivers/sleep.o
+ .debug_frame   0x00001778      0x120 ./CMSIS/efm32gg/system_efm32gg.o
+ .debug_frame   0x00001898       0x28 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-exit.o)
+ .debug_frame   0x000018c0       0x2c c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-init.o)
+ .debug_frame   0x000018ec       0x28 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x00001914       0x20 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc_s.a(lib_a-memset.o)
+ .debug_frame   0x00001934       0x20 c:/siliconlabs/simplicitystudio/v2/developer/toolchains/gnu_arm/4.8_2013q4/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libnosys.a(_exit.o)

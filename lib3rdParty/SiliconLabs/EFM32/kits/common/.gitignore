@@ -1,0 +1,12 @@
+Debug
+Debug_Linux
+Debug_linux
+Debug_lpc1769
+Release
+Release_linux
+Release_lpc1769
+unittest
+bspdoc
+EFM32ZG_STK3200
+*.launch
+.settings/
