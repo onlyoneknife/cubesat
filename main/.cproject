@@ -179,6 +179,8 @@
 					<stringMacro name="FreeRtosPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/FreeRTOS/"/>
 					<stringMacro name="StudioToolchainPath" type="VALUE_PATH_DIR" value="${StudioToolchainPathFromID:com.silabs.ide.si32.gcc:4.8.3.20131129}"/>
 					<stringMacro name="StudioSdkPath" type="VALUE_PATH_DIR" value="${StudioSdkPathFromID:com.silabs.sdk.si32.efm32.sls:2.0.4}"/>
+					<stringMacro name="SiliconLabsPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/SiliconLabs/EFM32"/>
+					<stringMacro name="GnuArmPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/GNU_ARM"/>
 				</macros>
 				<externalSettings>
 					<externalSetting/>
@@ -208,19 +210,19 @@
 								<option id="gnu.c.compiler.option.include.paths.2206093" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/portable/GCC/ARM_CM3&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/spidrv/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/sleep/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/rtcdrv/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/nvm/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/gpiointerrupt/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/config&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/common/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/usb/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/drivers&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/CMSIS/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/spidrv/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/sleep/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/rtcdrv/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/nvm/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/gpiointerrupt/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/config&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/common/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/usb/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/CMSIS/Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/bsp&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emlib/inc&quot;"/>
 								</option>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols.1217773586" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
@@ -233,21 +235,21 @@
 							</tool>
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base.1805394642" name="GNU ARM Assembler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base">
 								<option id="gnu.both.asm.option.include.paths.1764067255" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/common/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/config&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/gpiointerrupt/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/nvm/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/rtcdrv/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/sleep/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/spidrv/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/portable/GCC/ARM_CM3&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/usb/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/drivers&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/CMSIS/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/common/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/config&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/gpiointerrupt/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/nvm/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/rtcdrv/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/sleep/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emdrv/spidrv/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/usb/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/emlib/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/kits/common/bsp&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SiliconLabsPath}/CMSIS/Include&quot;"/>
 								</option>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.1950908788" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>

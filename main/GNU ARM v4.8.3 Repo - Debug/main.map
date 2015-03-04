@@ -83,7 +83,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x60 ./emlib/em_acmp.o
  .debug_ranges  0x00000000       0x50 ./emlib/em_acmp.o
- .debug_line    0x00000000      0x2d5 ./emlib/em_acmp.o
+ .debug_line    0x00000000      0x323 ./emlib/em_acmp.o
  .debug_str     0x00000000      0x630 ./emlib/em_acmp.o
  .comment       0x00000000       0x71 ./emlib/em_acmp.o
  .ARM.attributes
@@ -139,7 +139,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x88 ./emlib/em_aes.o
  .debug_ranges  0x00000000       0x78 ./emlib/em_aes.o
- .debug_line    0x00000000      0xb76 ./emlib/em_aes.o
+ .debug_line    0x00000000      0xbc4 ./emlib/em_aes.o
  .debug_str     0x00000000      0x357 ./emlib/em_aes.o
  .comment       0x00000000       0x71 ./emlib/em_aes.o
  .ARM.attributes
@@ -184,7 +184,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x70 ./emlib/em_burtc.o
  .debug_ranges  0x00000000       0x60 ./emlib/em_burtc.o
- .debug_line    0x00000000      0x364 ./emlib/em_burtc.o
+ .debug_line    0x00000000      0x3b2 ./emlib/em_burtc.o
  .debug_str     0x00000000      0x4a4 ./emlib/em_burtc.o
  .comment       0x00000000       0x71 ./emlib/em_burtc.o
  .ARM.attributes
@@ -258,7 +258,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x60 ./emlib/em_dac.o
  .debug_ranges  0x00000000       0x50 ./emlib/em_dac.o
- .debug_line    0x00000000      0x2de ./emlib/em_dac.o
+ .debug_line    0x00000000      0x32c ./emlib/em_dac.o
  .debug_str     0x00000000      0x832 ./emlib/em_dac.o
  .comment       0x00000000       0x71 ./emlib/em_dac.o
  .ARM.attributes
@@ -279,7 +279,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x30 ./emlib/em_dbg.o
  .debug_ranges  0x00000000       0x20 ./emlib/em_dbg.o
- .debug_line    0x00000000      0x25c ./emlib/em_dbg.o
+ .debug_line    0x00000000      0x2aa ./emlib/em_dbg.o
  .debug_str     0x00000000      0x4ed ./emlib/em_dbg.o
  .comment       0x00000000       0x71 ./emlib/em_dbg.o
  .ARM.attributes
@@ -385,7 +385,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0xe0 ./emlib/em_ebi.o
  .debug_ranges  0x00000000       0xd0 ./emlib/em_ebi.o
- .debug_line    0x00000000      0x536 ./emlib/em_ebi.o
+ .debug_line    0x00000000      0x584 ./emlib/em_ebi.o
  .debug_str     0x00000000      0xde2 ./emlib/em_ebi.o
  .comment       0x00000000       0x71 ./emlib/em_ebi.o
  .ARM.attributes
@@ -443,7 +443,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x40 ./emlib/em_gpio.o
  .debug_ranges  0x00000000       0x30 ./emlib/em_gpio.o
- .debug_line    0x00000000      0x27b ./emlib/em_gpio.o
+ .debug_line    0x00000000      0x2c9 ./emlib/em_gpio.o
  .debug_str     0x00000000      0x555 ./emlib/em_gpio.o
  .comment       0x00000000       0x71 ./emlib/em_gpio.o
  .ARM.attributes
@@ -478,7 +478,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x58 ./emlib/em_i2c.o
  .debug_ranges  0x00000000       0x48 ./emlib/em_i2c.o
- .debug_line    0x00000000      0x39e ./emlib/em_i2c.o
+ .debug_line    0x00000000      0x3ec ./emlib/em_i2c.o
  .debug_str     0x00000000      0x778 ./emlib/em_i2c.o
  .comment       0x00000000       0x71 ./emlib/em_i2c.o
  .ARM.attributes
@@ -491,7 +491,7 @@ Discarded input sections
  .debug_abbrev  0x00000000       0x4b ./emlib/em_idac.o
  .debug_aranges
                 0x00000000       0x18 ./emlib/em_idac.o
- .debug_line    0x00000000       0xe1 ./emlib/em_idac.o
+ .debug_line    0x00000000       0xfb ./emlib/em_idac.o
  .debug_str     0x00000000      0x1de ./emlib/em_idac.o
  .comment       0x00000000       0x71 ./emlib/em_idac.o
  .ARM.attributes
@@ -505,7 +505,7 @@ Discarded input sections
  .debug_abbrev  0x00000000       0x5c ./emlib/em_int.o
  .debug_aranges
                 0x00000000       0x18 ./emlib/em_int.o
- .debug_line    0x00000000       0xf6 ./emlib/em_int.o
+ .debug_line    0x00000000      0x110 ./emlib/em_int.o
  .debug_str     0x00000000      0x1f2 ./emlib/em_int.o
  .comment       0x00000000       0x71 ./emlib/em_int.o
  .ARM.attributes
@@ -517,7 +517,7 @@ Discarded input sections
  .debug_abbrev  0x00000000       0x4b ./emlib/em_lcd.o
  .debug_aranges
                 0x00000000       0x18 ./emlib/em_lcd.o
- .debug_line    0x00000000       0xe1 ./emlib/em_lcd.o
+ .debug_line    0x00000000       0xfb ./emlib/em_lcd.o
  .debug_str     0x00000000      0x1dd ./emlib/em_lcd.o
  .comment       0x00000000       0x71 ./emlib/em_lcd.o
  .ARM.attributes
@@ -575,7 +575,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0xc8 ./emlib/em_lesense.o
  .debug_ranges  0x00000000       0xb8 ./emlib/em_lesense.o
- .debug_line    0x00000000      0x5ea ./emlib/em_lesense.o
+ .debug_line    0x00000000      0x638 ./emlib/em_lesense.o
  .debug_str     0x00000000     0x151d ./emlib/em_lesense.o
  .comment       0x00000000       0x71 ./emlib/em_lesense.o
  .ARM.attributes
@@ -606,7 +606,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x58 ./emlib/em_letimer.o
  .debug_ranges  0x00000000       0x48 ./emlib/em_letimer.o
- .debug_line    0x00000000      0x2d7 ./emlib/em_letimer.o
+ .debug_line    0x00000000      0x325 ./emlib/em_letimer.o
  .debug_str     0x00000000      0x434 ./emlib/em_letimer.o
  .comment       0x00000000       0x71 ./emlib/em_letimer.o
  .ARM.attributes
@@ -649,7 +649,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x88 ./emlib/em_leuart.o
  .debug_ranges  0x00000000       0x78 ./emlib/em_leuart.o
- .debug_line    0x00000000      0x360 ./emlib/em_leuart.o
+ .debug_line    0x00000000      0x3ae ./emlib/em_leuart.o
  .debug_str     0x00000000      0x735 ./emlib/em_leuart.o
  .comment       0x00000000       0x71 ./emlib/em_leuart.o
  .ARM.attributes
@@ -666,7 +666,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x20 ./emlib/em_mpu.o
  .debug_ranges  0x00000000       0x10 ./emlib/em_mpu.o
- .debug_line    0x00000000      0x16b ./emlib/em_mpu.o
+ .debug_line    0x00000000      0x19f ./emlib/em_mpu.o
  .debug_str     0x00000000      0x55c ./emlib/em_mpu.o
  .comment       0x00000000       0x71 ./emlib/em_mpu.o
  .ARM.attributes
@@ -686,7 +686,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x50 ./emlib/em_msc.o
  .debug_ranges  0x00000000       0x40 ./emlib/em_msc.o
- .debug_line    0x00000000      0x2f9 ./emlib/em_msc.o
+ .debug_line    0x00000000      0x347 ./emlib/em_msc.o
  .debug_str     0x00000000      0x5f3 ./emlib/em_msc.o
  .comment       0x00000000       0x71 ./emlib/em_msc.o
  .ARM.attributes
@@ -705,7 +705,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x28 ./emlib/em_opamp.o
  .debug_ranges  0x00000000       0x18 ./emlib/em_opamp.o
- .debug_line    0x00000000      0x488 ./emlib/em_opamp.o
+ .debug_line    0x00000000      0x4d6 ./emlib/em_opamp.o
  .debug_str     0x00000000      0x58e ./emlib/em_opamp.o
  .comment       0x00000000       0x71 ./emlib/em_opamp.o
  .ARM.attributes
@@ -744,7 +744,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x78 ./emlib/em_pcnt.o
  .debug_ranges  0x00000000       0x68 ./emlib/em_pcnt.o
- .debug_line    0x00000000      0x3a7 ./emlib/em_pcnt.o
+ .debug_line    0x00000000      0x3f5 ./emlib/em_pcnt.o
  .debug_str     0x00000000      0x510 ./emlib/em_pcnt.o
  .comment       0x00000000       0x71 ./emlib/em_pcnt.o
  .ARM.attributes
@@ -763,7 +763,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x28 ./emlib/em_prs.o
  .debug_ranges  0x00000000       0x18 ./emlib/em_prs.o
- .debug_line    0x00000000      0x1f6 ./emlib/em_prs.o
+ .debug_line    0x00000000      0x244 ./emlib/em_prs.o
  .debug_str     0x00000000      0x2a4 ./emlib/em_prs.o
  .comment       0x00000000       0x71 ./emlib/em_prs.o
  .ARM.attributes
@@ -792,7 +792,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x48 ./emlib/em_rmu.o
  .debug_ranges  0x00000000       0x38 ./emlib/em_rmu.o
- .debug_line    0x00000000      0x274 ./emlib/em_rmu.o
+ .debug_line    0x00000000      0x2c2 ./emlib/em_rmu.o
  .debug_str     0x00000000      0x38b ./emlib/em_rmu.o
  .comment       0x00000000       0x71 ./emlib/em_rmu.o
  .ARM.attributes
@@ -823,7 +823,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x58 ./emlib/em_rtc.o
  .debug_ranges  0x00000000       0x48 ./emlib/em_rtc.o
- .debug_line    0x00000000      0x293 ./emlib/em_rtc.o
+ .debug_line    0x00000000      0x2e1 ./emlib/em_rtc.o
  .debug_str     0x00000000      0x2d1 ./emlib/em_rtc.o
  .comment       0x00000000       0x71 ./emlib/em_rtc.o
  .ARM.attributes
@@ -842,7 +842,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x28 ./emlib/em_system.o
  .debug_ranges  0x00000000       0x18 ./emlib/em_system.o
- .debug_line    0x00000000      0x214 ./emlib/em_system.o
+ .debug_line    0x00000000      0x262 ./emlib/em_system.o
  .debug_str     0x00000000      0x2c4 ./emlib/em_system.o
  .comment       0x00000000       0x71 ./emlib/em_system.o
  .ARM.attributes
@@ -871,7 +871,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x50 ./emlib/em_timer.o
  .debug_ranges  0x00000000       0x40 ./emlib/em_timer.o
- .debug_line    0x00000000      0x496 ./emlib/em_timer.o
+ .debug_line    0x00000000      0x4e4 ./emlib/em_timer.o
  .debug_str     0x00000000      0x97a ./emlib/em_timer.o
  .comment       0x00000000       0x71 ./emlib/em_timer.o
  .ARM.attributes
@@ -933,7 +933,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x40 ./emlib/em_vcmp.o
  .debug_ranges  0x00000000       0x30 ./emlib/em_vcmp.o
- .debug_line    0x00000000      0x26c ./emlib/em_vcmp.o
+ .debug_line    0x00000000      0x2ba ./emlib/em_vcmp.o
  .debug_str     0x00000000      0x3ca ./emlib/em_vcmp.o
  .comment       0x00000000       0x71 ./emlib/em_vcmp.o
  .ARM.attributes
@@ -958,7 +958,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x40 ./emlib/em_wdog.o
  .debug_ranges  0x00000000       0x30 ./emlib/em_wdog.o
- .debug_line    0x00000000      0x266 ./emlib/em_wdog.o
+ .debug_line    0x00000000      0x2b4 ./emlib/em_wdog.o
  .debug_str     0x00000000      0x3f2 ./emlib/em_wdog.o
  .comment       0x00000000       0x71 ./emlib/em_wdog.o
  .ARM.attributes
@@ -988,7 +988,7 @@ Discarded input sections
  .debug_abbrev  0x00000000       0x4b ./Drivers/gyro.o
  .debug_aranges
                 0x00000000       0x18 ./Drivers/gyro.o
- .debug_line    0x00000000       0xe1 ./Drivers/gyro.o
+ .debug_line    0x00000000       0xfb ./Drivers/gyro.o
  .debug_str     0x00000000      0x1e3 ./Drivers/gyro.o
  .comment       0x00000000       0x71 ./Drivers/gyro.o
  .ARM.attributes
@@ -1526,19 +1526,19 @@ OUTPUT(main.axf elf32-littlearm)
  .debug_ranges  0x000002d0       0xa8 ./emlib/em_usart.o
  .debug_ranges  0x00000378       0x58 ./CMSIS/efm32gg/system_efm32gg.o
 
-.debug_line     0x00000000     0x2484
- .debug_line    0x00000000      0x1d2 ./src/autogen_adc0.o
- .debug_line    0x000001d2      0x29e ./src/autogen_init.o
- .debug_line    0x00000470      0x1d9 ./src/autogen_usart1.o
- .debug_line    0x00000649      0x1d9 ./src/autogen_usart2.o
- .debug_line    0x00000822      0x106 ./src/main.o
- .debug_line    0x00000928      0x309 ./emlib/em_adc.o
- .debug_line    0x00000c31      0x779 ./emlib/em_cmu.o
- .debug_line    0x000013aa      0x4aa ./emlib/em_dma.o
- .debug_line    0x00001854      0x43a ./emlib/em_emu.o
- .debug_line    0x00001c8e      0x4e9 ./emlib/em_usart.o
- .debug_line    0x00002177       0x9f ./CMSIS/efm32gg/startup_gcc_efm32gg.o
- .debug_line    0x00002216      0x26e ./CMSIS/efm32gg/system_efm32gg.o
+.debug_line     0x00000000     0x2790
+ .debug_line    0x00000000      0x220 ./src/autogen_adc0.o
+ .debug_line    0x00000220      0x2ec ./src/autogen_init.o
+ .debug_line    0x0000050c      0x227 ./src/autogen_usart1.o
+ .debug_line    0x00000733      0x227 ./src/autogen_usart2.o
+ .debug_line    0x0000095a      0x120 ./src/main.o
+ .debug_line    0x00000a7a      0x357 ./emlib/em_adc.o
+ .debug_line    0x00000dd1      0x7c7 ./emlib/em_cmu.o
+ .debug_line    0x00001598      0x4f8 ./emlib/em_dma.o
+ .debug_line    0x00001a90      0x488 ./emlib/em_emu.o
+ .debug_line    0x00001f18      0x537 ./emlib/em_usart.o
+ .debug_line    0x0000244f       0x9f ./CMSIS/efm32gg/startup_gcc_efm32gg.o
+ .debug_line    0x000024ee      0x2a2 ./CMSIS/efm32gg/system_efm32gg.o
 
 .debug_str      0x00000000     0x2b78
  .debug_str     0x00000000      0x3f2 ./src/autogen_adc0.o
