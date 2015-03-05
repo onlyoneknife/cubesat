@@ -16,7 +16,7 @@ void eADesigner_Init(void)
   CMU->CTRL    = (CMU->CTRL & ~_CMU_CTRL_HFXOBOOST_MASK) | CMU_CTRL_HFXOBOOST_100PCENT;
           
   /* Enable HFXO as high frequency clock, HFCLK */
-  CMU_ClockSelectSet(cmuClock_HF,cmuSelect_HFXO);
+  //CMU_ClockSelectSet(cmuClock_HF,cmuSelect_HFXO);
   
   /* Use crystal oscillator for LFXO */
   CMU->CTRL |= CMU_CTRL_LFXOMODE_XTAL;
@@ -25,7 +25,7 @@ void eADesigner_Init(void)
   EMU->AUXCTRL = (EMU->AUXCTRL & ~_EMU_AUXCTRL_REDLFXOBOOST_MASK);
           
   /* Enable LFXO and wait for it to stabilize */
-  CMU_OscillatorEnable(cmuOsc_LFXO, true, true);
+  //CMU_OscillatorEnable(cmuOsc_LFXO, true, true);
   
   /* Enable GPIO clock */
   CMU_ClockEnable(cmuClock_GPIO, true);
