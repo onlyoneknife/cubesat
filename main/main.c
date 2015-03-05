@@ -18,13 +18,33 @@
  * @date 2015-02-20
  */
 
+#include <stdio.h>
+#include <stdint.h>
+
 #include <autogen_init.h>
 
-int
-main(void)
+#include "tempsense.h"
+
+#include "em_chip.h"
+
+int main(void)
 {
   /* Initialize chip */
   eADesigner_Init();
+
+  /* Initialize chip */
+  CHIP_Init();
+
+  ADCConfig();
+
+  uint32_t sample = 0;
+
+  /* Infinite blink loop */
+  while(1){
+
+	  sample = ADC_GetData(ADC0);
+
+  }
 
   /* Initialize other components */
 

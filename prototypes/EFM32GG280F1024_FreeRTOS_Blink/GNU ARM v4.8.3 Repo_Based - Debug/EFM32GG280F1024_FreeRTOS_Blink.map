@@ -84,7 +84,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x70 ./emlib/em_burtc.o
  .debug_ranges  0x00000000       0x60 ./emlib/em_burtc.o
- .debug_line    0x00000000      0x401 ./emlib/em_burtc.o
+ .debug_line    0x00000000      0x3a7 ./emlib/em_burtc.o
  .debug_str     0x00000000      0x488 ./emlib/em_burtc.o
  .comment       0x00000000       0x71 ./emlib/em_burtc.o
  .ARM.attributes
@@ -1262,26 +1262,26 @@ OUTPUT(EFM32GG280F1024_FreeRTOS_Blink.axf elf32-littlearm)
  .debug_ranges  0x00000640       0x70 ./Drivers/sleep.o
  .debug_ranges  0x000006b0       0x58 ./CMSIS/efm32gg/system_efm32gg.o
 
-.debug_line     0x00000000     0x43b8
- .debug_line    0x00000000      0x3e9 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
- .debug_line    0x000003e9      0x23e ./src/autogen_init.o
- .debug_line    0x00000627      0x4af ./src/low_power_tick_management.o
- .debug_line    0x00000ad6      0x7e3 ./emlib/em_cmu.o
- .debug_line    0x000012b9      0x4ce ./emlib/em_emu.o
- .debug_line    0x00001787      0x311 ./emlib/em_gpio.o
- .debug_line    0x00001a98      0x158 ./emlib/em_int.o
- .debug_line    0x00001bf0      0x313 ./emlib/em_rmu.o
- .debug_line    0x00001f03      0x329 ./emlib/em_rtc.o
- .debug_line    0x0000222c      0x2a9 ./emlib/em_system.o
- .debug_line    0x000024d5      0x171 ./FreeRTOS/efm32gg/heap_1.o
- .debug_line    0x00002646      0x1da ./FreeRTOS/efm32gg/list.o
- .debug_line    0x00002820      0x2dc ./FreeRTOS/efm32gg/port.o
- .debug_line    0x00002afc      0x552 ./FreeRTOS/efm32gg/queue.o
- .debug_line    0x0000304e      0x804 ./FreeRTOS/efm32gg/tasks.o
- .debug_line    0x00003852      0x310 ./FreeRTOS/efm32gg/timers.o
- .debug_line    0x00003b62      0x476 ./Drivers/sleep.o
- .debug_line    0x00003fd8       0xeb ./CMSIS/efm32gg/startup_efm32gg.o
- .debug_line    0x000040c3      0x2f5 ./CMSIS/efm32gg/system_efm32gg.o
+.debug_line     0x00000000     0x3f76
+ .debug_line    0x00000000      0x375 ./src/EFM32GG280F1024_FreeRTOS_Blink.o
+ .debug_line    0x00000375      0x1e4 ./src/autogen_init.o
+ .debug_line    0x00000559      0x455 ./src/low_power_tick_management.o
+ .debug_line    0x000009ae      0x789 ./emlib/em_cmu.o
+ .debug_line    0x00001137      0x474 ./emlib/em_emu.o
+ .debug_line    0x000015ab      0x2b7 ./emlib/em_gpio.o
+ .debug_line    0x00001862      0x132 ./emlib/em_int.o
+ .debug_line    0x00001994      0x2b9 ./emlib/em_rmu.o
+ .debug_line    0x00001c4d      0x2cf ./emlib/em_rtc.o
+ .debug_line    0x00001f1c      0x24f ./emlib/em_system.o
+ .debug_line    0x0000216b      0x165 ./FreeRTOS/efm32gg/heap_1.o
+ .debug_line    0x000022d0      0x1da ./FreeRTOS/efm32gg/list.o
+ .debug_line    0x000024aa      0x2dc ./FreeRTOS/efm32gg/port.o
+ .debug_line    0x00002786      0x546 ./FreeRTOS/efm32gg/queue.o
+ .debug_line    0x00002ccc      0x7f8 ./FreeRTOS/efm32gg/tasks.o
+ .debug_line    0x000034c4      0x310 ./FreeRTOS/efm32gg/timers.o
+ .debug_line    0x000037d4      0x402 ./Drivers/sleep.o
+ .debug_line    0x00003bd6       0xeb ./CMSIS/efm32gg/startup_efm32gg.o
+ .debug_line    0x00003cc1      0x2b5 ./CMSIS/efm32gg/system_efm32gg.o
 
 .debug_str      0x00000000     0x33c0
  .debug_str     0x00000000      0x86f ./src/EFM32GG280F1024_FreeRTOS_Blink.o
