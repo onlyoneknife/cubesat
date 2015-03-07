@@ -70,6 +70,6 @@ int main(void)
   {
     BSP_LedToggle(0);
     BSP_LedToggle(1);
-    Delay(1000);
+    Delay(500);
   }
 }
