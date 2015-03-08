@@ -76,13 +76,13 @@ u8_t GYRO_WriteReg(u8_t Reg, u8_t Data) {
 status_t GYRO_SetODR(GYRO_ODR_t ov){
   u8_t value;
 
-  if( !GYRO_ReadReg(GYRO_CTRL_REG1, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL1, &value) )
     return MEMS_ERROR;
 
   value &= 0x0f;
   value |= ov<<4;
 
-  if( !GYRO_WriteReg(GYRO_CTRL_REG1, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL1, value) )
     return MEMS_ERROR;
 
   return MEMS_SUCCESS;
@@ -99,7 +99,7 @@ status_t GYRO_SetODR(GYRO_ODR_t ov){
 status_t GYRO_SetMode(GYRO_Mode_t md) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG1, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL1, &value) )
     return MEMS_ERROR;
                   
   switch(md) {
@@ -123,7 +123,7 @@ status_t GYRO_SetMode(GYRO_Mode_t md) {
     return MEMS_ERROR;
   }
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG1, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL1, value) )
     return MEMS_ERROR;
                   
   return MEMS_SUCCESS;
@@ -140,13 +140,13 @@ status_t GYRO_SetMode(GYRO_Mode_t md) {
 status_t GYRO_SetAxis(GYRO_Axis_t axis) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG1, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL1, &value) )
     return MEMS_ERROR;
     
   value &= 0xf8;
   value |= axis;
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG1, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL1, value) )
     return MEMS_ERROR;  
   
   return MEMS_SUCCESS;
@@ -163,13 +163,13 @@ status_t GYRO_SetAxis(GYRO_Axis_t axis) {
 status_t GYRO_SetFullScale(GYRO_Fullscale_t fs) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG4, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL4, &value) )
     return MEMS_ERROR;
                   
   value &= 0xCF;	
   value |= (fs<<GYRO_FS);
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG4, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL4, value) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -186,13 +186,13 @@ status_t GYRO_SetFullScale(GYRO_Fullscale_t fs) {
 status_t GYRO_SetBDU(State_t bdu) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG4, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL4, &value) )
     return MEMS_ERROR;
  
   value &= 0x7F;
   value |= (bdu<<GYRO_BDU);
 
-  if( !GYRO_WriteReg(GYRO_CTRL_REG4, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL4, value) )
     return MEMS_ERROR;
 
   return MEMS_SUCCESS;
@@ -209,13 +209,13 @@ status_t GYRO_SetBDU(State_t bdu) {
 status_t GYRO_SetBLE(GYRO_Endianess_t ble) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG4, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL4, &value) )
     return MEMS_ERROR;
                   
   value &= 0xBF;	
   value |= (ble<<GYRO_BLE);
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG4, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL4, value) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -232,13 +232,13 @@ status_t GYRO_SetBLE(GYRO_Endianess_t ble) {
 status_t GYRO_HPFEnable(State_t hpf) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG5, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL5, &value) )
     return MEMS_ERROR;
                   
   value &= 0xEF;
   value |= (hpf<<GYRO_HPEN);
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG5, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL5, value) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -255,13 +255,13 @@ status_t GYRO_HPFEnable(State_t hpf) {
 status_t GYRO_SetHPFMode(GYRO_HPFMode_t hpf) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG2, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL2, &value) )
     return MEMS_ERROR;
                   
   value &= 0xCF;
   value |= (hpf<<GYRO_HPM);
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG2, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL2, value) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -278,13 +278,13 @@ status_t GYRO_SetHPFMode(GYRO_HPFMode_t hpf) {
 status_t GYRO_SetHPFCutOFF(GYRO_HPFCutOffFreq_t hpf) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG2, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL2, &value) )
     return MEMS_ERROR;
                   
   value &= 0xF0;
   value |= (hpf<<GYRO_HPFC0);
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG2, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL2, value) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -302,13 +302,13 @@ status_t GYRO_SetHPFCutOFF(GYRO_HPFCutOffFreq_t hpf) {
 status_t GYRO_SetIntPinMode(GYRO_IntPinMode_t pm) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG3, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL3, &value) )
     return MEMS_ERROR;
                   
   value &= 0xEF;
   value |= (pm<<GYRO_PP_OD);
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG3, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL3, value) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -327,13 +327,13 @@ status_t GYRO_SetIntPinMode(GYRO_IntPinMode_t pm) {
 status_t GYRO_SetInt1Pin(GYRO_Int1PinConf_t pinConf) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG3, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL3, &value) )
     return MEMS_ERROR;
                   
   value &= 0x1F;
   value |= pinConf;
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG3, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL3, value) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -353,13 +353,13 @@ status_t GYRO_SetInt1Pin(GYRO_Int1PinConf_t pinConf) {
 status_t GYRO_SetInt2Pin(GYRO_Int2PinConf_t pinConf) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG3, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL3, &value) )
     return MEMS_ERROR;
                   
   value &= 0xF0;
   value |= pinConf;
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG3, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL3, value) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;  
@@ -376,13 +376,13 @@ status_t GYRO_SetInt2Pin(GYRO_Int2PinConf_t pinConf) {
 status_t GYRO_Int1LatchEnable(State_t latch) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_INT1_CFG, &value) )
+  if( !GYRO_ReadReg(GYRO_IG_CFG, &value) )
     return MEMS_ERROR;
                   
   value &= 0xBF;
   value |= latch<<GYRO_LIR;
   
-  if( !GYRO_WriteReg(GYRO_INT1_CFG, value) )
+  if( !GYRO_WriteReg(GYRO_IG_CFG, value) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -399,7 +399,7 @@ status_t GYRO_Int1LatchEnable(State_t latch) {
 status_t GYRO_ResetInt1Latch(void) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_INT1_SRC, &value) )
+  if( !GYRO_ReadReg(GYRO_IG_SRC, &value) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -418,7 +418,7 @@ status_t GYRO_SetIntConfiguration(GYRO_Int1Conf_t ic) {
   
   value = ic;
 
-  if( !GYRO_WriteReg(GYRO_INT1_CFG, value) )
+  if( !GYRO_WriteReg(GYRO_IG_CFG, value) )
     return MEMS_ERROR;
 
   return MEMS_SUCCESS;
@@ -440,12 +440,12 @@ status_t GYRO_SetInt1Threshold(GYRO_IntThsAxis axis, u16_t ths) {
     case GYRO_THS_X:
       //write the threshold LSB
       value = (u8_t)( ths & 0x00ff); 
-      if( !GYRO_WriteReg(GYRO_INT1_THS_XL, value) )
+      if( !GYRO_WriteReg(GYRO_IG_THS_XL, value) )
         return MEMS_ERROR;
       
       //write the threshold LSB
       value = (u8_t)( ths >> 8); 
-      if( !GYRO_WriteReg(GYRO_INT1_THS_XH, value) )
+      if( !GYRO_WriteReg(GYRO_IG_THS_XH, value) )
         return MEMS_ERROR;
       
       break;
@@ -453,12 +453,12 @@ status_t GYRO_SetInt1Threshold(GYRO_IntThsAxis axis, u16_t ths) {
     case GYRO_THS_Y:
       //write the threshold LSB
       value = (u8_t)( ths & 0x00ff); 
-      if( !GYRO_WriteReg(GYRO_INT1_THS_YL, value) )
+      if( !GYRO_WriteReg(GYRO_IG_THS_YL, value) )
         return MEMS_ERROR;
       
       //write the threshold LSB
       value = (u8_t)( ths >> 8); 
-      if( !GYRO_WriteReg(GYRO_INT1_THS_YH, value) )
+      if( !GYRO_WriteReg(GYRO_IG_THS_YH, value) )
         return MEMS_ERROR;
       
       break;
@@ -466,12 +466,12 @@ status_t GYRO_SetInt1Threshold(GYRO_IntThsAxis axis, u16_t ths) {
     case GYRO_THS_Z:
       //write the threshold LSB
       value = (u8_t)( ths & 0x00ff); 
-      if( !GYRO_WriteReg(GYRO_INT1_THS_ZL, value) )
+      if( !GYRO_WriteReg(GYRO_IG_THS_ZL, value) )
         return MEMS_ERROR;
       
       //write the threshold LSB
       value = (u8_t)( ths >> 8); 
-      if( !GYRO_WriteReg(GYRO_INT1_THS_ZH, value) )
+      if( !GYRO_WriteReg(GYRO_IG_THS_ZH, value) )
         return MEMS_ERROR;
       
       break;     
@@ -495,7 +495,7 @@ status_t GYRO_SetInt1Duration(GYRO_Int1Conf_t id) {
   if (id > 127)
     return MEMS_ERROR;
 
-  if( !GYRO_WriteReg(GYRO_INT1_DURATION, id) )
+  if( !GYRO_WriteReg(GYRO_IG_DURATION, id) )
     return MEMS_ERROR;
 
   return MEMS_SUCCESS;
@@ -514,34 +514,34 @@ status_t GYRO_FIFOModeEnable(GYRO_FifoMode_t fm) {
   
   if(fm == GYRO_FIFO_DISABLE) {
     
-    if( !GYRO_ReadReg(GYRO_CTRL_REG5, &value) )
+    if( !GYRO_ReadReg(GYRO_CTRL5, &value) )
       return MEMS_ERROR;
                     
     value &= 0xBF;    
     
-    if( !GYRO_WriteReg(GYRO_CTRL_REG5, value) )
+    if( !GYRO_WriteReg(GYRO_CTRL5, value) )
       return MEMS_ERROR;
     
   }
   else {
     
-    if( !GYRO_ReadReg(GYRO_CTRL_REG5, &value) )
+    if( !GYRO_ReadReg(GYRO_CTRL5, &value) )
       return MEMS_ERROR;
                     
     value &= 0xBF;
     value |= MEMS_SET<<GYRO_FIFO_EN;
     
-    if( !GYRO_WriteReg(GYRO_CTRL_REG5, value) )
+    if( !GYRO_WriteReg(GYRO_CTRL5, value) )
       return MEMS_ERROR;
     
     
-    if( !GYRO_ReadReg(GYRO_FIFO_CTRL_REG, &value) )
+    if( !GYRO_ReadReg(GYRO_FIFO_CTRL, &value) )
       return MEMS_ERROR;
     
     value &= 0x1f;
     value |= (fm<<GYRO_FM0);
     
-    if( !GYRO_WriteReg(GYRO_FIFO_CTRL_REG, value) )
+    if( !GYRO_WriteReg(GYRO_FIFO_CTRL, value) )
       return MEMS_ERROR;
   }
 
@@ -562,13 +562,13 @@ status_t GYRO_SetWaterMark(u8_t wtm) {
   if(wtm > 31)
     return MEMS_ERROR;  
   
-  if( !GYRO_ReadReg(GYRO_FIFO_CTRL_REG, &value) )
+  if( !GYRO_ReadReg(GYRO_FIFO_CTRL, &value) )
     return MEMS_ERROR;
                   
   value &= 0xE0;
   value |= wtm; 
   
-  if( !GYRO_WriteReg(GYRO_FIFO_CTRL_REG, value) )
+  if( !GYRO_WriteReg(GYRO_FIFO_CTRL, value) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -583,7 +583,7 @@ status_t GYRO_SetWaterMark(u8_t wtm) {
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
 status_t GYRO_GetSatusReg(u8_t* buff) {
-  if( !GYRO_ReadReg(GYRO_STATUS_REG, buff) )
+  if( !GYRO_ReadReg(GYRO_STATUS, buff) )
       return MEMS_ERROR;
   
   return MEMS_SUCCESS;  
@@ -639,7 +639,7 @@ status_t GYRO_GetAngRateRaw(AxesRaw_t* buff) {
 *******************************************************************************/
 status_t GYRO_GetInt1Src(u8_t* buff) {
   
-  if( !GYRO_ReadReg(GYRO_INT1_SRC, buff) )
+  if( !GYRO_ReadReg(GYRO_IG_SRC, buff) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -655,7 +655,7 @@ status_t GYRO_GetInt1Src(u8_t* buff) {
 *******************************************************************************/
 status_t GYRO_GetFifoSourceReg(u8_t* buff) {
   
-  if( !GYRO_ReadReg(GYRO_FIFO_SRC_REG, buff) )
+  if( !GYRO_ReadReg(GYRO_FIFO_SRC, buff) )
     return MEMS_ERROR;
   
   return MEMS_SUCCESS;
@@ -674,7 +674,7 @@ status_t GYRO_SetOutputDataAndFifoFilters(GYRO_HPF_LPF2_Enable hpf){
   u8_t value;
   
   //HPF
-  if( !GYRO_ReadReg(GYRO_CTRL_REG5, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL5, &value) )
     return MEMS_ERROR;
   
   switch(hpf) {
@@ -700,7 +700,7 @@ status_t GYRO_SetOutputDataAndFifoFilters(GYRO_HPF_LPF2_Enable hpf){
     break;    
   }
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG5, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL5, value) )
     return MEMS_ERROR;
   
   
@@ -721,34 +721,34 @@ status_t GYRO_SetInt1Filters(GYRO_HPF_LPF2_Enable hpf){
   u8_t value;
   
   //HPF
-  if( !GYRO_ReadReg(GYRO_CTRL_REG5, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL5, &value) )
     return MEMS_ERROR;
   
   switch(hpf) {
     
   case GYRO_NONE:
     value &= 0xf3;
-    value |= 0x00<<GYRO_INT1_SEL0; //hpen = x, Int1_sel_1 = 0, Int1_sel_0 = 0
+    value |= 0x00<<GYRO_IG_SEL0; //hpen = x, IG_sel_1 = 0, IG_sel_0 = 0
     break;
     
   case GYRO_HPF:
     value &= 0xf3;
-    value |= 0x01<<GYRO_INT1_SEL0; //hpen = x, Int1_sel_1 = 0, Int1_sel_0 = 1
+    value |= 0x01<<GYRO_IG_SEL0; //hpen = x, IG_sel_1 = 0, IG_sel_0 = 1
     break;
 
   case GYRO_LPF2:
     value &= 0xe7;
-    value |= 0x02<<GYRO_INT1_SEL0; //hpen = 0, Int1_sel_1 = 1, Int1_sel_0 = x
+    value |= 0x02<<GYRO_IG_SEL0; //hpen = 0, IG_sel_1 = 1, IG_sel_0 = x
     break;    
    
   case GYRO_HPFLPF2:
     value &= 0xe7;
     value |= 0x01<<GYRO_HPEN;
-    value |= 0x02<<GYRO_INT1_SEL0; //hpen = 1, Int1_sel_1 = 1, Int1_sel_0 = x
+    value |= 0x02<<GYRO_IG_SEL0; //hpen = 1, IG_sel_1 = 1, IG_sel_0 = x
     break;    
   }
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG5, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL5, value) )
     return MEMS_ERROR;
   
   
@@ -767,13 +767,13 @@ status_t GYRO_SetInt1Filters(GYRO_HPF_LPF2_Enable hpf){
 status_t GYRO_SetSPIInterface(GYRO_SPIMode_t spi) {
   u8_t value;
   
-  if( !GYRO_ReadReg(GYRO_CTRL_REG4, &value) )
+  if( !GYRO_ReadReg(GYRO_CTRL4, &value) )
     return MEMS_ERROR;
                   
   value &= 0xFE;
   value |= spi<<GYRO_SIM;
   
-  if( !GYRO_WriteReg(GYRO_CTRL_REG4, value) )
+  if( !GYRO_WriteReg(GYRO_CTRL4, value) )
     return MEMS_ERROR;
   
   
