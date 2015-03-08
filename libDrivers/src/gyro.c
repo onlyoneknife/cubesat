@@ -85,6 +85,16 @@ status_t GYRO_SetODR(GYRO_ODR_t ov){
   if( !GYRO_WriteReg(GYRO_CTRL1, value) )
     return MEMS_ERROR;
 
+  // Set LOW_ODR bit in LOW_ODR_REG
+  if( !GYRO_ReadReg(GYRO_LOW_ODR_REG, &value) )
+    return MEMS_ERROR;
+
+  value &= 0xfe;
+  value |= ov>>4;
+
+  if( !GYRO_WriteReg(GYRO_LOW_ODR_REG, value) )
+    return MEMS_ERROR;
+
   return MEMS_SUCCESS;
 }
 

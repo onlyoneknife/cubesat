@@ -65,20 +65,22 @@ typedef struct {
 #endif /*__SHARED__TYPES*/
 
 typedef enum {
-	GYRO_ODR_95Hz_BW_12_5 = 0x00,
-	GYRO_ODR_95Hz_BW_25 = 0x01,
-	GYRO_ODR_190Hz_BW_12_5 = 0x04,
-	GYRO_ODR_190Hz_BW_25 = 0x05,
-	GYRO_ODR_190Hz_BW_50 = 0x06,
-	GYRO_ODR_190Hz_BW_70 = 0x07,
-	GYRO_ODR_380Hz_BW_20 = 0x08,
-	GYRO_ODR_380Hz_BW_25 = 0x09,
-	GYRO_ODR_380Hz_BW_50 = 0x0A,
-	GYRO_ODR_380Hz_BW_110 = 0x0B,
-	GYRO_ODR_760Hz_BW_30 = 0x0C,
-	GYRO_ODR_760Hz_BW_35 = 0x0D,
-	GYRO_ODR_760Hz_BW_50 = 0x0E,
-	GYRO_ODR_760Hz_BW_110 = 0x0F
+	GYRO_ODR_12_5Hz_BW_NA = 0x10,
+	GYRO_ODR_25Hz_BW_NA = 0x14,
+	GYRO_ODR_50Hz_BW_16_6 = 0x18,
+	GYRO_ODR_100Hz_BW_12_5 = 0x00,
+	GYRO_ODR_100Hz_BW_25 = 0x01,
+	GYRO_ODR_200Hz_BW_12_5 = 0x04,
+	GYRO_ODR_200Hz = 0x05,
+	GYRO_ODR_200Hz_BW_70 = 0x07,
+	GYRO_ODR_400Hz_BW_20 = 0x08,
+	GYRO_ODR_400Hz_BW_25 = 0x09,
+	GYRO_ODR_400Hz_BW_50 = 0x0A,
+	GYRO_ODR_400Hz_BW_110 = 0x0B,
+	GYRO_ODR_800Hz_BW_30 = 0x0C,
+	GYRO_ODR_800Hz_BW_35 = 0x0D,
+	GYRO_ODR_800Hz = 0x0E,
+	GYRO_ODR_800Hz_BW_100 = 0x0F,
 } GYRO_ODR_t;
 
 typedef enum {
@@ -220,7 +222,7 @@ typedef enum {
 #define GYRO_SIM					BIT(0)
 
 /***************CTRL5***************/
-#define GYRO_CTRL5			        0x24
+#define GYRO_CTRL5				0x24
 #define GYRO_FIFO_EN                BIT(6)
 #define GYRO_STOPONFTH				BIT(5)
 #define GYRO_HPEN                   BIT(4)
@@ -239,14 +241,14 @@ typedef enum {
 #define GYRO_IG_THS_ZH				0x36
 #define GYRO_IG_THS_ZL				0x37
 #define GYRO_IG_DURATION			0x38
-#define GYRO_LIR                                     BIT(6)
-#define GYRO_ANDOR                                   BIT(7)
-#define GYRO_ZHIE                                    BIT(5)
-#define GYRO_ZLIE                                    BIT(4)
-#define GYRO_YHIE                                    BIT(3)
-#define GYRO_YLIE                                    BIT(2)
-#define GYRO_XHIE                                    BIT(1)
-#define GYRO_XLIE                                    BIT(0)
+#define GYRO_LIR                    BIT(6)
+#define GYRO_ANDOR                  BIT(7)
+#define GYRO_ZHIE                   BIT(5)
+#define GYRO_ZLIE                  	BIT(4)
+#define GYRO_YHIE                   BIT(3)
+#define GYRO_YLIE                   BIT(2)
+#define GYRO_XHIE                   BIT(1)
+#define GYRO_XLIE                   BIT(0)
 #define GYRO_IG_AND                                0x80
 #define GYRO_IG_OR                                 0x00
 #define GYRO_IG_LIR_ENABLE                         0x40
@@ -263,6 +265,12 @@ typedef enum {
 #define GYRO_IG_XHIE_DISABLE                       0x00
 #define GYRO_IG_XLIE_ENABLE                        0x01
 #define GYRO_IG_XLIE_DISABLE                       0x00
+
+/***************LOW_ODR***************/
+#define GYRO_LOW_ODR_REG		0x39
+#define GYRO_DRDY_HL                BIT(5)
+#define GYRO_I2C_DIS				BIT(3)
+#define GYRO_LOW_ODR                BIT(0)
 
 /**********GYROSCOPE: STATUS AND OUTPUT REGISTERS***********/
 //OUTPUT REGISTER
