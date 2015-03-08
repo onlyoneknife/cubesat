@@ -67,13 +67,14 @@ u8_t GYRO_WriteReg(u8_t Reg, u8_t Data) {
 /* Private functions ---------------------------------------------------------*/
 /*******************************************************************************
  * Function Name  : GYRO_SetSPI
- * Description    : Configures the gyroscope to use a given USART
- * Input          : USART struct
+ * Description    : Configures the gyroscope to use a given USART.
+ * 				  : Target-specific for AlbertaSat Athena OBC Hardware.
+ * Input          : None
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void GYRO_SetSPI(USART_TypeDef *usart) {
-	spi = usart;
+void GYRO_SetSPI(void) {
+	spi = USART1;
 }
 
 
