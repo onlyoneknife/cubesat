@@ -857,7 +857,7 @@ void USART_Reset(USART_TypeDef *usart)
  * @note
  *   This function will stall if the buffer is empty, until data is received.
  *   Alternatively the user can explicitly check whether data is available, and
- *   if data is avaliable, call @ref USART_RxDataGet() to read the RXDATA
+ *   if data is available, call @ref USART_RxDataGet() to read the RXDATA
  *   register directly.
  *
  * @param[in] usart
