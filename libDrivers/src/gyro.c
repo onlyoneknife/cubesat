@@ -50,7 +50,7 @@ u8_t GYRO_ReadReg(u8_t Reg, u8_t* Data) {
 
 	* Data = USART_SpiTransfer(spi, Reg);
 
-	GPIO->P[cs_port].DOUTCLR = 1 << cs_pin; // Set CS high
+	GPIO->P[cs_port].DOUTSET = 1 << cs_pin; // Set CS high
 
 	return 1;
 }
