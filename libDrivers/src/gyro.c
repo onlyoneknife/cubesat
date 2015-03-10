@@ -31,6 +31,8 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 USART_TypeDef *spi;
+unsigned int cs_pin;
+GPIO_Port_TypeDef cs_port;
 /* Private function prototypes -----------------------------------------------*/
 
 /*******************************************************************************
@@ -43,7 +45,12 @@ USART_TypeDef *spi;
  *******************************************************************************/
 u8_t GYRO_ReadReg(u8_t Reg, u8_t* Data) {
 	Reg |= 0x01 << 7;	// Set READ bit
+
+	GPIO->P[cs_port].DOUTCLR = 1 << cs_pin; // Set CS low
+
 	* Data = USART_SpiTransfer(spi, Reg);
+
+	GPIO->P[cs_port].DOUTSET = 1 << cs_pin; // Set CS high
 
 	return 1;
 }
@@ -59,21 +66,30 @@ u8_t GYRO_ReadReg(u8_t Reg, u8_t* Data) {
 u8_t GYRO_WriteReg(u8_t Reg, u8_t Data) {
 	uint16_t Reg_Data;
 
+	GPIO->P[cs_port].DOUTCLR = 1 << cs_pin; // Set CS low
+
 	Reg_Data = ((uint16_t)Reg << 8) | Data;	// Combine Reg and Data for transfer
 	USART_TxDouble(spi, Reg_Data);
+
+	GPIO->P[cs_port].DOUTSET = 1 << cs_pin; // Set CS high
 
 	return 1;
 }
 /* Private functions ---------------------------------------------------------*/
 /*******************************************************************************
  * Function Name  : GYRO_SetSPI
- * Description    : Configures the gyroscope to use a given USART
- * Input          : USART struct
+ * Description    : Configures the gyroscope to use a given USART.
+ * 				  : Target-specific for AlbertaSat Athena OBC Hardware.
+ * Input          : None
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void GYRO_SetSPI(USART_TypeDef *usart) {
-	spi = usart;
+void GYRO_SetSPI(void) {
+	spi = USART1;
+	cs_port = gpioPortB;
+	cs_pin = 5;
+
+	GPIO->P[cs_port].DOUTSET = 1 << cs_pin; // Make sure CS is high/default state
 }
 
 
