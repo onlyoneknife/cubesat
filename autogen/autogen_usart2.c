@@ -20,5 +20,7 @@ void USART2_setup(void)
   init.autoTx       = 0;
 
   USART_InitSync(USART2, &init);
+  // Enable USART - Will be used as both receiver and transmitter
+  USART_Enable(USART2, usartEnable);
 }
 
