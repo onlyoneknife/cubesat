@@ -5,19 +5,6 @@
  * files are generated again by the eADesigner.                     *
  ********************************************************************/
 
-#include "autogen_init.h"
-#include "em_cmu.h"
+#include "autogen_usart1.h"
 
-void eADesigner_Init(void)
-{
-  /* Using HFRCO at 14MHz as high frequency clock, HFCLK */
-  CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFRCO);
-  
-  /* Use external digital clock for LFXO */
-  CMU->CTRL |= CMU_CTRL_LFXOMODE_DIGEXTCLK;
-  
-  /* Enable LFXO and wait for it to stabilize */
-  CMU_OscillatorEnable(cmuOsc_LFXO, true, true);
-  
-  
-}
+void eADesigner_Init(void);

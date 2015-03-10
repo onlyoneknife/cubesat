@@ -5,19 +5,20 @@
  * files are generated again by the eADesigner.                     *
  ********************************************************************/
 
-#include "autogen_init.h"
-#include "em_cmu.h"
+#include "autogen_usart1.h"
 
-void eADesigner_Init(void)
+void USART1_setup(void)
 {
-  /* Using HFRCO at 14MHz as high frequency clock, HFCLK */
-  CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFRCO);
-  
-  /* Use external digital clock for LFXO */
-  CMU->CTRL |= CMU_CTRL_LFXOMODE_DIGEXTCLK;
-  
-  /* Enable LFXO and wait for it to stabilize */
-  CMU_OscillatorEnable(cmuOsc_LFXO, true, true);
-  
-  
+  USART_InitAsync_TypeDef init = USART_INITASYNC_DEFAULT;
+
+  init.baudrate     = 115200;
+  init.oversampling = usartOVS16;
+  init.databits     = usartDatabits8;
+  init.parity       = usartNoParity;
+  init.stopbits     = usartStopbits1;
+  init.mvdis        = 0;
+  init.prsRxEnable  = 0;
+
+  USART_InitAsync(USART1, &init);
 }
+
