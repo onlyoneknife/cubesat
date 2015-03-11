@@ -77,7 +77,7 @@ void SPI_setup(uint8_t spiNumber, uint8_t location, bool master)
   }
 
   /* Setting baudrate */
-  spi->CLKDIV = 128 * (SPI_PERCLK_FREQUENCY / SPI_BAUDRATE - 2);
+  spi->CLKDIV = 16 * 128 * (SPI_PERCLK_FREQUENCY / SPI_BAUDRATE - 2);
 
   /* Configure SPI */
   /* Using synchronous (SPI) mode*/
