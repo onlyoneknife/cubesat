@@ -7,12 +7,7 @@
 #ifndef FRAM_H_
 #define FRAM_H_
 
-#ifndef __ARCHDEP__TYPES
-#define __ARCHDEP__TYPES
-typedef unsigned char 		u8_t;
-typedef unsigned short int 	u16_t;
-typedef unsigned int 		u32_t;
-#endif /*__ARCHDEP__TYPES*/
+#include <stdint.h>
 
 #ifndef __SHARED__TYPES
 #define __SHARED__TYPES
@@ -61,10 +56,10 @@ typedef enum {
 void FRAM_SetSPI(void);
 void FRAM_SetWriteEnableLatch(void);
 void FRAM_ResetWriteEnableLatch(void);
-void FRAM_ReadStatusReg(u8_t* data);
-void FRAM_WriteStatusReg(u8_t data);
-void FRAM_ReadMemory(u32_t address, u8_t* data);
-void FRAM_WriteMemory(u32_t address, u8_t data);
+void FRAM_ReadStatusReg(uint8_t* data);
+void FRAM_WriteStatusReg(uint8_t data);
+void FRAM_ReadMemory(uint32_t address, uint8_t* data);
+void FRAM_WriteMemory(uint32_t address, uint8_t data);
 void FRAM_SetSleepMode(FRAM_Mode_t mode);
 void FRAM_SetBlockProtectRange(FRAM_BlkProtectRange_t blockRange);
 void FRAM_WriteProtectEnable(State_t mode);

@@ -93,7 +93,7 @@ void FRAM_ResetWriteEnableLatch(void) {
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void FRAM_ReadStatusReg(u8_t* data) {
+void FRAM_ReadStatusReg(uint8_t* data) {
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
 	USART_Tx(spi, FRAM_OP_RDSR);
@@ -110,7 +110,7 @@ void FRAM_ReadStatusReg(u8_t* data) {
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void FRAM_WriteStatusReg(u8_t data) {
+void FRAM_WriteStatusReg(uint8_t data) {
 	FRAM_ResetWriteEnableLatch(); // Allow writing
 	GPIO->P[wpPort].DOUTSET = 1 << wpPin; // Set #WP high
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
@@ -131,15 +131,15 @@ void FRAM_WriteStatusReg(u8_t data) {
  * Output         : Memory data
  * Return         : None
  *******************************************************************************/
-void FRAM_ReadMemory(u32_t address, u8_t* data) {
+void FRAM_ReadMemory(uint32_t address, uint8_t* data) {
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
 	USART_Tx(spi, FRAM_OP_READ);
 
 	/* Send address bits 17 - 0. Bits 23- 18 are don't care */
-	USART_Tx(spi, (u8_t) (address >> 16));
-	USART_Tx(spi, (u8_t) (address >> 8));
-	USART_Tx(spi, (u8_t) address);
+	USART_Tx(spi, (uint8_t) (address >> 16));
+	USART_Tx(spi, (uint8_t) (address >> 8));
+	USART_Tx(spi, (uint8_t) address);
 
 	* data = USART_Rx(spi);
 
@@ -155,7 +155,7 @@ void FRAM_ReadMemory(u32_t address, u8_t* data) {
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void FRAM_WriteMemory(u32_t address, u8_t data) {
+void FRAM_WriteMemory(uint32_t address, uint8_t data) {
 	FRAM_ResetWriteEnableLatch(); // Allow writing
 
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
@@ -163,9 +163,9 @@ void FRAM_WriteMemory(u32_t address, u8_t data) {
 	USART_Tx(spi, FRAM_OP_WRITE);
 
 	/* Send address bits 17 - 0. Bits 23- 18 are don't care */
-	USART_Tx(spi, (u8_t) (address >> 16));
-	USART_Tx(spi, (u8_t) (address >> 8));
-	USART_Tx(spi, (u8_t) address);
+	USART_Tx(spi, (uint8_t) (address >> 16));
+	USART_Tx(spi, (uint8_t) (address >> 8));
+	USART_Tx(spi, (uint8_t) address);
 
 	USART_Tx(spi, data);
 
@@ -196,7 +196,7 @@ void FRAM_SetSleepMode(FRAM_Mode_t mode) {
 	case FRAM_NORMAL:
 		if (FRAM_Mode == FRAM_SLEEP)
 		{
-			u8_t value;
+			uint8_t value;
 			FRAM_ReadStatusReg(&value); // Do a dummy read to wake up the FRAM
 			//TODO: make delay of at least 8ns
 		}
@@ -218,7 +218,7 @@ void FRAM_SetSleepMode(FRAM_Mode_t mode) {
  * Return         : None
  *******************************************************************************/
 void FRAM_SetBlockProtectRange(FRAM_BlkProtectRange_t blockRange) {
-	u8_t value;
+	uint8_t value;
 	FRAM_ReadStatusReg(&value);
 
 	value &= 0xF3;	// Clear block protect bits
@@ -237,7 +237,7 @@ void FRAM_SetBlockProtectRange(FRAM_BlkProtectRange_t blockRange) {
  * Return         : None
  *******************************************************************************/
 void FRAM_WriteProtectEnable(State_t mode) {
-	u8_t value;
+	uint8_t value;
 	FRAM_ReadStatusReg(&value);
 
 	value &= 0x7F;	// Clear write protect bit

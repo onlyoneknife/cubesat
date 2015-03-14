@@ -26,22 +26,21 @@
 #ifndef __GYRO_DRIVER__H
 #define __GYRO_DRIVER__H
 
+#include <stdint.h>
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 
 //these could change accordingly with the architecture
 #ifndef __ARCHDEP__TYPES
 #define __ARCHDEP__TYPES
-typedef unsigned char u8_t;
-typedef unsigned short int u16_t;
 typedef short int i16_t;
 typedef signed char i8_t;
 #endif /*__ARCHDEP__TYPES*/
 
-typedef u8_t GYRO_Int1PinConf_t;
-typedef u8_t GYRO_Int2PinConf_t;
-typedef u8_t GYRO_Int1Conf_t;
-typedef u8_t GYRO_Axis_t;
+typedef uint8_t GYRO_Int1PinConf_t;
+typedef uint8_t GYRO_Int2PinConf_t;
+typedef uint8_t GYRO_Int1Conf_t;
+typedef uint8_t GYRO_Axis_t;
 
 /* Exported common structure --------------------------------------------------------*/
 
@@ -330,22 +329,22 @@ status_t GYRO_SetInt2Pin(GYRO_Int2PinConf_t pinConf);
 status_t GYRO_Int1LatchEnable(State_t latch);
 status_t GYRO_ResetInt1Latch(void);
 status_t GYRO_SetIntConfiguration(GYRO_Int1Conf_t ic);
-status_t GYRO_SetInt1Threshold(GYRO_IntThsAxis axis, u16_t ths);
+status_t GYRO_SetInt1Threshold(GYRO_IntThsAxis axis, uint16_t ths);
 status_t GYRO_SetInt1Duration(GYRO_Int1Conf_t id);
 
 /*****************FIFO Functions******************/
 status_t GYRO_FIFOModeEnable(GYRO_FifoMode_t fm);
-status_t GYRO_SetWaterMark(u8_t wtm);
+status_t GYRO_SetWaterMark(uint8_t wtm);
 
 /****************Reading Functions*****************/
-status_t GYRO_GetSatusReg(u8_t* buff);
+status_t GYRO_GetSatusReg(uint8_t* buff);
 status_t GYRO_GetAngRateRaw(AxesRaw_t* buff);
-status_t GYRO_GetFifoSourceReg(u8_t* buff);
-status_t GYRO_GetInt1Src(u8_t* buff);
+status_t GYRO_GetFifoSourceReg(uint8_t* buff);
+status_t GYRO_GetInt1Src(uint8_t* buff);
 
 /*********************Generic*********************/
-u8_t GYRO_ReadReg(u8_t Reg, u8_t* Data);
-u8_t GYRO_WriteReg(u8_t WriteAddr, u8_t Data);
+uint8_t GYRO_ReadReg(uint8_t Reg, uint8_t* Data);
+uint8_t GYRO_WriteReg(uint8_t WriteAddr, uint8_t Data);
 
 #endif /* __GYRO_H */
 
