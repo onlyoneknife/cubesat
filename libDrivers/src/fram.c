@@ -108,14 +108,14 @@ void FRAM_ReadMemory(uint32_t address, uint8_t* data) {
 
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
-	USART_TxDouble(spi, OP_READ);
+	USART_Tx(spi, OP_READ);
 
 	/* Send address bits 17 - 0. Bits 23- 18 are don't care */
-	USART_TxDouble(spi, (uint8_t) (address >> 16));
-	USART_TxDouble(spi, (uint8_t) (address >> 8));
-	USART_TxDouble(spi, (uint8_t) address);
+	USART_Tx(spi, (uint8_t) (address >> 16));
+	USART_Tx(spi, (uint8_t) (address >> 8));
+	USART_Tx(spi, (uint8_t) address);
 
-	* data = USART_RxDouble(spi);
+	* data = USART_Rx(spi);
 
 	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 }
@@ -125,10 +125,23 @@ void FRAM_ReadMemory(uint32_t address, uint8_t* data) {
  * Description    : Write data into the FRAMs memory
  * Input          : Address (18-bit) of the first byte of the write operation,
  * 				  : upper 6 bytes are ignored
+ * 				  : Data to be written
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void FRAM_WriteMemory(void) {
+void FRAM_WriteMemory(uint32_t address, uint8_t data) {
+	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+
+	USART_Tx(spi, OP_WRITE);
+
+	/* Send address bits 17 - 0. Bits 23- 18 are don't care */
+	USART_Tx(spi, (uint8_t) (address >> 16));
+	USART_Tx(spi, (uint8_t) (address >> 8));
+	USART_Tx(spi, (uint8_t) address);
+
+	USART_Tx(spi, data);
+
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 }
 
 /*******************************************************************************
