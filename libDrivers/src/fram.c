@@ -93,7 +93,13 @@ void FRAM_ResetWriteEnableLatch(void) {
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void FRAM_ReadStatusReg(void) {
+void FRAM_ReadStatusReg(uint8_t* data) {
+	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+
+	USART_Tx(spi, OP_RDSR);
+	* data = USART_RX(spi);
+
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 }
 
 /*******************************************************************************
@@ -104,7 +110,17 @@ void FRAM_ReadStatusReg(void) {
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void FRAM_WriteStatusReg(void) {
+void FRAM_WriteStatusReg(uint8_t data) {
+	FRAM_ResetWriteEnableLatch(); // Allow writing
+	GPIO->P[wpPort].DOUTSET = 1 << wpPin; // Set #WP high
+	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+
+	USART_Tx(spi, OP_WRSR);
+	USART_Tx(spi, data);
+
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
+	GPIO->P[wpPort].DOUTCLR = 1 << wpPin; // Set #WP low
+	FRAM_SetWriteEnableLatch();
 }
 
 /*******************************************************************************
@@ -116,7 +132,6 @@ void FRAM_WriteStatusReg(void) {
  * Return         : None
  *******************************************************************************/
 void FRAM_ReadMemory(uint32_t address, uint8_t* data) {
-
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
 	USART_Tx(spi, OP_READ);
@@ -172,20 +187,23 @@ void FRAM_SetMode(FRAM_Mode_t mode) {
 	case FRAM_SLEEP:
 		if (FRAM_Mode = FRAM_NORMAL)
 		{
-			//TODO: put FRAM into sleep mode
+			GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+			USART_Tx(spi, OP_EN_SLEEP);
+			GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 		}
 		break;
 
 	case FRAM_NORMAL:
 		if (FRAM_Mode = FRAM_SLEEP)
 		{
-			//TODO: Send dummy Read
+			uint8_t value;
+			FRAM_ReadMemory(0, &value); // Do a dummy read to wake up the FRAM
 			//TODO: make delay of at least 8ns
 		}
 		break;
 
 	default:
-		//TODO: return error
+		//TODO: return error?
 	}
 
 	FRAM_Mode = mode;

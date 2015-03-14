@@ -7,9 +7,25 @@
 #ifndef FRAM_H_
 #define FRAM_H_
 
+#ifndef __SHARED__TYPES
+#define __SHARED__TYPES
+
+typedef enum {
+	MEMS_ENABLE = 0x01, MEMS_DISABLE = 0x00
+} State_t;
+
+#endif /*__SHARED__TYPES*/
+
 typedef enum {
 	FRAM_NORMAL = 0x00, FRAM_SLEEP = 0x01
 } FRAM_Mode_t;
+
+#ifndef __SHARED__MACROS
+
+#define __SHARED__MACROS
+#define BIT(x) ( (x) )
+
+#endif /*__SHARED__MACROS*/
 
 /***************OP CODES***************/
 #define FRAM_WREN		0x06	// Set write enable latch
@@ -21,6 +37,11 @@ typedef enum {
 #define FRAM_WRITE		0x02	// Write memory data
 #define FRAM_EN_SLEEP	0xB9	// Enter sleep mode
 #define FRAM_RDID		0x9F	// Read device ID
+
+/***************STATUS REGISTER***************/
+#define FRAM_WEL				bit(1)
+#define FRAM_BLOCK_PROTECT		bit(2)
+#define FRAM_WPEN				bit(7)
 
 
 #endif /* FRAM_H_ */
