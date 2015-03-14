@@ -32,8 +32,8 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 USART_TypeDef *spi;
-unsigned int cs_pin;
-GPIO_Port_TypeDef cs_port;
+unsigned int csPin;
+GPIO_Port_TypeDef csPort;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -45,14 +45,14 @@ GPIO_Port_TypeDef cs_port;
  * Output			: Data Read
  * Return			: None
  *******************************************************************************/
-u8_t GYRO_ReadReg(u8_t Reg, u8_t* Data) {
-	Reg |= 0x01 << 7;	// Set READ bit
+u8_t GYRO_ReadReg(u8_t reg, u8_t* data) {
+	reg |= 0x01 << 7;	// Set READ bit
 
-	GPIO->P[cs_port].DOUTCLR = 1 << cs_pin; // Set CS low
+	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
-	* Data = USART_SpiTransfer(spi, Reg);
+	* data = USART_SpiTransfer(spi, reg);
 
-	GPIO->P[cs_port].DOUTSET = 1 << cs_pin; // Set CS high
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 
 	return 1;
 }
@@ -65,15 +65,15 @@ u8_t GYRO_ReadReg(u8_t Reg, u8_t* Data) {
  * Output			: None
  * Return			: None
  *******************************************************************************/
-u8_t GYRO_WriteReg(u8_t Reg, u8_t Data) {
-	uint16_t Reg_Data;
+u8_t GYRO_WriteReg(u8_t reg, u8_t data) {
+	uint16_t regData;
 
-	GPIO->P[cs_port].DOUTCLR = 1 << cs_pin; // Set CS low
+	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
-	Reg_Data = ((uint16_t)Reg << 8) | Data;	// Combine Reg and Data for transfer
-	USART_TxDouble(spi, Reg_Data);
+	regData = ((uint16_t)reg << 8) | data;	// Combine Reg and Data for transfer
+	USART_TxDouble(spi, regData);
 
-	GPIO->P[cs_port].DOUTSET = 1 << cs_pin; // Set CS high
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 
 	return 1;
 }
@@ -88,10 +88,10 @@ u8_t GYRO_WriteReg(u8_t Reg, u8_t Data) {
  *******************************************************************************/
 void GYRO_SetSPI(void) {
 	spi = USART1;
-	cs_port = gpioPortB;
-	cs_pin = 5;
+	csPort = gpioPortB;
+	csPin = 5;
 
-	GPIO->P[cs_port].DOUTSET = 1 << cs_pin; // Make sure CS is high/default state
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Make sure CS is high/default state
 }
 
 
