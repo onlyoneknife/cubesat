@@ -49,6 +49,8 @@ void FRAM_SetSPI(void) {
 	FRAM_Mode = FRAM_NORMAL;
 
 	GPIO->P[csPort].DOUTSET = 1 << csPin; // Make sure CS is high/default state
+	GPIO->P[holdPort].DOUTSET = 1 << holdPin; // Make sure CS is high/default state
+
 	//TODO: Wait until device is powered up (1 ms after V_DD = V_DD_min)
 }
 
@@ -61,7 +63,11 @@ void FRAM_SetSPI(void) {
  * Return         : None
  *******************************************************************************/
 void FRAM_SetWriteEnableLatch(void) {
+	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
+	USART_Tx(spi, WREN);
+
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 }
 
 /*******************************************************************************
@@ -72,6 +78,11 @@ void FRAM_SetWriteEnableLatch(void) {
  * Return         : None
  *******************************************************************************/
 void FRAM_ResetWriteEnableLatch(void) {
+	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+
+	USART_Tx(spi, WRDI);
+
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 }
 
 /*******************************************************************************
@@ -130,6 +141,8 @@ void FRAM_ReadMemory(uint32_t address, uint8_t* data) {
  * Return         : None
  *******************************************************************************/
 void FRAM_WriteMemory(uint32_t address, uint8_t data) {
+	FRAM_ResetWriteEnableLatch(); // Allow writing
+
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
 	USART_Tx(spi, OP_WRITE);
@@ -142,6 +155,8 @@ void FRAM_WriteMemory(uint32_t address, uint8_t data) {
 	USART_Tx(spi, data);
 
 	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
+
+	FRAM_SetWriteEnableLatch();
 }
 
 /*******************************************************************************
