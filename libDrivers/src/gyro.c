@@ -35,6 +35,7 @@ USART_TypeDef *spi;
 unsigned int cs_pin;
 GPIO_Port_TypeDef cs_port;
 /* Private function prototypes -----------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
  * Function Name	: GYRO_ReadReg
@@ -76,7 +77,7 @@ u8_t GYRO_WriteReg(u8_t Reg, u8_t Data) {
 
 	return 1;
 }
-/* Private functions ---------------------------------------------------------*/
+
 /*******************************************************************************
  * Function Name  : GYRO_SetSPI
  * Description    : Configures the gyroscope to use a given USART.
@@ -108,7 +109,7 @@ status_t GYRO_SetODR(GYRO_ODR_t ov) {
 		return MEMS_ERROR;
 
 	value &= 0x0f;
-	value |= ov << 4;
+	value |= ov << GYRO_ODR_BIT;
 
 	if (!GYRO_WriteReg(GYRO_CTRL1, value))
 		return MEMS_ERROR;
