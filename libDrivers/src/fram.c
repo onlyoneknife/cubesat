@@ -181,7 +181,7 @@ void FRAM_WriteMemory(uint32_t address, uint8_t data) {
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void FRAM_SetMode(FRAM_Mode_t mode) {
+void FRAM_SetSleepMode(FRAM_Mode_t mode) {
 	switch (mode) {
 
 	case FRAM_SLEEP:
@@ -197,7 +197,7 @@ void FRAM_SetMode(FRAM_Mode_t mode) {
 		if (FRAM_Mode = FRAM_SLEEP)
 		{
 			uint8_t value;
-			FRAM_ReadMemory(0, &value); // Do a dummy read to wake up the FRAM
+			FRAM_ReadStatusReg(&value); // Do a dummy read to wake up the FRAM
 			//TODO: make delay of at least 8ns
 		}
 		break;
@@ -208,4 +208,41 @@ void FRAM_SetMode(FRAM_Mode_t mode) {
 
 	FRAM_Mode = mode;
 
+}
+
+/*******************************************************************************
+ * Function Name  : FRAM_SetBlockProtectRange
+ * Description    : Set the range for the write protected block in FRAM
+ * Input          : FRAM_NONE | FRAM_00000_TO_3FFFF | FRAM_20000_TO_3FFFF |
+ * 				  : FRAM_30000_TO_3FFFF
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
+void FRAM_SetBlockProtectRange(FRAM_BlkProtectRange_t blockRange) {
+	uint8_t value;
+	FRAM_ReadStatusReg(&value);
+
+	value &= 0xF3;	// Clear block protect bits
+	value |= blockRange << FRAM_BLK_PROTECT; // Set new block protect range bits
+
+	FRAM_WriteStatusReg(value);
+}
+
+/*******************************************************************************
+ * Function Name  : FRAM_SetWriteProtectEnableMode
+ * Description    : Enable or disable the write protect pin control.  Write
+ * 				  : protect (#wp) disables writing to the status register when
+ * 				  :	low
+ * Input          : MEMS_ENABLE | MEMS_DISABLE
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
+void FRAM_WriteProtectEnable(State_t mode) {
+	uint8_t value;
+	FRAM_ReadStatusReg(&value);
+
+	value &= 0x7F;	// Clear write protect bit
+	value |= mode << FRAM_WPEN; // Set new write protect bit
+
+	FRAM_WriteStatusReg(value);
 }
