@@ -49,7 +49,7 @@ void FRAM_SetSPI(void) {
 	FRAM_Mode = FRAM_NORMAL;
 
 	GPIO->P[csPort].DOUTSET = 1 << csPin; // Make sure CS is high/default state
-	GPIO->P[holdPort].DOUTSET = 1 << holdPin; // Make sure CS is high/default state
+	GPIO->P[holdPort].DOUTSET = 1 << holdPin; // Make sure hold is high/default state
 
 	//TODO: Wait until device is powered up (1 ms after V_DD = V_DD_min)
 }
@@ -63,6 +63,8 @@ void FRAM_SetSPI(void) {
  * Return         : None
  *******************************************************************************/
 void FRAM_SetWriteEnableLatch(void) {
+	FRAM_SetSleepMode(FRAM_NORMAL); // Ensure FRAM not in sleep mode
+
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
 	USART_Tx(spi, FRAM_OP_WREN);
@@ -78,6 +80,8 @@ void FRAM_SetWriteEnableLatch(void) {
  * Return         : None
  *******************************************************************************/
 void FRAM_ResetWriteEnableLatch(void) {
+	FRAM_SetSleepMode(FRAM_NORMAL); // Ensure FRAM not in sleep mode
+
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
 	USART_Tx(spi, FRAM_OP_WRDI);
@@ -111,6 +115,8 @@ void FRAM_ReadStatusReg(uint8_t* data) {
  * Return         : None
  *******************************************************************************/
 void FRAM_WriteStatusReg(uint8_t data) {
+	FRAM_SetSleepMode(FRAM_NORMAL); // Ensure FRAM not in sleep mode
+
 	FRAM_ResetWriteEnableLatch(); // Allow writing
 	GPIO->P[wpPort].DOUTSET = 1 << wpPin; // Set #WP high
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
@@ -132,6 +138,8 @@ void FRAM_WriteStatusReg(uint8_t data) {
  * Return         : None
  *******************************************************************************/
 void FRAM_ReadMemory(uint32_t address, uint8_t* data) {
+	FRAM_SetSleepMode(FRAM_NORMAL); // Ensure FRAM not in sleep mode
+
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
 	USART_Tx(spi, FRAM_OP_READ);
@@ -156,6 +164,8 @@ void FRAM_ReadMemory(uint32_t address, uint8_t* data) {
  * Return         : None
  *******************************************************************************/
 void FRAM_WriteMemory(uint32_t address, uint8_t data) {
+	FRAM_SetSleepMode(FRAM_NORMAL); // Ensure FRAM not in sleep mode
+
 	FRAM_ResetWriteEnableLatch(); // Allow writing
 
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
@@ -218,6 +228,8 @@ void FRAM_SetSleepMode(FRAM_Mode_t mode) {
  * Return         : None
  *******************************************************************************/
 void FRAM_SetBlockProtectRange(FRAM_BlkProtectRange_t blockRange) {
+	FRAM_SetSleepMode(FRAM_NORMAL); // Ensure FRAM not in sleep mode
+
 	uint8_t value;
 	FRAM_ReadStatusReg(&value);
 
@@ -237,6 +249,8 @@ void FRAM_SetBlockProtectRange(FRAM_BlkProtectRange_t blockRange) {
  * Return         : None
  *******************************************************************************/
 void FRAM_WriteProtectEnable(State_t mode) {
+	FRAM_SetSleepMode(FRAM_NORMAL); // Ensure FRAM not in sleep mode
+
 	uint8_t value;
 	FRAM_ReadStatusReg(&value);
 
