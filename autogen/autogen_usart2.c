@@ -11,11 +11,11 @@ void USART2_setup(void)
 {
   USART_InitSync_TypeDef init = USART_INITSYNC_DEFAULT;
 
-  init.baudrate     = 115200;
+  init.baudrate     = 10000000;
   init.databits     = usartDatabits8;
   init.msbf         = 1;
   init.master       = 1;
-  init.clockMode    = usartClockMode0;
+  init.clockMode    = usartClockMode3;
   init.prsRxEnable  = 0;
   init.autoTx       = 0;
 
