@@ -4,10 +4,6 @@
  * @date 2015-03-17
  */
 
-// -----------------------------------------------------------
-// TODO: REPLACE FRAM CODE BELOW WITH ACTUAL SD DRIVER CODE!!!
-// -----------------------------------------------------------
-
 /* Includes ------------------------------------------------------------------*/
 #include "SD.h"
 #include "em_usart.h"
@@ -23,8 +19,6 @@
 USART_TypeDef *spi;
 unsigned int csPin;
 GPIO_Port_TypeDef csPort;
-
-SD_Mode_t SD_Mode;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -42,16 +36,22 @@ void SD_SetSPI(void) {
 	csPort = gpioPortC;
 	csPin = 5;
 
-	// Reduce clock to 400kHz for initialization
+	spiBaudrate = USART_BaudrateGet(spi);
+	USART_BaudrateSyncSet(spi, 0, 400000); // Reduce clock to 400kHz for initialization
 
 	SD_Mode = SD_NORMAL;
 
-
+	// TODO: SD SPI Initialization procedure.
 
 	GPIO->P[csPort].DOUTSET = 1 << csPin; // Make sure CS is high/default state
-	// Restore clock frequency after initialization
+
+	USART_BaudrateSyncSet(spi, 0, spiBaudrate); // Restore original SPI frequency
 
 }
+
+// -----------------------------------------------------------
+// TODO: REPLACE FRAM CODE BELOW WITH ACTUAL SD DRIVER CODE!!!
+// -----------------------------------------------------------
 
 /*******************************************************************************
  * Function Name  : SD_SetWriteEnableLatch
