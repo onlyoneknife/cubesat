@@ -23,10 +23,6 @@
 USART_TypeDef *spi;
 unsigned int csPin;
 GPIO_Port_TypeDef csPort;
-unsigned int holdPin;
-GPIO_Port_TypeDef holdPort;
-unsigned int wpPin;
-GPIO_Port_TypeDef wpPort;
 
 SD_Mode_t SD_Mode;
 
@@ -43,19 +39,18 @@ SD_Mode_t SD_Mode;
  *******************************************************************************/
 void SD_SetSPI(void) {
 	spi = USART2;
-	csPort = gpioPortB;
-	csPin = 6;
-	holdPort = gpioPortD;
-	holdPin = 8;
-	wpPort = gpioPortD;
-	wpPin = 5;
+	csPort = gpioPortC;
+	csPin = 5;
+
+	// Reduce clock to 400kHz for initialization
 
 	SD_Mode = SD_NORMAL;
 
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Make sure CS is high/default state
-	GPIO->P[holdPort].DOUTSET = 1 << holdPin; // Make sure hold is high/default state
 
-	//TODO: Wait until device is powered up (1 ms after V_DD = V_DD_min)
+
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Make sure CS is high/default state
+	// Restore clock frequency after initialization
+
 }
 
 /*******************************************************************************
