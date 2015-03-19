@@ -53,7 +53,7 @@ typedef enum {
 #define FRAM_BLK_PROTECT		2
 #define FRAM_WPEN				7
 
-void FRAM_SetSPI(void);
+void FRAM_Init(void);
 void FRAM_SetWriteEnableLatch(void);
 void FRAM_ResetWriteEnableLatch(void);
 void FRAM_ReadStatusReg(uint8_t* data);

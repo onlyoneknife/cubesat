@@ -32,6 +32,6 @@ typedef enum {
 
 
 
-void SD_SetSPI(void);
+void SD_Init(void);
 
 #endif /* SD_H_ */

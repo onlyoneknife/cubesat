@@ -37,7 +37,7 @@ FRAM_Mode_t FRAM_Mode;
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void FRAM_SetSPI(void) {
+void FRAM_Init(void) {
 	spi = USART2;
 	csPort = gpioPortB;
 	csPin = 6;

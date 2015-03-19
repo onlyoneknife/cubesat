@@ -306,7 +306,7 @@ typedef enum {
 
 /* Exported functions --------------------------------------------------------*/
 /**********Sensor Configuration Functions***********/
-void GYRO_SetSPI(void);
+void GYRO_Init(void);
 status_t GYRO_SetODR(GYRO_ODR_t ov);
 status_t GYRO_SetMode(GYRO_Mode_t md);
 status_t GYRO_SetAxis(GYRO_Axis_t axis);

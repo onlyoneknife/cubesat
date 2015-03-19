@@ -24,14 +24,14 @@ GPIO_Port_TypeDef csPort;
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
- * Function Name  : SD_SetSPI
+ * Function Name  : SD_Init
  * Description    : Configures the SD to use a given USART
  * 				  : Target-specific for AlbertaSat Athena OBC Hardware
  * Input          : None
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void SD_SetSPI(void) {
+void SD_Init(void) {
 	spi = USART2;
 	csPort = gpioPortC;
 	csPin = 5;

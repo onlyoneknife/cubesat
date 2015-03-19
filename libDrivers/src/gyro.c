@@ -86,7 +86,7 @@ uint8_t GYRO_WriteReg(uint8_t reg, uint8_t data) {
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void GYRO_SetSPI(void) {
+void GYRO_Init(void) {
 	spi = USART1;
 	csPort = gpioPortB;
 	csPin = 5;
