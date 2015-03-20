@@ -26,14 +26,16 @@
 /* Includes ------------------------------------------------------------------*/
 #include "gyro.h"
 #include "em_usart.h"
+#include "em_gpio.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 USART_TypeDef *spi;
-unsigned int cs_pin;
-GPIO_Port_TypeDef cs_port;
+unsigned int csPin;
+GPIO_Port_TypeDef csPort;
 /* Private function prototypes -----------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
  * Function Name	: GYRO_ReadReg
@@ -43,14 +45,14 @@ GPIO_Port_TypeDef cs_port;
  * Output			: Data Read
  * Return			: None
  *******************************************************************************/
-u8_t GYRO_ReadReg(u8_t Reg, u8_t* Data) {
-	Reg |= 0x01 << 7;	// Set READ bit
+uint8_t GYRO_ReadReg(uint8_t reg, uint8_t* data) {
+	reg |= 0x01 << 7;	// Set READ bit
 
-	GPIO->P[cs_port].DOUTCLR = 1 << cs_pin; // Set CS low
+	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
-	* Data = USART_SpiTransfer(spi, Reg);
+	* data = USART_SpiTransfer(spi, reg);
 
-	GPIO->P[cs_port].DOUTSET = 1 << cs_pin; // Set CS high
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 
 	return 1;
 }
@@ -63,19 +65,19 @@ u8_t GYRO_ReadReg(u8_t Reg, u8_t* Data) {
  * Output			: None
  * Return			: None
  *******************************************************************************/
-u8_t GYRO_WriteReg(u8_t Reg, u8_t Data) {
-	uint16_t Reg_Data;
+uint8_t GYRO_WriteReg(uint8_t reg, uint8_t data) {
+	uint16_t regData;
 
-	GPIO->P[cs_port].DOUTCLR = 1 << cs_pin; // Set CS low
+	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
-	Reg_Data = ((uint16_t)Reg << 8) | Data;	// Combine Reg and Data for transfer
-	USART_TxDouble(spi, Reg_Data);
+	regData = ((uint16_t)reg << 8) | data;	// Combine Reg and Data for transfer
+	USART_TxDouble(spi, regData);
 
-	GPIO->P[cs_port].DOUTSET = 1 << cs_pin; // Set CS high
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 
 	return 1;
 }
-/* Private functions ---------------------------------------------------------*/
+
 /*******************************************************************************
  * Function Name  : GYRO_SetSPI
  * Description    : Configures the gyroscope to use a given USART.
@@ -86,10 +88,10 @@ u8_t GYRO_WriteReg(u8_t Reg, u8_t Data) {
  *******************************************************************************/
 void GYRO_SetSPI(void) {
 	spi = USART1;
-	cs_port = gpioPortB;
-	cs_pin = 5;
+	csPort = gpioPortB;
+	csPin = 5;
 
-	GPIO->P[cs_port].DOUTSET = 1 << cs_pin; // Make sure CS is high/default state
+	GPIO->P[csPort].DOUTSET = 1 << csPin; // Make sure CS is high/default state
 }
 
 
@@ -101,13 +103,13 @@ void GYRO_SetSPI(void) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetODR(GYRO_ODR_t ov) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL1, &value))
 		return MEMS_ERROR;
 
 	value &= 0x0f;
-	value |= ov << 4;
+	value |= ov << GYRO_ODR_BIT;
 
 	if (!GYRO_WriteReg(GYRO_CTRL1, value))
 		return MEMS_ERROR;
@@ -133,7 +135,7 @@ status_t GYRO_SetODR(GYRO_ODR_t ov) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetMode(GYRO_Mode_t md) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL1, &value))
 		return MEMS_ERROR;
@@ -174,7 +176,7 @@ status_t GYRO_SetMode(GYRO_Mode_t md) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetAxis(GYRO_Axis_t axis) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL1, &value))
 		return MEMS_ERROR;
@@ -196,7 +198,7 @@ status_t GYRO_SetAxis(GYRO_Axis_t axis) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetFullScale(GYRO_Fullscale_t fs) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL4, &value))
 		return MEMS_ERROR;
@@ -218,7 +220,7 @@ status_t GYRO_SetFullScale(GYRO_Fullscale_t fs) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetBDU(State_t bdu) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL4, &value))
 		return MEMS_ERROR;
@@ -240,7 +242,7 @@ status_t GYRO_SetBDU(State_t bdu) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetBLE(GYRO_Endianess_t ble) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL4, &value))
 		return MEMS_ERROR;
@@ -262,7 +264,7 @@ status_t GYRO_SetBLE(GYRO_Endianess_t ble) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_HPFEnable(State_t hpf) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL5, &value))
 		return MEMS_ERROR;
@@ -284,7 +286,7 @@ status_t GYRO_HPFEnable(State_t hpf) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetHPFMode(GYRO_HPFMode_t hpf) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL2, &value))
 		return MEMS_ERROR;
@@ -306,7 +308,7 @@ status_t GYRO_SetHPFMode(GYRO_HPFMode_t hpf) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetHPFCutOFF(GYRO_HPFCutOffFreq_t hpf) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL2, &value))
 		return MEMS_ERROR;
@@ -329,7 +331,7 @@ status_t GYRO_SetHPFCutOFF(GYRO_HPFCutOffFreq_t hpf) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetIntPinMode(GYRO_IntPinMode_t pm) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL3, &value))
 		return MEMS_ERROR;
@@ -353,7 +355,7 @@ status_t GYRO_SetIntPinMode(GYRO_IntPinMode_t pm) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetInt1Pin(GYRO_Int1PinConf_t pinConf) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL3, &value))
 		return MEMS_ERROR;
@@ -378,7 +380,7 @@ status_t GYRO_SetInt1Pin(GYRO_Int1PinConf_t pinConf) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetInt2Pin(GYRO_Int2PinConf_t pinConf) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL3, &value))
 		return MEMS_ERROR;
@@ -400,7 +402,7 @@ status_t GYRO_SetInt2Pin(GYRO_Int2PinConf_t pinConf) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_Int1LatchEnable(State_t latch) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_IG_CFG, &value))
 		return MEMS_ERROR;
@@ -422,7 +424,7 @@ status_t GYRO_Int1LatchEnable(State_t latch) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_ResetInt1Latch(void) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_IG_SRC, &value))
 		return MEMS_ERROR;
@@ -438,7 +440,7 @@ status_t GYRO_ResetInt1Latch(void) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetIntConfiguration(GYRO_Int1Conf_t ic) {
-	u8_t value;
+	uint8_t value;
 
 	value = ic;
 
@@ -455,19 +457,19 @@ status_t GYRO_SetIntConfiguration(GYRO_Int1Conf_t ic) {
  * Output         : None
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
-status_t GYRO_SetInt1Threshold(GYRO_IntThsAxis axis, u16_t ths) {
-	u8_t value;
+status_t GYRO_SetInt1Threshold(GYRO_IntThsAxis axis, uint16_t ths) {
+	uint8_t value;
 
 	switch (axis) {
 
 	case GYRO_THS_X:
 		//write the threshold LSB
-		value = (u8_t) (ths & 0x00ff);
+		value = (uint8_t) (ths & 0x00ff);
 		if (!GYRO_WriteReg(GYRO_IG_THS_XL, value))
 			return MEMS_ERROR;
 
 		//write the threshold LSB
-		value = (u8_t) (ths >> 8);
+		value = (uint8_t) (ths >> 8);
 		if (!GYRO_WriteReg(GYRO_IG_THS_XH, value))
 			return MEMS_ERROR;
 
@@ -475,12 +477,12 @@ status_t GYRO_SetInt1Threshold(GYRO_IntThsAxis axis, u16_t ths) {
 
 	case GYRO_THS_Y:
 		//write the threshold LSB
-		value = (u8_t) (ths & 0x00ff);
+		value = (uint8_t) (ths & 0x00ff);
 		if (!GYRO_WriteReg(GYRO_IG_THS_YL, value))
 			return MEMS_ERROR;
 
 		//write the threshold LSB
-		value = (u8_t) (ths >> 8);
+		value = (uint8_t) (ths >> 8);
 		if (!GYRO_WriteReg(GYRO_IG_THS_YH, value))
 			return MEMS_ERROR;
 
@@ -488,12 +490,12 @@ status_t GYRO_SetInt1Threshold(GYRO_IntThsAxis axis, u16_t ths) {
 
 	case GYRO_THS_Z:
 		//write the threshold LSB
-		value = (u8_t) (ths & 0x00ff);
+		value = (uint8_t) (ths & 0x00ff);
 		if (!GYRO_WriteReg(GYRO_IG_THS_ZL, value))
 			return MEMS_ERROR;
 
 		//write the threshold LSB
-		value = (u8_t) (ths >> 8);
+		value = (uint8_t) (ths >> 8);
 		if (!GYRO_WriteReg(GYRO_IG_THS_ZH, value))
 			return MEMS_ERROR;
 
@@ -530,7 +532,7 @@ status_t GYRO_SetInt1Duration(GYRO_Int1Conf_t id) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_FIFOModeEnable(GYRO_FifoMode_t fm) {
-	u8_t value;
+	uint8_t value;
 
 	if (fm == GYRO_FIFO_DISABLE) {
 
@@ -573,8 +575,8 @@ status_t GYRO_FIFOModeEnable(GYRO_FifoMode_t fm) {
  * Output         : None
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
-status_t GYRO_SetWaterMark(u8_t wtm) {
-	u8_t value;
+status_t GYRO_SetWaterMark(uint8_t wtm) {
+	uint8_t value;
 
 	if (wtm > 31)
 		return MEMS_ERROR;
@@ -598,7 +600,7 @@ status_t GYRO_SetWaterMark(u8_t wtm) {
  * Output         : status register buffer
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
-status_t GYRO_GetSatusReg(u8_t* buff) {
+status_t GYRO_GetSatusReg(uint8_t* buff) {
 	if (!GYRO_ReadReg(GYRO_STATUS, buff))
 		return MEMS_ERROR;
 
@@ -613,8 +615,8 @@ status_t GYRO_GetSatusReg(u8_t* buff) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_GetAngRateRaw(AxesRaw_t* buff) {
-	u8_t valueL;
-	u8_t valueH;
+	uint8_t valueL;
+	uint8_t valueH;
 
 	if (!GYRO_ReadReg(GYRO_OUT_X_L, &valueL))
 		return MEMS_ERROR;
@@ -650,7 +652,7 @@ status_t GYRO_GetAngRateRaw(AxesRaw_t* buff) {
  * Output         : None
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
-status_t GYRO_GetInt1Src(u8_t* buff) {
+status_t GYRO_GetInt1Src(uint8_t* buff) {
 
 	if (!GYRO_ReadReg(GYRO_IG_SRC, buff))
 		return MEMS_ERROR;
@@ -665,7 +667,7 @@ status_t GYRO_GetInt1Src(u8_t* buff) {
  * Output         : None
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
-status_t GYRO_GetFifoSourceReg(u8_t* buff) {
+status_t GYRO_GetFifoSourceReg(uint8_t* buff) {
 
 	if (!GYRO_ReadReg(GYRO_FIFO_SRC, buff))
 		return MEMS_ERROR;
@@ -682,7 +684,7 @@ status_t GYRO_GetFifoSourceReg(u8_t* buff) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetOutputDataAndFifoFilters(GYRO_HPF_LPF2_Enable hpf) {
-	u8_t value;
+	uint8_t value;
 
 	//HPF
 	if (!GYRO_ReadReg(GYRO_CTRL5, &value))
@@ -727,7 +729,7 @@ status_t GYRO_SetOutputDataAndFifoFilters(GYRO_HPF_LPF2_Enable hpf) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetInt1Filters(GYRO_HPF_LPF2_Enable hpf) {
-	u8_t value;
+	uint8_t value;
 
 	//HPF
 	if (!GYRO_ReadReg(GYRO_CTRL5, &value))
@@ -772,7 +774,7 @@ status_t GYRO_SetInt1Filters(GYRO_HPF_LPF2_Enable hpf) {
  * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
  *******************************************************************************/
 status_t GYRO_SetSPIInterface(GYRO_SPIMode_t spi) {
-	u8_t value;
+	uint8_t value;
 
 	if (!GYRO_ReadReg(GYRO_CTRL4, &value))
 		return MEMS_ERROR;

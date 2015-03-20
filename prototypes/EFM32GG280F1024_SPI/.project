@@ -24,4 +24,11 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>emlib</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/SiliconLabs/EFM32/emlib/src</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
