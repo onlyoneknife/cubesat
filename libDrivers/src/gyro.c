@@ -70,8 +70,8 @@ uint8_t GYRO_WriteReg(uint8_t reg, uint8_t data) {
 
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
-	regData = ((uint16_t)reg << 8) | data;	// Combine Reg and Data for transfer
-	USART_TxDouble(spi, regData);
+	USART_TxDouble(spi, reg);
+	USART_TxDouble(spi, data);
 
 	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 
@@ -86,7 +86,7 @@ uint8_t GYRO_WriteReg(uint8_t reg, uint8_t data) {
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void GYRO_SetSPI(void) {
+void GYRO_Init(void) {
 	spi = USART1;
 	csPort = gpioPortB;
 	csPin = 5;
