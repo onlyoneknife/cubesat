@@ -23,6 +23,7 @@
 #include <autogen_init.h>
 
 #include "gyro.h"
+#include "i2c.h"
 #include "tempsense.h"
 #include "em_chip.h"
 #include "em_gpio.h"
@@ -45,10 +46,23 @@ int main(void)
   uint8_t buffer[50];
   uint8_t value;
 
+  char message[4] = "abcd";
+
+  setupI2C();
+
+
+
+  while (1)
+    {
+	  I2C_WRITE(message);
+      __WFI();
+    }
+
   int len = 0;
   uint8_t position=0, old_position=0;
   AxesRaw_t data;
 
+  /*
   //set PowerMode
   response = GYRO_SetMode(GYRO_NORMAL);
   //set Fullscale
@@ -63,6 +77,6 @@ int main(void)
 	  GYRO_GetAngRateRaw(&data);
 	  len = sprintf((char*)buffer, "X=%6d Y=%6d Z=%6d \r\n", data.AXIS_X, data.AXIS_Y, data.AXIS_Z);
 	  old_position = position;
-  }
+  }*/
 
 }
