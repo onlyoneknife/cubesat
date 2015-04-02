@@ -279,6 +279,7 @@ typedef enum {
 #define GYRO_OUT_Y_H					0x2B
 #define GYRO_OUT_Z_L					0x2C
 #define GYRO_OUT_Z_H					0x2D
+#define GYRO_OUT_TEMP					0x26
 #define GYRO_STATUS                              0x27
 #define GYRO_STATUS_ZYXOR                        0x07    // 1	:	new data set has over written the previous one
 // 0	:	no overrun has occurred (default)
@@ -297,7 +298,7 @@ typedef enum {
 #define STATUS_XDA                         			0x00    // 0	:	a new data for the X-Axis is not available
 #define GYRO_DATAREADY_BIT                           GYRO_STATUS_ZYXDA
 
-#define GYRO_I_AM_L3GD20H			        	 0xD7
+#define GYRO_I_AM_L3GD20H			        	 0x0F
 
 /*************GYROSCOPE FIFO CONTROL REGISTER**************/
 #define GYRO_FM0                                      BIT(5)

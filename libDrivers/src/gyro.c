@@ -50,7 +50,8 @@ uint8_t GYRO_ReadReg(uint8_t reg, uint8_t* data) {
 
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
-	* data = USART_SpiTransfer(spi, reg);
+	USART_SpiTransfer(spi, reg);
+	* data = USART_SpiTransfer(spi, 0x00);	// Send dummy data while receiving data response
 
 	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 
@@ -70,8 +71,8 @@ uint8_t GYRO_WriteReg(uint8_t reg, uint8_t data) {
 
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
-	USART_TxDouble(spi, reg);
-	USART_TxDouble(spi, data);
+	USART_SpiTransfer(spi, reg);
+	USART_SpiTransfer(spi, data);
 
 	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
 
