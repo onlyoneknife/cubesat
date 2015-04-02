@@ -33,8 +33,6 @@ int main(void)
 {
   /* Initialize chip */
   eADesigner_Init();
-
-  /* Initialize chip */
   CHIP_Init();
   ADCConfig();
 
@@ -51,31 +49,20 @@ int main(void)
   uint8_t position=0, old_position=0;
   AxesRaw_t data;
 
-  // Check ID - Should be 11010111b, D7h
-  response = GYRO_ReadReg(GYRO_I_AM_L3GD20H, &value);
-
   //set PowerMode
   response = GYRO_SetMode(GYRO_NORMAL);
-
   //set Fullscale
   response = GYRO_SetFullScale(GYRO_FULLSCALE_250);
-
   //set axis Enable
   response = GYRO_SetAxis(GYRO_X_ENABLE | GYRO_Y_ENABLE | GYRO_Z_ENABLE);
-
-  /*********************/
-  /******Example 1******/
-  /*********************/
+  // Check ID - Should be 11010111b, D7h
+  //response = GYRO_ReadReg(GYRO_I_AM_L3GD20H, &value);
 
   while(1){
 	  //get Acceleration Raw data
-	  response = GYRO_ReadReg(GYRO_OUT_TEMP, &value);
-
-	  response = GYRO_GetAngRateRaw(&data);
-	  if(response==1){    //debug print axies value for MKI109V1 board
-		  len = sprintf((char*)buffer, "X=%6d Y=%6d Z=%6d \r\n", data.AXIS_X, data.AXIS_Y, data.AXIS_Z);
-		  old_position = position;
-	  }
+	  GYRO_GetAngRateRaw(&data);
+	  len = sprintf((char*)buffer, "X=%6d Y=%6d Z=%6d \r\n", data.AXIS_X, data.AXIS_Y, data.AXIS_Z);
+	  old_position = position;
   }
 
 }
