@@ -46,23 +46,16 @@ int main(void)
   uint8_t buffer[50];
   uint8_t value;
 
-  char message[4] = "abcd";
+
 
   setupI2C();
 
-
-
-  while (1)
-    {
-	  I2C_WRITE(message);
-      __WFI();
-    }
 
   int len = 0;
   uint8_t position=0, old_position=0;
   AxesRaw_t data;
 
-  /*
+
   //set PowerMode
   response = GYRO_SetMode(GYRO_NORMAL);
   //set Fullscale
@@ -72,11 +65,18 @@ int main(void)
   // Check ID - Should be 11010111b, D7h
   //response = GYRO_ReadReg(GYRO_I_AM_L3GD20H, &value);
 
+
   while(1){
 	  //get Acceleration Raw data
-	  GYRO_GetAngRateRaw(&data);
+	  //GYRO_GetAngRateRaw(&data);
+
+	  response = GYRO_ReadReg(GYRO_I_AM_L3GD20H, &value);
+
 	  len = sprintf((char*)buffer, "X=%6d Y=%6d Z=%6d \r\n", data.AXIS_X, data.AXIS_Y, data.AXIS_Z);
 	  old_position = position;
-  }*/
+	 // I2C_WRITE(data.AXIS_X);
+	 // __WFI();
+
+  }
 
 }
