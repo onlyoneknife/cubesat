@@ -63,6 +63,11 @@ typedef struct {
 
 #endif /*__SHARED__TYPES*/
 
+// Target specific location information
+#define GYRO_CS_PIN	 	5
+#define GYRO_CS_PORT		gpioPortB
+#define GYRO_SPI		USART1
+
 typedef enum {
 	GYRO_ODR_12_5Hz_BW_NA = 0x10,
 	GYRO_ODR_25Hz_BW_NA = 0x14,
@@ -307,7 +312,6 @@ typedef enum {
 
 /* Exported functions --------------------------------------------------------*/
 /**********Sensor Configuration Functions***********/
-void GYRO_Init(void);
 status_t GYRO_SetODR(GYRO_ODR_t ov);
 status_t GYRO_SetMode(GYRO_Mode_t md);
 status_t GYRO_SetAxis(GYRO_Axis_t axis);

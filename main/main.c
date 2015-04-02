@@ -38,12 +38,11 @@ int main(void)
   CHIP_Init();
   ADCConfig();
 
-  GPIO->P[gpioPortD].DOUTSET = 1 << 3; // Set CS high
-  GPIO->P[gpioPortF].DOUTSET = 1 << 6; // Set CS high
-  GPIO->P[gpioPortB].DOUTSET = 1 << 12; // Set CS high
-
-  //uint8_t value;
-  //GYRO_ReadReg(GYRO_I_AM_L3GD20H, value);
+  // Set all SPI CS to default high
+  GPIO->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN;
+  GPIO->P[gpioPortD].DOUTSET = 1 << 3;
+  GPIO->P[gpioPortF].DOUTSET = 1 << 6;
+  GPIO->P[gpioPortB].DOUTSET = 1 << 12;
 
   uint8_t buffer[50];
   uint8_t value;
@@ -52,10 +51,7 @@ int main(void)
   uint8_t position=0, old_position=0;
   AxesRaw_t data;
 
-  /* Initialize Gyro */
-  GYRO_Init();
-
-  // Check ID - Should be 11010111, 0xD7
+  // Check ID - Should be 11010111b, D7h
   response = GYRO_ReadReg(GYRO_I_AM_L3GD20H, &value);
 
   //set PowerMode

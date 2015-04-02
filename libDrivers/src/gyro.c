@@ -31,9 +31,6 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-USART_TypeDef *spi;
-unsigned int csPin;
-GPIO_Port_TypeDef csPort;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -48,12 +45,12 @@ GPIO_Port_TypeDef csPort;
 uint8_t GYRO_ReadReg(uint8_t reg, uint8_t* data) {
 	reg |= 0x01 << 7;	// Set READ bit
 
-	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+	GPIO->P[GYRO_CS_PORT].DOUTCLR = 1 << GYRO_CS_PIN; // Set CS low
 
-	USART_SpiTransfer(spi, reg);
-	* data = USART_SpiTransfer(spi, 0x00);	// Send dummy data while receiving data response
+	USART_SpiTransfer(GYRO_SPI, reg);
+	* data = USART_SpiTransfer(GYRO_SPI, 0x00);	// Send dummy data while receiving data response
 
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
+	GPIO->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN; // Set CS high
 
 	return 1;
 }
@@ -69,30 +66,14 @@ uint8_t GYRO_ReadReg(uint8_t reg, uint8_t* data) {
 uint8_t GYRO_WriteReg(uint8_t reg, uint8_t data) {
 	uint16_t regData;
 
-	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+	GPIO->P[GYRO_CS_PORT].DOUTCLR = 1 << GYRO_CS_PIN; // Set CS low
 
-	USART_SpiTransfer(spi, reg);
-	USART_SpiTransfer(spi, data);
+	USART_SpiTransfer(GYRO_SPI, reg);
+	USART_SpiTransfer(GYRO_SPI, data);
 
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
+	GPIO->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN; // Set CS high
 
 	return 1;
-}
-
-/*******************************************************************************
- * Function Name  : GYRO_SetSPI
- * Description    : Configures the gyroscope to use a given USART.
- * 				  : Target-specific for AlbertaSat Athena OBC Hardware.
- * Input          : None
- * Output         : None
- * Return         : None
- *******************************************************************************/
-void GYRO_Init(void) {
-	spi = USART1;
-	csPort = gpioPortB;
-	csPin = 5;
-
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Make sure CS is high/default state
 }
 
 
