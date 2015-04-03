@@ -1,15 +1,15 @@
 /******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
-* File Name          : lsm303dlhc_driver.h
+* File Name          : LSM303DLHC.c
 * Author             : MSH Application Team
 * Author             : Fabio Tota
 * Version            : $Revision:$
 * Date               : $Date:$
-* Description        : Descriptor Header for l3g4200d driver file
+* Description        : LSM303DLHC driver file
 *
 * HISTORY:
-* Date        | Modification                                | Author
-* 02/08/2011  | Initial Revision                            | Fabio Tota
-
+* Date               |	Modification                    |	Author
+* 02/08/2011         |	Initial Revision                |	abio Tota
+* 07/03/2015		|	Modified to LSM303D 			|   Peng Zhang
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
