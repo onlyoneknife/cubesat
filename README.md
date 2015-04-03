@@ -49,11 +49,13 @@ Function must be catalogued in their heading according to the following format:
 	 * @details
 	 * 		<more detailed description of the function>
 	 * @attention
-	 * 		<any comments or concerns regarding the function>
+	 * 		<if applicable, any comments or concerns regarding the function>
 	 * @param <argument_1>
-	 * 		<brief (one line) description of one of the function's arguments>
+	 * 		<if applicable, brief (one line) description of one of the function's arguments>
 	 * @param <argument_2>
-	 * 		<brief (one line) description of one of the function's arguments>
+	 * 		<if applicable, brief (one line) description of one of the function's arguments>
+	 * @return
+	 * 		<if applicable, brief description of what is returned by the function>
 	 */
 	 
 *** Prevent Multiple Inclusions ***

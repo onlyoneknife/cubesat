@@ -7,20 +7,4 @@
 
 #include "autogen_usart1.h"
 
-void USART1_setup(void)
-{
-  USART_InitSync_TypeDef init = USART_INITSYNC_DEFAULT;
-
-  init.baudrate     = 5000000;
-  init.databits     = usartDatabits8;
-  init.msbf         = 1;
-  init.master       = 1;
-  init.clockMode    = usartClockMode3;
-  init.prsRxEnable  = 0;
-  init.autoTx       = 0;
-
-  USART_InitSync(USART1, &init);
-  // Enable USART - Will be used as both receiver and transmitter
-  USART_Enable(USART1, usartEnable);
-}
-
+void eADesigner_Init(void);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>EFM32GG280F1024_Blinky</name>
+	<name>EFM32GG280F1024_SPI</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -26,14 +26,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>CMSIS/efm32gg/startup_gcc_efm32gg.s</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/Device/SiliconLabs/EFM32GG/Source/GCC/startup_efm32gg.S</locationURI>
-		</link>
-		<link>
-			<name>CMSIS/efm32gg/system_efm32gg.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/Device/SiliconLabs/EFM32GG/Source/system_efm32gg.c</locationURI>
+			<name>emlib</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/SiliconLabs/EFM32/emlib/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

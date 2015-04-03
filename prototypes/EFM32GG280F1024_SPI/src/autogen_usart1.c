@@ -5,22 +5,20 @@
  * files are generated again by the eADesigner.                     *
  ********************************************************************/
 
-#include "autogen_usart2.h"
+#include "autogen_usart1.h"
 
-void USART2_setup(void)
+void USART1_setup(void)
 {
-  USART_InitSync_TypeDef init = USART_INITSYNC_DEFAULT;
+  USART_InitAsync_TypeDef init = USART_INITASYNC_DEFAULT;
 
-  init.baudrate     = 10000000;
+  init.baudrate     = 115200;
+  init.oversampling = usartOVS16;
   init.databits     = usartDatabits8;
-  init.msbf         = 1;
-  init.master       = 1;
-  init.clockMode    = usartClockMode3;
+  init.parity       = usartNoParity;
+  init.stopbits     = usartStopbits1;
+  init.mvdis        = 0;
   init.prsRxEnable  = 0;
-  init.autoTx       = 0;
 
-  USART_InitSync(USART2, &init);
-  // Enable USART - Will be used as both receiver and transmitter
-  USART_Enable(USART2, usartEnable);
+  USART_InitAsync(USART1, &init);
 }
 
