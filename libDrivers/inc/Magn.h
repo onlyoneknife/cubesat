@@ -391,12 +391,12 @@ typedef enum {
 
 //CONTROL REGISTER 5 ACC
 #define CTRL_REG5_A				0x24
-#define BOOT                                    BIT(7)
-#define FIFO_EN                                 BIT(6)
-#define LIR_INT1                                BIT(3)
-#define D4D_INT1                                BIT(2)
-#define LIR_INT2                                BIT(1)
-#define D4D_INT2                                BIT(0)
+#define BOOT                    BIT(7)
+#define FIFO_EN                 BIT(6)
+#define LIR_INT1                BIT(3)
+#define D4D_INT1                BIT(2)
+#define LIR_INT2                BIT(1)
+#define D4D_INT2                BIT(0)
 
 //CONTROL REGISTER 6 ACC
 #define CTRL_REG6_A				0x25

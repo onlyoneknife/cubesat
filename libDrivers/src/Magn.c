@@ -33,7 +33,7 @@
 * Output		: Data REad
 * Return		: None
 *******************************************************************************/
-uint8_t GYRO_ReadReg(uint8_t reg, uint8_t* data) {
+uint8_t mag_ReadReg(uint8_t reg, uint8_t* data) {
 	reg |= 0x01 << 7;	// Set READ bit
 
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
