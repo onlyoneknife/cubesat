@@ -22,7 +22,8 @@
 *
 *******************************************************************************/
 #include "magn.h"
-
+#include "em_usart.h"
+#include "em_gpio.h"
 
 
 /*******************************************************************************
@@ -33,14 +34,15 @@
 * Output		: Data REad
 * Return		: None
 *******************************************************************************/
-uint8_t mag_ReadReg(uint8_t reg, uint8_t* data) {
+uint8_t MAG_ReadReg(uint8_t reg, uint8_t* data) {
 	reg |= 0x01 << 7;	// Set READ bit
 
 	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
 
-	* data = USART_SpiTransfer(spi, reg);
+	USART_SpiTransfer(MAG_SPI, reg);
+	* data = USART_SpiTransfer(MAG_SPI, 0x00); //Send dummy data while receiving data response
 
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
+	GPIO->P[MAG_CS_PORT].DOUTSET = 1 << MAG_CS_PIN; // Set CS high
 
 	return 1;
 }
@@ -55,7 +57,18 @@ uint8_t mag_ReadReg(uint8_t reg, uint8_t* data) {
 * Return		: None
 *******************************************************************************/
 
+uint8_t MAG_WriteReg(uint8_t reg, uint8_t data) {
+	uint16_t regData;
 
+	GPIO->P[MAG_CS_PORT].DOUTCLR = 1 << MAG_CS_PIN; // Set CS low
+
+	USART_SpiTransfer(MAG_SPI, reg);
+	USART_SpiTransfer(MAG_SPI, data);
+
+	GPIO->P[MAG_CS_PORT].DOUTSET = 1 << MAG_CS_PIN; // Set CS high
+
+	return 1;
+}
 
 
 /* Private functions ---------------------------------------------------------*/

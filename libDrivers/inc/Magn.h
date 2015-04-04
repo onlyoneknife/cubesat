@@ -38,6 +38,15 @@ typedef u8_t IntPinConf_t;
 typedef u8_t Axis_t;
 typedef u8_t IntConf_t;
 
+
+
+// Target specific location information
+#define MAG_CS_PIN	 	3
+#define MAG_CS_PORT		gpioPortD
+#define MAG_SPI		USART1
+
+
+
 typedef enum {
   MEMS_SUCCESS                  =		0x01,
   MEMS_ERROR			=		0x00
