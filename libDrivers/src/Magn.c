@@ -4,7 +4,7 @@
 * Author             : Fabio Tota
 * Version            : $Revision:$
 * Date               : $Date:$
-* Description        : LSM303DLHC driver file
+* Description        : LSM303D driver file
 *
 * HISTORY:
 * Date               |	Modification                    |	Author
@@ -21,3 +21,4 @@
 * THIS SOFTWARE IS SPECIFICALLY DESIGNED FOR EXCLUSIVE USE WITH ST PARTS.
 *
 *******************************************************************************/
+#include "magn.h"
