@@ -125,8 +125,9 @@ extern "C" {
 #if ( ( configSLEEP_MODE == 2 || configSLEEP_MODE == 3 ) && ( configUSE_TICKLESS_IDLE == 1 || configUSE_SLEEP_MODE_IN_IDLE == 1 ) )
 #define configOVERRIDE_DEFAULT_TICK_CONFIGURATION ( 1 )
 #endif
+
 /* Main functions*/
-#define configMAX_PRIORITIES                      (( unsigned portBASE_TYPE ) 3)
+#define configMAX_PRIORITIES                      ( 3 )
 #define configMINIMAL_STACK_SIZE                  (( unsigned short ) 140)
 #define configTOTAL_HEAP_SIZE                     (( size_t )(9000))
 #define configMAX_TASK_NAME_LEN                   ( 10 )
