@@ -35,8 +35,8 @@
 #define STACK_SIZE_FOR_TASK    (configMINIMAL_STACK_SIZE + 10)
 #define TASK_PRIORITY          (tskIDLE_PRIORITY + 1)
 
-#define LED_PORT    gpioPortE
-#define LED_PIN     2
+#define LED_PORT    gpioPortA
+#define LED_PIN     7
 
 void LED_Init(void)
 {

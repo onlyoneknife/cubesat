@@ -25,7 +25,7 @@ void eADesigner_Init(void)
   EMU->AUXCTRL = (EMU->AUXCTRL & ~_EMU_AUXCTRL_REDLFXOBOOST_MASK);
           
   /* Enable LFXO and wait for it to stabilize */
-  //CMU_OscillatorEnable(cmuOsc_LFXO, true, true);
+  CMU_OscillatorEnable(cmuOsc_LFXO, true, true);
   
   /* Enable GPIO clock */
   CMU_ClockEnable(cmuClock_GPIO, true);
