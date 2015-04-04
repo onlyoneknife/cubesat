@@ -1,5 +1,5 @@
 /******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
-* File Name          : LSM303DLHC.h
+* File Name          : LSM303D.h
 * Author             : MSH Application Team
 * Author             : Fabio Tota
 * Version            : $Revision:$
