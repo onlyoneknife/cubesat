@@ -13,9 +13,12 @@ void eADesigner_Init(void)
   /* Using HFRCO at 14MHz as high frequency clock, HFCLK */
   CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFRCO);
   
-  /* Use external digital clock for LFXO */
-  CMU->CTRL |= CMU_CTRL_LFXOMODE_DIGEXTCLK;
-  
+  /* Use crystal oscillator for LFXO */
+  CMU->CTRL |= CMU_CTRL_LFXOMODE_XTAL;
+  /* LFXO setup */
+  CMU->CTRL    = (CMU->CTRL & ~_CMU_CTRL_LFXOBOOST_MASK) | CMU_CTRL_LFXOBOOST_100PCENT;
+  EMU->AUXCTRL = (EMU->AUXCTRL & ~_EMU_AUXCTRL_REDLFXOBOOST_MASK) | EMU_AUXCTRL_REDLFXOBOOST;
+          
   /* Enable LFXO and wait for it to stabilize */
   CMU_OscillatorEnable(cmuOsc_LFXO, true, true);
   

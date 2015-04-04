@@ -98,9 +98,6 @@ int main(void)
 
     LED_Init();
 
-    /* Enable clock for TIMER0 */
-    CMU->HFPERCLKEN0 |= CMU_HFPERCLKEN0_TIMER0;
-
     /* Parameters value for taks*/
     static TaskParams_t parametersToTask1 = { 1000 / portTICK_RATE_MS, 0 };
     static TaskParams_t parametersToTask2 = {  500 / portTICK_RATE_MS, 1 };

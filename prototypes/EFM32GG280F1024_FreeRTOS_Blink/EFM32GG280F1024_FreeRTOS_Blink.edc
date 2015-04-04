@@ -692,7 +692,7 @@
 				</item>
 				<item>
 					<first>mode</first>
-					<second>DIGEXTCLK</second>
+					<second>XTAL</second>
 				</item>
 				<item>
 					<first>parasitic</first>

@@ -28,7 +28,36 @@
 #include "em_chip.h"
 #include "em_gpio.h"
 
+#include "FreeRTOSConfig.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "semphr.h"
+#include "croutine.h"
+
+#define STACK_SIZE_FOR_TASK    (configMINIMAL_STACK_SIZE + 100)
+#define TASK_PRIORITY          (tskIDLE_PRIORITY + 1)
+
+#define LED_PORT    gpioPortA
+#define LED_PIN     7
+
 uint8_t response;
+
+/**************************************************************************//**
+ * @brief Simple task which is blinking led
+ * @param *pParameters pointer to parameters passed to the function
+ *****************************************************************************/
+static void LedBlink(void *pParameters)
+{
+
+  for (;;)
+  {
+    /* Set LSB of count value on LED */
+	GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
+    vTaskDelay(100);
+    GPIO->P[LED_PORT].DOUTSET = 1 << 3;
+  }
+}
 
 int main(void)
 {
@@ -48,11 +77,14 @@ int main(void)
 
   uint32_t result = 0;
 
-
-
   setupI2C();
 
+  /*Create two task for blinking leds*/
+  xTaskCreate( LedBlink, (const signed char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
+  /*Start FreeRTOS Scheduler*/
+  vTaskStartScheduler();
+  /*
   int len = 0;
   uint8_t position=0, old_position=0;
   AxesRaw_t data;
@@ -83,5 +115,6 @@ int main(void)
 	 //
 
   }
+  */
 
 }
