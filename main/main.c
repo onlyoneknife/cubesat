@@ -25,6 +25,9 @@
 
 /* Driver Includes */
 #include "gyro.h"
+#include "rtc.h"
+#include "fram.h"
+#include "mag.h"
 #include "i2c.h"
 #include "tempsense.h"
 #include "sleep.h"
@@ -43,39 +46,36 @@
 
 #define STACK_SIZE_FOR_TASK    (configMINIMAL_STACK_SIZE + 100)
 #define TASK_PRIORITY          (tskIDLE_PRIORITY + 1)
-#define LED_DELAY              ( 100 / portTICK_RATE_MS )
 
-
-
-#define LED_PORT    gpioPortA
-#define LED_PIN     7
-
-uint8_t response;
+#define LED_DELAY              (50 / portTICK_RATE_MS)
+#define LED_PORT    		   (gpioPortA)
+#define LED_PIN     		   (7)
 
 /**************************************************************************//**
  * @brief Initialize drivers
  *****************************************************************************/
 void DRIVERS_Init(void)
 {
-	  /* Initialize chip */
-	  eADesigner_Init();
-	  CHIP_Init();
+  /* Initialize SPI Chip Select Pins */
+  // Set all SPI CS to default high
+  // TODO Fix PCB to have pull-ups so this is not needed
+  GPIO->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN;
+  GPIO->P[FRAM_CS_PORT].DOUTSET = 1 << FRAM_CS_PIN;
+  GPIO->P[MAG_CS_PORT].DOUTSET  = 1 << MAG_CS_PIN;
+  GPIO->P[RTC_CS_PORT].DOUTSET  = 1 << RTC_CS_PIN;
 
-	  /* Initialize drivers */
-	  ADCConfig();
-	  setupI2C();
-	  // Set all SPI CS to default high
-	  GPIO->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN;
-	  GPIO->P[gpioPortD].DOUTSET = 1 << 3;
-	  GPIO->P[gpioPortF].DOUTSET = 1 << 6;
-	  GPIO->P[gpioPortB].DOUTSET = 1 << 12;
-	  /* Initialize SLEEP driver, no calbacks are used */
-	  SLEEP_Init(NULL, NULL);
-	#if (configSLEEP_MODE < 3)
-	  /* do not let to sleep deeper than define */
-	  SLEEP_SleepBlockBegin((SLEEP_EnergyMode_t)(configSLEEP_MODE+1));
-	#endif
+  /* Initialize ADC */
+  ADCConfig();
 
+  /* Initialize I2C */
+  setupI2C();
+
+  /* Initialize SLEEP driver, no call-backs are used */
+  SLEEP_Init(NULL, NULL);
+#if (configSLEEP_MODE < 3)
+  /* do not let to sleep deeper than define */
+  SLEEP_SleepBlockBegin((SLEEP_EnergyMode_t)(configSLEEP_MODE+1));
+#endif
 
 }
 
@@ -98,69 +98,60 @@ static void LedBlink(void *pParameters)
   }
 }
 
+static void GyroRead(void *pParameters)
+{
+
+  xSemaphoreHandle* semSPI = (xSemaphoreHandle*) pParameters;
+
+  uint8_t value = 0;
+
+  /* set PowerMode */
+  if ( GYRO_SetMode(GYRO_NORMAL) == MEMS_ERROR )
+  {
+	  I2C_WRITE("Gyro init error!\n");
+  }
+
+  for (;;)
+  {
+    vTaskDelay(GYRO_READ_DELAY / portTICK_RATE_MS);
+
+    if (pdTRUE == xSemaphoreTake(*semSPI, portMAX_DELAY)) {
+
+      GYRO_ReadReg(GYRO_I_AM_L3GD20H, &value);
+      I2C_WRITE(value);
+
+      GYRO_ReadReg(GYRO_OUT_X_L, &value);
+      I2C_WRITE(value);
+
+      GYRO_ReadReg(GYRO_OUT_X_H, &value);
+      I2C_WRITE(value);
+
+      xSemaphoreGive(*semSPI);
+    }
+  }
+}
+
 int main(void)
 {
-  /* Initialize chip */
+  /* Initialize EFM32 Chip Settings */
   eADesigner_Init();
   CHIP_Init();
 
-  /* Initialize drivers */
-  ADCConfig();
-  setupI2C();
-  // Set all SPI CS to default high
-  GPIO->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN;
-  GPIO->P[gpioPortD].DOUTSET = 1 << 3;
-  GPIO->P[gpioPortF].DOUTSET = 1 << 6;
-  GPIO->P[gpioPortB].DOUTSET = 1 << 12;
-  /* Initialize SLEEP driver, no calbacks are used */
-  SLEEP_Init(NULL, NULL);
-#if (configSLEEP_MODE < 3)
-  /* do not let to sleep deeper than define */
-  SLEEP_SleepBlockBegin((SLEEP_EnergyMode_t)(configSLEEP_MODE+1));
-#endif
+  /* Initialize Hardware Drivers */
+  DRIVERS_Init();
 
-  /* Initialize buffers and variables */
-  uint8_t buffer[50];
-  uint8_t value;
-  uint32_t result = 0;
+  /* Create binary semaphore for SPI */
+  xSemaphoreHandle       semSPI;
+  vSemaphoreCreateBinary(semSPI);
 
-  /*Create task for blinking leds*/
-  xTaskCreate( LedBlink, (const signed char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
+  /* Create task for blinking leds */
+  xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
+
+  /* Create task for interaction with gyro */
+  xTaskCreate( GyroRead, (const char *) "GyroRead", STACK_SIZE_FOR_TASK, &semSPI, TASK_PRIORITY, NULL);
 
   /*Start FreeRTOS Scheduler*/
   vTaskStartScheduler();
-  /*
-  int len = 0;
-  uint8_t position=0, old_position=0;
-  AxesRaw_t data;
-
-
-  //set PowerMode
-  //response = GYRO_SetMode(GYRO_NORMAL);
-  //set Fullscale
-  //response = GYRO_SetFullScale(GYRO_FULLSCALE_250);
-  //set axis Enable
-  //response = GYRO_SetAxis(GYRO_X_ENABLE | GYRO_Y_ENABLE | GYRO_Z_ENABLE);
-  // Check ID - Should be 11010111b, D7h
-  //response = GYRO_ReadReg(GYRO_I_AM_L3GD20H, &value);
-
-
-  while(1){
-	  //get Acceleration Raw data
-	  //GYRO_GetAngRateRaw(&data);
-
-	  __WFI();
-	  I2C_READ(result,sizeof(result));
-
-	  //response = GYRO_ReadReg(GYRO_I_AM_L3GD20H, &value);
-
-	  //len = sprintf((char*)buffer, "X=%6d Y=%6d Z=%6d \r\n", data.AXIS_X, data.AXIS_Y, data.AXIS_Z);
-	  //old_position = position;
-	 // I2C_WRITE(data.AXIS_X);
-	 //
-
-  }
-  */
 
   return 0;
 

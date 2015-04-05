@@ -37,13 +37,15 @@ typedef enum {
 
 #endif /*__SHARED__MACROS*/
 
-#define FRAM_SPI = USART2;
-#define FRAM_CS_PORT = gpioPortB;
-#define FRAM_CS_PIN = 6;
-#define FRAM_HOLD_PORT = gpioPortD;
-#define FRAM_HOLD_PIN = 8;
-#define FRAM_WP_PORT = gpioPortD;
-#define FRAM_WP_PIN = 5;
+/*********Pin and Bus Defines*********/
+
+#define FRAM_SPI            USART2
+#define FRAM_CS_PORT        gpioPortB
+#define FRAM_CS_PIN         6
+#define FRAM_HOLD_PORT      gpioPortD
+#define FRAM_HOLD_PIN       8
+#define FRAM_WP_PORT        gpioPortD
+#define FRAM_WP_PIN         5
 
 /***************OP CODES***************/
 #define FRAM_OP_WREN		0x06	// Set write enable latch

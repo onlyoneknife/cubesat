@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#define I2C_ADDRESS         (0xE2)
+#define I2C_ADDRESS         (98)
 #define I2C_MAX_TX_BUFFER_SIZE ((uint8_t)100)
 #define I2C_MAX_RX_BUFFER_SIZE ((uint8_t)100)
 #define I2C_WRITE(n)        writeI2C(&n,sizeof(n))

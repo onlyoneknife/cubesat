@@ -68,6 +68,9 @@ typedef struct {
 #define GYRO_CS_PORT	gpioPortB
 #define GYRO_SPI		USART1
 
+// Read Period
+#define GYRO_READ_DELAY 100
+
 typedef enum {
 	GYRO_ODR_12_5Hz_BW_NA = 0x10,
 	GYRO_ODR_25Hz_BW_NA = 0x14,

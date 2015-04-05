@@ -64,7 +64,6 @@ uint8_t GYRO_ReadReg(uint8_t reg, uint8_t* data) {
  * Return			: None
  *******************************************************************************/
 uint8_t GYRO_WriteReg(uint8_t reg, uint8_t data) {
-	uint16_t regData;
 
 	GPIO->P[GYRO_CS_PORT].DOUTCLR = 1 << GYRO_CS_PIN; // Set CS low
 
