@@ -65,7 +65,7 @@ typedef struct {
 
 // Target specific location information
 #define GYRO_CS_PIN	 	5
-#define GYRO_CS_PORT		gpioPortB
+#define GYRO_CS_PORT	gpioPortB
 #define GYRO_SPI		USART1
 
 typedef enum {

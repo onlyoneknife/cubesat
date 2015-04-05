@@ -45,10 +45,40 @@
 #define TASK_PRIORITY          (tskIDLE_PRIORITY + 1)
 #define LED_DELAY              ( 100 / portTICK_RATE_MS )
 
+
+
 #define LED_PORT    gpioPortA
 #define LED_PIN     7
 
 uint8_t response;
+
+/**************************************************************************//**
+ * @brief Initialize drivers
+ *****************************************************************************/
+void DRIVERS_Init(void)
+{
+	  /* Initialize chip */
+	  eADesigner_Init();
+	  CHIP_Init();
+
+	  /* Initialize drivers */
+	  ADCConfig();
+	  setupI2C();
+	  // Set all SPI CS to default high
+	  GPIO->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN;
+	  GPIO->P[gpioPortD].DOUTSET = 1 << 3;
+	  GPIO->P[gpioPortF].DOUTSET = 1 << 6;
+	  GPIO->P[gpioPortB].DOUTSET = 1 << 12;
+	  /* Initialize SLEEP driver, no calbacks are used */
+	  SLEEP_Init(NULL, NULL);
+	#if (configSLEEP_MODE < 3)
+	  /* do not let to sleep deeper than define */
+	  SLEEP_SleepBlockBegin((SLEEP_EnergyMode_t)(configSLEEP_MODE+1));
+	#endif
+
+
+}
+
 
 /**************************************************************************//**
  * @brief Simple task which is blinking led
