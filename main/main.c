@@ -63,7 +63,8 @@ static void LedBlink(void *pParameters)
     /* Set LSB of count value on LED */
 	GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
     vTaskDelay(100);
-    GPIO->P[LED_PORT].DOUTSET = 1 << 3;
+    GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
+    vTaskDelay(100);
   }
 }
 
@@ -130,5 +131,7 @@ int main(void)
 
   }
   */
+
+  return 0;
 
 }

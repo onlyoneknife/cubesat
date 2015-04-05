@@ -46,15 +46,11 @@
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/reptile/FreeRTOS/Source/portable/GCC/ARM_CM3&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/common/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/config&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/dmadrv/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/ezradiodrv/common/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/gpiointerrupt/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/nvm/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/rtcdrv/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/sleep/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/spidrv/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/uartdrv/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/ustimer/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/drivers&quot;"/>
@@ -76,19 +72,16 @@
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/reptile/FreeRTOS/Source/portable/GCC/ARM_CM3&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/common/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/config&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/dmadrv/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/ezradiodrv/common/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/gpiointerrupt/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/nvm/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/rtcdrv/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/sleep/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/spidrv/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/uartdrv/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/ustimer/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/drivers&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/CMSIS/Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/EFM32GG_STK3700/config&quot;"/>
 								</option>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.464204803" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="GCC_ARMCM3=1"/>
@@ -109,6 +102,9 @@
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base.1299074656" name="GNU ARM Archiver" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base"/>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="BSP" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -219,6 +215,9 @@
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base.62017589" name="GNU ARM Archiver" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base"/>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="BSP" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
