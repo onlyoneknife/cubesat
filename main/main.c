@@ -103,31 +103,47 @@ static void GyroRead(void *pParameters)
 
   xSemaphoreHandle* semSPI = (xSemaphoreHandle*) pParameters;
 
-  uint8_t value = 0;
+  uint8_t  xlow  = 0;
+  uint8_t  xhigh = 0;
+  int16_t  value = 0x0000;
+  uint8_t  size  = 0;
+  char buffer[11];
 
   /* set PowerMode */
   if ( GYRO_SetMode(GYRO_NORMAL) == MEMS_ERROR )
   {
-	  I2C_WRITE("Gyro init error!\n");
+	I2C_WRITE("Gyro init error!\n");
+  }
+
+  if ( GYRO_SetHPFCutOFF == MEMS_ERROR )
+  {
+	I2C_WRITE("Gyro init error!\n");
   }
 
   for (;;)
   {
     vTaskDelay(GYRO_READ_DELAY / portTICK_RATE_MS);
 
-    if (pdTRUE == xSemaphoreTake(*semSPI, portMAX_DELAY)) {
+    //if (pdTRUE == xSemaphoreTake(*semSPI, portMAX_DELAY)) {
 
-      GYRO_ReadReg(GYRO_I_AM_L3GD20H, &value);
-      I2C_WRITE(value);
+      //GYRO_ReadReg(GYRO_I_AM_L3GD20H, &value);
 
-      GYRO_ReadReg(GYRO_OUT_X_L, &value);
-      I2C_WRITE(value);
+      GYRO_ReadReg(GYRO_OUT_X_L, &xlow);
 
-      GYRO_ReadReg(GYRO_OUT_X_H, &value);
-      I2C_WRITE(value);
+      GYRO_ReadReg(GYRO_OUT_X_H, &xhigh);
 
-      xSemaphoreGive(*semSPI);
-    }
+      GYRO_SetHPFCutOFF(1);
+
+      value = xlow;
+      value += xhigh << 8;
+
+      size = sprintf(buffer,"X = %hd\n",value);
+
+      writeI2C(&buffer,size);
+
+    //}
+
+    //xSemaphoreGive(*semSPI);
   }
 }
 
