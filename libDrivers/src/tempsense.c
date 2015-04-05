@@ -11,7 +11,7 @@
 
 /***************************************************************************//**
 * @brief
-*   Configure ADC usage for this application.
+*   Configure ADC usage for the temperature sensor.
 *******************************************************************************/
 void ADCConfig(void)
 {
@@ -19,7 +19,7 @@ void ADCConfig(void)
 	ADC_InitSingle_TypeDef singleInit = ADC_INITSINGLE_DEFAULT;
 
 	/* WARMUPMODE must be set to Normal according to ref manual before */
-	/* entering EM2. In this example, the warmup time is not a big problem */
+	/* entering EM2. In this example, the warm-up time is not a big problem */
 	/* due to relatively infrequent polling. Leave at default NORMAL, */
 
 	ADC_Init(ADC0, &init);
@@ -29,7 +29,7 @@ void ADCConfig(void)
 	singleInit.input      = adcSingleInpCh4;
 	singleInit.resolution = adcRes12Bit;
 
-	/* The datasheet specifies a minimum aquisition time when sampling vdd/3 */
+	/* The datasheet specifies a minimum acquisition time when sampling vdd/3 */
 	/* 32 cycles should be safe for all ADC clock frequencies */
 	singleInit.acqTime = adcAcqTime32;
 
