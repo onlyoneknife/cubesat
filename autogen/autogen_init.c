@@ -45,7 +45,8 @@ void eADesigner_Init(void)
   /* Pin PA6 is configured to Push-pull */
   GPIO->P[0].MODEL = (GPIO->P[0].MODEL & ~_GPIO_P_MODEL_MODE6_MASK) | GPIO_P_MODEL_MODE6_PUSHPULL;
   /* Pin PA7 is configured to Input enabled */
-  GPIO->P[0].MODEL = (GPIO->P[0].MODEL & ~_GPIO_P_MODEL_MODE7_MASK) | GPIO_P_MODEL_MODE7_INPUT;
+  // TODO CHANGE PIN A7 BACK TO INPUT
+  GPIO->P[0].MODEL = (GPIO->P[0].MODEL & ~_GPIO_P_MODEL_MODE7_MASK) | GPIO_P_MODEL_MODE7_PUSHPULL;
   /* Pin PA8 is configured to Open-source */
   GPIO->P[0].MODEH = (GPIO->P[0].MODEH & ~_GPIO_P_MODEH_MODE8_MASK) | GPIO_P_MODEH_MODE8_WIREDOR;
   /* Pin PA12 is configured to Push-pull */

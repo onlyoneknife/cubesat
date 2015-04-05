@@ -27,6 +27,7 @@
 #include "gyro.h"
 #include "i2c.h"
 #include "tempsense.h"
+#include "sleep.h"
 
 /* EFM32 Includes */
 #include "em_chip.h"
@@ -42,7 +43,7 @@
 
 #define STACK_SIZE_FOR_TASK    (configMINIMAL_STACK_SIZE + 100)
 #define TASK_PRIORITY          (tskIDLE_PRIORITY + 1)
-#define DELAY ( 700 / portTICK_RATE_MS )
+#define LED_DELAY              ( 100 / portTICK_RATE_MS )
 
 #define LED_PORT    gpioPortA
 #define LED_PIN     7
@@ -51,7 +52,6 @@ uint8_t response;
 
 /**************************************************************************//**
  * @brief Simple task which is blinking led
- * @param *pParameters pointer to parameters passed to the function
  *****************************************************************************/
 static void LedBlink(void *pParameters)
 {
@@ -62,9 +62,9 @@ static void LedBlink(void *pParameters)
   {
     /* Set LSB of count value on LED */
 	GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
-    vTaskDelay(100);
+    vTaskDelay(LED_DELAY);
     GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
-    vTaskDelay(100);
+    vTaskDelay(LED_DELAY);
   }
 }
 
