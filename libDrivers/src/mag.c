@@ -25,9 +25,6 @@
 #include "em_usart.h"
 #include "em_gpio.h"
 
-#define MEMS_SUCCESS  	0x01
-#define MEMS_ERROR  	0x00
-
 /*******************************************************************************
 * Function Name		: MAG_MagReadReg
 * Description		: Generic Reading function. It must be fulfilled with either
