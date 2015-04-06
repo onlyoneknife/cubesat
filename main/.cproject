@@ -187,8 +187,8 @@
 					<stringMacro name="FreeRtosPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/FreeRTOS/"/>
 					<stringMacro name="StudioToolchainPath" type="VALUE_PATH_DIR" value="${StudioToolchainPathFromID:com.silabs.ide.si32.gcc:4.8.3.20131129}"/>
 					<stringMacro name="StudioSdkPath" type="VALUE_PATH_DIR" value="${StudioSdkPathFromID:com.silabs.sdk.si32.efm32.sls:2.0.4}"/>
-					<stringMacro name="SiliconLabsPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/SiliconLabs/EFM32"/>
 					<stringMacro name="GnuArmPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/GNU_ARM"/>
+					<stringMacro name="SiliconLabsPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/SiliconLabs/EFM32"/>
 				</macros>
 				<externalSettings>
 					<externalSetting/>
@@ -354,10 +354,10 @@
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129;com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1106142351;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.1452913784">
+		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.release#com.silabs.ide.si32.gcc:4.8.3.20131129;com.silabs.ide.si32.gcc.release#com.silabs.ide.si32.gcc:4.8.3.20131129.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.2017602764;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.489261329">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.release#com.silabs.ide.si32.gcc:4.8.3.20131129;com.silabs.ide.si32.gcc.release#com.silabs.ide.si32.gcc:4.8.3.20131129.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.2017602764;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.489261329">
+		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129;com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1106142351;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.1452913784">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129@0;com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129@0.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1564937032;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.326016380">

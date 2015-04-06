@@ -134,8 +134,7 @@ static void GyroRead(void *pParameters)
 
       GYRO_SetHPFCutOFF(1);
 
-      value = xlow;
-      value += xhigh << 8;
+      value = (xhigh << 8) + xlow;
 
       size = sprintf(buffer,"X = %hd\n",value);
 
