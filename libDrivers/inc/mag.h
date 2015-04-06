@@ -222,10 +222,10 @@ typedef enum {
 #define REG_MAG_DATA_ADDR	(0x08)	/** Mag. data low address register */
 #define REG_TEMP_DATA_ADDR	(0x05)	/** Temp. data low address register */
 
-#define INT_CTRL_M_ADDR	(0x12)	/** INT_CTRL_REG_M address register */
-#define INT_SRC_M_ADDR	(0x13)	/** INT_SRC_REG_M address register */
-#define INT_THS_L_M_ADDR	(0x14)	/** INT_THS_L_M address register */
-#define INT_THS_H_M_ADDR	(0x15)	/** INT_THS_H_M address register */
+#define REG_GEN_MAG_ADDR	(0x12)	/** INT_CTRL_REG_M address register */
+#define INT_SRC_REG_M_ADDR	(0x13)	/** INT_SRC_REG_M address register */
+#define REG_GEN_MAG_THR_ADDR	(0x14)	/** INT_THS_L_M address register */
+#define MIG_THRESHOLD_ADDR_H	(0x15)	/** INT_THS_H_M address register */
 #define REG_GEN1_AXIS_ADDR	(0x30)	/** INT_GEN1_REG address register */
 #define INT_GEN1_SRC_ADDR	(0x31)	/** INT_GEN1_SRC address register */
 #define REG_GEN1_THR_ADDR	(0x32)	/** INT_GEN1_THS address register */
@@ -269,22 +269,22 @@ typedef enum {
 #define LSM303D_MAG_ODR100	(0x14)  /* 100Hz output data rate */
 
 /* Magnetic sensor mode */
-#define MSMS_MASK		(0x03)	/* Mask magnetic sensor mode */
+#define MSMS_MASK			(0x03)	/* Mask magnetic sensor mode */
 #define POWEROFF_MAG		(0x02)	/* Power Down */
 #define CONTINUOS_CONVERSION	(0x00)	/* Continuos Conversion */
 
 /* Default values loaded in probe function */
-#define WHOIAM_VALUE		(0x49)	/** Who Am I default value */
+#define WHOIAM_VALUE		(0x47)	/** Who Am I default value */
 #define REG_DEF_CNTRL0		(0x00)	/** CNTRL0 default value */
-#define REG_DEF_CNTRL1		(0x0F)	/** CNTRL1 default value */
+#define REG_DEF_CNTRL1		(0x07)	/** CNTRL1 default value */
 #define REG_DEF_CNTRL2		(0x00)	/** CNTRL2 default value */
 #define REG_DEF_CNTRL3		(0x00)	/** CNTRL3 default value */
 #define REG_DEF_CNTRL4		(0x00)	/** CNTRL4 default value */
 #define REG_DEF_CNTRL5		(0x18)	/** CNTRL5 default value */
 #define REG_DEF_CNTRL6		(0x20)	/** CNTRL6 default value */
-#define REG_DEF_CNTRL7		(0x02)	/** CNTRL7 default value */
+#define REG_DEF_CNTRL7		(0x01)	/** CNTRL7 default value */
 
-#define REG_DEF_INT_CNTRL_MAG	(0x00)	/** INT_CTRL_REG_M default value */
+#define REG_DEF_INT_CNTRL_MAG	(0xE8)	/** INT_CTRL_REG_M default value */
 #define REG_DEF_INT_GEN1	(0x00)	/** INT_GEN1_REG default value */
 #define REG_DEF_INT_GEN2	(0x00)	/** INT_GEN2_REG default value */
 #define REG_DEF_IIG1_DURATION	(0x00)	/** INT_GEN1_DUR default value */
@@ -338,14 +338,6 @@ typedef enum {
 #define INT_POLARITY_MASK	(0x80)
 
 
-
-
-
-
-
-
-
-
 /* Exported constants --------------------------------------------------------*/
 
 #define MEMS_SET                                0x01
@@ -359,60 +351,62 @@ typedef enum {
 // CONTROL REGISTER 1 ACC
 #define CTRL_REG1_A				0x20
 #define ODR_BIT			        BIT(4)
-#define LPEN					BIT(3)
+#define BDU					BIT(3)
 #define A_ZEN					BIT(2)
 #define A_YEN					BIT(1)
 #define A_XEN					BIT(0)
 
 //CONTROL REGISTER 2 ACC
 #define CTRL_REG2_A				0x21
-#define HPM     				BIT(6)
-#define HPCF					BIT(4)
+#define ABW     				BIT(6)
+#define AFS					BIT(3)
 #define FDS					BIT(3)
-#define HPCLICK					BIT(2)
-#define HPIS2					BIT(1)
-#define HPIS1					BIT(0)
+#define AST					BIT(1)
+#define SIM					BIT(0)
 
 //CONTROL REGISTER 3 ACC
 #define CTRL_REG3_A				0x22
-#define I1_CLICK				BIT(7)
-#define I1_AOI1					BIT(6)
-#define I1_AOI2				        BIT(5)
-#define I1_DRDY1				BIT(4)
-#define I1_DRDY2				BIT(3)
-#define I1_WTM					BIT(2)
-#define I1_ORUN					BIT(1)
+#define I1_CLICK				BIT(6)
+#define I1_AOI1					BIT(5)
+#define I1_AOI2				    BIT(4)
+#define I1_DRDY_A				BIT(2)
+#define I1_DRDY_M				BIT(1)
+#define I1_EMPTY				BIT(0)
 
 //CONTROL REGISTER 4 ACC
-#define CTRL_REG4_A				0x23
-#define BDU					BIT(7)
-#define BLE					BIT(6)
-#define FS					BIT(4)
-#define HR					BIT(3)
-#define ST       				BIT(1)
-#define SIM					BIT(0)
+#define CTRL_REG3_A				0x23
+#define I2_CLICK				BIT(7)
+#define I2_AOI1					BIT(6)
+#define I2_AOI2				    BIT(5)
+#define I2_AOIM					BIT(4)
+#define I2_DRDY_A				BIT(3)
+#define I2_DRDY_M				BIT(2)
+#define I2_OVERRUN				BIT(1)
+#define I2_EMPTY				BIT(0)
 
 //CONTROL REGISTER 5 ACC
 #define CTRL_REG5_A				0x24
-#define BOOT                    BIT(7)
-#define FIFO_EN                 BIT(6)
-#define LIR_INT1                BIT(3)
-#define D4D_INT1                BIT(2)
+#define TEMP_EN                 BIT(7)
+#define M_RES                   BIT(5)
+#define M_ODR                   BIT(2)
 #define LIR_INT2                BIT(1)
-#define D4D_INT2                BIT(0)
+#define LIR_INT1                BIT(0)
 
 //CONTROL REGISTER 6 ACC
 #define CTRL_REG6_A				0x25
-#define I2_CLICK				BIT(7)
-#define I2_INT1					BIT(6)
-#define I2_INT2					BIT(5)
-#define I2_BOOT         			BIT(4)
-#define P2_ACT           			BIT(3)
-#define H_LACTIVE				BIT(1)
+#define MFS						BIT(5)
 
-//REFERENCE/DATA_CAPTURE ACC
-#define REFERENCE_REG_A		                0x26
-#define REF		                	BIT(0)
+//CONTROL REGISTER 7 ACC
+#define CTRL_REG5_A				0x26
+#define AHPM                 	BIT(6)
+#define AFDS                    BIT(5)
+#define T_ONLY                  BIT(4)
+#define MLP		                BIT(2)
+#define MD0                     BIT(0)
+
+////REFERENCE/DATA_CAPTURE ACC
+//#define REFERENCE_REG_A		    0x26
+//#define REF		                BIT(0)
 
 //STATUS_REG_AXIES ACC
 #define STATUS_REG_A				0x27
@@ -436,8 +430,7 @@ typedef enum {
 
 //FIFO CONTROL REGISTER ACC
 #define FIFO_CTRL_REG_A                         0x2E
-#define FM                                      BIT(6)
-#define TR                                      BIT(5)
+#define FM                                      BIT(5)
 #define FTH                                     BIT(0)
 
 //FIFO SOURCE REGISTERS ACC
@@ -454,8 +447,6 @@ typedef enum {
 #define I1_DRDY1_ON_INT1_DISABLE                0x00
 #define I1_DRDY2_ON_INT1_ENABLE                 0x08
 #define I1_DRDY2_ON_INT1_DISABLE                0x00
-#define WTM_ON_INT1_ENABLE                      0x04
-#define WTM_ON_INT1_DISABLE                     0x00
 #define INT1_OVERRUN_ENABLE                     0x02
 #define INT1_OVERRUN_DISABLE                    0x00
 
@@ -497,7 +488,7 @@ typedef enum {
 #define INT_SRC_XL                              0x01
 
 //FIFO Source Register ACC bit Mask
-#define FIFO_SRC_WTM                            0x80
+#define FIFO_SRC_FTH                            0x80
 #define FIFO_SRC_OVRUN                          0x40
 #define FIFO_SRC_EMPTY                          0x20
 
