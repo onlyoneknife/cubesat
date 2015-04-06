@@ -13,7 +13,7 @@
 #define I2C_ADDRESS         (98)
 #define I2C_MAX_TX_BUFFER_SIZE ((uint8_t)100)
 #define I2C_MAX_RX_BUFFER_SIZE ((uint8_t)100)
-#define I2C_WRITE(n)        writeI2C(&n,sizeof(n))
+#define I2C_WRITE(n)        while(!writeI2C(&n,sizeof(n)))
 #define I2C_READ(n,m)       readI2C(&n,m)
 
 /* Exported common structure --------------------------------------------------------*/

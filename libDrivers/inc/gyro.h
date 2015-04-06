@@ -26,34 +26,14 @@
 #ifndef __GYRO_DRIVER__H
 #define __GYRO_DRIVER__H
 
-#include <stdint.h>
 /* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
+#include <sharedtypes.h>
 /* Exported types ------------------------------------------------------------*/
 typedef uint8_t GYRO_Int1PinConf_t;
 typedef uint8_t GYRO_Int2PinConf_t;
 typedef uint8_t GYRO_Int1Conf_t;
 typedef uint8_t GYRO_Axis_t;
-
-/* Exported common structure --------------------------------------------------------*/
-
-#ifndef __SHARED__TYPES
-#define __SHARED__TYPES
-
-typedef enum {
-	MEMS_SUCCESS = 0x01, MEMS_ERROR = 0x00
-} status_t;
-
-typedef enum {
-	MEMS_ENABLE = 0x01, MEMS_DISABLE = 0x00
-} State_t;
-
-typedef struct {
-	int16_t AXIS_X;
-	int16_t AXIS_Y;
-	int16_t AXIS_Z;
-} AxesRaw_t;
-
-#endif /*__SHARED__TYPES*/
 
 // Target specific location information
 #define GYRO_CS_PIN	 	5
@@ -299,7 +279,7 @@ typedef enum {
 #define GYRO_DATAREADY_BIT                           GYRO_STATUS_ZYXDA
 
 #define GYRO_I_AM_L3GD20H			        	 0x0F
-#define GYRO_WHO_AM_I_CONTENTS					 0xD7
+#define GYRO_WHOIAM_VALUE					 0xD7
 
 /*************GYROSCOPE FIFO CONTROL REGISTER**************/
 #define GYRO_FM0                                      BIT(5)

@@ -22,13 +22,13 @@
 *
 *******************************************************************************/
 
-#include <stdint.h>
-
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef MAG__H
 #define MAG__H
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
+#include <sharedtypes.h>
 /* Exported types ------------------------------------------------------------*/
 typedef uint8_t IntPinConf_t;
 typedef uint8_t Axis_t;
@@ -38,25 +38,6 @@ typedef uint8_t IntConf_t;
 #define MAG_CS_PIN	 	3
 #define MAG_CS_PORT		gpioPortD
 #define MAG_SPI		USART1
-
-#ifndef __SHARED__TYPES
-#define __SHARED__TYPES
-
-typedef enum {
-	MEMS_SUCCESS = 0x01, MEMS_ERROR = 0x00
-} status_t;
-
-typedef enum {
-	MEMS_ENABLE = 0x01, MEMS_DISABLE = 0x00
-} State_t;
-
-typedef struct {
-	int16_t AXIS_X;
-	int16_t AXIS_Y;
-	int16_t AXIS_Z;
-} AxesRaw_t;
-
-#endif /*__SHARED__TYPES*/
 
 typedef enum {
   ODR_1Hz		        =		0x01,
@@ -266,7 +247,7 @@ typedef enum {
 #define CONTINUOS_CONVERSION	(0x00)	/* Continuos Conversion */
 
 /* Default values loaded in probe function */
-#define WHOIAM_VALUE		(0x47)	/** Who Am I default value */
+#define WHOIAM_VALUE		(0x49)	/** Who Am I default value */
 #define REG_DEF_CNTRL0		(0x00)	/** CNTRL0 default value */
 #define REG_DEF_CNTRL1		(0x07)	/** CNTRL1 default value */
 #define REG_DEF_CNTRL2		(0x00)	/** CNTRL2 default value */

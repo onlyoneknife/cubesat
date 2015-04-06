@@ -21,12 +21,20 @@
 * THIS SOFTWARE IS SPECIFICALLY DESIGNED FOR EXCLUSIVE USE WITH ST PARTS.
 *
 *******************************************************************************/
+
+/* Includes ------------------------------------------------------------------*/
 #include "mag.h"
 #include "em_usart.h"
 #include "em_gpio.h"
+/* Private typedef -----------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+/* Private function prototypes -----------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
-* Function Name		: MAG_MagReadReg
+* Function Name		: MAG_ReadReg
 * Description		: Generic Reading function. It must be fulfilled with either
 *					: I2C or SPI reading functions
 * Input				: Register Address
