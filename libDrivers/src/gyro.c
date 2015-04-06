@@ -29,6 +29,8 @@
 #include "em_gpio.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+#define MEMS_SUCCESS  	0x01
+#define MEMS_ERROR  	0x00
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -630,7 +632,7 @@ status_t GYRO_GetAngRateRaw(AxesRaw_t* buff) {
 	if (!GYRO_ReadReg(GYRO_OUT_X_H, &valueH))
 		return MEMS_ERROR;
 
-	buff->AXIS_X = (i16_t) ((valueH << 8) | valueL);
+	buff->AXIS_X = (int16_t) ((valueH << 8) | valueL);
 
 	if (!GYRO_ReadReg(GYRO_OUT_Y_L, &valueL))
 		return MEMS_ERROR;
@@ -638,7 +640,7 @@ status_t GYRO_GetAngRateRaw(AxesRaw_t* buff) {
 	if (!GYRO_ReadReg(GYRO_OUT_Y_H, &valueH))
 		return MEMS_ERROR;
 
-	buff->AXIS_Y = (i16_t) ((valueH << 8) | valueL);
+	buff->AXIS_Y = (int16_t) ((valueH << 8) | valueL);
 
 	if (!GYRO_ReadReg(GYRO_OUT_Z_L, &valueL))
 		return MEMS_ERROR;
@@ -646,7 +648,7 @@ status_t GYRO_GetAngRateRaw(AxesRaw_t* buff) {
 	if (!GYRO_ReadReg(GYRO_OUT_Z_H, &valueH))
 		return MEMS_ERROR;
 
-	buff->AXIS_Z = (i16_t) ((valueH << 8) | valueL);
+	buff->AXIS_Z = (int16_t) ((valueH << 8) | valueL);
 
 	return MEMS_SUCCESS;
 }

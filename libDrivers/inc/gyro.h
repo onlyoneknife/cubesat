@@ -29,14 +29,6 @@
 #include <stdint.h>
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
-
-//these could change accordingly with the architecture
-#ifndef __ARCHDEP__TYPES
-#define __ARCHDEP__TYPES
-typedef short int i16_t;
-typedef signed char i8_t;
-#endif /*__ARCHDEP__TYPES*/
-
 typedef uint8_t GYRO_Int1PinConf_t;
 typedef uint8_t GYRO_Int2PinConf_t;
 typedef uint8_t GYRO_Int1Conf_t;
@@ -56,9 +48,9 @@ typedef enum {
 } State_t;
 
 typedef struct {
-	i16_t AXIS_X;
-	i16_t AXIS_Y;
-	i16_t AXIS_Z;
+	int16_t AXIS_X;
+	int16_t AXIS_Y;
+	int16_t AXIS_Z;
 } AxesRaw_t;
 
 #endif /*__SHARED__TYPES*/
