@@ -1,5 +1,5 @@
 /******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
-* File Name          : LSM303D.h
+* File Name          : mag.h
 * Author             : MSH Application Team
 * Author             : Fabio Tota
 * Version            : $Revision:$
@@ -25,8 +25,8 @@
 #include <stdint.h>
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __LSM303DLHC_DRIVER__H
-#define __LSM303DLHC_DRIVER__H
+#ifndef MAG__H
+#define MAG__H
 
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
@@ -34,22 +34,29 @@ typedef uint8_t IntPinConf_t;
 typedef uint8_t Axis_t;
 typedef uint8_t IntConf_t;
 
-
 // Target specific location information
 #define MAG_CS_PIN	 	3
 #define MAG_CS_PORT		gpioPortD
 #define MAG_SPI		USART1
 
+#ifndef __SHARED__TYPES
+#define __SHARED__TYPES
 
 typedef enum {
-  MEMS_SUCCESS                  =		0x01,
-  MEMS_ERROR			=		0x00
+	MEMS_SUCCESS = 0x01, MEMS_ERROR = 0x00
 } status_t;
 
 typedef enum {
-  MEMS_ENABLE			=		0x01,
-  MEMS_DISABLE			=		0x00
+	MEMS_ENABLE = 0x01, MEMS_DISABLE = 0x00
 } State_t;
+
+typedef struct {
+	int16_t AXIS_X;
+	int16_t AXIS_Y;
+	int16_t AXIS_Z;
+} AxesRaw_t;
+
+#endif /*__SHARED__TYPES*/
 
 typedef enum {
   ODR_1Hz		        =		0x01,
@@ -64,14 +71,12 @@ typedef enum {
 } ODR_t;
 
 typedef enum {
-  ODR_0_75Hz_M		        =		0x00,
-  ODR_1_5Hz_M                   =		0x01,
-  ODR_3_0Hz_M		        =		0x02,
-  ODR_7_5Hz_M		        =		0x03,
-  ODR_15Hz_M		        =		0x04,
-  ODR_30Hz_M		        =		0x05,
-  ODR_75Hz_M		        =		0x06,
-  ODR_220Hz_M		        =		0x07
+  ODR_3_125Hz_M		        =		0x00,
+  ODR_6_25Hz_M              =		0x01,
+  ODR_12_5Hz_M		        =		0x02,
+  ODR_25Hz_M		        =		0x03,
+  ODR_50Hz_M		        =		0x04,
+  ODR_100Hz_M		        =		0x05
 } ODR_M_t;
 
 typedef enum {
@@ -120,7 +125,7 @@ typedef struct {
   int16_t AXIS_X;
   int16_t AXIS_Y;
   int16_t AXIS_Z;
-}MagAxesRaw_t;
+} MagAxesRaw_t;
 
 typedef enum {
   FULLSCALE_2                   =               0x00,
@@ -130,14 +135,8 @@ typedef enum {
 } Fullscale_t;
 
 typedef enum {
-  BLE_LSB			=		0x00,
-  BLE_MSB			=		0x01
-} Endianess_t;
-
-typedef enum {
   SELF_TEST_DISABLE             =               0x00,
-  SELF_TEST_0                   =               0x01,
-  SELF_TEST_1                   =               0x02
+  SELF_TEST_ENABLE              =               0x01
 } SelfTest_t;
 
 typedef enum {
@@ -188,13 +187,6 @@ typedef enum {
   INT_MODE_AND                  =               0x02,
   INT_MODE_6D_POSITION          =               0x03
 } Int1Mode_t;
-
-
-
-
-
-
-
 
 #define	I2C_AUTO_INCREMENT	(0x80)
 #define MS_TO_NS(x)		(x*1000000L)
@@ -374,7 +366,7 @@ typedef enum {
 #define I1_EMPTY				BIT(0)
 
 //CONTROL REGISTER 4 ACC
-#define CTRL_REG3_A				0x23
+#define CTRL_REG4_A				0x23
 #define I2_CLICK				BIT(7)
 #define I2_AOI1					BIT(6)
 #define I2_AOI2				    BIT(5)
@@ -397,12 +389,12 @@ typedef enum {
 #define MFS						BIT(5)
 
 //CONTROL REGISTER 7 ACC
-#define CTRL_REG5_A				0x26
+#define CTRL_REG7_A				0x26
 #define AHPM                 	BIT(6)
 #define AFDS                    BIT(5)
 #define T_ONLY                  BIT(4)
 #define MLP		                BIT(2)
-#define MD0                     BIT(0)
+#define MD                     BIT(0)
 
 ////REFERENCE/DATA_CAPTURE ACC
 //#define REFERENCE_REG_A		    0x26
@@ -552,4 +544,92 @@ typedef enum {
 
 #define DATAREADY_BIT_A                         STATUS_REG_ZYXDA
 
+/**************MAGNETOMETER REGISTER*****************/
+
+#define TEMP_EN                                 BIT(7)
+#define ODR_M                                   BIT(2)
+
+#define MODE_SEL_M                              BIT(0)
+
+#define OUT_X_H_M                               0x09
+#define OUT_X_L_M                               0x08
+#define OUT_Z_H_M                               0x0D
+#define OUT_Z_L_M                               0x0C
+#define OUT_Y_H_M                               0x0B
+#define OUT_Y_L_M                               0x0A
+
+//MSB of 12 bit TEMP_OUT
+#define TEMP_OUT_H_M                            0x06
+//LSB of 12bit (4 bit) TEMP_OUT
+#define TEMP_OUT_L_M                            0x05
+
+
+
+/* Exported macro ------------------------------------------------------------*/
+#define ValBit(VAR,Place)         (VAR & (1<<Place))
+#define BIT(x) ( (x) )
+
+/* Exported functions --------------------------------------------------------*/
+//Sensor Configuration Functions
+status_t SetODR(ODR_t ov);
+status_t SetMode(Mode_t md);
+status_t SetAxis(Axis_t axis);
+status_t SetFullScale(Fullscale_t fs);
+status_t SetBDU(State_t bdu);
+status_t SetSelfTest(SelfTest_t st);
+status_t SetTemperature(State_t state);
+
+//Filtering Functions
+status_t HPFClickEnable(State_t hpfe);
+status_t HPFAOI1Enable(State_t hpfe);
+status_t HPFAOI2Enable(State_t hpfe);
+status_t SetHPFMode(HPFMode_t hpf);
+status_t SetHPFCutOFF(HPFCutOffFreq_t hpf);
+status_t SetFilterDataSel(State_t state);
+
+//Interrupt Functions
+status_t SetInt1Pin(IntPinConf_t pinConf);
+status_t SetInt2Pin(IntPinConf_t pinConf);
+status_t Int1LatchEnable(State_t latch);
+status_t ResetInt1Latch(void);
+status_t SetInt1Configuration(IntConf_t ic);
+status_t SetInt2Configuration(IntConf_t ic);
+status_t SetInt1Threshold(uint8_t ths);
+status_t SetInt1Duration(IntConf_t id);
+status_t SetIntMode(Int1Mode_t ic);
+status_t SetClickCFG(uint8_t status);
+status_t SetInt6D4DConfiguration(INT_6D_4D_t ic);
+status_t GetInt1Src(uint8_t* val);
+status_t GetInt1SrcBit(uint8_t statusBIT);
+status_t GetInt2SrcBit(uint8_t statusBIT);
+
+//FIFO Functions
+status_t FIFOModeEnable(FifoMode_t fm);
+status_t SetWaterMark(uint8_t wtm);
+status_t SetTriggerInt(TrigInt_t tr);
+status_t GetFifoSourceReg(uint8_t* val);
+status_t GetFifoSourceBit(uint8_t statusBIT);
+status_t GetFifoSourceFSS(uint8_t* val);
+
+//Other Reading Functions
+status_t GetSatusReg(uint8_t* val);
+status_t GetSatusBit(uint8_t statusBIT);
+status_t GetAccAxesRaw(AccAxesRaw_t* buff);
+status_t GetClickResponce(uint8_t* val);
+status_t GetTempRaw(int16_t* val);
+status_t Get6DPosition(uint8_t* val);
+
+/********magnetometer function***********/
+status_t SetODR_M(ODR_M_t ov);
+status_t SetGainMag(GAIN_M_t Gain);
+status_t SetModeMag(Mode_M_t Mode);
+status_t GetMagAxesRaw(MagAxesRaw_t* buff);
+
+uint8_t MagReadReg(uint8_t Reg, uint8_t* Data);
+uint8_t MagWriteReg(uint8_t Reg, uint8_t Data);
+
+
+#endif
+
+/******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
 

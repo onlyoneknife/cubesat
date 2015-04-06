@@ -1,5 +1,5 @@
 /******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
-* File Name          : LSM303D.c
+* File Name          : mag.c
 * Author             : MSH Application Team
 * Author             : Fabio Tota
 * Version            : $Revision:$
@@ -9,7 +9,7 @@
 * HISTORY:
 * Date               |	Modification                    |	Author
 * 02/08/2011         |	Initial Revision                |	abio Tota
-* 07/03/2015		|	Modified to LSM303D 			|   Peng Zhang
+* 07/03/2015		 |	Modified to LSM303D 			|   Peng Zhang
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -21,23 +21,25 @@
 * THIS SOFTWARE IS SPECIFICALLY DESIGNED FOR EXCLUSIVE USE WITH ST PARTS.
 *
 *******************************************************************************/
-#include "magn.h"
+#include "mag.h"
 #include "em_usart.h"
 #include "em_gpio.h"
 
+#define MEMS_SUCCESS  	0x01
+#define MEMS_ERROR  	0x00
 
 /*******************************************************************************
-* Function Name		: ReadReg
-* Description		: Generic Reading function. It must be fullfilled with either
-*			: I2C or SPI reading functions
-* Input			: Register Address
-* Output		: Data REad
-* Return		: None
+* Function Name		: MAG_MagReadReg
+* Description		: Generic Reading function. It must be fulfilled with either
+*					: I2C or SPI reading functions
+* Input				: Register Address
+* Output			: Data REad
+* Return			: None
 *******************************************************************************/
 uint8_t MAG_ReadReg(uint8_t reg, uint8_t* data) {
 	reg |= 0x01 << 7;	// Set READ bit
 
-	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+	GPIO->P[MAG_CS_PORT].DOUTCLR = 1 << MAG_CS_PIN; // Set CS low
 
 	USART_SpiTransfer(MAG_SPI, reg);
 	* data = USART_SpiTransfer(MAG_SPI, 0x00); //Send dummy data while receiving data response
@@ -49,17 +51,15 @@ uint8_t MAG_ReadReg(uint8_t reg, uint8_t* data) {
 
 
 /*******************************************************************************
-* Function Name		: WriteReg
-* Description		: Generic Writing function. It must be fullfilled with either
-*			: I2C or SPI writing function
-* Input			: Register Address, Data to be written
-* Output		: None
-* Return		: None
+* Function Name		: MAG_WriteReg
+* Description		: Generic Writing function. It must be fulfilled with either
+*					: I2C or SPI writing function
+* Input				: Register Address, Data to be written
+* Output			: None
+* Return			: None
 *******************************************************************************/
 
 uint8_t MAG_WriteReg(uint8_t reg, uint8_t data) {
-	uint16_t regData;
-
 	GPIO->P[MAG_CS_PORT].DOUTCLR = 1 << MAG_CS_PIN; // Set CS low
 
 	USART_SpiTransfer(MAG_SPI, reg);
@@ -74,45 +74,44 @@ uint8_t MAG_WriteReg(uint8_t reg, uint8_t data) {
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
-* Function Name  : SetODR
+* Function Name  : MAG_SetODR
 * Description    : Sets LSM303DLHC Output Data Rate Accelerometer
 * Input          : Output Data Rate
 * Output         : None
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t SetODR(ODR_t ov){
+status_t MAG_SetODR(ODR_t ov){
   uint8_t value;
 
-  if( !ReadReg(ACC_I2C_ADDRESS, CTRL_REG1_A, &value) )
+  if( !MAG_ReadReg(CTRL_REG1_A, &value) )
     return MEMS_ERROR;
 
-  value &= 0x0f;
-  //value |= ov<<ODR_BIT;
-  value |= ov<<4;
+  value &= 0x0F;
+  value |= ov<<ODR_BIT;
 
-  if( !WriteReg(ACC_I2C_ADDRESS, CTRL_REG1_A, value) )
+  if( !MAG_WriteReg(CTRL_REG1_A, value) )
     return MEMS_ERROR;
 
   return MEMS_SUCCESS;
 }
 
 /*******************************************************************************
-* Function Name  : SetODR_M
+* Function Name  : MAG_SetODR_M
 * Description    : Sets LSM303DLHC Output Data Rate Magnetometer
 * Input          : Output Data Rate
 * Output         : None
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t SetODR_M(ODR_M_t ov){
+status_t MAG_SetODR_M(ODR_M_t ov){
   uint8_t value;
 
-  if( !ReadReg(MAG_I2C_ADDRESS, CRA_REG_M, &value) )
+  if( !MAG_ReadReg(CTRL_REG5_A, &value) )
     return MEMS_ERROR;
 
-  value &= 0x80; //bit<6,5,1,0> must be =0 for correct working
-  value |= ov<<ODR_M;
+  value &= 0xE3; //bit<6,5,1,0> must be =0 for correct working
+  value |= ov<<M_ODR;
 
-  if( !WriteReg(MAG_I2C_ADDRESS, CRA_REG_M, value) )
+  if( !MAG_WriteReg(CTRL_REG5_A, value) )
     return MEMS_ERROR;
 
   return MEMS_SUCCESS;
@@ -120,68 +119,68 @@ status_t SetODR_M(ODR_M_t ov){
 
 
 /*******************************************************************************
-* Function Name  : SetTemperature
+* Function Name  : MAG_SetTemperature
 * Description    : Sets LSM303DLHC Output Temperature
 * Input          : MEMS_ENABLE, MEMS_DISABLE
 * Output         : None
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t SetTemperature(State_t state){
+status_t MAG_SetTemperature(State_t state){
   uint8_t value;
 
-  if( !ReadReg(MAG_I2C_ADDRESS, CRA_REG_M, &value) )
+  if( !MAG_ReadReg(CTRL_REG5_A, &value) )
     return MEMS_ERROR;
 
   value &= 0x7F;
   value |= state<<TEMP_EN;
 
-  if( !WriteReg(MAG_I2C_ADDRESS, CRA_REG_M, value) )
+  if( !MAG_WriteReg(CTRL_REG5_A, value) )
     return MEMS_ERROR;
 
   return MEMS_SUCCESS;
 }
 
 
+///*******************************************************************************
+//* Function Name  : MAG_SetGainMag
+//* Description    : Sets LSM303DLHC Magnetometer Gain
+//* Input          : GAIN_1100_M or GAIN_855_M or GAIN_670_M or GAIN_450_M....
+//* Output         : None
+//* Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
+//*******************************************************************************/
+//status_t MAG_SetGainMag(GAIN_M_t Gain){
+//  uint8_t value;
+//
+//  if( !MAG_ReadReg(CRB_REG_M, &value) )
+//    return MEMS_ERROR;
+//
+//  value &= 0x00; //bit<4-0> must be =0 for correct working
+//  value |= Gain<<GN_CFG;
+//
+//  if( !MAG_WriteReg(CRB_REG_M, value) )
+//    return MEMS_ERROR;
+//
+//  return MEMS_SUCCESS;
+//}
+
+
 /*******************************************************************************
-* Function Name  : SetGainMag
-* Description    : Sets LSM303DLHC Magnetometer Gain
-* Input          : GAIN_1100_M or GAIN_855_M or GAIN_670_M or GAIN_450_M....
-* Output         : None
-* Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
-*******************************************************************************/
-status_t SetGainMag(GAIN_M_t Gain){
-  uint8_t value;
-
-  if( !ReadReg(MAG_I2C_ADDRESS, CRB_REG_M, &value) )
-    return MEMS_ERROR;
-
-  value &= 0x00; //bit<4-0> must be =0 for correct working
-  value |= Gain<<GN_CFG;
-
-  if( !WriteReg(MAG_I2C_ADDRESS, CRB_REG_M, value) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
-}
-
-
-/*******************************************************************************
-* Function Name  : SetModeMag
+* Function Name  : MAG_SetModeMag
 * Description    : Sets LSM303DLHC Magnetometer Modality
 * Input          : Modality (CONTINUOUS_MODE, or SINGLE_MODE, or SLEEP_MODE)
 * Output         : None
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t SetModeMag(Mode_M_t Mode){
+status_t MAG_SetModeMag(Mode_M_t Mode){
   uint8_t value;
 
-  if( !ReadReg(MAG_I2C_ADDRESS, MR_REG_M, &value) )
+  if( !MAG_ReadReg(CTRL_REG7_A, &value) )
     return MEMS_ERROR;
 
-  value &= 0x00; //bit<7-3> must be =0 for correct working
-  value |= Mode<<MODE_SEL_M;
+  value &= 0xF0; //bit<3> must be =0 for correct working
+  value |= Mode<<MD;
 
-  if( !WriteReg(MAG_I2C_ADDRESS, MR_REG_M, value) )
+  if( !MAG_WriteReg(CTRL_REG7_A, value) )
     return MEMS_ERROR;
 
   return MEMS_SUCCESS;
@@ -189,16 +188,16 @@ status_t SetModeMag(Mode_M_t Mode){
 
 
 /*******************************************************************************
-* Function Name  : GetTempRaw
+* Function Name  : MAG_GetTempRaw
 * Description    : Read the Temperature Values by TEMP_OUT Output Registers
-* Input          : Value to empity (16 Bit two's complement)
+* Input          : Value to empty (16 Bit two's complement)
 * Output         : None
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t GetTempRaw(int16_t* val) {
+status_t MAG_GetTempRaw(int16_t* val) {
   uint8_t valueH;
 
-  if( !ReadReg(MAG_I2C_ADDRESS, TEMP_OUT_H_M, &valueH) )
+  if( !MAG_ReadReg(TEMP_OUT_H_M, &valueH) )
       return MEMS_ERROR;
 
   *val = 25 + (int16_t)(valueH);
@@ -207,78 +206,78 @@ status_t GetTempRaw(int16_t* val) {
 }
 
 
+///*******************************************************************************
+//* Function Name  : SetMode
+//* Description    : Sets LSM303DLHC Operating Mode Accelrometer
+//* Input          : Modality (NORMAL, LOW_POWER, POWER_DOWN)
+//* Output         : None
+//* Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
+//*******************************************************************************/
+//status_t MAG_SetMode(Mode_t md) {
+//  uint8_t value;
+//  uint8_t value2;
+//  static   uint8_t ODR_old_value;
+//
+//  if( !MAG_ReadReg(CTRL_REG1_A, &value) )
+//    return MEMS_ERROR;
+//
+//  if( !MAG_ReadReg(CTRL_REG4_A, &value2) )
+//    return MEMS_ERROR;
+//
+//  if((value & 0xF0)==0) value = value | (ODR_old_value & 0xF0); //if it comes from POWERDOWN
+//
+//  switch(md) {
+//
+//  case POWER_DOWN:
+//    ODR_old_value = value;
+//    value &= 0x0F;
+//    break;
+//
+//  case NORMAL:
+//    value &= 0xF7;
+//    value |= (MEMS_RESET<<LPEN);
+//    value2 &= 0xF7;
+//    value2 |= (MEMS_SET<<HR);   //set HighResolution_BIT
+//    break;
+//
+//  case LOW_POWER:
+//    value &= 0xF7;
+//    value |=  (MEMS_SET<<LPEN);
+//    value2 &= 0xF7;
+//    value2 |= (MEMS_RESET<<HR); //reset HighResolution_BIT
+//    break;
+//
+//  default:
+//    return MEMS_ERROR;
+//  }
+//
+//  if( !MAG_WriteReg(ACC_I2C_ADDRESS, CTRL_REG1_A, value) )
+//    return MEMS_ERROR;
+//
+//  if( !MAG_WriteReg(ACC_I2C_ADDRESS, CTRL_REG4_A, value2) )
+//    return MEMS_ERROR;
+//
+//  return MEMS_SUCCESS;
+//}
+
+
 /*******************************************************************************
-* Function Name  : SetMode
-* Description    : Sets LSM303DLHC Operating Mode Accelrometer
-* Input          : Modality (NORMAL, LOW_POWER, POWER_DOWN)
-* Output         : None
-* Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
-*******************************************************************************/
-status_t SetMode(Mode_t md) {
-  uint8_t value;
-  uint8_t value2;
-  static   uint8_t ODR_old_value;
-
-  if( !ReadReg(ACC_I2C_ADDRESS, CTRL_REG1_A, &value) )
-    return MEMS_ERROR;
-
-  if( !ReadReg(ACC_I2C_ADDRESS, CTRL_REG4_A, &value2) )
-    return MEMS_ERROR;
-
-  if((value & 0xF0)==0) value = value | (ODR_old_value & 0xF0); //if it comes from POWERDOWN
-
-  switch(md) {
-
-  case POWER_DOWN:
-    ODR_old_value = value;
-    value &= 0x0F;
-    break;
-
-  case NORMAL:
-    value &= 0xF7;
-    value |= (MEMS_RESET<<LPEN);
-    value2 &= 0xF7;
-    value2 |= (MEMS_SET<<HR);   //set HighResolution_BIT
-    break;
-
-  case LOW_POWER:
-    value &= 0xF7;
-    value |=  (MEMS_SET<<LPEN);
-    value2 &= 0xF7;
-    value2 |= (MEMS_RESET<<HR); //reset HighResolution_BIT
-    break;
-
-  default:
-    return MEMS_ERROR;
-  }
-
-  if( !WriteReg(ACC_I2C_ADDRESS, CTRL_REG1_A, value) )
-    return MEMS_ERROR;
-
-  if( !WriteReg(ACC_I2C_ADDRESS, CTRL_REG4_A, value2) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
-}
-
-
-/*******************************************************************************
-* Function Name  : SetAxis
+* Function Name  : MAG_SetAxis
 * Description    : Enable/Disable LSM303DLHC Axis
 * Input          : X_ENABLE/X_DISABLE | Y_ENABLE/Y_DISABLE | Z_ENABLE/Z_DISABLE
 * Output         : None
 * Note           : You MUST use all input variable in the argument, as example
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t SetAxis(Axis_t axis) {
+status_t MAG_SetAxis(Axis_t axis) {
   uint8_t value;
 
-  if( !ReadReg(ACC_I2C_ADDRESS, CTRL_REG1_A, &value) )
+  if( !MAG_ReadReg(CTRL_REG1_A, &value) )
     return MEMS_ERROR;
   value &= 0xF8;
   value |= (0x07 & axis);
 
-  if( !WriteReg(ACC_I2C_ADDRESS, CTRL_REG1_A, value) )
+  if( !MAG_WriteReg(CTRL_REG1_A, value) )
     return MEMS_ERROR;
 
   return MEMS_SUCCESS;
@@ -286,22 +285,22 @@ status_t SetAxis(Axis_t axis) {
 
 
 /*******************************************************************************
-* Function Name  : SetFullScale
+* Function Name  : MAG_SetFullScale
 * Description    : Sets the LSM303DLHC FullScale
 * Input          : FULLSCALE_2/FULLSCALE_4/FULLSCALE_8/FULLSCALE_16
 * Output         : None
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t SetFullScale(Fullscale_t fs) {
+status_t MAG_SetFullScale(Fullscale_t fs) {
   uint8_t value;
 
-  if( !ReadReg(ACC_I2C_ADDRESS, CTRL_REG4_A, &value) )
+  if( !MAG_ReadReg(CTRL_REG6_A, &value) )
     return MEMS_ERROR;
 
-  value &= 0xCF;
-  value |= (fs<<FS);
+  value &= 0x9F;
+  value |= (fs<<MFS);
 
-  if( !WriteReg(ACC_I2C_ADDRESS, CTRL_REG4_A, value) )
+  if( !MAG_WriteReg(CTRL_REG6_A, value) )
     return MEMS_ERROR;
 
   return MEMS_SUCCESS;
@@ -309,22 +308,22 @@ status_t SetFullScale(Fullscale_t fs) {
 
 
 /*******************************************************************************
-* Function Name  : SetBDU
+* Function Name  : MAG_SetBDU
 * Description    : Enable/Disable Block Data Update Functionality
 * Input          : ENABLE/DISABLE
 * Output         : None
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t SetBDU(State_t bdu) {
+status_t MAG_SetBDU(State_t bdu) {
   uint8_t value;
 
-  if( !ReadReg(ACC_I2C_ADDRESS, CTRL_REG4_A, &value) )
+  if( !MAG_ReadReg(CTRL_REG1_A, &value) )
     return MEMS_ERROR;
 
-  value &= 0x7F;
+  value &= 0xF7;
   value |= (bdu<<BDU);
 
-  if( !WriteReg(ACC_I2C_ADDRESS, CTRL_REG4_A, value) )
+  if( !MAG_WriteReg(CTRL_REG1_A, value) )
     return MEMS_ERROR;
 
   return MEMS_SUCCESS;
@@ -332,53 +331,107 @@ status_t SetBDU(State_t bdu) {
 
 
 /*******************************************************************************
-* Function Name  : SetBLE
-* Description    : Set Endianess (MSB/LSB)
-* Input          : BLE_LSB / BLE_MSB
-* Output         : None
-* Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
-*******************************************************************************/
-status_t SetBLE(Endianess_t ble) {
-  uint8_t value;
-
-  if( !ReadReg(ACC_I2C_ADDRESS, CTRL_REG4_A, &value) )
-    return MEMS_ERROR;
-
-  value &= 0xBF;
-  value |= (ble<<BLE);
-
-  if( !WriteReg(ACC_I2C_ADDRESS, CTRL_REG4_A, value) )
-    return MEMS_ERROR;
-
-  return MEMS_SUCCESS;
-}
-
-
-/*******************************************************************************
-* Function Name  : SetSelfTest
+* Function Name  : MAG_SetSelfTest
 * Description    : Set Self Test Modality
 * Input          : SELF_TEST_DISABLE/ST_0/ST_1
 * Output         : None
 * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
 *******************************************************************************/
-status_t SetSelfTest(SelfTest_t st) {
+status_t MAG_SetSelfTest(SelfTest_t st) {
   uint8_t value;
 
-  if( !ReadReg(ACC_I2C_ADDRESS, CTRL_REG4_A, &value) )
+  if( !MAG_ReadReg(CTRL_REG2_A, &value) )
     return MEMS_ERROR;
 
-  value &= 0xF9;
-  value |= (st<<ST);
+  value &= 0xFD;
+  value |= (st<<AST);
 
-  if( !WriteReg(ACC_I2C_ADDRESS, CTRL_REG4_A, value) )
+  if( !MAG_WriteReg(CTRL_REG2_A, value) )
     return MEMS_ERROR;
+
+  return MEMS_SUCCESS;
+}
+
+/*******************************************************************************
+* Function Name  : MAG_GetAccAxesRaw
+* Description    : Read the Acceleration Values Output Registers
+* Input          : buffer to empity by AccAxesRaw_t Typedef
+* Output         : None
+* Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
+*******************************************************************************/
+status_t MAG_GetAccAxesRaw(AccAxesRaw_t* buff) {
+  uint8_t valueL;
+  uint8_t valueH;
+
+  if( !MAG_ReadReg(OUT_X_L_A, &valueL) )
+      return MEMS_ERROR;
+
+  if( !MAG_ReadReg(OUT_X_H_A, &valueH) )
+      return MEMS_ERROR;
+
+  buff->AXIS_X = (int16_t)( (valueH << 8) | valueL )/16;
+
+  if( !MAG_ReadReg(OUT_Y_L_A, &valueL) )
+      return MEMS_ERROR;
+
+  if( !MAG_ReadReg(OUT_Y_H_A, &valueH) )
+      return MEMS_ERROR;
+
+  buff->AXIS_Y = (int16_t)( (valueH << 8) | valueL )/16;
+
+   if( !MAG_ReadReg(OUT_Z_L_A, &valueL) )
+      return MEMS_ERROR;
+
+  if( !MAG_ReadReg(OUT_Z_H_A, &valueH) )
+      return MEMS_ERROR;
+
+  buff->AXIS_Z = (int16_t)( (valueH << 8) | valueL )/16;
 
   return MEMS_SUCCESS;
 }
 
 
 /*******************************************************************************
-* Function Name  : HPFClick
+* Function Name  : MAG_GetMagAxesRaw
+* Description    : Read the Magnetometer Values Output Registers
+* Input          : buffer to empty by MagAxesRaw_t Typedef
+* Output         : None
+* Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
+*******************************************************************************/
+status_t MAG_GetMagAxesRaw(MagAxesRaw_t* buff) {
+  uint8_t valueL;
+  uint8_t valueH;
+
+  if( !MAG_ReadReg(OUT_X_L_M, &valueL) )
+      return MEMS_ERROR;
+
+  if( !MAG_ReadReg(OUT_X_H_M, &valueH) )
+      return MEMS_ERROR;
+
+  buff->AXIS_X = (int16_t)( (valueH << 8) | valueL )/16;
+
+  if( !MAG_ReadReg(OUT_Y_L_M, &valueL) )
+      return MEMS_ERROR;
+
+  if( !MAG_ReadReg(OUT_Y_H_M, &valueH) )
+      return MEMS_ERROR;
+
+  buff->AXIS_Y = (int16_t)( (valueH << 8) | valueL )/16;
+
+   if( !MAG_ReadReg(OUT_Z_L_M, &valueL) )
+      return MEMS_ERROR;
+
+  if( !MAG_ReadReg(OUT_Z_H_M, &valueH) )
+      return MEMS_ERROR;
+
+  buff->AXIS_Z = (int16_t)( (valueH << 8) | valueL )/16;
+
+  return MEMS_SUCCESS;
+}
+
+
+/*******************************************************************************
+* Function Name  : MAG_HPFClick
 * Description    : Enable/Disable High Pass Filter for click
 * Input          : MEMS_ENABLE/MEMS_DISABLE
 * Output         : None
@@ -389,7 +442,7 @@ status_t SetSelfTest(SelfTest_t st) {
 
 
 /*******************************************************************************
-* Function Name  : HPFAOI1
+* Function Name  : MAG_HPFAOI1
 * Description    : Enable/Disable High Pass Filter for AOI on INT_1
 * Input          : MEMS_ENABLE/MEMS_DISABLE
 * Output         : None
@@ -403,7 +456,7 @@ status_t SetSelfTest(SelfTest_t st) {
 
 
 /*******************************************************************************
-* Function Name  : HPFAOI2
+* Function Name  : MAG_HPFAOI2
 * Description    : Enable/Disable High Pass Filter for AOI on INT_2
 * Input          : MEMS_ENABLE/MEMS_DISABLE
 * Output         : None
@@ -415,7 +468,7 @@ status_t SetSelfTest(SelfTest_t st) {
 
 
 /*******************************************************************************
-* Function Name  : SetHPFMode
+* Function Name  : MAG_SetHPFMode
 * Description    : Set High Pass Filter Modality
 * Input          : HPM_NORMAL_MODE_RES/HPM_REF_SIGNAL/HPM_NORMAL_MODE/HPM_AUTORESET_INT
 * Output         : None
@@ -427,7 +480,7 @@ status_t SetSelfTest(SelfTest_t st) {
 
 
 /*******************************************************************************
-* Function Name  : SetHPFCutOFF
+* Function Name  : MAG_SetHPFCutOFF
 * Description    : Set High Pass CUT OFF Freq
 * Input          : HPFCF [0,3]
 * Output         : None
