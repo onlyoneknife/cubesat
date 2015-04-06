@@ -35,6 +35,7 @@
 /* EFM32 Includes */
 #include "em_chip.h"
 #include "em_gpio.h"
+#include "gpiointerrupt.h"
 
 /* FreeRTOS Includes */
 #include "FreeRTOSConfig.h"
@@ -50,6 +51,9 @@
 #define LED_DELAY              (50 / portTICK_RATE_MS)
 #define LED_PORT    		   (gpioPortA)
 #define LED_PIN     		   (7)
+
+/* Create mutex semaphore for SPI1 */
+xSemaphoreHandle       xSemaphoreSPI;
 
 /**************************************************************************//**
  * @brief Initialize drivers
@@ -76,9 +80,20 @@ void DRIVERS_Init(void)
   /* do not let to sleep deeper than define */
   SLEEP_SleepBlockBegin((SLEEP_EnergyMode_t)(configSLEEP_MODE+1));
 #endif
-
 }
 
+/**************************************************************************//**
+ * @brief  Gpio callback
+ * @param  pin - pin which triggered interrupt
+ *****************************************************************************/
+void gpioCallback(uint8_t pin)
+{
+  if (pin == 11)
+  {
+	  GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
+  }
+  else GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
+}
 
 /**************************************************************************//**
  * @brief Simple task which is blinking led
@@ -98,10 +113,15 @@ static void LedBlink(void *pParameters)
   }
 }
 
+/**************************************************************************//**
+ * @brief Task to control Gyro sampling
+ *****************************************************************************/
 static void GyroRead(void *pParameters)
 {
 
-  xSemaphoreHandle* semSPI = (xSemaphoreHandle*) pParameters;
+  pParameters = pParameters;   /* to quiet warnings */
+
+  uint8_t who_am_i = 0;
 
   uint8_t  xlow  = 0;
   uint8_t  xhigh = 0;
@@ -109,24 +129,44 @@ static void GyroRead(void *pParameters)
   uint8_t  size  = 0;
   char buffer[11];
 
+
   /* set PowerMode */
   if ( GYRO_SetMode(GYRO_NORMAL) == MEMS_ERROR )
   {
-	I2C_WRITE("Gyro init error!\n");
+	I2C_WRITE("Gyro CTRL1 init error!\n");
   }
 
-  if ( GYRO_SetHPFCutOFF == MEMS_ERROR )
+  if ( GYRO_SetHPFCutOFF(8) == MEMS_ERROR )
   {
-	I2C_WRITE("Gyro init error!\n");
+	I2C_WRITE("Gyro HPF init error!\n");
+  }
+
+  if ( GYRO_SetBLE(0) == MEMS_ERROR )
+  {
+	I2C_WRITE("Gyro BLE init error!\n");
+  }
+
+  if ( GYRO_SetSelfTest(1) == MEMS_ERROR )
+  {
+	I2C_WRITE("Gyro BLE init error!\n");
+  }
+
+  if ( GYRO_SetInt2Pin(GYRO_I2_DRDY_ON_INT2_ENABLE) == MEMS_ERROR )
+  {
+	I2C_WRITE("Gyro INT2 init error!\n");
+  }
+
+  /* Gyro sampling SPI transactions */
+  GYRO_ReadReg(GYRO_I_AM_L3GD20H, &who_am_i);
+  if ( who_am_i != GYRO_WHO_AM_I_CONTENTS ) {
+	I2C_WRITE("Gyro READ error!\n");
   }
 
   for (;;)
   {
     vTaskDelay(GYRO_READ_DELAY / portTICK_RATE_MS);
 
-    //if (pdTRUE == xSemaphoreTake(*semSPI, portMAX_DELAY)) {
-
-      //GYRO_ReadReg(GYRO_I_AM_L3GD20H, &value);
+    if (pdTRUE == xSemaphoreTake(xSemaphoreSPI, portMAX_DELAY)) {
 
       GYRO_ReadReg(GYRO_OUT_X_L, &xlow);
 
@@ -134,15 +174,15 @@ static void GyroRead(void *pParameters)
 
       GYRO_SetHPFCutOFF(1);
 
-      value = (xhigh << 8) + xlow;
+      xSemaphoreGive(xSemaphoreSPI);
+
+      value = xlow;
+      value |= xhigh << 8;
 
       size = sprintf(buffer,"X = %hd\n",value);
 
       writeI2C(&buffer,size);
-
-    //}
-
-    //xSemaphoreGive(*semSPI);
+    }
   }
 }
 
@@ -155,15 +195,23 @@ int main(void)
   /* Initialize Hardware Drivers */
   DRIVERS_Init();
 
-  /* Create binary semaphore for SPI */
-  xSemaphoreHandle       semSPI;
-  vSemaphoreCreateBinary(semSPI);
+  /* Initialize GPIO interrupt dispatcher */
+  GPIOINT_Init();
+
+  /* Register callbacks before setting up and enabling pin interrupt. */
+  GPIOINT_CallbackRegister(0, gpioCallback);
+
+  /* Set falling edge interrupt for both ports */
+  GPIO_IntConfig(gpioPortC, 11, false, true, true);
+
+  /* Initialize mutex semaphore for SPI1 */
+  xSemaphoreSPI = xSemaphoreCreateMutex();
 
   /* Create task for blinking leds */
-  xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
+  //xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
   /* Create task for interaction with gyro */
-  xTaskCreate( GyroRead, (const char *) "GyroRead", STACK_SIZE_FOR_TASK, &semSPI, TASK_PRIORITY, NULL);
+  xTaskCreate( GyroRead, (const char *) "GyroRead", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
   /*Start FreeRTOS Scheduler*/
   vTaskStartScheduler();
