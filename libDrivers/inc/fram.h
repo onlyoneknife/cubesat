@@ -37,6 +37,16 @@ typedef enum {
 
 #endif /*__SHARED__MACROS*/
 
+/*********Pin and Bus Defines*********/
+
+#define FRAM_SPI            USART2
+#define FRAM_CS_PORT        gpioPortB
+#define FRAM_CS_PIN         6
+#define FRAM_HOLD_PORT      gpioPortD
+#define FRAM_HOLD_PIN       8
+#define FRAM_WP_PORT        gpioPortD
+#define FRAM_WP_PIN         5
+
 /***************OP CODES***************/
 #define FRAM_OP_WREN		0x06	// Set write enable latch
 #define FRAM_OP_WRDI		0x04	// Reset write enable latch
@@ -53,7 +63,6 @@ typedef enum {
 #define FRAM_BLK_PROTECT		2
 #define FRAM_WPEN				7
 
-void FRAM_Init(void);
 void FRAM_SetWriteEnableLatch(void);
 void FRAM_ResetWriteEnableLatch(void);
 void FRAM_ReadStatusReg(uint8_t* data);

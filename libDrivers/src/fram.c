@@ -16,43 +16,10 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-USART_TypeDef *spi;
-unsigned int csPin;
-GPIO_Port_TypeDef csPort;
-unsigned int holdPin;
-GPIO_Port_TypeDef holdPort;
-unsigned int wpPin;
-GPIO_Port_TypeDef wpPort;
-
-FRAM_Mode_t FRAM_Mode;
+FRAM_Mode_t FRAM_Mode = FRAM_NORMAL;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
-/*******************************************************************************
- * Function Name  : FRAM_SetSPI
- * Description    : Configures the FRAM to use a given USART
- * 				  : Target-specific for AlbertaSat Athena OBC Hardware
- * Input          : None
- * Output         : None
- * Return         : None
- *******************************************************************************/
-void FRAM_Init(void) {
-	spi = USART2;
-	csPort = gpioPortB;
-	csPin = 6;
-	holdPort = gpioPortD;
-	holdPin = 8;
-	wpPort = gpioPortD;
-	wpPin = 5;
-
-	FRAM_Mode = FRAM_NORMAL;
-
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Make sure CS is high/default state
-	GPIO->P[holdPort].DOUTSET = 1 << holdPin; // Make sure hold is high/default state
-
-	//TODO: Wait until device is powered up (1 ms after V_DD = V_DD_min)
-}
 
 /*******************************************************************************
  * Function Name  : FRAM_SetWriteEnableLatch
@@ -65,11 +32,11 @@ void FRAM_Init(void) {
 void FRAM_SetWriteEnableLatch(void) {
 	FRAM_SetSleepMode(FRAM_NORMAL); // Ensure FRAM not in sleep mode
 
-	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+	GPIO->P[FRAM_CS_PORT].DOUTCLR = 1 << FRAM_CS_PIN; // Set CS low
 
-	USART_Tx(spi, FRAM_OP_WREN);
+	USART_SpiTransfer(FRAM_SPI, FRAM_OP_WREN);
 
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
+	GPIO->P[FRAM_CS_PORT].DOUTSET = 1 << FRAM_CS_PIN; // Set CS high
 }
 
 /*******************************************************************************
@@ -82,11 +49,11 @@ void FRAM_SetWriteEnableLatch(void) {
 void FRAM_ResetWriteEnableLatch(void) {
 	FRAM_SetSleepMode(FRAM_NORMAL); // Ensure FRAM not in sleep mode
 
-	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+	GPIO->P[FRAM_CS_PORT].DOUTCLR = 1 << FRAM_CS_PIN; // Set CS low
 
-	USART_Tx(spi, FRAM_OP_WRDI);
+	USART_SpiTransfer(FRAM_SPI, FRAM_OP_WRDI);
 
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
+	GPIO->P[FRAM_CS_PORT].DOUTSET = 1 << FRAM_CS_PIN; // Set CS high
 }
 
 /*******************************************************************************
@@ -98,12 +65,12 @@ void FRAM_ResetWriteEnableLatch(void) {
  * Return         : None
  *******************************************************************************/
 void FRAM_ReadStatusReg(uint8_t* data) {
-	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+	GPIO->P[FRAM_CS_PORT].DOUTCLR = 1 << FRAM_CS_PIN; // Set CS low
 
-	USART_Tx(spi, FRAM_OP_RDSR);
-	* data = USART_Rx(spi);
+	USART_SpiTransfer(FRAM_SPI, FRAM_OP_RDSR);
+	* data = USART_SpiTransfer(FRAM_SPI, 0x00);
 
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
+	GPIO->P[FRAM_CS_PORT].DOUTSET = 1 << FRAM_CS_PIN; // Set CS high
 }
 
 /*******************************************************************************
@@ -118,14 +85,14 @@ void FRAM_WriteStatusReg(uint8_t data) {
 	FRAM_SetSleepMode(FRAM_NORMAL); // Ensure FRAM not in sleep mode
 
 	FRAM_ResetWriteEnableLatch(); // Allow writing
-	GPIO->P[wpPort].DOUTSET = 1 << wpPin; // Set #WP high
-	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+	GPIO->P[FRAM_WP_PORT].DOUTSET = 1 << FRAM_WP_PIN; // Set #WP high
+	GPIO->P[FRAM_CS_PORT].DOUTCLR = 1 << FRAM_CS_PIN; // Set CS low
 
-	USART_Tx(spi, FRAM_OP_WRSR);
-	USART_Tx(spi, data);
+	USART_SpiTransfer(FRAM_SPI, FRAM_OP_WRSR);
+	USART_SpiTransfer(FRAM_SPI, data);
 
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
-	GPIO->P[wpPort].DOUTCLR = 1 << wpPin; // Set #WP low
+	GPIO->P[FRAM_CS_PORT].DOUTSET = 1 << FRAM_CS_PIN; // Set CS high
+	GPIO->P[FRAM_WP_PORT].DOUTCLR = 1 << FRAM_WP_PIN; // Set #WP low
 	FRAM_SetWriteEnableLatch();
 }
 
@@ -140,18 +107,18 @@ void FRAM_WriteStatusReg(uint8_t data) {
 void FRAM_ReadMemory(uint32_t address, uint8_t* data) {
 	FRAM_SetSleepMode(FRAM_NORMAL); // Ensure FRAM not in sleep mode
 
-	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+	GPIO->P[FRAM_CS_PORT].DOUTCLR = 1 << FRAM_CS_PIN; // Set CS low
 
-	USART_Tx(spi, FRAM_OP_READ);
+	USART_SpiTransfer(FRAM_SPI, FRAM_OP_READ);
 
 	/* Send address bits 17 - 0. Bits 23- 18 are don't care */
-	USART_Tx(spi, (uint8_t) (address >> 16));
-	USART_Tx(spi, (uint8_t) (address >> 8));
-	USART_Tx(spi, (uint8_t) address);
+	USART_SpiTransfer(FRAM_SPI, (uint8_t) (address >> 16));
+	USART_SpiTransfer(FRAM_SPI, (uint8_t) (address >> 8));
+	USART_SpiTransfer(FRAM_SPI, (uint8_t) address);
 
-	* data = USART_Rx(spi);
+	* data = USART_SpiTransfer(FRAM_SPI, 0x00);
 
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
+	GPIO->P[FRAM_CS_PORT].DOUTSET = 1 << FRAM_CS_PIN; // Set CS high
 }
 
 /*******************************************************************************
@@ -168,18 +135,18 @@ void FRAM_WriteMemory(uint32_t address, uint8_t data) {
 
 	FRAM_ResetWriteEnableLatch(); // Allow writing
 
-	GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
+	GPIO->P[FRAM_CS_PORT].DOUTCLR = 1 << FRAM_CS_PIN; // Set CS low
 
-	USART_Tx(spi, FRAM_OP_WRITE);
+	USART_SpiTransfer(FRAM_SPI, FRAM_OP_WRITE);
 
 	/* Send address bits 17 - 0. Bits 23- 18 are don't care */
-	USART_Tx(spi, (uint8_t) (address >> 16));
-	USART_Tx(spi, (uint8_t) (address >> 8));
-	USART_Tx(spi, (uint8_t) address);
+	USART_SpiTransfer(FRAM_SPI, (uint8_t) (address >> 16));
+	USART_SpiTransfer(FRAM_SPI, (uint8_t) (address >> 8));
+	USART_SpiTransfer(FRAM_SPI, (uint8_t) address);
 
-	USART_Tx(spi, data);
+	USART_SpiTransfer(FRAM_SPI, data);
 
-	GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
+	GPIO->P[FRAM_CS_PORT].DOUTSET = 1 << FRAM_CS_PIN; // Set CS high
 
 	FRAM_SetWriteEnableLatch();
 }
@@ -197,9 +164,9 @@ void FRAM_SetSleepMode(FRAM_Mode_t mode) {
 	case FRAM_SLEEP:
 		if (FRAM_Mode == FRAM_NORMAL)
 		{
-			GPIO->P[csPort].DOUTCLR = 1 << csPin; // Set CS low
-			USART_Tx(spi, FRAM_OP_SLEEP);
-			GPIO->P[csPort].DOUTSET = 1 << csPin; // Set CS high
+			GPIO->P[FRAM_CS_PORT].DOUTCLR = 1 << FRAM_CS_PIN; // Set CS low
+			USART_SpiTransfer(FRAM_SPI, FRAM_OP_SLEEP);
+			GPIO->P[FRAM_CS_PORT].DOUTSET = 1 << FRAM_CS_PIN; // Set CS high
 		}
 		break;
 

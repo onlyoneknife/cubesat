@@ -63,6 +63,14 @@ typedef struct {
 
 #endif /*__SHARED__TYPES*/
 
+// Target specific location information
+#define GYRO_CS_PIN	 	5
+#define GYRO_CS_PORT	gpioPortB
+#define GYRO_SPI		USART1
+
+// Read Period
+#define GYRO_READ_DELAY 5
+
 typedef enum {
 	GYRO_ODR_12_5Hz_BW_NA = 0x10,
 	GYRO_ODR_25Hz_BW_NA = 0x14,
@@ -279,6 +287,7 @@ typedef enum {
 #define GYRO_OUT_Y_H					0x2B
 #define GYRO_OUT_Z_L					0x2C
 #define GYRO_OUT_Z_H					0x2D
+#define GYRO_OUT_TEMP					0x26
 #define GYRO_STATUS                              0x27
 #define GYRO_STATUS_ZYXOR                        0x07    // 1	:	new data set has over written the previous one
 // 0	:	no overrun has occurred (default)
@@ -297,7 +306,7 @@ typedef enum {
 #define STATUS_XDA                         			0x00    // 0	:	a new data for the X-Axis is not available
 #define GYRO_DATAREADY_BIT                           GYRO_STATUS_ZYXDA
 
-#define GYRO_I_AM_L3GD20H			        	 0xD7
+#define GYRO_I_AM_L3GD20H			        	 0x0F
 
 /*************GYROSCOPE FIFO CONTROL REGISTER**************/
 #define GYRO_FM0                                      BIT(5)
@@ -306,7 +315,6 @@ typedef enum {
 
 /* Exported functions --------------------------------------------------------*/
 /**********Sensor Configuration Functions***********/
-void GYRO_Init(void);
 status_t GYRO_SetODR(GYRO_ODR_t ov);
 status_t GYRO_SetMode(GYRO_Mode_t md);
 status_t GYRO_SetAxis(GYRO_Axis_t axis);

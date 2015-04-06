@@ -35,13 +35,17 @@
 
 #include <string.h>
 #include "em_device.h"
+#include "em_gpio.h"
 #include "em_chip.h"
 #include "em_cmu.h"
 #include "spi.h"
 #include "usart.h"
 
+#define LED_PORT    gpioPortB
+#define LED_PIN     5
+
 /* Buffers */
-char transmitBuffer[] = "EFM32 SPI";
+char transmitBuffer[] = {(char)241,(char)0};
 #define            BUFFERSIZE    (sizeof(transmitBuffer) / sizeof(char))
 char receiveBuffer[BUFFERSIZE];
 
@@ -54,6 +58,28 @@ void init(void)
   /* Enabling clock to USART 1 */
   CMU_ClockEnable(cmuClock_USART1, true);
   CMU_ClockEnable(cmuClock_GPIO, true);
+
+  /* Configure LED_PORT pin LED_PIN (User LED) as push/pull outputs */
+  GPIO_PinModeSet(LED_PORT,         /* Port */
+                  LED_PIN,          /* Pin */
+                  gpioModePushPull, /* Mode */
+                  0 );              /* Output value */
+
+  /* Configure LED_PORT pin LED_PIN (User LED) as push/pull outputs */
+    GPIO_PinModeSet(gpioPortD,         /* Port */
+                    3,          /* Pin */
+                    gpioModePushPull, /* Mode */
+                    0 );              /* Output value */
+  /* Configure LED_PORT pin LED_PIN (User LED) as push/pull outputs */
+    GPIO_PinModeSet(gpioPortF,         /* Port */
+                    6,          /* Pin */
+                    gpioModePushPull, /* Mode */
+                    0 );              /* Output value */
+  /* Configure LED_PORT pin LED_PIN (User LED) as push/pull outputs */
+    GPIO_PinModeSet(gpioPortB,         /* Port */
+                    12,          /* Pin */
+                    gpioModePushPull, /* Mode */
+                    0 );              /* Output value */
 
   /* Setup UART */
   SPI_setup(USART1_NUM, GPIO_POS1, true);
@@ -73,27 +99,22 @@ int main(void)
 
   /* Initalizing */
   init();
-while(1){
-  /* Data transmission to slave */
-  /* ************************** */
-  /* Setting up RX interrupt for master */
-  SPI1_setupRXInt(NO_RX, NO_RX);
-  /* Transmitting data */
-  USART1_sendBuffer(transmitBuffer, BUFFERSIZE);
-}
 
-  /* Data reception from slave */
-  /* ************************** */
-  /* Setting up RX interrupt for master */
-  SPI1_setupRXInt(receiveBuffer, BUFFERSIZE);
-  /* Receiving data by transmitting dummy data to slave */
-  USART1_sendBuffer(NO_TX, BUFFERSIZE);
+  GPIO_PortOutSetVal(gpioPortD, 1<<3, 1<<3);
+  GPIO_PortOutSetVal(gpioPortF, 1<<6, 1<<6);
+  GPIO_PortOutSetVal(gpioPortB, 1<<12, 1<<12);
+  GPIO_PortOutSetVal(LED_PORT, 1<<LED_PIN, 1<<LED_PIN);
+  while(1){
+	  /* Data transmission to slave */
+	  /* ************************** */
+	  /* Setting up RX interrupt for master */
+	  SPI1_setupRXInt(receiveBuffer, BUFFERSIZE);
+	  GPIO_PortOutSetVal(LED_PORT, 0<<LED_PIN, 1<<LED_PIN);
+	  /* Transmitting data */
+	  USART1_sendBuffer(transmitBuffer, BUFFERSIZE);
+	  GPIO_PortOutSetVal(LED_PORT, 1<<LED_PIN, 1<<LED_PIN);
+  }
 
-
-  /* Clearing the receive buffers */
-  memset(receiveBuffer, '\0', BUFFERSIZE);
-
-  while (1) ;
 }
 
 
