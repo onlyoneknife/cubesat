@@ -376,6 +376,31 @@ status_t GYRO_SetInt2Pin(GYRO_Int2PinConf_t pinConf) {
 }
 
 /*******************************************************************************
+ * Function Name  : GYRO_SetSelfTest
+ * Description    : Set Interrupt2 pin Function
+ * Input          : GYRO_I2_DRDY_ON_INT2_ENABLE/DISABLE |
+ GYRO_WTM_ON_INT2_ENABLE/DISABLE |
+ GYRO_OVERRUN_ON_INT2_ENABLE/DISABLE |
+ GYRO_EMPTY_ON_INT2_ENABLE/DISABLE
+ * Output         : None
+ * Return         : Status [MEMS_ERROR, MEMS_SUCCESS]
+ *******************************************************************************/
+status_t GYRO_SetSelfTest(State_t setst) {
+	uint8_t value;
+
+	if (!GYRO_ReadReg(GYRO_CTRL4, &value))
+		return MEMS_ERROR;
+
+	value &= 0xF9;
+	value |= (setst << GYRO_ST);
+
+	if (!GYRO_WriteReg(GYRO_CTRL4, value))
+		return MEMS_ERROR;
+
+	return MEMS_SUCCESS;
+}
+
+/*******************************************************************************
  * Function Name  : GYRO_Int1LatchEnable
  * Description    : Enable Interrupt 1 Latching function
  * Input          : ENABLE/DISABLE

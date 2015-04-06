@@ -307,6 +307,7 @@ typedef enum {
 #define GYRO_DATAREADY_BIT                           GYRO_STATUS_ZYXDA
 
 #define GYRO_I_AM_L3GD20H			        	 0x0F
+#define GYRO_WHO_AM_I_CONTENTS					 0xD7
 
 /*************GYROSCOPE FIFO CONTROL REGISTER**************/
 #define GYRO_FM0                                      BIT(5)
@@ -349,6 +350,9 @@ status_t GYRO_GetSatusReg(uint8_t* buff);
 status_t GYRO_GetAngRateRaw(AxesRaw_t* buff);
 status_t GYRO_GetFifoSourceReg(uint8_t* buff);
 status_t GYRO_GetInt1Src(uint8_t* buff);
+
+/****************Testing Functions****************/
+status_t GYRO_SetSelfTest(State_t setst);
 
 /*********************Generic*********************/
 uint8_t GYRO_ReadReg(uint8_t Reg, uint8_t* Data);
