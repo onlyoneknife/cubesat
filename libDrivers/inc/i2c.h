@@ -9,30 +9,15 @@
 #define I2C_H_
 
 #include <stdint.h>
-#include "FreeRTOS.h"
-#include "queue.h"
 
 #define I2C_ADDRESS              (98)
 
-#define I2C_MAX_TX_BUFFER_SIZE   ((uint8_t)100)
-#define I2C_MAX_RX_BUFFER_SIZE   ((uint8_t)100)
+#define I2C_MAX_QUEUE_SIZE       ((uint8_t)100)
 
-#define I2C_WRITE(n)             while(!writeI2C(&n,sizeof(n)))
-#define I2C_READ(n)              readI2C(&n,sizeof(n));
+#define I2C_WRITE(n)             writeI2C(&n,sizeof(n))
+#define I2C_READ(n)              readI2C(&n,sizeof(n))
 
-xQueueHandle xQueueI2C_RX;
-xQueueHandle xQueueI2C_TX;
-
-/* Exported common structure --------------------------------------------------------*/
-
-#ifndef __SHARED__TYPES
-#define __SHARED__TYPES
-
-typedef enum {
-	MEMS_SUCCESS = 0x01, MEMS_ERROR = 0x00
-} status_t;
-
-#endif /*__SHARED__TYPES*/
+#define I2C_TX_WAIT              (1000)
 
 void setupI2C(void);
 

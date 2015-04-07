@@ -54,7 +54,6 @@
 
 /* Create mutex semaphore for SPI1 */
 xSemaphoreHandle   xSemaphoreSPI;
-xSemaphoreHandle   xSemaphoreI2C;
 
 /* Create */
 xQueueHandle       xQueueMag;
@@ -90,7 +89,7 @@ void DRIVERS_Init(void)
 /**************************************************************************//**
  * @brief  Gpio callback
  * @param  pin - pin which triggered interrupt
- *****************************************************************************/
+ *****************************************************************************//*
 void gpioCallback(uint8_t pin)
 {
   if (pin == 11)
@@ -98,7 +97,7 @@ void gpioCallback(uint8_t pin)
 	  GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
   }
   else GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
-}
+}*/
 
 /**************************************************************************//**
  * @brief Simple task which is blinking led
@@ -125,17 +124,17 @@ static void GyroRead(void *pParameters)
 {
 
   pParameters = pParameters;   /* to quiet warnings */
-
+/*
   xQueueGyro = xQueueCreate( 10, sizeof( uint8_t ));
   if ( xQueueGyro != NULL )
-	I2C_WRITE("Gyro QUEUE error!\n");
+	I2C_WRITE("Gyro QUEUE error!\n");*/
 
   uint8_t ucReceivedValue = 0;
   uint8_t ucTransmitValue = 0;
 
   uint8_t ucWhoAmI        = 0;
 
-  /* set PowerMode */
+  /* set PowerMode *//*
   if ( GYRO_SetMode(GYRO_NORMAL) == MEMS_ERROR )
 	I2C_WRITE("Gyro CTRL1 init error!\n");
 
@@ -151,13 +150,14 @@ static void GyroRead(void *pParameters)
   if ( GYRO_SetInt2Pin(GYRO_I2_DRDY_ON_INT2_ENABLE) == MEMS_ERROR )
 	I2C_WRITE("Gyro INT2 init error!\n");
 
-  /* Gyro sampling SPI transactions */
+  /* Gyro sampling SPI transactions */ /*
   GYRO_ReadReg(GYRO_I_AM_L3GD20H, &ucWhoAmI);
   if ( ucWhoAmI != GYRO_WHOIAM_VALUE )
-	I2C_WRITE("Gyro READ error!\n");
+	I2C_WRITE("Gyro READ error!\n"); */
 
   for (;;)
   {
+
     vTaskDelay(GYRO_READ_DELAY / portTICK_RATE_MS);
 
     if ( pdPASS == xQueueReceive( xQueueGyro, &ucReceivedValue, portMAX_DELAY ) )
@@ -181,17 +181,17 @@ static void MagRead(void *pParameters)
 {
 
   pParameters = pParameters;   /* to quiet warnings */
-
+/*
   xQueueMag = xQueueCreate( 10, sizeof( uint8_t ));
   if ( xQueueMag != NULL )
-	I2C_WRITE("Mag QUEUE error!\n");
+	I2C_WRITE("Mag QUEUE error!\n");*/
 
   uint8_t ucReceivedValue = 0;
   uint8_t ucValueToSend   = 0;
 
   uint8_t ucWhoAmI        = 0;
 
-  /* Mag sampling SPI transactions */
+  /* Mag sampling SPI transactions *//*
   MAG_ReadReg(REG_WHOAMI_ADDR, &ucWhoAmI);
   if ( ucWhoAmI != WHOIAM_VALUE )
 	I2C_WRITE("Mag READ error!\n");
@@ -203,7 +203,7 @@ static void MagRead(void *pParameters)
     I2C_WRITE("Mag FSCALE init error!\n");
 
   if ( MAG_SetModeMag(CONTINUOUS_MODE) == MEMS_ERROR )
-    I2C_WRITE("Mag CTRL7 init error!\n");
+    I2C_WRITE("Mag CTRL7 init error!\n");*/
 
   for (;;)
   {
@@ -237,23 +237,20 @@ static void I2CReceive(void *pParameters)
     ucDeviceID = 0;
     ucRegister = 0;
 
-    if ( pdTRUE == xSemaphoreTake(xSemaphoreI2C, portMAX_DELAY )) {
+    I2C_READ(ucDeviceID);
 
-	  I2C_READ(ucDeviceID);
-
-	  switch(ucDeviceID) {
-	  case 'M':
-		  I2C_READ(ucRegister);
-		  xQueueSendToBack( xQueueMag, &ucRegister, 0 );
-	  break;
-	  case 'G':
-		  I2C_READ(ucRegister);
-		  xQueueSendToBack( xQueueGyro, &ucRegister, 0 );
-	  break;
-      }
-
-      xSemaphoreGive(xSemaphoreI2C);
-
+	switch(ucDeviceID) {
+	case 0:
+	break;
+	case 'M':
+	  I2C_READ(ucRegister);
+	  xQueueSendToBack( xQueueMag, &ucRegister, 0 );
+	break;
+	case 'G':
+	  I2C_READ(ucRegister);
+	  xQueueSendToBack( xQueueGyro, &ucRegister, 0 );
+	break;
+	ucRegister = 0;
     }
   }
 }
@@ -269,18 +266,16 @@ int main(void)
   DRIVERS_Init();
 
   /* Initialize GPIO interrupt dispatcher */
-  GPIOINT_Init();
+  //GPIOINT_Init();
 
   /* Register callbacks before setting up and enabling pin interrupt. */
-  GPIOINT_CallbackRegister(0, gpioCallback);
+  //GPIOINT_CallbackRegister(0, gpioCallback);
 
   /* Set falling edge interrupt for both ports */
-  GPIO_IntConfig(gpioPortC, 11, false, true, true);
+  //GPIO_IntConfig(gpioPortC, 11, false, true, true);
 
   /* Initialize mutex semaphore for SPI1 */
   xSemaphoreSPI = xSemaphoreCreateMutex();
-  /* Initialize mutex semaphore for I2C */
-  xSemaphoreI2C = xSemaphoreCreateMutex();
 
   /* Create task for blinking leds */
   xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);

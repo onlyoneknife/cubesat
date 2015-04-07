@@ -8,6 +8,8 @@
 #ifndef SHAREDTYPES_H_
 #define SHAREDTYPES_H_
 
+#include <stdint.h>
+
 /* --Exported common structure -----------------------------------------------*/
 #ifndef __SHARED__TYPES
 #define __SHARED__TYPES
