@@ -10,12 +10,12 @@
 #include "em_i2c.h"
 #include "em_gpio.h"
 
-uint8_t TxBuffer[I2C_MAX_TX_BUFFER_SIZE];
+uint8_t TxBuffer[I2C_MAX_TX_BUFFER_SIZE] = {0};
 uint16_t TxBufferSize = 0;
 uint16_t TxBufferHead = 0;
 uint16_t TxBufferTail = 0;
 
-uint8_t RxBuffer[I2C_MAX_RX_BUFFER_SIZE];
+uint8_t RxBuffer[I2C_MAX_RX_BUFFER_SIZE] = {0};
 uint16_t RxBufferSize = 0;
 uint16_t RxBufferHead = 0;
 uint16_t RxBufferTail = 0;
@@ -27,6 +27,8 @@ void setupI2C(void)
 {
   I2C_Init_TypeDef i2cInit = I2C_INIT_DEFAULT;
 
+  xQueueI2C_RX = xQueueCreate( 10, sizeof( uint8_t ));
+  xQueueI2C_TX = xQueueCreate( 10, sizeof( uint8_t ));
 
   /* Enable pins at location 1 */
   I2C0->ROUTE = I2C_ROUTE_SDAPEN |

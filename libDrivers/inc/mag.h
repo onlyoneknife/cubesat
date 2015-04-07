@@ -37,7 +37,10 @@ typedef uint8_t IntConf_t;
 // Target specific location information
 #define MAG_CS_PIN	 	3
 #define MAG_CS_PORT		gpioPortD
-#define MAG_SPI		USART1
+#define MAG_SPI		    USART1
+
+// Read Period
+#define MAG_READ_DELAY 10
 
 typedef enum {
   ODR_1Hz		        =		0x01,

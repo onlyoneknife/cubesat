@@ -9,12 +9,19 @@
 #define I2C_H_
 
 #include <stdint.h>
+#include "FreeRTOS.h"
+#include "queue.h"
 
-#define I2C_ADDRESS         (98)
-#define I2C_MAX_TX_BUFFER_SIZE ((uint8_t)100)
-#define I2C_MAX_RX_BUFFER_SIZE ((uint8_t)100)
-#define I2C_WRITE(n)        while(!writeI2C(&n,sizeof(n)))
-#define I2C_READ(n,m)       readI2C(&n,m)
+#define I2C_ADDRESS              (98)
+
+#define I2C_MAX_TX_BUFFER_SIZE   ((uint8_t)100)
+#define I2C_MAX_RX_BUFFER_SIZE   ((uint8_t)100)
+
+#define I2C_WRITE(n)             while(!writeI2C(&n,sizeof(n)))
+#define I2C_READ(n)              readI2C(&n,sizeof(n));
+
+xQueueHandle xQueueI2C_RX;
+xQueueHandle xQueueI2C_TX;
 
 /* Exported common structure --------------------------------------------------------*/
 

@@ -41,7 +41,7 @@ typedef uint8_t GYRO_Axis_t;
 #define GYRO_SPI		USART1
 
 // Read Period
-#define GYRO_READ_DELAY 5
+#define GYRO_READ_DELAY 10
 
 typedef enum {
 	GYRO_ODR_12_5Hz_BW_NA = 0x10,

@@ -53,7 +53,12 @@
 #define LED_PIN     		   (7)
 
 /* Create mutex semaphore for SPI1 */
-xSemaphoreHandle       xSemaphoreSPI;
+xSemaphoreHandle   xSemaphoreSPI;
+xSemaphoreHandle   xSemaphoreI2C;
+
+/* Create */
+xQueueHandle       xQueueMag;
+xQueueHandle       xQueueGyro;
 
 /**************************************************************************//**
  * @brief Initialize drivers
@@ -121,13 +126,14 @@ static void GyroRead(void *pParameters)
 
   pParameters = pParameters;   /* to quiet warnings */
 
-  uint8_t who_am_i = 0;
+  xQueueGyro = xQueueCreate( 10, sizeof( uint8_t ));
+  if ( xQueueGyro != NULL )
+	I2C_WRITE("Gyro QUEUE error!\n");
 
-  uint8_t  xlow  = 0;
-  uint8_t  xhigh = 0;
-  int16_t  value = 0x0000;
-  uint8_t  size  = 0;
-  char buffer[11];
+  uint8_t ucReceivedValue = 0;
+  uint8_t ucTransmitValue = 0;
+
+  uint8_t ucWhoAmI        = 0;
 
   /* set PowerMode */
   if ( GYRO_SetMode(GYRO_NORMAL) == MEMS_ERROR )
@@ -146,30 +152,24 @@ static void GyroRead(void *pParameters)
 	I2C_WRITE("Gyro INT2 init error!\n");
 
   /* Gyro sampling SPI transactions */
-  GYRO_ReadReg(GYRO_I_AM_L3GD20H, &who_am_i);
-  if ( who_am_i != GYRO_WHOIAM_VALUE )
+  GYRO_ReadReg(GYRO_I_AM_L3GD20H, &ucWhoAmI);
+  if ( ucWhoAmI != GYRO_WHOIAM_VALUE )
 	I2C_WRITE("Gyro READ error!\n");
 
   for (;;)
   {
     vTaskDelay(GYRO_READ_DELAY / portTICK_RATE_MS);
 
-    if (pdTRUE == xSemaphoreTake(xSemaphoreSPI, portMAX_DELAY)) {
+    if ( pdPASS == xQueueReceive( xQueueGyro, &ucReceivedValue, portMAX_DELAY ) )
+    {
+      if (pdTRUE == xSemaphoreTake(xSemaphoreSPI, portMAX_DELAY)) {
 
-      GYRO_ReadReg(GYRO_OUT_X_L, &xlow);
+        GYRO_ReadReg(ucReceivedValue, &ucTransmitValue);
 
-      GYRO_ReadReg(GYRO_OUT_X_H, &xhigh);
+	    I2C_WRITE(ucTransmitValue);
 
-      GYRO_SetHPFCutOFF(1);
-
-      value = xlow;
-      value |= xhigh << 8;
-
-      size = sprintf(buffer,"X = %hd\n",value);
-
-      while(!writeI2C(&buffer,size));
-
-      xSemaphoreGive(xSemaphoreSPI);
+	    xSemaphoreGive(xSemaphoreSPI);
+      }
     }
   }
 }
@@ -182,46 +182,78 @@ static void MagRead(void *pParameters)
 
   pParameters = pParameters;   /* to quiet warnings */
 
-  uint8_t who_am_i = 0;
+  xQueueMag = xQueueCreate( 10, sizeof( uint8_t ));
+  if ( xQueueMag != NULL )
+	I2C_WRITE("Mag QUEUE error!\n");
 
-  uint8_t  xlow  = 0;
-  uint8_t  xhigh = 0;
-  int16_t  value = 0x0000;
-  uint8_t  size  = 0;
-  char buffer[11];
+  uint8_t ucReceivedValue = 0;
+  uint8_t ucValueToSend   = 0;
 
-  /* Gyro sampling SPI transactions */
-  MAG_ReadReg(REG_WHOAMI_ADDR, &who_am_i);
-  if ( who_am_i != WHOIAM_VALUE )
-	I2C_WRITE("Gyro READ error!\n");
+  uint8_t ucWhoAmI        = 0;
+
+  /* Mag sampling SPI transactions */
+  MAG_ReadReg(REG_WHOAMI_ADDR, &ucWhoAmI);
+  if ( ucWhoAmI != WHOIAM_VALUE )
+	I2C_WRITE("Mag READ error!\n");
 
   if ( MAG_SetODR_M(ODR_100Hz_M) == MEMS_ERROR )
-    I2C_WRITE("Gyro ODR_M init error!\n");
+    I2C_WRITE("Mag ODR_M init error!\n");
 
   if ( MAG_SetFullScale(FULLSCALE_2) == MEMS_ERROR )
-    I2C_WRITE("Gyro FSCALE init error!\n");
+    I2C_WRITE("Mag FSCALE init error!\n");
 
   if ( MAG_SetModeMag(CONTINUOUS_MODE) == MEMS_ERROR )
-    I2C_WRITE("Gyro CTRL7 init error!\n");
+    I2C_WRITE("Mag CTRL7 init error!\n");
 
   for (;;)
   {
-    vTaskDelay(GYRO_READ_DELAY / portTICK_RATE_MS);
+    vTaskDelay(MAG_READ_DELAY / portTICK_RATE_MS);
 
-    if (pdTRUE == xSemaphoreTake(xSemaphoreSPI, portMAX_DELAY)) {
+    if ( pdPASS == xQueueReceive( xQueueMag, &ucReceivedValue, portMAX_DELAY ) )
+    {
+	  if ( pdTRUE == xSemaphoreTake(xSemaphoreSPI, portMAX_DELAY )) {
 
-      MAG_ReadReg(OUT_X_L_M, &xlow);
+	    MAG_ReadReg(ucReceivedValue, &ucValueToSend);
 
-      MAG_ReadReg(OUT_X_H_M, &xhigh);
+	    I2C_WRITE(ucValueToSend);
 
-      value = xlow;
-      value |= xhigh << 8;
+	    xSemaphoreGive(xSemaphoreSPI);
+	  }
+    }
+  }
+}
 
-      I2C_WRITE("\nDELIM\n");
+static void I2CReceive(void *pParameters)
+{
 
-      I2C_WRITE(value);
+  pParameters = pParameters;   /* to quiet warnings */
 
-      xSemaphoreGive(xSemaphoreSPI);
+  uint8_t ucDeviceID = 0;
+  uint8_t ucRegister = 0;
+
+  for (;;)
+  {
+
+    ucDeviceID = 0;
+    ucRegister = 0;
+
+    if ( pdTRUE == xSemaphoreTake(xSemaphoreI2C, portMAX_DELAY )) {
+
+	  I2C_READ(ucDeviceID);
+
+	  switch(ucDeviceID) {
+	  case 'M':
+		  I2C_READ(ucRegister);
+		  xQueueSendToBack( xQueueMag, &ucRegister, 0 );
+	  break;
+	  case 'G':
+		  I2C_READ(ucRegister);
+		  xQueueSendToBack( xQueueGyro, &ucRegister, 0 );
+	  break;
+      }
+
+      xSemaphoreGive(xSemaphoreI2C);
+
     }
   }
 }
@@ -229,6 +261,7 @@ static void MagRead(void *pParameters)
 int main(void)
 {
   /* Initialize EFM32 Chip Settings */
+
   eADesigner_Init();
   CHIP_Init();
 
@@ -246,15 +279,20 @@ int main(void)
 
   /* Initialize mutex semaphore for SPI1 */
   xSemaphoreSPI = xSemaphoreCreateMutex();
+  /* Initialize mutex semaphore for I2C */
+  xSemaphoreI2C = xSemaphoreCreateMutex();
 
   /* Create task for blinking leds */
   xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
   /* Create task for interaction with gyro */
-  //xTaskCreate( GyroRead, (const char *) "GyroRead", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
+  xTaskCreate( GyroRead, (const char *) "GyroRead", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
   /* Create task for interaction with mag */
   xTaskCreate( MagRead, (const char *) "MagRead", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
+
+  /* Create task for processing I2C commands */
+  xTaskCreate( I2CReceive, (const char *) "I2CReceive", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
   /*Start FreeRTOS Scheduler*/
   vTaskStartScheduler();
