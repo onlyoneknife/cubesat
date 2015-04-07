@@ -150,14 +150,16 @@ typedef enum {
   FIFO_BYPASS_MODE              =               0x00,
   FIFO_MODE                     =               0x01,
   FIFO_STREAM_MODE              =               0x02,
-  FIFO_TRIGGER_MODE             =               0x03,
-  FIFO_DISABLE                  =               0x04
+  FIFO_STREAM_TO_FIFO_MODE      =               0x03,
+  FIFO_BYPASS_TO_STREAM_MODE    =               0x04,
+  FIFO_DISABLE                  =               0x08
 } FifoMode_t;
 
-typedef enum {
+/*typedef enum {
   TRIG_INT1                     =		0x00,
   TRIG_INT2 			=		0x01
 } TrigInt_t;
+*/
 
 typedef enum {
   SPI_4_WIRE                    =               0x00,
@@ -173,11 +175,6 @@ typedef enum {
   Z_DISABLE                     =               0x00
 } AXISenable_t;
 
-typedef enum {
-  INT1_6D_4D_DISABLE            =               0x00,
-  INT1_6D_ENABLE                =               0x01,
-  INT1_4D_ENABLE                =               0x02
-} INT_6D_4D_t;
 
 typedef enum {
   UP_SX                         =               0x44,
@@ -442,8 +439,7 @@ typedef enum {
 
 //FIFO CONTROL REGISTER ACC
 #define FIFO_CTRL_REG_A                         0x2E
-#define FM                                      BIT(6)
-#define TR                                      BIT(5)
+#define FM                                      BIT(5)
 #define FTH                                     BIT(0)
 
 //FIFO SOURCE REGISTERS ACC
