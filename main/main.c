@@ -45,7 +45,7 @@
 #include "semphr.h"
 #include "croutine.h"
 
-#define STACK_SIZE_FOR_TASK    (configMINIMAL_STACK_SIZE + 100)
+#define STACK_SIZE_FOR_TASK    (configMINIMAL_STACK_SIZE + 1000)
 #define TASK_PRIORITY          (tskIDLE_PRIORITY + 1)
 
 #define LED_DELAY              (50 / portTICK_RATE_MS)
@@ -77,6 +77,12 @@ void DRIVERS_Init(void)
 
   /* Initialize I2C */
   setupI2C();
+
+  /* Initialize mutex semaphore for SPI1 */
+  xSemaphoreSPI = xSemaphoreCreateMutex();
+
+  xQueueMag  = xQueueCreate( 10, sizeof( uint8_t ));
+  xQueueGyro = xQueueCreate( 10, sizeof( uint8_t ));
 
   /* Initialize SLEEP driver, no call-backs are used */
   SLEEP_Init(NULL, NULL);
@@ -124,10 +130,6 @@ static void GyroRead(void *pParameters)
 {
 
   pParameters = pParameters;   /* to quiet warnings */
-/*
-  xQueueGyro = xQueueCreate( 10, sizeof( uint8_t ));
-  if ( xQueueGyro != NULL )
-	I2C_WRITE("Gyro QUEUE error!\n");*/
 
   uint8_t ucReceivedValue = 0;
   uint8_t ucTransmitValue = 0;
@@ -166,7 +168,7 @@ static void GyroRead(void *pParameters)
 
         GYRO_ReadReg(ucReceivedValue, &ucTransmitValue);
 
-	    I2C_WRITE(ucTransmitValue);
+	    writeI2C(&ucTransmitValue,1);
 
 	    xSemaphoreGive(xSemaphoreSPI);
       }
@@ -181,10 +183,6 @@ static void MagRead(void *pParameters)
 {
 
   pParameters = pParameters;   /* to quiet warnings */
-/*
-  xQueueMag = xQueueCreate( 10, sizeof( uint8_t ));
-  if ( xQueueMag != NULL )
-	I2C_WRITE("Mag QUEUE error!\n");*/
 
   uint8_t ucReceivedValue = 0;
   uint8_t ucValueToSend   = 0;
@@ -274,8 +272,7 @@ int main(void)
   /* Set falling edge interrupt for both ports */
   //GPIO_IntConfig(gpioPortC, 11, false, true, true);
 
-  /* Initialize mutex semaphore for SPI1 */
-  xSemaphoreSPI = xSemaphoreCreateMutex();
+
 
   /* Create task for blinking leds */
   xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
