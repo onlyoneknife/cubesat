@@ -217,7 +217,7 @@ static void MagRead(void *pParameters)
       value = xlow;
       value |= xhigh << 8;
 
-      I2C_WRITE("\nDELIM\n");
+
 
       I2C_WRITE(value);
 
