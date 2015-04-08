@@ -51,18 +51,15 @@ void setupI2C(void)
  * @param  point to read data from
  * @return Return error if buffer is full
  *****************************************************************************/
-status_t writeI2C(void* ptr, uint8_t size)
+status_t writeI2C(uint8_t* ptr)
 {
-	int cursor = 0;
+	if ( TxBufferSize < I2C_MAX_TX_BUFFER_SIZE ) {
 
-	if ( TxBufferSize + size <= I2C_MAX_TX_BUFFER_SIZE ) {
+		TxBufferSize++;
 
-		TxBufferSize += size;
+		TxBuffer[TxBufferHead++] = *ptr;
+		TxBufferHead %= I2C_MAX_TX_BUFFER_SIZE;
 
-		for ( cursor = 0 ; cursor < size ; cursor++ ) {
-			TxBuffer[TxBufferHead++] = *(uint8_t*)ptr++;
-			TxBufferHead %= I2C_MAX_TX_BUFFER_SIZE;
-		}
 
 		return MEMS_SUCCESS;
 	}
@@ -76,20 +73,16 @@ status_t writeI2C(void* ptr, uint8_t size)
  * @param  point to write data to
  * @return Return error if buffer is empty
  *****************************************************************************/
-status_t readI2C(void* ptr, uint8_t size)
+status_t readI2C(uint8_t* ptr)
 {
-	int cursor           =    0;
-	uint8_t* cursor_ptr  =    (uint8_t*)ptr;
 
-	if ( RxBufferSize - size >= 0 ) {
+	if ( RxBufferSize  > 0 ) {
 
-		RxBufferSize -= size;
+		RxBufferSize--;
 
-		for ( cursor = 0 ; cursor < size ; cursor++, cursor_ptr++ ) {
-			*cursor_ptr = (uint8_t)RxBuffer[RxBufferTail];
-			RxBuffer[RxBufferTail++] = '\0';
-			RxBufferHead %= I2C_MAX_RX_BUFFER_SIZE;
-		}
+		*ptr = (uint8_t)RxBuffer[RxBufferTail];
+		RxBuffer[RxBufferTail++] = '\0';
+		RxBufferHead %= I2C_MAX_RX_BUFFER_SIZE;
 
 		return MEMS_SUCCESS;
 	}
@@ -131,7 +124,7 @@ void I2C0_IRQHandler(void)
       I2C0->IEN |= I2C_IEN_RXDATAV;
     }
   }
-  else if ( (status & I2C_IF_RXDATAV) && RxBufferSize < I2C_MAX_RX_BUFFER_SIZE)
+  else if ( (status & I2C_IF_RXDATAV) && RxBufferSize < I2C_MAX_RX_BUFFER_SIZE )
   {
     /* Data received */
     RxBuffer[RxBufferHead++] = I2C0->RXDATA;

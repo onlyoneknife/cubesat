@@ -13,8 +13,6 @@
 #define I2C_ADDRESS         (98)
 #define I2C_MAX_TX_BUFFER_SIZE ((uint8_t)100)
 #define I2C_MAX_RX_BUFFER_SIZE ((uint8_t)100)
-#define I2C_WRITE(n)        while(!writeI2C(&n,sizeof(n)))
-#define I2C_READ(n,m)       readI2C(&n,m)
 
 /* Exported common structure --------------------------------------------------------*/
 
@@ -32,6 +30,6 @@ void setupI2C(void);
 void I2C0_IRQHandler(void);
 
 status_t writeI2C(void*,uint8_t);
-status_t readI2C(void*,uint8_t);
+status_t readI2C(uint8_t*);
 
 #endif /* I2C_H_ */
