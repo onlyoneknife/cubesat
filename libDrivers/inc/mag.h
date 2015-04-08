@@ -39,12 +39,13 @@ typedef uint8_t IntConf_t;
 #define MAG_CS_PORT		gpioPortD
 #define MAG_SPI		USART1
 
+// TODO check ODR_t enum
 typedef enum {
   ODR_1Hz		        =		0x01,
   ODR_10Hz                      =		0x02,
   ODR_25Hz		        =		0x03,
   ODR_50Hz		        =		0x04,
-  ODR_100Hz		        =		0x05,
+  ODR_100Hz		        =		0x06,
   ODR_200Hz		        =		0x06,
   ODR_400Hz		        =		0x07,
   ODR_1620Hz_LP		        =		0x08,

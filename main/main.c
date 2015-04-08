@@ -36,11 +36,23 @@
 #include "em_chip.h"
 #include "em_gpio.h"
 
-#define LED_DELAY              (10 / portTICK_RATE_MS)
+/* FreeRTOS Includes */
+#include "FreeRTOSConfig.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "semphr.h"
+#include "croutine.h"
+
+#define STACK_SIZE_FOR_TASK    (configMINIMAL_STACK_SIZE + 1000)
+#define TASK_PRIORITY          (tskIDLE_PRIORITY + 1)
+
+#define LED_DELAY              (50 / portTICK_RATE_MS)
 #define LED_PORT    		   (gpioPortA)
 #define LED_PIN     		   (7)
 
-uint8_t
+/* Create mutex semaphore for SPI1 */
+xSemaphoreHandle       xSemaphoreSPI;
 
 /**************************************************************************//**
  * @brief Initialize drivers
@@ -61,6 +73,8 @@ void DRIVERS_Init(void)
 
   MAG_SetModeMag(CONTINUOUS_MODE);
 
+  MAG_SetODR(ODR_100Hz);
+
   /* set PowerMode */
   GYRO_SetMode(GYRO_NORMAL);
 
@@ -76,6 +90,63 @@ void DRIVERS_Init(void)
   /* Initialize I2C */
   setupI2C();
 
+  /* Initialize SLEEP driver, no call-backs are used */
+  SLEEP_Init(NULL, NULL);
+#if (configSLEEP_MODE < 3)
+  /* do not let to sleep deeper than define */
+  SLEEP_SleepBlockBegin((SLEEP_EnergyMode_t)(configSLEEP_MODE+1));
+#endif
+}
+
+/**************************************************************************//**
+ * @brief Simple task which is blinking led
+ *****************************************************************************/
+static void LedBlink(void *pParameters)
+{
+
+  pParameters = pParameters;   /* to quiet warnings */
+
+  for (;;)
+  {
+    /* Set LSB of count value on LED */
+	GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
+    vTaskDelay(LED_DELAY);
+    GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
+    vTaskDelay(LED_DELAY);
+  }
+}
+
+static void ReceiveI2C(void *pParameters)
+{
+	pParameters = pParameters;
+
+	uint8_t ucDeviceID      = 0;
+	uint8_t ucRegister      = 0;
+	uint8_t ucValueToSend   = 0;
+
+	for (;;) {
+
+		vTaskDelay(I2C_DELAY);
+
+		if( commandRdy() == MEMS_SUCCESS ) {
+
+			readI2C(&ucDeviceID);
+
+			switch(ucDeviceID) {
+			case 'G':
+				readI2C(&ucRegister);
+				GYRO_ReadReg(ucRegister, &ucValueToSend);
+				writeI2C(&ucValueToSend);
+			break;
+			case 'M':
+				readI2C(&ucRegister);
+				MAG_ReadReg(ucRegister, &ucValueToSend);
+				writeI2C(&ucValueToSend);
+			break;
+			}
+			taskYIELD();
+		}
+	}
 }
 
 int main(void)
@@ -87,35 +158,24 @@ int main(void)
   /* Initialize Hardware Drivers */
   DRIVERS_Init();
 
+  /* Initialize mutex semaphore for SPI1 */
+  xSemaphoreSPI = xSemaphoreCreateMutex();
 
-  uint8_t ucDeviceID      = 0;
-  uint8_t ucRegister      = 0;
-  uint8_t ucValueToSend   = 0;
+  /* Create task for blinking leds */
+  //xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
-  for( ;; ){
+  /* Create task for interaction with gyro */
+  //xTaskCreate( GyroRead, (const char *) "GyroRead", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
-	    __WFI();
+  /* Create task for interaction with mag */
+  //xTaskCreate( MagRead, (const char *) "MagRead", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
-		if( readI2C(&ucDeviceID) ) {
+  /* Create task for polling I2C RX */
+  xTaskCreate( ReceiveI2C, (const char *) "ReceiveI2C", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
-			switch(ucDeviceID) {
-			case 'G':
-				readI2C(&ucRegister);
-				GYRO_ReadReg(ucRegister, &ucValueToSend);
-				writeI2C(&ucValueToSend);
-				__WFI();
-			break;
-			case 'M':
-				readI2C(&ucRegister);
-				MAG_ReadReg(ucRegister, &ucValueToSend);
-				writeI2C(ucValueToSend);
-				__WFI();
-			break;
-			}
-		}
-  }
+  /*Start FreeRTOS Scheduler*/
+  vTaskStartScheduler();
 
-
-  return 0;
+  for( ;; );
 
 }

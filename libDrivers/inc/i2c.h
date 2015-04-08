@@ -9,27 +9,20 @@
 #define I2C_H_
 
 #include <stdint.h>
+#include <sharedtypes.h>
 
 #define I2C_ADDRESS         (98)
-#define I2C_MAX_TX_BUFFER_SIZE ((uint8_t)100)
-#define I2C_MAX_RX_BUFFER_SIZE ((uint8_t)100)
+#define I2C_MAX_TX_BUFFER_SIZE ((uint8_t)200)
+#define I2C_MAX_RX_BUFFER_SIZE ((uint8_t)200)
 
-/* Exported common structure --------------------------------------------------------*/
-
-#ifndef __SHARED__TYPES
-#define __SHARED__TYPES
-
-typedef enum {
-	MEMS_SUCCESS = 0x01, MEMS_ERROR = 0x00
-} status_t;
-
-#endif /*__SHARED__TYPES*/
+#define I2C_DELAY              (1 / portTICK_RATE_MS)
 
 void setupI2C(void);
 
 void I2C0_IRQHandler(void);
 
-status_t writeI2C(void*,uint8_t);
+status_t commandRdy(void);
+status_t writeI2C(uint8_t*);
 status_t readI2C(uint8_t*);
 
 #endif /* I2C_H_ */

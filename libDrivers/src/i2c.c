@@ -45,6 +45,12 @@ void setupI2C(void)
   NVIC_EnableIRQ(I2C0_IRQn);
 }
 
+status_t commandRdy(void)
+{
+	if ( RxBufferSize >= 2 ) return MEMS_SUCCESS;
+	else return MEMS_ERROR;
+}
+
 /**************************************************************************//**
  * @brief  Write data to the I2C transmit buffer (will be pending transmit)
  * @param  size Bytes to write to I2C
@@ -78,14 +84,15 @@ status_t readI2C(uint8_t* ptr)
 
 	if ( RxBufferSize  > 0 ) {
 
-		RxBufferSize--;
-
 		*ptr = (uint8_t)RxBuffer[RxBufferTail];
 		RxBuffer[RxBufferTail++] = '\0';
-		RxBufferHead %= I2C_MAX_RX_BUFFER_SIZE;
+		RxBufferTail %= I2C_MAX_RX_BUFFER_SIZE;
 
-		return MEMS_SUCCESS;
+		RxBufferSize--;
+
 	}
+
+	if ( RxBufferSize >= 2 ) return MEMS_SUCCESS;
 
 	else return MEMS_ERROR;
 }
@@ -127,8 +134,8 @@ void I2C0_IRQHandler(void)
   else if ( (status & I2C_IF_RXDATAV) && RxBufferSize < I2C_MAX_RX_BUFFER_SIZE )
   {
     /* Data received */
-    RxBuffer[RxBufferHead++] = I2C0->RXDATA;
     RxBufferSize++;
+    RxBuffer[RxBufferHead++] = I2C0->RXDATA;
   }
   else if (status & I2C_IF_ACK)
   {
