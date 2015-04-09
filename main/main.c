@@ -75,6 +75,8 @@ void DRIVERS_Init(void)
 
   MAG_SetODR(ODR_100Hz);
 
+  MAG_SetTemperature(0x01); // 0x01 -> MEMS_ENABLE
+
   /* set PowerMode */
   GYRO_SetMode(GYRO_NORMAL);
 
