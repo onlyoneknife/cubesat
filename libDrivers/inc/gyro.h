@@ -26,47 +26,22 @@
 #ifndef __GYRO_DRIVER__H
 #define __GYRO_DRIVER__H
 
-#include <stdint.h>
 /* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
+#include <sharedtypes.h>
 /* Exported types ------------------------------------------------------------*/
-
-//these could change accordingly with the architecture
-#ifndef __ARCHDEP__TYPES
-#define __ARCHDEP__TYPES
-typedef short int i16_t;
-typedef signed char i8_t;
-#endif /*__ARCHDEP__TYPES*/
-
 typedef uint8_t GYRO_Int1PinConf_t;
 typedef uint8_t GYRO_Int2PinConf_t;
 typedef uint8_t GYRO_Int1Conf_t;
 typedef uint8_t GYRO_Axis_t;
 
-/* Exported common structure --------------------------------------------------------*/
-
-#ifndef __SHARED__TYPES
-#define __SHARED__TYPES
-
-typedef enum {
-	MEMS_SUCCESS = 0x01, MEMS_ERROR = 0x00
-} status_t;
-
-typedef enum {
-	MEMS_ENABLE = 0x01, MEMS_DISABLE = 0x00
-} State_t;
-
-typedef struct {
-	i16_t AXIS_X;
-	i16_t AXIS_Y;
-	i16_t AXIS_Z;
-} AxesRaw_t;
-
-#endif /*__SHARED__TYPES*/
-
 // Target specific location information
 #define GYRO_CS_PIN	 	5
-#define GYRO_CS_PORT		gpioPortB
+#define GYRO_CS_PORT	gpioPortB
 #define GYRO_SPI		USART1
+
+// Read Period
+#define GYRO_READ_DELAY 5
 
 typedef enum {
 	GYRO_ODR_12_5Hz_BW_NA = 0x10,
@@ -304,6 +279,7 @@ typedef enum {
 #define GYRO_DATAREADY_BIT                           GYRO_STATUS_ZYXDA
 
 #define GYRO_I_AM_L3GD20H			        	 0x0F
+#define GYRO_WHOIAM_VALUE					 0xD7
 
 /*************GYROSCOPE FIFO CONTROL REGISTER**************/
 #define GYRO_FM0                                      BIT(5)
@@ -346,6 +322,9 @@ status_t GYRO_GetSatusReg(uint8_t* buff);
 status_t GYRO_GetAngRateRaw(AxesRaw_t* buff);
 status_t GYRO_GetFifoSourceReg(uint8_t* buff);
 status_t GYRO_GetInt1Src(uint8_t* buff);
+
+/****************Testing Functions****************/
+status_t GYRO_SetSelfTest(State_t setst);
 
 /*********************Generic*********************/
 uint8_t GYRO_ReadReg(uint8_t Reg, uint8_t* Data);

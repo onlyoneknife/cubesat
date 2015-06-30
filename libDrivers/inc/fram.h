@@ -13,8 +13,18 @@
 #define __SHARED__TYPES
 
 typedef enum {
+	MEMS_SUCCESS = 0x01, MEMS_ERROR = 0x00
+} status_t;
+
+typedef enum {
 	MEMS_ENABLE = 0x01, MEMS_DISABLE = 0x00
 } State_t;
+
+typedef struct {
+	int16_t AXIS_X;
+	int16_t AXIS_Y;
+	int16_t AXIS_Z;
+} AxesRaw_t;
 
 #endif /*__SHARED__TYPES*/
 
@@ -37,13 +47,15 @@ typedef enum {
 
 #endif /*__SHARED__MACROS*/
 
-#define FRAM_SPI = USART2;
-#define FRAM_CS_PORT = gpioPortB;
-#define FRAM_CS_PIN = 6;
-#define FRAM_HOLD_PORT = gpioPortD;
-#define FRAM_HOLD_PIN = 8;
-#define FRAM_WP_PORT = gpioPortD;
-#define FRAM_WP_PIN = 5;
+/*********Pin and Bus Defines*********/
+
+#define FRAM_SPI            USART2
+#define FRAM_CS_PORT        gpioPortB
+#define FRAM_CS_PIN         6
+#define FRAM_HOLD_PORT      gpioPortD
+#define FRAM_HOLD_PIN       8
+#define FRAM_WP_PORT        gpioPortD
+#define FRAM_WP_PIN         5
 
 /***************OP CODES***************/
 #define FRAM_OP_WREN		0x06	// Set write enable latch
