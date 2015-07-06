@@ -14,7 +14,7 @@
 
 /**
  * @file main.c
- * @author Brandon Borden
+ * @author Brandon Borden, Stefan Damkjar
  * @date 2015-02-20
  */
 
@@ -138,12 +138,12 @@ static void ReceiveI2C(void *pParameters)
 			case 'G':
 				readI2C(&ucRegister);
 				GYRO_ReadReg(ucRegister, &ucValueToSend);
-				writeI2C(&ucValueToSend);
+				//writeI2C(&ucValueToSend);
 			break;
 			case 'M':
 				readI2C(&ucRegister);
 				MAG_ReadReg(ucRegister, &ucValueToSend);
-				writeI2C(&ucValueToSend);
+				//writeI2C(&ucValueToSend);
 			break;
 			}
 			taskYIELD();
@@ -164,7 +164,7 @@ int main(void)
   xSemaphoreSPI = xSemaphoreCreateMutex();
 
   /* Create task for blinking leds */
-  //xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
+  xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
   /* Create task for interaction with gyro */
   //xTaskCreate( GyroRead, (const char *) "GyroRead", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
@@ -173,7 +173,7 @@ int main(void)
   //xTaskCreate( MagRead, (const char *) "MagRead", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
 
   /* Create task for polling I2C RX */
-  xTaskCreate( ReceiveI2C, (const char *) "ReceiveI2C", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
+  //xTaskCreate( ReceiveI2C, (const char *) "ReceiveI2C", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY+1, NULL);
 
   /*Start FreeRTOS Scheduler*/
   vTaskStartScheduler();

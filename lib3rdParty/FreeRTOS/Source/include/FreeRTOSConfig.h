@@ -84,19 +84,19 @@ extern "C" {
 /********************** Configuration of FreeRTOS ****************************/
   
 /* Implement FreeRTOS configASSERT as emlib assert */
-#define configASSERT( x )       EFM_ASSERT( x )
+#define configASSERT( x )       EFM_ASSERT( x ) 
 
 /* Modes of operations of operation system*/
 #define configUSE_PREEMPTION       ( 1 )
 
 /* Energy saving modes */
-#define configUSE_TICKLESS_IDLE    ( 1 )
+#define configUSE_TICKLESS_IDLE    ( 0 )
 /* Available options when configUSE_TICKLESS_IDLE set to 1 
  * or configUSE_SLEEP_MODE_IN_IDLE set to 1 :
  * 1 - EM1, 2 - EM2, 3 - EM3, timer in EM3 is not very accurate*/
-#define configSLEEP_MODE           ( 2 )
+#define configSLEEP_MODE           ( 3 )
 /* Definition used only if configUSE_TICKLESS_IDLE == 0 */
-#define configUSE_SLEEP_MODE_IN_IDLE       ( 0 )
+#define configUSE_SLEEP_MODE_IN_IDLE       ( 1 )
 
  
 /* EM1 use systick as system clock*/
