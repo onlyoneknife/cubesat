@@ -76,7 +76,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-/* Emlib includes. */
+/* emlib includes. */
 #include "em_cmu.h"
 #include "em_emu.h"
 #include "em_rtc.h"
@@ -243,8 +243,6 @@ void vPortSetupTimerInterrupt(void)
 void vPortSuppressTicksAndSleep(portTickType xExpectedIdleTime)
 {
   unsigned long ulReloadValue, ulCompleteTickPeriods;
-  unsigned int ulRemainingCounter;
-
   portTickType  xModifiableIdleTime;
   /* Make sure the SysTick reload value does not overflow the counter. */
   if (xExpectedIdleTime > xMaximumPossibleSuppressedTicks)
@@ -311,8 +309,6 @@ void vPortSuppressTicksAndSleep(portTickType xExpectedIdleTime)
      * inevitably result in some tiny drift of the time maintained by the
      * kernel with respect to calendar time. */
 
-    /* Store current counter value */
-    ulRemainingCounter = RTC_CounterGet();
     /* Stop the RTC clock*/
     RTC_Enable(false);
     /* Re-enable interrupts */
@@ -335,17 +331,17 @@ void vPortSuppressTicksAndSleep(portTickType xExpectedIdleTime)
       /* Some other interrupt than system tick ended the sleep.
        * Calculate how many tick periods passed while the processor
        * was waiting */
-      ulCompleteTickPeriods = ulRemainingCounter / ulTimerReloadValueForOneTick;
+      ulCompleteTickPeriods = RTC_CounterGet() / ulTimerReloadValueForOneTick;
 
       /* The reload value is set to whatever fraction of a single tick
        * period remains. */
       if (ulCompleteTickPeriods == 0)
       {
-        ulReloadValue = ulTimerReloadValueForOneTick - ulRemainingCounter;
+        ulReloadValue = ulTimerReloadValueForOneTick - RTC_CounterGet();
       }
       else
       {
-        ulReloadValue = ulRemainingCounter - (ulCompleteTickPeriods * ulTimerReloadValueForOneTick);
+        ulReloadValue = RTC_CounterGet() - (ulCompleteTickPeriods * ulTimerReloadValueForOneTick);
       }
       RTC_CompareSet(0, ulReloadValue);
     }
