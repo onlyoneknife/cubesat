@@ -44,7 +44,7 @@
 #include "semphr.h"
 #include "croutine.h"
 
-#define STACK_SIZE_FOR_TASK    (configMINIMAL_STACK_SIZE + 1000)
+#define STACK_SIZE_FOR_TASK    (configMINIMAL_STACK_LEDBLINK + 10)
 #define TASK_PRIORITY          (tskIDLE_PRIORITY + 1)
 
 #define LED_DELAY              (50 / portTICK_RATE_MS)
@@ -52,7 +52,7 @@
 #define LED_PIN     		   (7)
 
 /* Create mutex semaphore for SPI1 */
-xSemaphoreHandle       xSemaphoreSPI;
+xSemaphoreHandle       xSemaphoreSPI1;
 
 /**************************************************************************//**
  * @brief Initialize drivers
@@ -164,7 +164,7 @@ int main(void)
   xSemaphoreSPI = xSemaphoreCreateMutex();
 
   /* Create task for blinking leds */
-  xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
+  xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_LEDBLINK, NULL, TASK_PRIORITY, NULL);
 
   /* Create task for interaction with gyro */
   //xTaskCreate( GyroRead, (const char *) "GyroRead", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
