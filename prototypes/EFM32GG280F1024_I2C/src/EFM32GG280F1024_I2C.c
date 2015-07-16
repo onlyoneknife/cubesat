@@ -34,6 +34,10 @@
 
 #define I2C_ADDRESS   0xE2
 
+#define LED_DELAY     (50 / portTICK_RATE_MS)
+#define LED_PORT      (gpioPortA)
+#define LED_PIN       (7)
+
 uint8_t i2c_Buffer[] = "hello\n";
 uint8_t i2c_BufferSize = sizeof(i2c_Buffer);
 uint8_t i2c_BufferIndex;
@@ -56,8 +60,8 @@ void setupI2C(void)
   I2C_Init_TypeDef i2cInit = I2C_INIT_DEFAULT;
 
   /* Using PD6 (SDA) and PD7 (SCL) */
-  GPIO_PinModeSet(gpioPortD, 7, gpioModeWiredAndFilter, 1);
-  GPIO_PinModeSet(gpioPortD, 6, gpioModeWiredAndFilter, 1);
+  GPIO_PinModeSet(gpioPortD, 7, gpioModeInput, 1);
+  GPIO_PinModeSet(gpioPortD, 6, gpioModeWiredAnd, 1);
 
   /* Enable pins at location 1 */
   I2C0->ROUTE = I2C_ROUTE_SDAPEN |
@@ -135,6 +139,10 @@ int main(void)
 
   /* Setting up i2c */
   setupI2C();
+
+  /* Pin PA0 is configured to Push-pull */
+  GPIO->P[0].MODEL = (GPIO->P[0].MODEL & ~_GPIO_P_MODEL_MODE0_MASK) | GPIO_P_MODEL_MODE0_PUSHPULL;
+  GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
 
   while (1)
   {
