@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ASCII"?>
+<device:XMLDevice xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:device="http://www.silabs.com/sls/hc/document/device.ecore" name="EFM32GG280F1024" partId="com.silabs.mcu.si32.efm32.efm32gg.efm32gg280f1024">
+  <mode name="DefaultMode">
+    <property object="ADC0" propertyId="ABPeripheral.included" value="true"/>
+    <property object="DefaultMode" propertyId="mode.diagramLocation" value="100, 100"/>
+    <property object="EBI" propertyId="ABPeripheral.included" value="true"/>
+    <property object="HFXO" propertyId="ABPeripheral.included" value="true"/>
+    <property object="HFXO" propertyId="hfxo.circuitcharacteristics.calculatedclpf" value="12.50"/>
+    <property object="HFXO" propertyId="hfxo.result.rnegesrmaxratio" value="28.819"/>
+    <property object="I2C0" propertyId="ABPeripheral.included" value="true"/>
+    <property object="LFXO" propertyId="ABPeripheral.included" value="true"/>
+    <property object="LFXO" propertyId="lfxo.circuitcharacteristics.calculatedclpf" value="12.50"/>
+    <property object="LFXO" propertyId="lfxo.recommendedoscillatorboostsettings.lfxoboostpercent" value="100%"/>
+    <property object="LFXO" propertyId="lfxo.result.rnegesrmaxratio" value="15.574"/>
+    <property object="PORTIO" propertyId="portio.acmp0.location.acmp0" value="2"/>
+    <property object="PORTIO" propertyId="portio.adc0.enable.ch4" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.dbg.enable.swo" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.dbg.location.dbg" value="1"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a00" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a01" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a02" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a03" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a04" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a05" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a06" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a07" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a08" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a09" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a10" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a11" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a12" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a13" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a14" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a15" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a16" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a17" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a18" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.a19" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad00" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad01" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad02" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad03" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad04" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad05" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad06" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad07" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad08" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad09" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad10" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad11" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad12" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad13" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad14" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ad15" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ardy" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.cs0" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.ren" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.ebi.enable.wen" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.hfxo.enable.n" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.hfxo.enable.p" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.i2c0.enable.scl" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.i2c0.enable.sda" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.i2c0.location.i2c0" value="1"/>
+    <property object="PORTIO" propertyId="portio.lfxo.enable.n" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.lfxo.enable.p" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.uart1.enable.rx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.uart1.enable.tx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart1.enable.clk" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart1.enable.cs" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart1.enable.rx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart1.enable.tx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart1.location.usart1" value="1"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.clk" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.cs" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.rx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.tx" value="Enabled"/>
+    <property object="UART1" propertyId="ABPeripheral.included" value="true"/>
+    <property object="USART1" propertyId="ABPeripheral.included" value="true"/>
+    <property object="USART1" propertyId="usart.mode.usartmode" value="Synchronous Mode (SPI)"/>
+    <property object="USART2" propertyId="ABPeripheral.included" value="true"/>
+    <property object="USART2" propertyId="usart.mode.usartmode" value="Synchronous Mode (SPI)"/>
+  </mode>
+  <modeTransition>
+    <property object="RESET &#x2192; DefaultMode" propertyId="modeTransition.target" value="DefaultMode"/>
+    <property object="RESET &#x2192; DefaultMode" propertyId="modeTransition.source" value="RESET"/>
+  </modeTransition>
+</device:XMLDevice>

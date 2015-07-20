@@ -9,15 +9,6 @@
 
 #include <stdint.h>
 
-#ifndef __SHARED__TYPES
-#define __SHARED__TYPES
-
-typedef enum {
-	MEMS_ENABLE = 0x01, MEMS_DISABLE = 0x00
-} State_t;
-
-#endif /*__SHARED__TYPES*/
-
 #ifndef __SHARED__MACROS
 
 #define __SHARED__MACROS
