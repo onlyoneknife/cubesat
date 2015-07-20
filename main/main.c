@@ -24,6 +24,7 @@
 #include <autogen_init.h>
 
 /* Driver Includes */
+#include "sharedtypes.h"
 #include "gyro.h"
 #include "rtc.h"
 #include "fram.h"
@@ -44,12 +45,12 @@
 #include "semphr.h"
 #include "croutine.h"
 
-#define STACK_SIZE_FOR_TASK    (configMINIMAL_STACK_LEDBLINK + 10)
-#define TASK_PRIORITY          (tskIDLE_PRIORITY + 1)
+#define STACK_SIZE_FOR_LEDBLINK    (configMINIMAL_STACK_SIZE + 10)
+#define TASK_PRIORITY              (tskIDLE_PRIORITY + 1)
 
-#define LED_DELAY              (50 / portTICK_RATE_MS)
-#define LED_PORT    		   (gpioPortA)
-#define LED_PIN     		   (7)
+#define LED_DELAY                  (50 / portTICK_RATE_MS)
+#define LED_PORT    		       (gpioPortA)
+#define LED_PIN     		       (7)
 
 /* Create mutex semaphore for SPI1 */
 xSemaphoreHandle       xSemaphoreSPI1;
@@ -59,13 +60,15 @@ xSemaphoreHandle       xSemaphoreSPI1;
  *****************************************************************************/
 void DRIVERS_Init(void)
 {
-  /* Initialize SPI Chip Select Pins */
+  /* Initialize SPI Chip Select Pins *****************************************/
   // Set all SPI CS to default high
   // TODO Fix PCB to have pull-ups so this is not needed
   GPIO->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN;
   GPIO->P[FRAM_CS_PORT].DOUTSET = 1 << FRAM_CS_PIN;
   GPIO->P[MAG_CS_PORT].DOUTSET  = 1 << MAG_CS_PIN;
   GPIO->P[RTC_CS_PORT].DOUTSET  = 1 << RTC_CS_PIN;
+
+  /* Initialize Magnetometer Registers ***************************************/
 
   MAG_SetODR_M(ODR_100Hz_M);
 
@@ -75,9 +78,10 @@ void DRIVERS_Init(void)
 
   MAG_SetODR(ODR_100Hz);
 
-  MAG_SetTemperature(0x01); // 0x01 -> MEMS_ENABLE
+  MAG_SetTemperature(MEMS_ENABLE);
 
-  /* set PowerMode */
+  /* Initialize Gyroscope Registers ******************************************/
+
   GYRO_SetMode(GYRO_NORMAL);
 
   GYRO_SetHPFCutOFF(8);
@@ -86,13 +90,13 @@ void DRIVERS_Init(void)
 
   GYRO_SetSelfTest(1);
 
-  /* Initialize ADC */
+  /* Initialize ADC **********************************************************/
   ADCConfig();
 
-  /* Initialize I2C */
+  /* Initialize I2C **********************************************************/
   setupI2C();
 
-  /* Initialize SLEEP driver, no call-backs are used */
+  /* Initialize SLEEP driver, no call-backs are used *************************/
   SLEEP_Init(NULL, NULL);
 #if (configSLEEP_MODE < 3)
   /* do not let to sleep deeper than define */
@@ -161,7 +165,7 @@ int main(void)
   DRIVERS_Init();
 
   /* Initialize mutex semaphore for SPI1 */
-  xSemaphoreSPI = xSemaphoreCreateMutex();
+  xSemaphoreSPI1 = xSemaphoreCreateMutex();
 
   /* Create task for blinking leds */
   xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_LEDBLINK, NULL, TASK_PRIORITY, NULL);
