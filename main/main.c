@@ -21,7 +21,6 @@
 /* System Includes */
 #include <stdio.h>
 #include <stdint.h>
-#include <autogen_init.h>
 
 /* Driver Includes */
 #include "sharedtypes.h"
@@ -34,6 +33,7 @@
 #include "sleep.h"
 
 /* EFM32 Includes */
+#include "em_device.h"
 #include "em_chip.h"
 #include "em_gpio.h"
 
@@ -158,7 +158,6 @@ static void ReceiveI2C(void *pParameters)
 int main(void)
 {
   /* Initialize EFM32 Chip Settings */
-  eADesigner_Init();
   CHIP_Init();
 
   /* Initialize Hardware Drivers */

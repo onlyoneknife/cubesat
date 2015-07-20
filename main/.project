@@ -36,14 +36,14 @@
 			<locationURI>WORKSPACE_LOC/lib3rdParty/FreeRTOS/Source</locationURI>
 		</link>
 		<link>
-			<name>autogen</name>
-			<type>2</type>
-			<locationURI>WORKSPACE_LOC/autogen</locationURI>
-		</link>
-		<link>
 			<name>emlib</name>
 			<type>2</type>
 			<locationURI>WORKSPACE_LOC/lib3rdParty/SiliconLabs/EFM32/emlib/src</locationURI>
+		</link>
+		<link>
+			<name>libDevice</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/libDevice</locationURI>
 		</link>
 		<link>
 			<name>libDrivers</name>
