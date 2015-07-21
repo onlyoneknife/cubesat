@@ -21,7 +21,12 @@
 /* System Includes */
 #include <stdio.h>
 #include <stdint.h>
-#include <autogen_init.h>
+
+/* EFM32 Includes */
+#include "InitDevice.h"
+#include "em_device.h"
+#include "em_chip.h"
+#include "em_gpio.h"
 
 /* Driver Includes */
 #include "sharedtypes.h"
@@ -33,10 +38,6 @@
 #include "tempsense.h"
 #include "sleep.h"
 
-/* EFM32 Includes */
-#include "em_chip.h"
-#include "em_gpio.h"
-
 /* FreeRTOS Includes */
 #include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"
@@ -45,63 +46,20 @@
 #include "semphr.h"
 #include "croutine.h"
 
-#define STACK_SIZE_FOR_LEDBLINK    (configMINIMAL_STACK_SIZE + 10)
-#define TASK_PRIORITY              (tskIDLE_PRIORITY + 1)
+#define LEDBLINK_STACK_SIZE        (configMINIMAL_STACK_SIZE + 10)
+#define LEDBLINK_TASK_PRIORITY     (tskIDLE_PRIORITY + 1)
 
 #define LED_DELAY                  (50 / portTICK_RATE_MS)
 #define LED_PORT    		       (gpioPortA)
 #define LED_PIN     		       (7)
-
-/* Create mutex semaphore for SPI1 */
-xSemaphoreHandle       xSemaphoreSPI1;
 
 /**************************************************************************//**
  * @brief Initialize drivers
  *****************************************************************************/
 void DRIVERS_Init(void)
 {
-  /* Initialize SPI Chip Select Pins *****************************************/
-  // Set all SPI CS to default high
-  // TODO Fix PCB to have pull-ups so this is not needed
-  GPIO->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN;
-  GPIO->P[FRAM_CS_PORT].DOUTSET = 1 << FRAM_CS_PIN;
-  GPIO->P[MAG_CS_PORT].DOUTSET  = 1 << MAG_CS_PIN;
-  GPIO->P[RTC_CS_PORT].DOUTSET  = 1 << RTC_CS_PIN;
 
-  /* Initialize Magnetometer Registers ***************************************/
 
-  MAG_SetODR_M(ODR_100Hz_M);
-
-  MAG_SetFullScale(FULLSCALE_2);
-
-  MAG_SetModeMag(CONTINUOUS_MODE);
-
-  MAG_SetODR(ODR_100Hz);
-
-  MAG_SetTemperature(MEMS_ENABLE);
-
-  /* Initialize Gyroscope Registers ******************************************/
-
-  GYRO_SetMode(GYRO_NORMAL);
-
-  GYRO_SetHPFCutOFF(8);
-
-  GYRO_SetBLE(0);
-
-  GYRO_SetSelfTest(1);
-
-  /* Initialize ADC **********************************************************/
-  ADCConfig();
-
-  /* Initialize I2C **********************************************************/
-  setupI2C();
-
-  /* Initialize SLEEP driver, no call-backs are used *************************/
-  SLEEP_Init(NULL, NULL);
-#if (configSLEEP_MODE < 3)
-  /* do not let to sleep deeper than define */
-  SLEEP_SleepBlockBegin((SLEEP_EnergyMode_t)(configSLEEP_MODE+1));
-#endif
 }
 
 /**************************************************************************//**
@@ -122,66 +80,31 @@ static void LedBlink(void *pParameters)
   }
 }
 
-static void ReceiveI2C(void *pParameters)
-{
-	pParameters = pParameters;
-
-	uint8_t ucDeviceID      = 0;
-	uint8_t ucRegister      = 0;
-	uint8_t ucValueToSend   = 0;
-
-	for (;;) {
-
-		vTaskDelay(I2C_DELAY);
-
-		if( commandRdy() == MEMS_SUCCESS ) {
-
-			readI2C(&ucDeviceID);
-
-			switch(ucDeviceID) {
-			case 'G':
-				readI2C(&ucRegister);
-				GYRO_ReadReg(ucRegister, &ucValueToSend);
-				//writeI2C(&ucValueToSend);
-			break;
-			case 'M':
-				readI2C(&ucRegister);
-				MAG_ReadReg(ucRegister, &ucValueToSend);
-				//writeI2C(&ucValueToSend);
-			break;
-			}
-			taskYIELD();
-		}
-	}
-}
-
+/**************************************************************************//**
+ * @brief  Main function
+ *****************************************************************************/
 int main(void)
 {
   /* Initialize EFM32 Chip Settings */
-  eADesigner_Init();
   CHIP_Init();
 
   /* Initialize Hardware Drivers */
   DRIVERS_Init();
 
-  /* Initialize mutex semaphore for SPI1 */
-  xSemaphoreSPI1 = xSemaphoreCreateMutex();
+  enter_DefaultMode_from_RESET();
 
   /* Create task for blinking leds */
-  xTaskCreate( LedBlink, (const char *) "LedBlink", STACK_SIZE_FOR_LEDBLINK, NULL, TASK_PRIORITY, NULL);
-
-  /* Create task for interaction with gyro */
-  //xTaskCreate( GyroRead, (const char *) "GyroRead", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
-
-  /* Create task for interaction with mag */
-  //xTaskCreate( MagRead, (const char *) "MagRead", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY, NULL);
-
-  /* Create task for polling I2C RX */
-  //xTaskCreate( ReceiveI2C, (const char *) "ReceiveI2C", STACK_SIZE_FOR_TASK, NULL, TASK_PRIORITY+1, NULL);
+  xTaskCreate( LedBlink,
+		       (const char *) "LedBlink",
+		       LEDBLINK_STACK_SIZE,
+		       NULL,
+		       LEDBLINK_TASK_PRIORITY,
+		       NULL );
 
   /*Start FreeRTOS Scheduler*/
   vTaskStartScheduler();
 
-  for( ;; );
+  /* Infinite loop */
+  for( ;; ) { /* do nothing */ }
 
 }

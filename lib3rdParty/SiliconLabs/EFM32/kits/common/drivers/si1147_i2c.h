@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file
  * @brief Driver for the Si1147 Proximity sensor
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -34,27 +34,25 @@ extern "C" {
 #endif
 
 /*******************************************************************************
- *******************************   DEFINES   ***********************************
- ******************************************************************************/
-  
-
-/*******************************************************************************
- ********************************   ENUMS   ************************************
- ******************************************************************************/
-
-/*******************************************************************************
  *******************************   STRUCTS   ***********************************
  ******************************************************************************/
+/** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
+typedef struct {
+    I2C_TypeDef *i2c;
+    uint8_t addr;
+  } si114x_i2c_t;
+
+/** @endcond */
 
 
 /*******************************************************************************
  *****************************   PROTOTYPES   **********************************
  ******************************************************************************/
-int Si1147_Write_Register (I2C_TypeDef *i2c,uint8_t addr, uint8_t reg, uint8_t data);
-int Si1147_Write_Block_Register (I2C_TypeDef *i2c,uint8_t addr, uint8_t reg, uint8_t length, uint8_t const *data);
-int Si1147_Read_Block_Register (I2C_TypeDef *i2c,uint8_t addr, uint8_t reg, uint8_t length, uint8_t  *data);
-int Si1147_Read_Register (I2C_TypeDef *i2c,uint8_t addr, uint8_t reg, uint8_t *data);
+uint32_t Si1147_Write_Register (I2C_TypeDef *i2c,uint8_t addr, uint8_t reg, uint8_t data);
+uint32_t Si1147_Write_Block_Register (I2C_TypeDef *i2c,uint8_t addr, uint8_t reg, uint8_t length, uint8_t const *data);
+uint32_t Si1147_Read_Block_Register (I2C_TypeDef *i2c,uint8_t addr, uint8_t reg, uint8_t length, uint8_t  *data);
+uint32_t Si1147_Read_Register (I2C_TypeDef *i2c,uint8_t addr, uint8_t reg, uint8_t *data);
 
 
 #ifdef __cplusplus

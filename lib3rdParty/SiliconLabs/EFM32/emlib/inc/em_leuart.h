@@ -2,7 +2,7 @@
  * @file em_leuart.h
  * @brief Low Energy Universal Asynchronous Receiver/Transmitter (LEUART)
  *   peripheral API
- * @version 3.20.7
+ * @version 3.20.13
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -32,8 +32,8 @@
  ******************************************************************************/
 
 
-#ifndef __EM_LEUART_H
-#define __EM_LEUART_H
+#ifndef __SILICON_LABS_EM_LEUART_H_
+#define __SILICON_LABS_EM_LEUART_H_
 
 #include "em_device.h"
 #if defined(LEUART_COUNT) && (LEUART_COUNT > 0)
@@ -263,4 +263,4 @@ void LEUART_TxExt(LEUART_TypeDef *leuart, uint16_t data);
 
 #endif /* defined(LEUART_COUNT) && (LEUART_COUNT > 0) */
 
-#endif /* __EM_LEUART_H */
+#endif /* __SILICON_LABS_EM_LEUART_H_ */

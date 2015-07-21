@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file
  * @brief SSD2119 LCD controller driver
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2012 Energy Micro AS, http://www.energymicro.com</b>
@@ -390,7 +390,7 @@ static void SSD2119_FillRect(GUI_DEVICE * pDevice, int x0, int y0, int x1, int y
   { yl=y1;
     yh=y0;
   }
-  switch (GUI_Context.DrawMode & LCD_DRAWMODE_XOR)
+  switch (GUI_GetDrawMode() & LCD_DRAWMODE_XOR)
   { case 0:
       size = (xh-xl+1)*(yh-yl+1);
       SSD2119_SetClippingArea( context, x0, y0, x1, y1);
@@ -458,7 +458,7 @@ static void SSD2119_HorizontalLine1bpp(GUI_DEVICE * pDevice, unsigned x, unsigne
   Pixels   = LCD_aMirror[*p] >> Diff;
 
 
-  switch (GUI_Context.DrawMode & (LCD_DRAWMODE_TRANS | LCD_DRAWMODE_XOR)) {
+  switch (GUI_GetDrawMode() & (LCD_DRAWMODE_TRANS | LCD_DRAWMODE_XOR)) {
   case 0:
     SSD2119_SetCurrentPosition((DRIVER_CONTEXT *)pDevice->u.pContext, x, y);
     SSD2119_PrepareDataAccess((DRIVER_CONTEXT *)pDevice->u.pContext);
@@ -538,7 +538,7 @@ static void  SSD2119_HorizontalLine2bpp(GUI_DEVICE * pDevice, int x, int y, uint
   Pixels       = *p;
   CurrentPixel = Diff;
   x           += Diff;
-  switch (GUI_Context.DrawMode & (LCD_DRAWMODE_TRANS | LCD_DRAWMODE_XOR)) {
+  switch (GUI_GetDrawMode() & (LCD_DRAWMODE_TRANS | LCD_DRAWMODE_XOR)) {
   case 0:
     if (pTrans) {
       do {
@@ -612,7 +612,7 @@ static void  SSD2119_HorizontalLine4bpp(GUI_DEVICE * pDevice, int x, int y, uint
   Pixels       = *p;
   CurrentPixel = Diff;
   x           += Diff;
-  switch (GUI_Context.DrawMode & (LCD_DRAWMODE_TRANS | LCD_DRAWMODE_XOR)) {
+  switch (GUI_GetDrawMode() & (LCD_DRAWMODE_TRANS | LCD_DRAWMODE_XOR)) {
   case 0:
     if (pTrans) {
       do {
@@ -688,7 +688,7 @@ static void  SSD2119_HorizontalLine8bpp(GUI_DEVICE * pDevice, int x, int y, uint
   }
   SSD2119_SetCurrentPosition((DRIVER_CONTEXT *)pDevice->u.pContext, x, y);
   SSD2119_PrepareDataAccess((DRIVER_CONTEXT *)pDevice->u.pContext);
-  switch (GUI_Context.DrawMode & (LCD_DRAWMODE_TRANS | LCD_DRAWMODE_XOR)) {
+  switch (GUI_GetDrawMode() & (LCD_DRAWMODE_TRANS | LCD_DRAWMODE_XOR)) {
   case 0:
     while(xsize--)
     {

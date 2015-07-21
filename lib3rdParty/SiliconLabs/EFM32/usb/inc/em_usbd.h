@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file em_usbd.h
  * @brief USB protocol stack library API for EFM32.
- * @version 3.20.7
+ * @version 3.20.14
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>

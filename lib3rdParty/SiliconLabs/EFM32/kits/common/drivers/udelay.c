@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file udelay.c
  * @brief Microsecond delay routine.
- * @version 3.20.5
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -30,7 +30,9 @@
  *  algorithm is taken from linux 2.4 sources (bogomips).
  *
  *  The delay is fairly accurate, the assembly coding will not be optimized
- *  by the compiler.
+ *  by the compiler. The delay function should not be used for longer delays
+ *  than 1000 us. Calling the delay function with > 1000 will give unpredictable
+ *  results.
  *  Recalibrate the loop when HFCORECLK is changed.
  *
  *  The calibration uses the RTC clocked by LFRCO to measure time. Better
@@ -196,16 +198,23 @@ void UDELAY_Calibrate(void)
  * @brief
  *   Microsecond active wait delay routine.
  *
+ * @note
+ *   The delay function should not be used for longer delays than 1000 us.
+ *   Calling the delay function with > 1000 will give unpredictable results.
+ *
  * @param[in] usecs
  *   Number of microseconds to delay.
  ******************************************************************************/
 void UDELAY_Delay( uint32_t usecs )
 {
   __ASM volatile (
-#if defined(_EFM32_ZERO_FAMILY)
+#if ( __CORTEX_M == 0x00 )
 "        .syntax unified           \n"
 "        .arch armv6-m             \n"
 #endif
+"        cmp     %0, #0            \n"    /* Return if 0 delay. */
+"        beq.n   2f                \n"
+"        subs    %0, #1            \n"    /* Correct for off by one error. */
 "        movs    r2, #0x88         \n"
 "        lsls    r2, r2, #8        \n"
 "        adds    r2, #0x00         \n"
@@ -222,11 +231,11 @@ void UDELAY_Delay( uint32_t usecs )
 "                                  \n"
 "1:      subs    r0, #1            \n"
 "        bhi     1b                \n"
-#if defined(_EFM32_ZERO_FAMILY)
+#if ( __CORTEX_M == 0x00 )
 "2:                                \n"
-"        .syntax divided           \n" : : "r" (usecs), "r" (&loops_per_jiffy) );
+"        .syntax divided           \n" : : "r" (usecs), "r" (&loops_per_jiffy) : "r0", "r2", "cc" );
 #else
-"2:                                \n" : : "r" (usecs), "r" (&loops_per_jiffy) );
+"2:                                \n" : : "r" (usecs), "r" (&loops_per_jiffy) : "r0", "r2", "cc" );
 #endif
 }
 #endif /* defined(__GNUC__) */
@@ -288,24 +297,27 @@ static void _delay( uint32_t delay)
 void UDELAY_Delay( uint32_t usecs )
 {
   __ASM volatile (
+"        cmp     %0, #0            \n"    /* Return if 0 delay. */
+"        beq.n   udelay_2          \n"
+"        subs    %0, #1            \n"    /* Correct for off by one error. */
 "        movs    r2, #0x88         \n"
 "        lsls    r2, r2, #8        \n"
 "        adds    r2, #0x00         \n"
-"        muls    r0, r2            \n"
+"        muls    %0, r2            \n"
 "                                  \n"
-"        ldr     r2, [%0]          \n"
-"        movs    r0, r0, lsr #11   \n"
+"        ldr     r2, [%1]          \n"
+"        movs    r0, %0, lsr #11   \n"
 "        movs    r2, r2, lsr #11   \n"
 "                                  \n"
 "        muls    r0, r2            \n"
 "        movs    r0, r0, lsr #6    \n"
 "                                  \n"
-"        bne.n   udelay_1          \n"
-"        bx      lr                \n"
+"        beq.n   udelay_2          \n"
 "                                  \n"
 "udelay_1:                         \n"
 "        subs    r0, #1            \n"
-"        bhi.n   udelay_1          \n" : : "r" (&loops_per_jiffy) );
+"        bhi.n   udelay_1          \n"
+"udelay_2:                         \n" : : "r" (usecs), "r" (&loops_per_jiffy) : "r0", "r2", "cc");
 }
 #endif /* defined(__ICCARM__) */
 
@@ -313,12 +325,12 @@ void UDELAY_Delay( uint32_t usecs )
 static void _delay( uint32_t delay )
 {
   __ASM volatile (
-#if defined(_EFM32_ZERO_FAMILY)
+#if ( __CORTEX_M == 0x00 )
 "        .syntax unified           \n"
 "        .arch armv6-m             \n"
 #endif
 "1:      subs    %0, #1            \n"
-#if defined(_EFM32_ZERO_FAMILY)
+#if ( __CORTEX_M == 0x00 )
 "        bhi.n   1b                \n"
 "        .syntax divided           \n" : : "r" (delay) );
 #else
@@ -340,6 +352,9 @@ __ASM void UDELAY_Delay( uint32_t usecs __attribute__ ((unused)) )
 {
         IMPORT  loops_per_jiffy
 
+        cmp     r0, #0                  /* Return if 0 delay. */
+        beq.n   udelay_2
+        subs    r0, #1                  /* Correct for off by one error. */
         movs    r2, #0x88
         lsls    r2, r2, #8
         adds    r2, #0x00
@@ -352,13 +367,11 @@ __ASM void UDELAY_Delay( uint32_t usecs __attribute__ ((unused)) )
 
         muls    r0, r2, r0
         movs    r0, r0, lsr #6
-
-        bne     udelay_1
-        bx      lr
-
+        beq     udelay_2
 udelay_1
         subs    r0, #1
         bhi     udelay_1
+udelay_2
         bx      lr
 }
 #endif /* defined(__CC_ARM) */

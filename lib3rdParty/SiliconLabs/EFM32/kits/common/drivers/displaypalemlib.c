@@ -2,7 +2,7 @@
  * @file displaypalemlib.c
  * @brief Platform Abstraction Layer (PAL) for DISPLAY driver on EMLIB based
  *        platforms.
- * @version 3.20.5
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -25,6 +25,7 @@
 #include "em_cmu.h"
 #include "em_gpio.h"
 #include "em_usart.h"
+#include "bsp.h"
 #include "udelay.h"
 
 /* DISPLAY driver inclustions */
@@ -75,7 +76,7 @@ EMSTATUS PAL_SpiInit (void)
   /* Initialize USART for SPI transaction */
   CMU_ClockEnable( PAL_SPI_USART_CLOCK, true );
   usartInit.baudrate = PAL_SPI_BAUDRATE;
-  
+
   USART_InitSync( PAL_SPI_USART_UNIT, &usartInit );
   PAL_SPI_USART_UNIT->ROUTE = (USART_ROUTE_CLKPEN | USART_ROUTE_TXPEN | PAL_SPI_USART_LOCATION);
 
@@ -393,8 +394,17 @@ EMSTATUS PAL_GpioPinAutoToggle (unsigned int gpioPort,
 
 #ifdef INCLUDE_PAL_GPIO_PIN_AUTO_TOGGLE_HW_ONLY
 
-  /* We only support auto HW toggling on GPIO port E pin 10 on ZeroSTK.  */
+#if defined( BSP_STK_2010 )
+  /* We only support auto HW toggling on GPIO port E pin 10 on Zero STK.  */
   if ( (gpioPortE != gpioPort) || (10 != gpioPin) )
+
+#elif defined( BSP_STK_2011 )
+  /* We only support auto HW toggling on GPIO port F pin 3 on Happy STK.  */
+  if ( (gpioPortF != gpioPort) || (3 != gpioPin) )
+
+#else
+#error "Illegal display auto-toggle setup."
+#endif
   {
     status = PAL_EMSTATUS_INVALID_PARAM;
   }
@@ -403,18 +413,19 @@ EMSTATUS PAL_GpioPinAutoToggle (unsigned int gpioPort,
     /* Setup PRS to drive the GPIO port E pin 10 which is connected to the
        display com inversion pin (EXTCOMIN) using the RTC COMP0 signal as
        source. */
-    unsigned int channel = 2;
     uint32_t     source  = PRS_CH_CTRL_SOURCESEL_RTC;
-    uint32_t     signal  = PRS_CH_CTRL_SIGSEL_RTCCOMP0; 
+    uint32_t     signal  = PRS_CH_CTRL_SIGSEL_RTCCOMP0;
 
     /* Enable PRS clock */
     CMU_ClockEnable(cmuClock_PRS, true);
 
     /* Set up PRS to trigger from an RTC compare match */
-    PRS_SourceAsyncSignalSet(channel, source, signal);
+    PRS_SourceAsyncSignalSet(LCD_AUTO_TOGGLE_PRS_CH, source, signal);
 
     /* This outputs the PRS pulse on PE10 which is the EXTCOMIN pin */
-    PRS->ROUTE = (PRS_ROUTE_CH2PEN | PRS_ROUTE_LOCATION_LOC2);
+    PRS->ROUTE = ( PRS->ROUTE & ~_PRS_ROUTE_LOCATION_MASK )
+                 | LCD_AUTO_TOGGLE_PRS_ROUTE_LOC;
+    PRS->ROUTE |= LCD_AUTO_TOGGLE_PRS_ROUTE_PEN;
   }
 #else
   /* Store GPIO pin data. */

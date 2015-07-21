@@ -27,6 +27,7 @@
 #include "gyro.h"
 #include "em_usart.h"
 #include "em_gpio.h"
+#include "sharedtypes.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/

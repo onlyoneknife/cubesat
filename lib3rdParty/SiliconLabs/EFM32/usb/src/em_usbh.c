@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file em_usbh.c
  * @brief USB protocol stack library API for EFM32.
- * @version 3.20.7
+ * @version 3.20.14
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -1293,7 +1293,7 @@ void USBH_PrintString( const char *pre,
   * The endpoint descriptors for the first interface follow the first interface
   * descriptor.
   * If there are additional interfaces, their interface descriptor and endpoint
-  * descriptors follow the first interfaceï¿½s endpoint descriptors.
+  * descriptors follow the first interface’s endpoint descriptors.
   * Class-specific and/or vendor-specific descriptors follow the standard
   * descriptors they extend or modify.
   */
@@ -2232,6 +2232,9 @@ int USBH_WaitForDeviceConnectionB( uint8_t *buf, int timeoutInSeconds )
 
     /* Disable USB, power down VBUS. */
     USBH_Stop();
+    /* Enable USB clocks again, USBH_Stop() turns them off. */
+    CMU->HFCORECLKEN0 |= CMU_HFCORECLKEN0_USB | CMU_HFCORECLKEN0_USBC;
+
     if ( deadLine )
       accumulatedTime += PORT_VBUS_DELAY;
 

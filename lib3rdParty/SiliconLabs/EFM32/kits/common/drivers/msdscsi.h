@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file  msdscsi.h
  * @brief SCSI interface for Mass Storage Devices (MSD).
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -38,9 +38,11 @@ extern "C" {
 #define SCSI_READCAPACITY            0x25 /**< SCSI Read Capacity command opcode.   */
 #define SCSI_READ10                  0x28 /**< SCSI Read (10) command opcode.       */
 #define SCSI_WRITE10                 0x2A /**< SCSI Write (10) command opcode.      */
+#define SCSI_VERIFY10                0x2F /**< SCSI Verify (10) command opcode.     */
 
 #define SCSI_READ10_LEN              10U  /**< SCSI Read (10) CBD length.       */
 #define SCSI_WRITE10_LEN             10U  /**< SCSI Write (10) CDB length.      */
+#define SCSI_VERIFY10_LEN            10U  /**< SCSI Verify (10) CDB length.     */
 #define SCSI_INQUIRYDATA_LEN         36U  /**< SCSI Inquiry response data length. */
 #define SCSI_REQUESTSENSE_LEN        6U   /**< SCSI Request Sense CDB length.   */
 #define SCSI_REQUESTSENSEDATA_LEN    18U  /**< SCSI Request Sense response data length. */
@@ -267,6 +269,33 @@ typedef struct
   uint16_t TransferLength;        /**< Number of blocks (sectors) to transfer.*/
   uint8_t  Control;               /**< Control byte.                          */
 } __attribute__ ((packed)) MSDSCSI_Write10_TypeDef;
+EFM32_PACK_END()
+
+/**************************************************************************//**
+ * @brief SCSI Verify 10 Command Descriptor Block (CDB) typedef.
+ *****************************************************************************/
+EFM32_PACK_START(1)
+typedef struct
+{
+  uint8_t  OpCode;                /**< Command opcode.                        */
+  struct
+  {
+    uint8_t Obsolete  : 1;        /**< Obsolete, expect any value.            */
+    uint8_t BytChk    : 1;        /**< Byte check bit.                        */
+    uint8_t Reserved1 : 2;        /**< Reserved, expect 0.                    */
+    uint8_t Dpo       : 1;        /**< Disable Page Out.                      */
+    uint8_t VrProtect : 3;        /**< Verify Protect field.                  */
+  };
+  uint32_t Lba;                   /**< Logical Block (sector) Address.        */
+  struct
+  {
+    uint8_t GroupNumber : 5;      /**< Group Number field.                    */
+    uint8_t Reserved2   : 2;      /**< Reserved, expect 0.                    */
+    uint8_t Restricted  : 1;      /**< Treat as a reserved field, expect 0.   */
+  };
+  uint16_t Verification;          /**< Number of blocks (sectors) to verify  .*/
+  uint8_t  Control;               /**< Control byte.                          */
+} __attribute__ ((packed)) MSDSCSI_Verify10_TypeDef;
 EFM32_PACK_END()
 
 /*** MSDSCSI Function prototypes ***/

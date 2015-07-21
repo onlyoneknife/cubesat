@@ -1,6 +1,6 @@
 /**************************************************************************//**
  * @brief Configures and calculates gestures from Si1147
- * @version 3.20.5
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -15,6 +15,7 @@
 
 #include "si114x_algorithm.h"
 #include "si114x_functions.h"
+#include "si1147_i2c.h"
 
 #define LED1I                 0xb
 #define LED2I                 0xb
@@ -404,7 +405,7 @@ int Si1147_ConfigureDetection(I2C_TypeDef *i2c, uint8_t addr, int lowpower)
 
 
   /* UV Coefficients */
-  si114x_get_calibration(si114x_handle, &si114x_cal, 1);
+  si114x_get_calibration(si114x_handle, &si114x_cal, 0);
   si114x_set_ucoef(si114x_handle, 0, &si114x_cal);
 
 

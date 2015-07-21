@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file displayls013b7dh03.c
  * @brief Display driver for the Sharp Memory LCD LS013B7DH03
- * @version 3.20.5
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -166,7 +166,11 @@ EMSTATUS DISPLAY_Ls013b7dh03Init(void)
   PAL_GpioPinModeSet(LCD_PORT_SI,      LCD_PIN_SI,      palGpioModePushPull,0);
   PAL_GpioPinModeSet(LCD_PORT_SCS,     LCD_PIN_SCS,     palGpioModePushPull,0);
   PAL_GpioPinModeSet(LCD_PORT_DISP_SEL,LCD_PIN_DISP_SEL,palGpioModePushPull,0);
+
+#if defined( LCD_PORT_DISP_PWR )
   PAL_GpioPinModeSet(LCD_PORT_DISP_PWR,LCD_PIN_DISP_PWR,palGpioModePushPull,0);
+#endif
+
   PAL_GpioPinModeSet(LCD_PORT_EXTMODE, LCD_PIN_EXTMODE, palGpioModePushPull,0);
   PAL_GpioPinModeSet(LCD_PORT_EXTCOMIN,LCD_PIN_EXTCOMIN,palGpioModePushPull,0);
 
@@ -190,8 +194,8 @@ EMSTATUS DISPLAY_Ls013b7dh03Init(void)
   {
     return status;
   }
-  
-  /* Setup and register the LS013B7DH03 as a DISPLAY device now. */  
+
+  /* Setup and register the LS013B7DH03 as a DISPLAY device now. */
   display.name                  = SHARP_MEMLCD_DEVICE_NAME;
   display.colourMode            = DISPLAY_COLOUR_MODE_MONOCHROME_INVERSE;
   display.addressMode           = DISPLAY_ADDRESSING_BY_ROWS_ONLY;
@@ -223,7 +227,7 @@ EMSTATUS DISPLAY_Ls013b7dh03Init(void)
     /* Clear display */
     DisplayClear();
   }
-     
+
   return status;
 }
 
@@ -275,13 +279,19 @@ static EMSTATUS DisplayEnable(DISPLAY_Device_t* device,
   {
     /* Set EFM_DISP_SELECT pin. */
     PAL_GpioPinOutSet(LCD_PORT_DISP_SEL, LCD_PIN_DISP_SEL);
+
+#if defined( LCD_PORT_DISP_PWR )
     /* Drive voltage on EFM_DISP_PWR_EN pin. */
     PAL_GpioPinOutSet(LCD_PORT_DISP_PWR, LCD_PIN_DISP_PWR);
+#endif
   }
   else
   {
+#if defined( LCD_PORT_DISP_PWR )
     /* Stop driving voltage on EFM_DISP_PWR_EN pin. */
     PAL_GpioPinOutClear(LCD_PORT_DISP_PWR, LCD_PIN_DISP_PWR);
+#endif
+
     /* Clear EFM_DISP_SELECT pin. */
     PAL_GpioPinOutClear(LCD_PORT_DISP_SEL, LCD_PIN_DISP_SEL);
   }
@@ -300,23 +310,23 @@ static EMSTATUS DisplayEnable(DISPLAY_Device_t* device,
 static EMSTATUS DisplayClear ( void )
 {
   uint16_t cmd;
-  
+
   /* Set SCS */
   PAL_GpioPinOutSet( LCD_PORT_SCS, LCD_PIN_SCS );
-  
+
   /* SCS setup time: min 6us */
   PAL_TimerMicroSecondsDelay(6);
-  
+
   /* Send command */
   cmd = LS013B7DH03_CMD_ALL_CLEAR | lcdPolarity;
   PAL_SpiTransmit ((uint8_t*) &cmd, 2 );
-  
+
   /* SCS hold time: min 2us */
   PAL_TimerMicroSecondsDelay(2);
-  
+
   /* Clear SCS */
   PAL_GpioPinOutClear( LCD_PORT_SCS, LCD_PIN_SCS );
-  
+
   return DISPLAY_EMSTATUS_OK;
 }
 
@@ -334,15 +344,15 @@ static EMSTATUS DisplayClear ( void )
 static EMSTATUS DisplayPolarityInverse (void)
 {
 #ifdef POLARITY_INVERSION_EXTCOMIN
-  
+
   /* Toggle extcomin gpio */
   PAL_GpioPinOutToggle( LCD_PORT_EXTCOMIN, LCD_PIN_EXTCOMIN );
-  
+
 #else /* POLARITY_INVERSION_EXTCOMIN */
-  
+
   /* Send a packet with inverted com */
   PAL_GpioPinOutSet( LCD_PORT_SCS, LCD_PIN_SCS );
-  
+
   /* SCS setup time: min 6us */
   PAL_TimerMicroSecondsDelay(6);
 
@@ -351,7 +361,7 @@ static EMSTATUS DisplayPolarityInverse (void)
 
   /* SCS hold time: min 2us */
   PAL_TimerMicroSecondsDelay(2);
-      
+
   PAL_GpioPinOutClear( LCD_PORT_SCS, LCD_PIN_SCS );
 
   /* Invert com polarity */
@@ -443,7 +453,7 @@ static EMSTATUS PixelMatrixAllocate( DISPLAY_Device_t*      device,
   }
 
 #endif /* USE_STATIC_PIXEL_MATRIX_POOL */
-  
+
 }
 #endif /* PIXEL_MATRIX_ALLOC_SUPPORT */
 
@@ -509,7 +519,7 @@ static EMSTATUS PixelMatrixClear( DISPLAY_Device_t*      device,
 
   (void) device; /* Suppress compiler warning: unused parameter. */
   (void) width;  /* Suppress compiler warning: unused parameter. */
-  
+
   for (i=0; i<height; i++)
   {
     /* Clear line */
@@ -558,7 +568,7 @@ static EMSTATUS pixelMatrixSetup( DISPLAY_PixelMatrix_t  pixelMatrix,
   if ((userStride-LS013B7DH03_WIDTH) % sizeof(uint16_t))
     return DISPLAY_EMSTATUS_INVALID_PARAMETER;
 #endif
-  
+
   while (i<height)
   {
     pByte += LS013B7DH03_WIDTH/8;
@@ -645,14 +655,14 @@ static EMSTATUS PixelMatrixDraw( DISPLAY_Device_t*      device,
 
   /* SCS setup time: min 6us */
   PAL_TimerMicroSecondsDelay(6);
-  
+
   /* Send update command and first line address */
   cmd = LS013B7DH03_CMD_UPDATE | (startRow << 8);
   PAL_SpiTransmit((uint8_t*) &cmd, 2 );
 
   /* Get start address to draw from */
   for ( i=0; i<height; i++ ) {
-        
+
     /* Send pixels for this line */
     PAL_SpiTransmit((uint8_t*) p,
                     LS013B7DH03_WIDTH/8 + LS013B7DH03_CONTROL_BYTES);
@@ -675,10 +685,10 @@ static EMSTATUS PixelMatrixDraw( DISPLAY_Device_t*      device,
 #endif
 
   }
-  
+
   /* SCS hold time: min 2us */
   PAL_TimerMicroSecondsDelay(2);
-  
+
   /* De-assert SCS */
   PAL_GpioPinOutClear( LCD_PORT_SCS, LCD_PIN_SCS );
 

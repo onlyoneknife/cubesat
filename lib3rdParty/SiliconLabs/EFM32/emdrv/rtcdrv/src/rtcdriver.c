@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file rtcdriver.c
  * @brief RTCDRV timer API implementation.
- * @version 3.20.5
+ * @version 3.20.13
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -20,10 +20,16 @@
 #include "em_common.h"
 #include "em_int.h"
 
-#if defined( _EFM_DEVICE )
-#include "em_rtc.h"
-#elif defined( _EFR_DEVICE )
+#if defined( RTCC_PRESENT ) && ( RTCC_COUNT == 1 )
+#define RTCDRV_USE_RTCC
+#else
+#define RTCDRV_USE_RTC
+#endif
+
+#if defined( RTCDRV_USE_RTCC )
 #include "em_rtcc.h"
+#else
+#include "em_rtc.h"
 #endif
 
 #include "rtcdriver.h"
@@ -35,14 +41,14 @@
 
 #if     defined( EMDRV_RTCDRV_SLEEPDRV_INTEGRATION ) \
     && !defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG     ) \
-    &&  defined( _EFM_DEVICE )
+    &&  defined( RTCDRV_USE_RTC )
 // Do not allow EM3/EM4 energy modes when the RTC is running.
 #define EMODE_DYNAMIC
 #endif
 
 #if    defined( EMDRV_RTCDRV_SLEEPDRV_INTEGRATION ) \
     && defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG     ) \
-    &&  defined( _EFM_DEVICE )
+    &&  defined( RTCDRV_USE_RTC )
 // Always deny EM3/EM4 energy modes when wallclock is enabled.
 #define EMODE_NEVER_ALLOW_EM3EM4
 #endif
@@ -50,11 +56,32 @@
 //
 // Various #define's to enable use of both RTC and RTCC.
 //
-#if defined( _EFM_DEVICE )
+#if defined( RTCDRV_USE_RTCC )
+#define TIMEDIFF( a, b )              ((a) - (b))
+#define RTC_COUNTERGET()              RTCC_CounterGet()
+#define RTC_COUNTER_BITS              32
+#define RTC_ALL_INTS                  _RTCC_IF_MASK
+#define RTC_OF_INT                    RTCC_IF_OF
+#define RTC_COMP_INT                  RTCC_IF_CC1
+#define RTC_COUNTER_MASK              (_RTCC_CNT_MASK)
+#define RTC_MAX_VALUE                 (_RTCC_CNT_MASK)
+#define RTC_INTDISABLE( x )           RTCC_IntDisable( x )
+#define RTC_INTENABLE( x )            RTCC_IntEnable(  x )
+#define RTC_INTCLEAR( x )             RTCC_IntClear(   x )
+#define RTC_INTGET()                  RTCC_IntGet()
+#define RTC_COUNTERRESET()            RTCC->CNT = _RTCC_CNT_RESETVALUE
+#define RTC_COMPARESET( x )           RTCC_ChannelCCVSet( 1, x )
+#define RTC_COMPAREGET()              RTCC_ChannelCCVGet( 1 )
+#define NVIC_CLEARPENDINGIRQ()        NVIC_ClearPendingIRQ( RTCC_IRQn )
+#define NVIC_DISABLEIRQ()             NVIC_DisableIRQ( RTCC_IRQn )
+#define NVIC_ENABLEIRQ()              NVIC_EnableIRQ( RTCC_IRQn )
+
+#else
 // To get the math correct we must have the MSB of the underlying 24bit
 // counter in the MSB position of a uint32_t datatype.
 #define TIMEDIFF( a, b )              ((( (a)<<8) - ((b)<<8) ) >> 8 )
 #define RTC_COUNTERGET()              RTC_CounterGet()
+#define RTC_COUNTER_BITS              24
 #define RTC_ALL_INTS                  _RTC_IF_MASK
 #define RTC_OF_INT                    RTC_IF_OF
 #define RTC_COMP_INT                  RTC_IF_COMP0
@@ -70,25 +97,6 @@
 #define NVIC_CLEARPENDINGIRQ()        NVIC_ClearPendingIRQ( RTC_IRQn )
 #define NVIC_DISABLEIRQ()             NVIC_DisableIRQ( RTC_IRQn )
 #define NVIC_ENABLEIRQ()              NVIC_EnableIRQ( RTC_IRQn )
-
-#elif defined( _EFR_DEVICE )
-#define TIMEDIFF( a, b )              ((a) - (b))
-#define RTC_COUNTERGET()              RTCC_CounterGet()
-#define RTC_ALL_INTS                  _RTCC_IF_MASK
-#define RTC_OF_INT                    RTCC_IF_OF
-#define RTC_COMP_INT                  RTCC_IF_CC1
-#define RTC_COUNTER_MASK              (_RTCC_CNT_MASK)
-#define RTC_MAX_VALUE                 (_RTCC_CNT_MASK)
-#define RTC_INTDISABLE( x )           RTCC_IntDisable( x )
-#define RTC_INTENABLE( x )            RTCC_IntEnable(  x )
-#define RTC_INTCLEAR( x )             RTCC_IntClear(   x )
-#define RTC_INTGET()                  RTCC_IntGet()
-#define RTC_COUNTERRESET()            RTCC->CNT = _RTCC_CNT_RESETVALUE
-#define RTC_COMPARESET( x )           RTCC_CapComSet( 1, x )
-#define RTC_COMPAREGET()              RTCC_CapComGet( 1 )
-#define NVIC_CLEARPENDINGIRQ()        NVIC_ClearPendingIRQ( RTCC_IRQn )
-#define NVIC_DISABLEIRQ()             NVIC_DisableIRQ( RTCC_IRQn )
-#define NVIC_ENABLEIRQ()              NVIC_EnableIRQ( RTCC_IRQn )
 #endif
 
 // Maximum number of ticks per overflow period (not the maximum tick value)
@@ -102,21 +110,22 @@
 // Assume 32kHz RTC/RTCC clock, cmuClkDiv_8 prescaler, 4 ticks per millisecond
 #define RTC_DIVIDER                     ( cmuClkDiv_8 )
 #endif
+
 #define RTC_CLOCK                       ( 32768U )
 #define MSEC_TO_TICKS_DIVIDER           ( 1000U * RTC_DIVIDER )
 #define MSEC_TO_TICKS_ROUNDING_FACTOR   ( MSEC_TO_TICKS_DIVIDER / 2 )
-#define MSEC_TO_TICKS( ms )             ( ( ( (uint64_t)ms * RTC_CLOCK )      \
+#define MSEC_TO_TICKS( ms )             ( ( ( (uint64_t)(ms) * RTC_CLOCK )    \
                                             + MSEC_TO_TICKS_ROUNDING_FACTOR ) \
                                           / MSEC_TO_TICKS_DIVIDER )
 
 #define TICKS_TO_MSEC_ROUNDING_FACTOR   ( RTC_CLOCK / 2 )
-#define TICKS_TO_MSEC( ticks )          ( ( ( (uint64_t)ticks                 \
+#define TICKS_TO_MSEC( ticks )          ( ( ( (uint64_t)(ticks)               \
                                               * RTC_DIVIDER * 1000U )         \
                                             + TICKS_TO_MSEC_ROUNDING_FACTOR ) \
                                           / RTC_CLOCK )
 
 #define TICKS_TO_SEC_ROUNDING_FACTOR    ( RTC_CLOCK / 2 )
-#define TICKS_TO_SEC( ticks )           ( ( ( (uint64_t)ticks                 \
+#define TICKS_TO_SEC( ticks )           ( ( ( (uint64_t)(ticks)               \
                                               * RTC_DIVIDER )                 \
                                             + TICKS_TO_SEC_ROUNDING_FACTOR )  \
                                           / RTC_CLOCK )
@@ -147,11 +156,11 @@ static bool               sleepBlocked;
 #endif
 
 #if defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG )
-static uint32_t           wallClockTime;
-static uint32_t           wallClockInitTime;
+static volatile uint32_t  wallClockOverflowCnt;
+static uint32_t           wallClockTimeBase;
 #endif
 
-#if defined( _EFM_DEVICE )
+#if defined( RTCDRV_USE_RTC )
 static const RTC_Init_TypeDef initRTC =
 {
   true,  // Start counting when init completed.
@@ -159,28 +168,30 @@ static const RTC_Init_TypeDef initRTC =
   false  // Count until max. to wrap around.
 };
 
-#elif defined( _EFR_DEVICE )
+#elif defined( RTCDRV_USE_RTCC )
 static RTCC_Init_TypeDef initRTCC =
 {
   true,                 /* Start counting when init completed. */
-  rtccCntModeNormal,    /* Use RTCC in normal mode and not in calender mode */
   false,                /* Disable updating RTC during debug halt. */
-  false,                /* Count until max. to wrap around. */
+  false,                /* Prescaler counts until max. before wrap around. */
+  false,                /* Counter counts until max. before wrap around. */
   rtccCntPresc_8,       /* Set RTCC prescaler to 8 */
   rtccCntTickPresc,     /* Count according to prescaler configuration */
   false,                /* Disable storing RTCC counter value in RTCC_CCV2 upon backup mode entry. */
   false,                /* LFXO fail detection disabled */
-  false                 /* Not applicable in this configuation */
+  rtccCntModeNormal,    /* Use RTCC in normal mode and not in calender mode */
+  false                 /* No leap year correction. */
 };
 
-static RTC_CCChConf_TypeDef initRTCCCompareChannel =
+static RTCC_CCChConf_TypeDef initRTCCCompareChannel =
 {
-  rtccCapComChModeCompare,    /* Use Compare mode*/
-  rtccCompMatchOutActionNone, /* Do no action on compare*/
+  rtccCapComChModeCompare,    /* Use Compare mode */
+  rtccCompMatchOutActionPulse,/* Don't care */
   rtccPRSCh0,                 /* PRS not used */
   rtccInEdgeNone,             /* Capture Input not used */
-  rtccCompBaseCnt,            /* Compare with Base CNT register*/
-  0
+  rtccCompBaseCnt,            /* Compare with Base CNT register */
+  0,                          /* Compare mask */
+  rtccDayCompareModeMonth     /* Don't care */
 };
 #endif
 
@@ -309,10 +320,15 @@ Ecode_t RTCDRV_Init( void )
   // Ensure LE modules are clocked.
   CMU_ClockEnable( cmuClock_CORELE, true );
 
+#if defined( CMU_LFECLKEN0_RTCC )
+  // Enable LFECLK in CMU (will also enable oscillator if not enabled).
+  CMU_ClockSelectSet( cmuClock_LFE, cmuSelect_LFXO );
+#else
   // Enable LFACLK in CMU (will also enable oscillator if not enabled).
   CMU_ClockSelectSet( cmuClock_LFA, cmuSelect_LFXO );
+#endif
 
-#if defined( _EFM_DEVICE )
+#if defined( RTCDRV_USE_RTC )
   // Set clock divider.
   CMU_ClockDivSet( cmuClock_RTC, RTC_DIVIDER );
 
@@ -322,9 +338,9 @@ Ecode_t RTCDRV_Init( void )
   // Initialize RTC.
   RTC_Init( &initRTC );
 
-#elif defined( _EFR_DEVICE )
+#elif defined( RTCDRV_USE_RTCC )
   // Set clock divider.
-  initRTCC.cntPresc = (RTCC_CntPresc_TypeDef)CMU_DivToLog2( RTC_DIVIDER );
+  initRTCC.presc = (RTCC_CntPresc_TypeDef)CMU_DivToLog2( RTC_DIVIDER );
 
   // Enable RTCC module clock.
   CMU_ClockEnable( cmuClock_RTCC, true );
@@ -333,7 +349,7 @@ Ecode_t RTCDRV_Init( void )
   RTCC_Init( &initRTCC );
 
   // Set up Compare channel.
-  RTCC_CapComChannelConfig( 1, &initRTCCCompareChannel );
+  RTCC_ChannelInit( 1, &initRTCCCompareChannel );
 #endif
 
   // Disable RTC/RTCC interrupt generation.
@@ -361,8 +377,8 @@ Ecode_t RTCDRV_Init( void )
 #endif
 
 #if defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG )
-  wallClockTime     = 0;
-  wallClockInitTime = 0;
+  wallClockOverflowCnt = 0;
+  wallClockTimeBase    = 0;
 
 #if defined( EMODE_NEVER_ALLOW_EM3EM4 )
   // Always block EM3 and EM4 if wallclock is running.
@@ -396,10 +412,10 @@ Ecode_t RTCDRV_DeInit( void )
   NVIC_CLEARPENDINGIRQ();
 
   // Disable RTC module and its clock.
-#if defined( _EFM_DEVICE )
+#if defined( RTCDRV_USE_RTC )
   RTC_Enable( false );
   CMU_ClockEnable( cmuClock_RTC, false );
-#elif defined( _EFR_DEVICE )
+#elif defined( RTCDRV_USE_RTCC )
   RTCC_Enable( false );
   CMU_ClockEnable( cmuClock_RTCC, false );
 #endif
@@ -540,9 +556,9 @@ Ecode_t RTCDRV_StartTimer(  RTCDRV_TimerID_t id,
 
   if ( rtcRunning == false ) {
 
-#if defined( _EFM_DEVICE )
+#if defined( RTCDRV_USE_RTC )
     lastStart = ( cnt ) & RTC_COUNTER_MASK;
-#elif defined( _EFR_DEVICE )
+#elif defined( RTCDRV_USE_RTCC )
     lastStart = cnt;
 #endif
 
@@ -579,7 +595,7 @@ Ecode_t RTCDRV_StartTimer(  RTCDRV_TimerID_t id,
         RTC_INTDISABLE( RTC_COMP_INT );
 
         timeElapsed = TIMEDIFF( cnt, lastStart );
-#if defined( _EFM_DEVICE )
+#if defined( RTCDRV_USE_RTC )
         // Compensate for the fact that CNT is normally COMP0+1 after a
         // compare match event.
         if ( timeElapsed == RTC_MAX_VALUE ) {
@@ -726,17 +742,59 @@ Ecode_t RTCDRV_TimeRemaining( RTCDRV_TimerID_t id, uint32_t *timeRemaining )
  ******************************************************************************/
 uint32_t RTCDRV_GetWallClock( void )
 {
-  uint64_t tmp;
-  uint32_t ticks, wallClock, wallClockStartPoint;
+  return wallClockTimeBase
+         + (uint32_t)TICKS_TO_SEC( RTCDRV_GetWallClockTicks32() );
+}
+#endif
 
-  INT_Disable();
-  ticks               = RTC_COUNTERGET();
-  wallClock           = wallClockTime;
-  wallClockStartPoint = wallClockInitTime;
-  INT_Enable();
+#if defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG )
+/***************************************************************************//**
+ * @brief
+ *    Get wallclock tick count as a 32bit value. At 4 ticks per millisecond,
+ *    overflow occurs after approximately 12.5 days
+ *
+ * @return
+ *    Wallclock tick counter.
+ ******************************************************************************/
+uint32_t RTCDRV_GetWallClockTicks32( void )
+{
+  uint32_t overflows, ticks;
 
-  tmp = ticks - wallClockStartPoint;
-  return wallClock + (uint32_t)TICKS_TO_SEC( tmp );
+  /* Need to re-read data in case overflow cnt is incremented while we read. */
+  do
+  {
+    overflows = wallClockOverflowCnt;
+    ticks     = RTC_COUNTERGET();
+  } while ( overflows != wallClockOverflowCnt );
+
+#if ( RTC_COUNTER_BITS < 32 )
+  return ( overflows << RTC_COUNTER_BITS ) + ticks;
+#else
+  return ticks;
+#endif
+}
+#endif
+
+#if defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG )
+/***************************************************************************//**
+ * @brief
+ *    Get wallclock tick count as a 64 bit value. This will never overflow.
+ *
+ * @return
+ *    Wallclock tick counter.
+ ******************************************************************************/
+uint64_t RTCDRV_GetWallClockTicks64( void )
+{
+  uint64_t overflows, ticks;
+
+  /* Need to re-read data in case overflow cnt is incremented while we read. */
+  do
+  {
+    overflows = wallClockOverflowCnt;
+    ticks     = RTC_COUNTERGET();
+  } while ( overflows != wallClockOverflowCnt );
+
+  return ( overflows << RTC_COUNTER_BITS ) + ticks;
 }
 #endif
 
@@ -752,20 +810,80 @@ uint32_t RTCDRV_GetWallClock( void )
  ******************************************************************************/
 Ecode_t RTCDRV_SetWallClock( uint32_t secs )
 {
-  INT_Disable();
-  wallClockTime     = secs;
-  wallClockInitTime = RTC_COUNTERGET();
-  INT_Enable();
-
+  wallClockTimeBase = secs - TICKS_TO_SEC( RTCDRV_GetWallClockTicks32() );
   return ECODE_EMDRV_RTCDRV_OK;
+}
+#endif
+
+#if defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG )
+/***************************************************************************//**
+ * @brief
+ *    Convert from milliseconds to RTC/RTCC ticks.
+ *
+ * @param[in] ms Millisecond value to convert.
+ *
+ * @return
+ *    Number of ticks.
+ ******************************************************************************/
+uint64_t  RTCDRV_MsecsToTicks( uint32_t ms )
+{
+  return MSEC_TO_TICKS( ms );
+}
+#endif
+
+#if defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG )
+/***************************************************************************//**
+ * @brief
+ *    Convert from seconds to RTC/RTCC ticks.
+ *
+ * @param[in] secs Second value to convert.
+ *
+ * @return
+ *    Number of ticks.
+ ******************************************************************************/
+uint64_t  RTCDRV_SecsToTicks( uint32_t secs )
+{
+  return MSEC_TO_TICKS( 1000 * secs );
+}
+#endif
+
+#if defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG )
+/***************************************************************************//**
+ * @brief
+ *    Convert from RTC/RTCC ticks to milliseconds.
+ *
+ * @param[in] ticks Number of ticks to convert.
+ *
+ * @return
+ *    Number of milliseconds.
+ ******************************************************************************/
+uint32_t  RTCDRV_TicksToMsec( uint64_t ticks )
+{
+  return TICKS_TO_MSEC( ticks );
+}
+#endif
+
+#if defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG )
+/***************************************************************************//**
+ * @brief
+ *    Convert from RTC/RTCC ticks to seconds.
+ *
+ * @param[in] ticks Number of ticks to convert.
+ *
+ * @return
+ *    Number of seconds.
+ ******************************************************************************/
+uint32_t  RTCDRV_TicksToSec( uint64_t ticks )
+{
+  return TICKS_TO_MSEC( ticks ) / 1000;
 }
 #endif
 
 /// @cond DO_NOT_INCLUDE_WITH_DOXYGEN
 
-#if defined( _EFM_DEVICE )
+#if defined( RTCDRV_USE_RTC )
 void RTC_IRQHandler(void)
-#elif defined( _EFR_DEVICE )
+#elif defined( RTCDRV_USE_RTCC )
 void RTCC_IRQHandler(void)
 #endif
 {
@@ -817,14 +935,10 @@ void RTCC_IRQHandler(void)
   }
 
 #if defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG )
-  if ( flags & RTC_OF_INT ) {
-    uint64_t ticks;
-
+  if ( flags & RTC_OF_INT )
+  {
     RTC_INTCLEAR( RTC_OF_INT );
-
-    ticks             = MAX_RTC_TICK_CNT - wallClockInitTime;
-    wallClockInitTime = 0;
-    wallClockTime    += TICKS_TO_SEC( ticks );
+    wallClockOverflowCnt++;
   }
 #endif
 
@@ -935,7 +1049,7 @@ static void rescheduleRtc( uint32_t rtcCnt )
   rtcRunning = false;
   if ( min != UINT64_MAX ) {
     min = EFM32_MIN( min, RTC_CLOSE_TO_MAX_VALUE );
-#if defined( _EFM_DEVICE )
+#if defined( RTCDRV_USE_RTC )
     if ( inTimerIRQ == false ) {
       lastStart = ( rtcCnt ) & RTC_COUNTER_MASK;
     } else
@@ -1063,6 +1177,15 @@ static void rescheduleRtc( uint32_t rtcCnt )
 
   @ref RTCDRV_GetWallClock(), @ref RTCDRV_SetWallClock() @n
     Get or set wallclock time.
+
+  @ref RTCDRV_GetWallClockTicks32(), @ref RTCDRV_GetWallClockTicks64() @n
+    Get wallclock time expressed as number of RTC/RTCC counter ticks, available
+    both as 32bit and 64 bit values.
+
+  @ref RTCDRV_MsecsToTicks(), @ref RTCDRV_SecsToTicks(),
+  @ref RTCDRV_TicksToMsec(), @ref RTCDRV_TicksToSec() @n
+    Conversion functions between seconds, milliseconds and RTC/RTCC
+    counter ticks.
 
   @n @anchor TimerCallback <b>The timer expiry callback function:</b> @n
   The callback function, prototyped as @ref RTCDRV_Callback_t(), is called from

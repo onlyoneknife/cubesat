@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file
  * @brief EEPROM driver for 24AA024 (2Kbit) EEPROM device on the DK.
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -13,11 +13,8 @@
  *
  ******************************************************************************/
 
-
-
-
 #include <stddef.h>
-#include "i2cdrv.h"
+#include "i2cspm.h"
 #include "eeprom.h"
 
 /*******************************************************************************
@@ -68,9 +65,6 @@ static int EEPROM_AckPoll(I2C_TypeDef *i2c, uint8_t addr)
   I2C_TransferSeq_TypeDef    seq;
   I2C_TransferReturn_TypeDef ret;
 
-  /* Unused parameter */
-  (void) i2c;
-
   /* Do acknowledge polling waiting for write process to finish in EEPROM */
   seq.addr  = addr;
   seq.flags = I2C_FLAG_WRITE;
@@ -81,7 +75,7 @@ static int EEPROM_AckPoll(I2C_TypeDef *i2c, uint8_t addr)
   /* Wait for ACK from device */
   while (1)
   {
-    ret = I2CDRV_Transfer(&seq);
+    ret = I2CSPM_Transfer(i2c, &seq);
     if (ret == i2cTransferDone)
     {
       break;
@@ -139,9 +133,6 @@ int EEPROM_Read(I2C_TypeDef *i2c,
   I2C_TransferReturn_TypeDef ret;
   uint8_t                    offsetLoc[1];
 
-  /* Unused parameter */
-  (void) i2c;
-
   if (offset >= EEPROM_DVK_LEN)
   {
     return(0);
@@ -162,7 +153,7 @@ int EEPROM_Read(I2C_TypeDef *i2c,
   seq.buf[1].data = data;
   seq.buf[1].len  = len;
 
-  ret = I2CDRV_Transfer(&seq);
+  ret = I2CSPM_Transfer(i2c, &seq);
   if (ret != i2cTransferDone)
   {
     return((int) ret);
@@ -244,7 +235,7 @@ int EEPROM_Write(I2C_TypeDef *i2c,
     seq.buf[1].data = data;
     seq.buf[1].len  = chunk;
 
-    ret = I2CDRV_Transfer(&seq);
+    ret = I2CSPM_Transfer(i2c, &seq);
     if (ret != i2cTransferDone)
     {
       return((int) ret);

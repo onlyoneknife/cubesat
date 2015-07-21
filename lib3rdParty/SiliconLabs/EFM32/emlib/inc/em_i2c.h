@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file em_i2c.h
  * @brief Inter-intergrated circuit (I2C) peripheral API
- * @version 3.20.7
+ * @version 3.20.13
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -31,8 +31,8 @@
  ******************************************************************************/
 
 
-#ifndef __EM_I2C_H
-#define __EM_I2C_H
+#ifndef __SILICON_LABS_EM_I2C_H_
+#define __SILICON_LABS_EM_I2C_H_
 
 #include "em_device.h"
 #if defined(I2C_COUNT) && (I2C_COUNT > 0)
@@ -66,8 +66,19 @@ extern "C" {
  *   worst case value of Tlow or Thigh as base.
  *
  *   1/(Tlow + Thigh + 1us + 0.3us) = 1/(4.7 + 4.7 + 1.3)us = 93458Hz
+ * @note
+ *   Due to chip characteristics, the max value is somewhat reduced.
  */
-#define I2C_FREQ_STANDARD_MAX    93500
+#if defined(_EFM32_GECKO_FAMILY) || defined(_EFM32_TINY_FAMILY) \
+    || defined(_EFM32_ZERO_FAMILY) || defined(_EFM32_HAPPY_FAMILY)
+#define I2C_FREQ_STANDARD_MAX    93000
+
+#elif defined(_EFM32_GIANT_FAMILY) || defined(_EFM32_WONDER_FAMILY)
+#define I2C_FREQ_STANDARD_MAX    92000
+
+#else
+#error "Unknown device family."
+#endif
 
 /**
  * @brief
@@ -87,7 +98,7 @@ extern "C" {
  *   Fast mode+ max frequency assuming using 11:6 ratio for Nlow:Nhigh.
  * @details
  *   From I2C specification: Min Tlow = 0.5us, min Thigh = 0.26us,
- *   max Trise=0.012us, max Tfall=0.12us. Since ratio is 11:6, have to use
+ *   max Trise=0.12us, max Tfall=0.12us. Since ratio is 11:6, have to use
  *   worst case value of Tlow or (11/6)xThigh as base.
  *
  *   1/(Tlow + Thigh + 0.12us + 0.12us) = 1/(0.5 + 0.273 + 0.24)us = 987167Hz
@@ -489,4 +500,4 @@ I2C_TransferReturn_TypeDef I2C_TransferInit(I2C_TypeDef *i2c,
 #endif
 
 #endif /* defined(I2C_COUNT) && (I2C_COUNT > 0) */
-#endif /* __EM_I2C_H */
+#endif /* __SILICON_LABS_EM_I2C_H_ */

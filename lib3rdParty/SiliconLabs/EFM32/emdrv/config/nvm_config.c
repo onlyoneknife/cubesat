@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file nvm_config.c
  * @brief NVM config implementation
- * @version 3.20.5
+ * @version 3.20.13
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -16,19 +16,21 @@
 #include <stddef.h>
 #include "nvm.h"
 #include "nvm_config.h"
-   
+
+/// @cond DO_NOT_INCLUDE_WITH_DOXYGEN
+
 /*******************************************************************************
  ***********************   DATA SPECIFICATION START   **************************
  ******************************************************************************/
 
-/* Example data objects */
-uint32_t colorTable[]           = { 0x000000, 0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 
+/**< Example data objects */
+uint32_t colorTable[]           = { 0x000000, 0xff0000, 0x00ff00, 0x0000ff, 0xffff00,
                                     0x00ffff, 0xff00ff, 0xc0c0c0, 0xffffff };
 uint8_t coefficientTable[]      = { 11, 12, 13, 14, 15 };
-uint8_t primeNumberTable[]      = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 
-                                    43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 
-                                    101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 
-                                    151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 
+uint8_t primeNumberTable[]      = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41,
+                                    43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97,
+                                    101, 103, 107, 109, 113, 127, 131, 137, 139, 149,
+                                    151, 157, 163, 167, 173, 179, 181, 191, 193, 197,
                                     199, 211, 223, 227, 229, 233, 239, 241, 251 };
 uint8_t bonusTable[]            = { 39, 38, 37, 36 };
 uint8_t privateKeyTable[]       = { 49, 48, 47, 46 };
@@ -38,8 +40,8 @@ uint8_t bigEmptyTable[450];
 uint32_t singleVariable         = 68;
 
 
-/* Example object IDs.
- * These IDs should have names that relate to the data objects defined in nvm_config.c. */
+/* Example object IDs. These IDs should have names that relate to the data
+ * objects defined in nvm_config.c. */
 typedef enum
 {
   COLOR_TABLE_ID,
@@ -102,7 +104,7 @@ NVM_Page_t const myPage3 =
 NVM_Page_t const myPage4 =
 {
 /*{ Pointer to object,            Size of object,           Object ID}, */
-  { (uint8_t *) primeNumberTable, sizeof(primeNumberTable), PRIME_NUMBER_TABLE_ID },  
+  { (uint8_t *) primeNumberTable, sizeof(primeNumberTable), PRIME_NUMBER_TABLE_ID },
   { (uint8_t *) transformTable,   sizeof(transformTable),   TRANSFORM_TABLE_ID },
   { (uint8_t *) &singleVariable,  sizeof(singleVariable),   SINGLE_VARIABLE_ID },
   NVM_PAGE_TERMINATION /* Null termination of table. This is required. */
@@ -123,9 +125,7 @@ NVM_Page_Table_t const nvmPages =
  ************************   DATA SPECIFICATION END   ***************************
  ******************************************************************************/
 
-/// @cond DO_NOT_INCLUDE_WITH_DOXYGEN
-
-/** The code below should not be changed. 
+/** The code below should not be changed.
  *
  *  Set the storage location in memory. This area should be reserved
  *  using the linker and needs to be aligned with the physical page
@@ -146,24 +146,26 @@ NVM_Page_Table_t const nvmPages =
  *
  */
 #define NUMBER_OF_USER_PAGES  (sizeof(nvmPages) / sizeof(NVM_Page_Descriptor_t))
-#define NUMBER_OF_PAGES (NVM_PAGES_SCRATCH + NUMBER_OF_USER_PAGES)
-   
+#define NUMBER_OF_PAGES       (NVM_PAGES_SCRATCH + NUMBER_OF_USER_PAGES)
+
 /// @endcond
 
 #ifdef __ICCARM__
 #pragma data_alignment = NVM_PAGE_SIZE
-static const uint8_t nvmData[NVM_PAGE_SIZE * NUMBER_OF_PAGES] @ ".text";
+static const uint8_t nvmData[NVM_PAGE_SIZE * NUMBER_OF_PAGES] @ ".text";   /**< Set storage size and location */
 #else
-static const uint8_t nvmData[NVM_PAGE_SIZE * NUMBER_OF_PAGES] __attribute__ ((__aligned__(NVM_PAGE_SIZE))) = { 0xFF };
+static const uint8_t nvmData[NVM_PAGE_SIZE * NUMBER_OF_PAGES] \
+  __attribute__ ((__aligned__(NVM_PAGE_SIZE))) = { 0xFF };                 /**< Set storage size and location */
 #endif
 
-static NVM_Config_t const nvmConfig = 
+
+static NVM_Config_t const nvmConfig =
 {
-  &nvmPages,
-  NUMBER_OF_PAGES,
-  NUMBER_OF_USER_PAGES,
-  nvmData
-};
+  &nvmPages,            /**< Page table */
+  NUMBER_OF_PAGES,      /**< Total number of pages */
+  NUMBER_OF_USER_PAGES, /**< Wear leveling pages */
+  nvmData               /**< NVM data */
+};                      /**< Top-level configuration data */
 
 /***************************************************************************//**
  * @brief

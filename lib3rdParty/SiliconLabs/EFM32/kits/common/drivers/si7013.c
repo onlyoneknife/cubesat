@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file
  * @brief Driver for the Si7013 Temperature / Humidity sensor
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -13,9 +13,11 @@
  *
  ******************************************************************************/
 
-
+#include <stddef.h>
 #include "si7013.h"
-#include "i2cdrv.h"
+#include "i2cspm.h"
+
+#include "stddef.h"
 
 /*******************************************************************************
  *******************************   DEFINES   ***********************************
@@ -24,15 +26,18 @@
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
 /** Si7013 Read Temperature Command */
-#define SI7013_READ_TEMP     0xE0 /* Read previous T data from RH measurement
-                                     command*/
+#define SI7013_READ_TEMP        0xE0 /* Read previous T data from RH measurement
+                                        command*/
 /** Si7013 Read RH Command */
-#define SI7013_READ_RH       0xE5 /* Perform RH (and T) measurement. */
+#define SI7013_READ_RH          0xE5 /* Perform RH (and T) measurement. */
 /** Si7013 Read ID */
-#define SI7013_READ_ID1_1    0xFA
-#define SI7013_READ_ID1_2    0x0F
-#define SI7013_READ_ID2_1    0xFc
-#define SI7013_READ_ID2_2    0xc9
+#define SI7013_READ_ID1_1       0xFA
+#define SI7013_READ_ID1_2       0x0F
+#define SI7013_READ_ID2_1       0xFc
+#define SI7013_READ_ID2_2       0xc9
+/** Si7013 Read Firmware Revision */
+#define SI7013_READ_FWREV_1     0x84
+#define SI7013_READ_FWREV_2     0xB8
 
 /** @endcond */
 
@@ -56,16 +61,13 @@
  *   Returns number of bytes read on success. Otherwise returns error codes
  *   based on the I2CDRV.
  *****************************************************************************/
-static int Si7013_Measure(I2C_TypeDef *i2c, uint8_t addr, uint32_t *data,
-                          uint8_t command)
+static int32_t Si7013_Measure(I2C_TypeDef *i2c, uint8_t addr, uint32_t *data,
+                              uint8_t command)
 {
   I2C_TransferSeq_TypeDef    seq;
   I2C_TransferReturn_TypeDef ret;
   uint8_t                    i2c_read_data[2];
   uint8_t                    i2c_write_data[1];
-
-  /* Unused parameter */
-  (void) i2c;
 
   seq.addr  = addr;
   seq.flags = I2C_FLAG_WRITE_READ;
@@ -77,7 +79,7 @@ static int Si7013_Measure(I2C_TypeDef *i2c, uint8_t addr, uint32_t *data,
   seq.buf[1].data = i2c_read_data;
   seq.buf[1].len  = 2;
 
-  ret = I2CDRV_Transfer(&seq);
+  ret = I2CSPM_Transfer(i2c, &seq);
 
   if (ret != i2cTransferDone)
   {
@@ -88,6 +90,49 @@ static int Si7013_Measure(I2C_TypeDef *i2c, uint8_t addr, uint32_t *data,
   *data = ((uint32_t) i2c_read_data[0] << 8) + (i2c_read_data[1] & 0xfc);
 
   return((int) 2);
+}
+
+
+/**************************************************************************//**
+ * @brief
+  *  Reads Firmware Revision from a Si7013 sensor.
+ * @param[in] i2c
+ *   The I2C peripheral to use.
+ * @param[in] addr
+ *   The I2C address of the sensor.
+ * @param[out] fwRev
+ *   The internal firmware revision. 0xFF === 1.0
+ * @return
+ *   Returns zero on OK, non-zero otherwise.
+ *****************************************************************************/
+int32_t Si7013_GetFirmwareRevision(I2C_TypeDef *i2c, uint8_t addr, uint8_t *fwRev)
+{
+  I2C_TransferSeq_TypeDef    seq;
+  I2C_TransferReturn_TypeDef ret;
+  uint8_t                    i2c_write_data[2];
+  uint8_t                    i2c_read_data[1];
+
+  seq.addr  = addr;
+  seq.flags = I2C_FLAG_WRITE_READ;
+  /* Select command to issue */
+  i2c_write_data[0] = SI7013_READ_FWREV_1;
+  i2c_write_data[1] = SI7013_READ_FWREV_2;
+  seq.buf[0].data   = i2c_write_data;
+  seq.buf[0].len    = 2;
+  /* Select location/length of data to be read */
+  seq.buf[1].data = i2c_read_data;
+  seq.buf[1].len  = 1;
+
+  ret = I2CSPM_Transfer(i2c, &seq);
+
+  if (ret != i2cTransferDone)
+  {
+    *fwRev = 0;
+    return (uint32_t)ret;
+  }
+  *fwRev = i2c_read_data[0];
+
+  return (uint32_t)i2cTransferDone;
 }
 
 
@@ -105,8 +150,8 @@ static int Si7013_Measure(I2C_TypeDef *i2c, uint8_t addr, uint32_t *data,
  * @return
  *   Returns zero on OK, non-zero otherwise.
  *****************************************************************************/
-int Si7013_MeasureRHAndTemp(I2C_TypeDef *i2c, uint8_t addr, uint32_t *rhData,
-                        int32_t *tData)
+int32_t Si7013_MeasureRHAndTemp(I2C_TypeDef *i2c, uint8_t addr, uint32_t *rhData,
+                                int32_t *tData)
 {
   int ret = Si7013_Measure(i2c, addr, rhData, SI7013_READ_RH);
 
@@ -134,6 +179,7 @@ int Si7013_MeasureRHAndTemp(I2C_TypeDef *i2c, uint8_t addr, uint32_t *rhData,
   return 0;
 }
 
+
 /**************************************************************************//**
  * @brief
  *   Checks if a Si7013 is present on the I2C bus or not.
@@ -141,35 +187,38 @@ int Si7013_MeasureRHAndTemp(I2C_TypeDef *i2c, uint8_t addr, uint32_t *rhData,
  *   The I2C peripheral to use (Not used).
  * @param[in] addr
  *   The I2C address to probe.
+ * @param[out] deviceId
+ *   Write device ID from SNB_3 if device reponds. Pass in NULL to discard.
+ *   Should be 0x0D for Si7013, 0x14 for Si7020 or 0x15 for Si7021
  * @return
  *   True if a Si7013 is detected, false otherwise.
  *****************************************************************************/
-bool Si7013_Detect(I2C_TypeDef *i2c, uint8_t addr)
+bool Si7013_Detect(I2C_TypeDef *i2c, uint8_t addr, uint8_t *deviceId)
 {
   I2C_TransferSeq_TypeDef    seq;
   I2C_TransferReturn_TypeDef ret;
   uint8_t                    i2c_read_data[8];
   uint8_t                    i2c_write_data[2];
 
-  /* Unused parameter */
-  (void) i2c;
-
   seq.addr  = addr;
   seq.flags = I2C_FLAG_WRITE_READ;
   /* Select command to issue */
-  i2c_write_data[0] = SI7013_READ_ID1_1;
-  i2c_write_data[1] = SI7013_READ_ID1_2;
+  i2c_write_data[0] = SI7013_READ_ID2_1;
+  i2c_write_data[1] = SI7013_READ_ID2_2;
   seq.buf[0].data   = i2c_write_data;
   seq.buf[0].len    = 2;
   /* Select location/length of data to be read */
   seq.buf[1].data = i2c_read_data;
   seq.buf[1].len  = 8;
 
-  ret = I2CDRV_Transfer(&seq);
+  ret = I2CSPM_Transfer(i2c, &seq);
   if (ret != i2cTransferDone)
   {
-    return(false);
+    return false;
   }
-
-  return(true);
+  if (NULL != deviceId)
+  {
+    *deviceId = i2c_read_data[0];
+  }
+  return true;
 }

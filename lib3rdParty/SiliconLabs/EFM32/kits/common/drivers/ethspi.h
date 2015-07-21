@@ -1,8 +1,8 @@
-/***************************************************************************//**
+/**************************************************************************//**
  * @file
- * @brief API for SPI Interface to Micrel KSZ8851SNL ethernet controller.
- * @version 3.20.5
- *******************************************************************************
+ * @brief SPI interface API for KSZ8851SNL Ethernet controller
+ * @version 3.20.12
+ ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
  *******************************************************************************
@@ -13,7 +13,6 @@
  *
  ******************************************************************************/
 
-
 #ifndef __ETHERNET_SPI_H
 #define __ETHERNET_SPI_H
 #include <stdint.h>
@@ -22,11 +21,12 @@
 * @addtogroup Drivers
 * @{
 ******************************************************************************/
+/**
+ * TODO: Add detailed description here */
 /**************************************************************************//**
 * @addtogroup EthSpi
-* @{
-* The actual communication between the EFM32 chips and the ethernet controller
-* is done via SPI using the driver from this file.
+* @{ Detailed description of the ethernet SPI driver
+* EFM32 SPI abstraction layer for KSZ8851SNL Ethernet controller driver
 ******************************************************************************/
 
 #ifdef __cplusplus

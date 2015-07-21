@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file spidrv.h
  * @brief SPIDRV API definition.
- * @version 3.20.5
+ * @version 3.20.13
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -18,12 +18,13 @@
 
 #include "em_device.h"
 #include "em_cmu.h"
-#include "em_dma.h"
+
 #include "ecode.h"
 #include "spidrv_config.h"
 #if defined( EMDRV_SPIDRV_INCLUDE_SLAVE )
-#include "rtcdrv.h"
+#include "rtcdriver.h"
 #endif
+#include "dmadrv.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,12 +47,12 @@ extern "C" {
 #define ECODE_EMDRV_SPIDRV_ILLEGAL_HANDLE    ( ECODE_EMDRV_SPIDRV_BASE | 0x00000001 ) ///< Illegal SPI handle.
 #define ECODE_EMDRV_SPIDRV_PARAM_ERROR       ( ECODE_EMDRV_SPIDRV_BASE | 0x00000002 ) ///< Illegal input parameter.
 #define ECODE_EMDRV_SPIDRV_BUSY              ( ECODE_EMDRV_SPIDRV_BASE | 0x00000003 ) ///< The SPI port is busy.
-#define ECODE_EMDRV_SPIDRV_ILLEGAL_OPERATION ( ECODE_EMDRV_SPIDRV_BASE | 0x00000004 ) ///< Illegal operation on SPI port.
-#define ECODE_EMDRV_SPIDRV_TIMER_ALLOC_ERROR ( ECODE_EMDRV_SPIDRV_BASE | 0x00000005 ) ///< Unable to allocated timeout timer.
-#define ECODE_EMDRV_SPIDRV_TIMEOUT           ( ECODE_EMDRV_SPIDRV_BASE | 0x00000006 ) ///< SPI transfer timeout.
-#define ECODE_EMDRV_SPIDRV_IDLE              ( ECODE_EMDRV_SPIDRV_BASE | 0x00000007 ) ///< No SPI transfer in progress.
-#define ECODE_EMDRV_SPIDRV_ABORTED           ( ECODE_EMDRV_SPIDRV_BASE | 0x00000008 ) ///< SPI transfer has been aborted.
-#define ECODE_EMDRV_SPIDRV_MODE_ERROR        ( ECODE_EMDRV_SPIDRV_BASE | 0x00000009 ) ///< SPI master used slave API or vica versa.
+#define ECODE_EMDRV_SPIDRV_TIMER_ALLOC_ERROR ( ECODE_EMDRV_SPIDRV_BASE | 0x00000004 ) ///< Unable to allocated timeout timer.
+#define ECODE_EMDRV_SPIDRV_TIMEOUT           ( ECODE_EMDRV_SPIDRV_BASE | 0x00000005 ) ///< SPI transfer timeout.
+#define ECODE_EMDRV_SPIDRV_IDLE              ( ECODE_EMDRV_SPIDRV_BASE | 0x00000006 ) ///< No SPI transfer in progress.
+#define ECODE_EMDRV_SPIDRV_ABORTED           ( ECODE_EMDRV_SPIDRV_BASE | 0x00000007 ) ///< SPI transfer has been aborted.
+#define ECODE_EMDRV_SPIDRV_MODE_ERROR        ( ECODE_EMDRV_SPIDRV_BASE | 0x00000008 ) ///< SPI master used slave API or vica versa.
+#define ECODE_EMDRV_SPIDRV_DMA_ALLOC_ERROR   ( ECODE_EMDRV_SPIDRV_BASE | 0x00000009 ) ///< Unable to allocated DMA channels.
 
 /// SPI driver instance type.
 typedef enum SPIDRV_Type
@@ -125,9 +126,14 @@ typedef void (*SPIDRV_Callback_t)( struct SPIDRV_HandleData *handle,
 typedef struct SPIDRV_Init
 {
   USART_TypeDef       *port;            ///< The USART used for SPI.
-  unsigned int        txDMACh;          ///< DMA channel number for transmit.
-  unsigned int        rxDMACh;          ///< DMA channel number for receive.
-  uint32_t            portLocation;     ///< Location number for SPI pins.
+#if defined( _USART_ROUTELOC0_MASK )
+  uint8_t             portLocationTx;   ///< Location number for SPI Tx pin.
+  uint8_t             portLocationRx;   ///< Location number for SPI Rx pin.
+  uint8_t             portLocationClk;  ///< Location number for SPI Clk pin.
+  uint8_t             portLocationCs;   ///< Location number for SPI Cs pin.
+#else
+  uint8_t             portLocation;     ///< Location number for SPI pins.
+#endif
   uint32_t            bitRate;          ///< SPI bitrate.
   uint32_t            frameLength;      ///< SPI framelength, valid numbers are 4..16
   uint32_t            dummyTxValue;     ///< The value to transmit when using SPI receive API functions.
@@ -146,7 +152,10 @@ typedef struct SPIDRV_HandleData
 {
   /// @cond DO_NOT_INCLUDE_WITH_DOXYGEN
   SPIDRV_Init_t       initData;
-  DMA_CB_TypeDef      rxDmaCbData;
+  unsigned int        txDMACh;
+  unsigned int        rxDMACh;
+  DMADRV_PeripheralSignal_t txDMASignal;
+  DMADRV_PeripheralSignal_t rxDMASignal;
   SPIDRV_Callback_t   userCallback;
   uint32_t            dummyRx;
   int                 transferCount;
@@ -167,12 +176,155 @@ typedef struct SPIDRV_HandleData
 /// SPI driver instance handle.
 typedef SPIDRV_HandleData_t * SPIDRV_Handle_t;
 
+#if defined( _USART_ROUTELOC0_MASK )
 /// Configuration data for SPI master using USART0.
 #define SPIDRV_MASTER_USART0                                              \
 {                                                                         \
   USART0,                       /* USART port                       */    \
-  0,                            /* Tx DMA channel number            */    \
-  1,                            /* Rx DMA channel number            */    \
+  _USART_ROUTELOC0_TXLOC_LOC0,  /* USART Tx pin location number     */    \
+  _USART_ROUTELOC0_RXLOC_LOC0,  /* USART Rx pin location number     */    \
+  _USART_ROUTELOC0_CLKLOC_LOC2, /* USART Clk pin location number    */    \
+  _USART_ROUTELOC0_CSLOC_LOC2,  /* USART Cs pin location number     */    \
+  1000000,                      /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvMaster,                 /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+
+/// Configuration data for SPI master using USART1.
+#define SPIDRV_MASTER_USART1                                              \
+{                                                                         \
+  USART1,                       /* USART port                       */    \
+  _USART_ROUTELOC0_TXLOC_LOC17, /* USART Tx pin location number     */    \
+  _USART_ROUTELOC0_RXLOC_LOC17, /* USART Rx pin location number     */    \
+  _USART_ROUTELOC0_CLKLOC_LOC17,/* USART Clk pin location number    */    \
+  _USART_ROUTELOC0_CSLOC_LOC17, /* USART Cs pin location number     */    \
+  1000000,                      /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvMaster,                 /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+
+/// Configuration data for SPI master using USART2.
+#define SPIDRV_MASTER_USART2                                              \
+{                                                                         \
+  USART2,                       /* USART port                       */    \
+  _USART_ROUTELOC0_TXLOC_LOC0,  /* USART Tx pin location number     */    \
+  _USART_ROUTELOC0_RXLOC_LOC0,  /* USART Rx pin location number     */    \
+  _USART_ROUTELOC0_CLKLOC_LOC0, /* USART Clk pin location number    */    \
+  _USART_ROUTELOC0_CSLOC_LOC0,  /* USART Cs pin location number     */    \
+  1000000,                      /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvMaster,                 /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+
+#define SPIDRV_MASTER_USARTRF0                                            \
+{                                                                         \
+  USARTRF0,                     /* USART port                       */    \
+  _USART_ROUTELOC0_TXLOC_LOC0,  /* USART Tx pin location number     */    \
+  _USART_ROUTELOC0_RXLOC_LOC0,  /* USART Rx pin location number     */    \
+  _USART_ROUTELOC0_CLKLOC_LOC2, /* USART Clk pin location number    */    \
+  _USART_ROUTELOC0_CSLOC_LOC2,  /* USART Cs pin location number     */    \
+  1000000,                      /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvMaster,                 /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+
+/// Configuration data for SPI slave using USART0.
+#define SPIDRV_SLAVE_USART0                                               \
+{                                                                         \
+  USART0,                       /* USART port                       */    \
+  _USART_ROUTELOC0_TXLOC_LOC0,  /* USART Tx pin location number     */    \
+  _USART_ROUTELOC0_RXLOC_LOC0,  /* USART Rx pin location number     */    \
+  _USART_ROUTELOC0_CLKLOC_LOC2, /* USART Clk pin location number    */    \
+  _USART_ROUTELOC0_CSLOC_LOC2,  /* USART Cs pin location number     */    \
+  0,                            /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvSlave,                  /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+
+/// Configuration data for SPI slave using USART1.
+#define SPIDRV_SLAVE_USART1                                               \
+{                                                                         \
+  USART1,                       /* USART port                       */    \
+  _USART_ROUTELOC0_TXLOC_LOC17, /* USART Tx pin location number     */    \
+  _USART_ROUTELOC0_RXLOC_LOC17, /* USART Rx pin location number     */    \
+  _USART_ROUTELOC0_CLKLOC_LOC17,/* USART Clk pin location number    */    \
+  _USART_ROUTELOC0_CSLOC_LOC17, /* USART Cs pin location number     */    \
+  0,                            /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvSlave,                  /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+
+/// Configuration data for SPI slave using USART2.
+#define SPIDRV_SLAVE_USART2                                               \
+{                                                                         \
+  USART2,                       /* USART port                       */    \
+  _USART_ROUTELOC0_TXLOC_LOC0,  /* USART Tx pin location number     */    \
+  _USART_ROUTELOC0_RXLOC_LOC0,  /* USART Rx pin location number     */    \
+  _USART_ROUTELOC0_CLKLOC_LOC0, /* USART Clk pin location number    */    \
+  _USART_ROUTELOC0_CSLOC_LOC0,  /* USART Cs pin location number     */    \
+  0,                            /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvSlave,                  /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+
+/// Configuration data for SPI slave using USARTRF0.
+#define SPIDRV_SLAVE_USARTRF0                                             \
+{                                                                         \
+  USARTRF0,                     /* USART port                       */    \
+  _USART_ROUTELOC0_TXLOC_LOC0,  /* USART Tx pin location number     */    \
+  _USART_ROUTELOC0_RXLOC_LOC0,  /* USART Rx pin location number     */    \
+  _USART_ROUTELOC0_CLKLOC_LOC2, /* USART Clk pin location number    */    \
+  _USART_ROUTELOC0_CSLOC_LOC2,  /* USART Cs pin location number     */    \
+  0,                            /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvSlave,                  /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+#else
+
+/// Configuration data for SPI master using USART0.
+#define SPIDRV_MASTER_USART0                                              \
+{                                                                         \
+  USART0,                       /* USART port                       */    \
   _USART_ROUTE_LOCATION_LOC1,   /* USART pins location number       */    \
   1000000,                      /* Bitrate                          */    \
   8,                            /* Frame length                     */    \
@@ -188,8 +340,6 @@ typedef SPIDRV_HandleData_t * SPIDRV_Handle_t;
 #define SPIDRV_MASTER_USART1                                              \
 {                                                                         \
   USART1,                       /* USART port                       */    \
-  2,                            /* Tx DMA channel number            */    \
-  3,                            /* Rx DMA channel number            */    \
   _USART_ROUTE_LOCATION_LOC1,   /* USART pins location number       */    \
   1000000,                      /* Bitrate                          */    \
   8,                            /* Frame length                     */    \
@@ -202,12 +352,41 @@ typedef SPIDRV_HandleData_t * SPIDRV_Handle_t;
 }
 
 /// Configuration data for SPI master using USART2.
+#if defined( _EZR32_LEOPARD_FAMILY ) || defined( _EZR32_WONDER_FAMILY )
 #define SPIDRV_MASTER_USART2                                              \
 {                                                                         \
   USART2,                       /* USART port                       */    \
-  4,                            /* Tx DMA channel number            */    \
-  5,                            /* Rx DMA channel number            */    \
+  _USART_ROUTE_LOCATION_LOC1,   /* USART pins location number       */    \
+  1000000,                      /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvMaster,                 /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+#else
+#define SPIDRV_MASTER_USART2                                              \
+{                                                                         \
+  USART2,                       /* USART port                       */    \
   _USART_ROUTE_LOCATION_LOC0,   /* USART pins location number       */    \
+  1000000,                      /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvMaster,                 /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+#endif
+
+/// Configuration data for SPI master using USARTRF0.
+#define SPIDRV_MASTER_USARTRF0                                            \
+{                                                                         \
+  USARTRF0,                     /* USART port                       */    \
+  _USART_ROUTE_LOCATION_LOC1,   /* USART pins location number       */    \
   1000000,                      /* Bitrate                          */    \
   8,                            /* Frame length                     */    \
   0,                            /* Dummy tx value for rx only funcs */    \
@@ -222,8 +401,6 @@ typedef SPIDRV_HandleData_t * SPIDRV_Handle_t;
 #define SPIDRV_SLAVE_USART0                                               \
 {                                                                         \
   USART0,                       /* USART port                       */    \
-  0,                            /* Tx DMA channel number            */    \
-  1,                            /* Rx DMA channel number            */    \
   _USART_ROUTE_LOCATION_LOC1,   /* USART pins location number       */    \
   0,                            /* Bitrate                          */    \
   8,                            /* Frame length                     */    \
@@ -239,8 +416,6 @@ typedef SPIDRV_HandleData_t * SPIDRV_Handle_t;
 #define SPIDRV_SLAVE_USART1                                               \
 {                                                                         \
   USART1,                       /* USART port                       */    \
-  2,                            /* Tx DMA channel number            */    \
-  3,                            /* Rx DMA channel number            */    \
   _USART_ROUTE_LOCATION_LOC1,   /* USART pins location number       */    \
   0,                            /* Bitrate                          */    \
   8,                            /* Frame length                     */    \
@@ -253,11 +428,24 @@ typedef SPIDRV_HandleData_t * SPIDRV_Handle_t;
 }
 
 /// Configuration data for SPI slave using USART2.
+#if defined( _EZR32_LEOPARD_FAMILY ) || defined( _EZR32_WONDER_FAMILY )
 #define SPIDRV_SLAVE_USART2                                               \
 {                                                                         \
   USART2,                       /* USART port                       */    \
-  4,                            /* Tx DMA channel number            */    \
-  5,                            /* Rx DMA channel number            */    \
+  _USART_ROUTE_LOCATION_LOC1,   /* USART pins location number       */    \
+  0,                            /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvSlave,                  /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+#else
+#define SPIDRV_SLAVE_USART2                                               \
+{                                                                         \
+  USART2,                       /* USART port                       */    \
   _USART_ROUTE_LOCATION_LOC0,   /* USART pins location number       */    \
   0,                            /* Bitrate                          */    \
   8,                            /* Frame length                     */    \
@@ -268,6 +456,23 @@ typedef SPIDRV_HandleData_t * SPIDRV_Handle_t;
   spidrvCsControlAuto,          /* CS controlled by the driver      */    \
   spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
 }
+#endif
+
+/// Configuration data for SPI slave using USARTRF0.
+#define SPIDRV_SLAVE_USARTRF0                                             \
+{                                                                         \
+  USARTRF0,                     /* USART port                       */    \
+  _USART_ROUTE_LOCATION_LOC1,   /* USART pins location number       */    \
+  0,                            /* Bitrate                          */    \
+  8,                            /* Frame length                     */    \
+  0,                            /* Dummy tx value for rx only funcs */    \
+  spidrvSlave,                  /* SPI mode                         */    \
+  spidrvBitOrderMsbFirst,       /* Bit order on bus                 */    \
+  spidrvClockMode0,             /* SPI clock/phase mode             */    \
+  spidrvCsControlAuto,          /* CS controlled by the driver      */    \
+  spidrvSlaveStartImmediate     /* Slave start transfers immediately*/    \
+}
+#endif /* _USART_ROUTELOC0_MASK */
 
 Ecode_t   SPIDRV_AbortTransfer( SPIDRV_Handle_t handle );
 

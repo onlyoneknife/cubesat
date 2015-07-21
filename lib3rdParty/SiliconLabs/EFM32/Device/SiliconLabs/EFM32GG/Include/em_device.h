@@ -10,10 +10,10 @@
  * Example: Add "-DEFM32G890F128" to your build options, to define part
  *          Add "#include "em_device.h" to your source files
  * @endverbatim
- * @version 3.20.7
+ * @version 3.20.13
  ******************************************************************************
  * @section License
- * <b>(C) Copyright 2014 Silicon Laboratories, Inc. http://www.silabs.com</b>
+ * <b>(C) Copyright 2015 Silicon Laboratories, Inc. http://www.silabs.com</b>
  ******************************************************************************
  *
  * Permission is granted to anyone to use this software for any purpose,
@@ -39,8 +39,8 @@
  *
  *****************************************************************************/
 
-#ifndef __EM_DEVICE_H
-#define __EM_DEVICE_H
+#ifndef __SILICON_LABS_EM_DEVICE_H__
+#define __SILICON_LABS_EM_DEVICE_H__
 
 
 #if defined(EFM32GG230F1024)
@@ -174,4 +174,4 @@
 #error "em_device.h: PART NUMBER undefined"
 #endif
 
-#endif
+#endif /* __SILICON_LABS_EM_DEVICE_H__ */
