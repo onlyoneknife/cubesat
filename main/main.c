@@ -1,31 +1,110 @@
-/**************************************************************************//**
- * @file
- * @brief Empty Project
- * @author Energy Micro AS
- * @version 3.20.2
- ******************************************************************************
- * @section License
- * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
- *******************************************************************************
+/*
+ * Copyright (C) 2015  Brandon Borden, Stefan Damkjar, Taeho Kang, and Peng Zhang
  *
- * This file is licensed under the Silicon Labs Software License Agreement. See 
- * "http://developer.silabs.com/legal/version/v11/Silicon_Labs_Software_License_Agreement.txt"  
- * for details. Before using this software for any purpose, you must agree to the 
- * terms of that agreement.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
- ******************************************************************************/
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/**
+ * @file main.c
+ * @author Brandon Borden, Stefan Damkjar
+ * @date 2015-02-20
+ */
+
+/* System Includes */
+#include <stdio.h>
+#include <stdint.h>
+
+/* EFM32 Includes */
+#include "InitDevice.h"
 #include "em_device.h"
 #include "em_chip.h"
+#include "em_gpio.h"
+
+/* Driver Includes */
+#include "sharedtypes.h"
+#include "gyro.h"
+#include "rtc.h"
+#include "fram.h"
+#include "mag.h"
+#include "i2c.h"
+#include "tempsense.h"
+#include "sleep.h"
+
+/* FreeRTOS Includes */
+#include "FreeRTOSConfig.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "semphr.h"
+#include "croutine.h"
+
+#define LEDBLINK_STACK_SIZE        (configMINIMAL_STACK_SIZE + 10)
+#define LEDBLINK_TASK_PRIORITY     (tskIDLE_PRIORITY + 1)
+
+#define LED_DELAY                  (50 / portTICK_RATE_MS)
+#define LED_PORT    		       (gpioPortA)
+#define LED_PIN     		       (7)
+
+/**************************************************************************//**
+ * @brief Initialize drivers
+ *****************************************************************************/
+void DRIVERS_Init(void)
+{
+
+
+}
+
+/**************************************************************************//**
+ * @brief Simple task which is blinking led
+ *****************************************************************************/
+static void LedBlink(void *pParameters)
+{
+
+  pParameters = pParameters;   /* to quiet warnings */
+
+  for (;;)
+  {
+    /* Set LSB of count value on LED */
+	GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
+    vTaskDelay(LED_DELAY);
+    GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
+    vTaskDelay(LED_DELAY);
+  }
+}
 
 /**************************************************************************//**
  * @brief  Main function
  *****************************************************************************/
 int main(void)
 {
-  /* Chip errata */
+  /* Initialize EFM32 Chip Settings */
   CHIP_Init();
 
+  /* Initialize Hardware Drivers */
+  DRIVERS_Init();
+
+  enter_DefaultMode_from_RESET();
+
+  /* Create task for blinking leds */
+  xTaskCreate( LedBlink,
+		       (const char *) "LedBlink",
+		       LEDBLINK_STACK_SIZE,
+		       NULL,
+		       LEDBLINK_TASK_PRIORITY,
+		       NULL );
+
+  /*Start FreeRTOS Scheduler*/
+  vTaskStartScheduler();
+
   /* Infinite loop */
-  while (1) {
-  }
+  for( ;; ) { /* do nothing */ }
+
 }

@@ -27,6 +27,7 @@
 extern void enter_DefaultMode_from_RESET(void) {
 	// $[Config Calls]
 	CMU_enter_DefaultMode_from_RESET();
+	PORTIO_enter_DefaultMode_from_RESET();
 	// [Config Calls]$
 
 
@@ -484,6 +485,47 @@ extern void ETM_enter_DefaultMode_from_RESET(void) {
 extern void EBI_enter_DefaultMode_from_RESET(void) {
 	// $[EBI initialization]
 	// [EBI initialization]$
+
+
+}
+
+//================================================================================
+// PORTIO_enter_DefaultMode_from_RESET
+//================================================================================
+extern void PORTIO_enter_DefaultMode_from_RESET(void) {
+
+	// $[Port A Configuration]
+
+	/* Pin PA7 is configured to Push-pull */
+	GPIO->P[0].MODEL = (GPIO->P[0].MODEL & ~_GPIO_P_MODEL_MODE7_MASK) | GPIO_P_MODEL_MODE7_PUSHPULL;
+	// [Port A Configuration]$
+
+
+	// $[Port B Configuration]
+	// [Port B Configuration]$
+
+
+	// $[Port C Configuration]
+	// [Port C Configuration]$
+
+
+	// $[Port D Configuration]
+	// [Port D Configuration]$
+
+
+	// $[Port E Configuration]
+	// [Port E Configuration]$
+
+
+	// $[Port F Configuration]
+	// [Port F Configuration]$
+
+
+	// $[Route Configuration]
+
+	/* Module PCNT0 is configured to location 0 */
+	PCNT0->ROUTE = (PCNT0->ROUTE & ~_PCNT_ROUTE_LOCATION_MASK) | PCNT_ROUTE_LOCATION_LOC0;
+	// [Route Configuration]$
 
 
 }
