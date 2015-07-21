@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file  msdd.h
  * @brief Mass Storage class Device (MSD) driver.
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -12,8 +12,6 @@
  * any purpose, you must agree to the terms of that agreement.
  *
  ******************************************************************************/
-
-
 #ifndef __MSDD_H
 #define __MSDD_H
 
@@ -52,6 +50,9 @@ typedef struct
 
 bool MSDD_Handler(void);
 void MSDD_Init(int activityLedPort, uint32_t activityLedPin);
+int  MSDD_SetupCmd(const USB_Setup_TypeDef *setup);
+void MSDD_StateChangeEvent(USBD_State_TypeDef oldState,
+                           USBD_State_TypeDef newState);
 
 #ifdef __cplusplus
 }

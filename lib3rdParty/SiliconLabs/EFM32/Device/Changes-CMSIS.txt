@@ -1,8 +1,72 @@
 ================ Revision history ============================================
+3.20.13:
+ - CMSIS:  No changes.
+ - Device: Added device header files for new Happy Gecko family.
+ - Device: Corrected RF_GPIO0_PORT macro in EZRLG/WG part header files.
+ - emlib:  Added new style family #defines in em_system.h, including EZR32 families.
+ - emlib:  Fixed I2C_FREQ_STANDARD_MAX macros.
+ - emlib:  Fixed bug in MSC_WriteWord which called internal functions that were
+           linked to flash for armgcc. All subsequent calls of MSC_WriteWord
+           should now be linked to RAM for all supported compilers. The
+           internals of MSC_WriteWord will check the global variable
+           SystemCoreClock in order to make sure the frequency is high enough
+           for flash operations. If the core clock frequency is changed,
+           software is responsible for calling MSC_Init or SystemCoreClockGet in
+           order to set the SystemCoreClock variable to the correct value.
+ - emlib:  Added errata fix IDAC_101.
+ - usb:    No changes.
+
+3.20.12:
+ - emlib: Added errata fix EMU_108.
+ - emlib: #ifdef's now use register defines instead of a mix of register and family defines.
+ - emlib: Added a case for when there are only 4 DMA channels available:
+          Alignment was (correctly) defined at 7 bit, but got asserted for 8 bit, leading
+          to unpredicatable tripped asserts.
+ - emlib: Added USART_INITPRSTRIGGER_DEFAULT defined structure to support HWCONF.
+ - emlib: Added support for LFC clock tree.
+ - emlib: Added CMU_USHFRCOBandSet() and CMU_USHFRCOBandGet().
+ - usb:   Replaced USB_EP0_SIZE and USB_MAX_EP_SIZE macros with new versions which
+          have correct values for low speed/full speed/endpoint types.
+
+3.20.11:
+ - Device header release only. Added part headers for EZR families EZR32LG
+   and EZR32WG.
+
+3.20.10:
+ - CMSIS/Device/emlib: No changes.
+ - usb: Added support for Happy Gecko USB LEM (Low Energy Modes).
+ - usb: Fixed bug in suspend powersave mode implementation.
+
+3.20.9:
+ - New and updated headers for the Happy Gecko family.
+ - emlib: Added support for Happy Gecko including support for the new oscillator USHFRCO.
+ - emlib: Added MSC_WriteWordFast() function. This flash write function has a similar
+          performance as the old  MSC_WriteWord(), but it disables interrupts and
+          requires a core clock frequency of at least 14MHz. The new MSC_WriteWord()
+          is slower, but it does not disable interrupts and may be called with core
+          clock frequencies down to 1MHz.
+ - emlib: Fixed a bug in EMU_EnterEM4() that set other EM4 configuration bits to 0
+          on EM4 entry.
+ - emlib: Added EMU_EM23Init().
+ - emlib: Fixed a bug in CMU_FlashWaitStateControl() where it failed to set the
+          required wait-state configuration if the MSC is locked.
+ - emlib: Added EMU interrupt handling functions.
+ - emlib: BURTC_Reset() changed to use async reset RMU_CTRL_BURSTEN instead of
+          reset value writeback. This makes the function independent of a selected
+          and enabled clock.
+ - emlib: BURTC_Sync() now returns without waiting for BURTC->SYNCBUSY to clear
+          when no clock is selected in BURTC_CTRL_CLKSEL.
+ - emlib: Fixed assertion bug in ACMP_ChannelSet() that checked the negSel parameter
+          against the wrong upper bound.
+ - usb: Added support for Happy Gecko USB peripheral.
+ - usb: Improved USB cable plug/unplug robustness.
+
+3.20.8:
+ - This release contains headers etc. for the Happy Gecko family.
+
 3.20.7:
  - Support for new part numbers EFM32GG900F1024, EFM32GG900F512,
-   EFM32LG360F256, EFM32LG360F128, EFM32LG360F64, EFM32WG360F256,
-   EFM32WG360F128 and EFM32WG360F64.
+   EFM32LG360F256 and EFM32WG360F256.
  - Header files for Leopard device family are according to Product Revision E.
    Ref. PCN #1406131.
  - emlib: Fixed CMU_MAX_FREQ_HFLE macro for Wonder family.

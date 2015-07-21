@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file nvm_hal.c
  * @brief Non-Volatile Memory HAL for EFM32 flash.
- * @version 3.20.5
+ * @version 3.20.13
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -77,10 +77,10 @@ __ramfunc static msc_Return_TypeDef NVMHAL_MSC_ErasePage(uint32_t *startAddress)
 #endif /* __ICCARM__ */
 
 #ifdef __GNUC__  /* GCC based compilers */
-#ifdef __CROSSWORKS_ARM  /* Rowley Crossworks */
+#ifdef __CROSSWORKS_ARM  /* Rowley Crossworks (GCC based) */
 static msc_Return_TypeDef NVMHAL_MSC_WriteWord(uint32_t *address, void const *data, uint32_t numBytes) __attribute__ ((section(".fast")));
 static msc_Return_TypeDef NVMHAL_MSC_ErasePage(uint32_t *startAddress) __attribute__ ((section(".fast")));
-#else /* Sourcery G++ */
+#else /* GCC */
 static msc_Return_TypeDef NVMHAL_MSC_WriteWord(uint32_t *address, void const *data, uint32_t numBytes) __attribute__ ((section(".ram")));
 static msc_Return_TypeDef NVMHAL_MSC_ErasePage(uint32_t *startAddress) __attribute__ ((section(".ram")));
 #endif /* __GNUC__ */

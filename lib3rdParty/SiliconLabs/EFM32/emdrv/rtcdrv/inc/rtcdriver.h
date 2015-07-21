@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file rtcdriver.h
  * @brief RTCDRV timer API definition.
- * @version 3.20.5
+ * @version 3.20.13
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -86,7 +86,13 @@ Ecode_t   RTCDRV_TimeRemaining( RTCDRV_TimerID_t id, uint32_t *timeRemaining );
 
 #if defined( EMDRV_RTCDRV_WALLCLOCK_CONFIG )
 uint32_t  RTCDRV_GetWallClock( void );
+uint32_t  RTCDRV_GetWallClockTicks32( void );
+uint64_t  RTCDRV_GetWallClockTicks64( void );
+uint64_t  RTCDRV_MsecsToTicks( uint32_t ms );
+uint64_t  RTCDRV_SecsToTicks( uint32_t secs );
 Ecode_t   RTCDRV_SetWallClock( uint32_t secs );
+uint32_t  RTCDRV_TicksToMsec( uint64_t ticks );
+uint32_t  RTCDRV_TicksToSec( uint64_t ticks );
 #endif
 
 /** @} (end addtogroup RTCDRV) */

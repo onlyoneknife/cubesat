@@ -3,7 +3,7 @@
  * @brief Micro SD card driver for the EFM32GG_DK3750 development kit.
  *        This file provides the interface layer between the DK and the
  *        fat filesystem provided.
- * @version 3.20.5
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>

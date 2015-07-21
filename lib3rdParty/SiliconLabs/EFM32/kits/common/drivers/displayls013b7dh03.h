@@ -2,7 +2,7 @@
  * @file displayls013b7dh03.h
  * @brief Configuration for the display driver for the Sharp Memory LCD
  *        LS013B7DH03
- * @version 3.20.5
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>

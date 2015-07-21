@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file
  * @brief Driver for the Si7013 Temperature / Humidity sensor
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -12,7 +12,6 @@
  * any purpose, you must agree to the terms of that agreement.
  *
  ******************************************************************************/
-
 
 #ifndef __SI7013_H
 #define __SI7013_H
@@ -39,26 +38,28 @@ extern "C" {
  ******************************************************************************/
 
 /** I2C device address for Si7013 */
-#define SI7013_ADDR    0x82
-
-/*******************************************************************************
- ********************************   ENUMS   ************************************
- ******************************************************************************/
-
-/*******************************************************************************
- *******************************   STRUCTS   ***********************************
- ******************************************************************************/
+#define SI7013_ADDR      0x82
+/** I2C device address for Si7021 */
+#define SI7021_ADDR      0x80
 
 
+/** Device ID value for Si7013 */
+#define SI7013_DEVICE_ID 0x0D
+/** Device ID value for Si7020 */
+#define SI7020_DEVICE_ID 0x14
+/** Device ID value for Si7021 */
+#define SI7021_DEVICE_ID 0x21
 
 /*******************************************************************************
  *****************************   PROTOTYPES   **********************************
  ******************************************************************************/
 
-int Si7013_MeasureRHAndTemp(I2C_TypeDef *i2c, uint8_t addr,
-                        uint32_t *rhData, int32_t *tData);
+int32_t Si7013_MeasureRHAndTemp(I2C_TypeDef *i2c, uint8_t addr,
+                                 uint32_t *rhData, int32_t *tData);
 
-bool Si7013_Detect(I2C_TypeDef *i2c, uint8_t addr);
+int32_t Si7013_GetFirmwareRevision(I2C_TypeDef *i2c, uint8_t addr, uint8_t *fwRev);
+
+bool Si7013_Detect(I2C_TypeDef *i2c, uint8_t addr, uint8_t *deviceId);
 
 #ifdef __cplusplus
 }
@@ -66,4 +67,4 @@ bool Si7013_Detect(I2C_TypeDef *i2c, uint8_t addr);
 
 /** @} (end group Si7013) */
 /** @} (end group Drivers) */
-#endif /* __TEMPSENS_H */
+#endif /* __SI7013_H */

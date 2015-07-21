@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file usbkbdscancodes.c
  * @brief USB HID keyboard scancodes.
- * @version 3.20.5
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -96,7 +96,7 @@ static const uint8_t Scancode2Ascii[ 256 ] =
   '\\', /*  49   31  Keyboard \ and |                         */
   '#',  /*  50   32  Keyboard Non-US# and ~                   */
   ';',  /*  51   33  Keyboard ; and :                         */
-  'ï¿½',  /*  52   34  Keyboard ï¿½ and ï¿½                         */
+  '‘',  /*  52   34  Keyboard ‘ and “                         */
   '`',  /*  53   35  Keyboard Grave Accent ` and Tilde ~      */
   ',',  /*  54   36  Keyboard , and <                         */
   '.',  /*  55   37  Keyboard . and >                         */
@@ -250,7 +250,7 @@ static const uint8_t Scancode2Ascii[ 256 ] =
   0,    /*  212  D4  Keypad Memory Subtract                   */
   0,    /*  213  D5  Keypad Memory Multiply                   */
   0,    /*  214  D6  Keypad Memory Divide                     */
-  'ï¿½',  /*  215  D7  Keypad +/-                               */
+  '±',  /*  215  D7  Keypad +/-                               */
   0,    /*  216  D8  Keypad Clear                             */
   0,    /*  217  D9  Keypad Clear Entry                       */
   0,    /*  218  DA  Keypad Binary                            */

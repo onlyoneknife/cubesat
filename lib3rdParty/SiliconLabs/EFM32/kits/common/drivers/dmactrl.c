@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file
  * @brief DMA control data block.
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -19,13 +19,17 @@
 #include "em_device.h"
 #include "dmactrl.h"
 
-#if ( ( DMA_CHAN_COUNT > 4 ) && ( DMA_CHAN_COUNT <= 8 ) )
+#if ( ( DMA_CHAN_COUNT > 0 ) && ( DMA_CHAN_COUNT <= 4 ) )
+#define DMACTRL_CH_CNT      4
+#define DMACTRL_ALIGNMENT   128
+
+#elif ( ( DMA_CHAN_COUNT > 4 ) && ( DMA_CHAN_COUNT <= 8 ) )
 #define DMACTRL_CH_CNT      8
 #define DMACTRL_ALIGNMENT   256
 
-#elif ( ( DMA_CHAN_COUNT > 8 ) && ( DMA_CHAN_COUNT <= 16 ) )
+#elif ( ( DMA_CHAN_COUNT > 8 ) && ( DMA_CHAN_COUNT <= 12 ) )
 #define DMACTRL_CH_CNT      16
-#define DMACTRL_ALIGNMENT   512
+#define DMACTRL_ALIGNMENT   256
 
 #else
 #error "Unsupported DMA channel count (dmactrl.c)."

@@ -2,7 +2,7 @@
  * @file
  * @brief Temperature sensor driver for DS75 temperature sensor compatible
  *   device on the DK.
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -14,9 +14,7 @@
  *
  ******************************************************************************/
 
-
-
-#include "i2cdrv.h"
+#include "i2cspm.h"
 #include "tempsens.h"
 
 /*******************************************************************************
@@ -83,9 +81,6 @@ int TEMPSENS_RegisterGet(I2C_TypeDef *i2c,
   uint8_t                    regid[1];
   uint8_t                    data[2];
 
-  /* Unused parameter */
-  (void) i2c;
-
   seq.addr  = addr;
   seq.flags = I2C_FLAG_WRITE_READ;
   /* Select register to be read */
@@ -106,7 +101,7 @@ int TEMPSENS_RegisterGet(I2C_TypeDef *i2c,
     seq.buf[1].len  = 2;
   }
 
-  ret = I2CDRV_Transfer(&seq);
+  ret = I2CSPM_Transfer(i2c, &seq);
   if (ret != i2cTransferDone)
   {
     return((int) ret);
@@ -147,9 +142,6 @@ int TEMPSENS_RegisterSet(I2C_TypeDef *i2c,
   I2C_TransferReturn_TypeDef ret;
   uint8_t                    data[3];
 
-  /* Unused parameter */
-  (void) i2c;
-
   if (reg == tempsensRegTemp)
   {
     return(-1);
@@ -173,7 +165,7 @@ int TEMPSENS_RegisterSet(I2C_TypeDef *i2c,
     seq.buf[0].len = 3;
   }
 
-  ret = I2CDRV_Transfer(&seq);
+  ret = I2CSPM_Transfer(i2c, &seq);
   if (ret != i2cTransferDone)
   {
     return((int) ret);

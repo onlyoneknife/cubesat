@@ -2,7 +2,7 @@
  * @file display_ls013b7dh03.h
  * @brief EFM32ZG_STK3200 specific configuration for the display driver for
  *        the Sharp Memory LCD model LS013B7DH03.
- * @version 3.20.5
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -33,6 +33,12 @@
 #define LCD_PIN_EXTCOMIN         (10)
 #define LCD_PORT_DISP             (0)  /* = gpioPortA on EFM32ZG_STK3200 */
 #define LCD_PIN_DISP              (8)
+
+/* PRS settings for polarity inversion extcomin auto toggle.  */
+#define LCD_AUTO_TOGGLE_PRS_CH    (2)  /* PRS channel 2.      */
+#define LCD_AUTO_TOGGLE_PRS_ROUTE_LOC   PRS_ROUTE_LOCATION_LOC2
+#define LCD_AUTO_TOGGLE_PRS_ROUTE_PEN   PRS_ROUTE_CH2PEN
+
 #define LCD_PORT_EXTMODE          (0)  /* = gpioPortA on EFM32ZG_STK3200 */
 #define LCD_PIN_EXTMODE           (0)
 

@@ -1,4 +1,10 @@
 ================ Revision history ============================================
+3.20.13:
+ - Removed obsolete include statement in ezradiodrv.
+
+3.20.12:
+ - Changes and bugfixes in all drivers.
+
 3.20.5:
  - Added RTCDRV and SPIDRV drivers.
  - All NVM driver configuration parameters moved to emdrv\config\nvm_config.h and nvm_config.c

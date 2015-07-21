@@ -4,7 +4,10 @@
 /* CMSIS END USER LICENSE AGREEMENT.pdf, governing the use of       */
 /* Example Code.                                                    */
 /*                                                                  */
-/* Silicon Laboratories, Inc. 2014                                  */
+/* Silicon Laboratories, Inc. 2015                                  */
+/*                                                                  */
+/* Version 3.20.13 */
+/*                                                                  */
 MEMORY
 {
   FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 1048576

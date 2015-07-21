@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file
- * @brief SPI Interface for Ethernet controller; Micrel KSZ8851SNL
- * @version 3.20.5
+ * @brief SPI interface API for KSZ8851SNL Ethernet controller
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -12,14 +12,15 @@
  * any purpose, you must agree to the terms of that agreement.
  *
  ******************************************************************************/
-
+#include <stdio.h>
+#include <stdint.h>
 
 #include "ethspi.h"
 #include "em_device.h"
 #include "em_usart.h"
 #include "em_gpio.h"
 #include "em_cmu.h"
-#include <stdio.h>
+
 
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 static void ETHSPI_SetChipSelect(bool value);
@@ -29,27 +30,36 @@ static uint8_t ETHSPI_XferSpi(uint8_t data);
 static const uint8_t bitEnable[] = { 0x00, 0x1, 0x3, 0x7, 0xf };
 
 /** SPI init structure */
+#if (_EFM32_GIANT_FAMILY)
 static const USART_InitSync_TypeDef initSpi =
 { usartEnable,    /* Enable RX/TX when init completed. */
-  48000000,       /* Use 48MHz reference clock */
-  7000000,        /* 7 Mbits/s. */
+  48000000,       /* Use HFXO reference clock */
+  8000000,        /* 8 Mbits/s - max safe performance */
   usartDatabits8, /* 8 databits. */
   true,           /* Master mode. */
   true,           /* Send most significant bit first. */
   usartClockMode0,
-#if defined(_EFM32_GIANT_FAMILY) || defined(_EFM32_TINY_FAMILY) || defined(_EFM32_WONDER_FAMILY)
   false,
   usartPrsRxCh0,
-  false,
+  false,          };
+#else
+static const USART_InitSync_TypeDef initSpi =
+{ usartEnable,    /* Enable RX/TX when init completed. */
+  32000000,       /* Use HFXO reference clock */
+   8000000,       /* 10 Mbits/s - max safe performance */
+  usartDatabits8, /* 8 databits. */
+  true,           /* Master mode. */
+  true,           /* Send most significant bit first. */
+  usartClockMode0 };
 #endif
-};
+
 /** @endcond */
 
 /**************************************************************************//**
  * @brief ETHSPI_Init
  *    Initialize SPI interface to Ethernet controller.
  * @note To enable access, be sure to call the functions
- *            BSP_PeripheralAccess(BSP_ETH, enable);
+ *            DVK_peripheralAccess(DVK_ETH, enable);
  *    before using this interface.
  *****************************************************************************/
 void ETHSPI_Init(void)
@@ -61,13 +71,13 @@ void ETHSPI_Init(void)
   CMU_ClockEnable(ETH_USART_CLK, true);
   CMU_ClockEnable(cmuClock_GPIO, true);
 
-  /* Setup SPI at USART0 */
+  /* Setup SPI at USART1 */
   spi = ETH_USART_USED;
   /* Configure SPI */
   USART_Reset(spi);
   /* Initialize USART1, in SPI master mode. */
   USART_InitSync(spi, &initSpi);
-  /* Enabling pins and setting location, SPI CS not enable */
+  /* Enabling pins and setting location #1, SPI CS not enable */
   spi->ROUTE = USART_ROUTE_TXPEN | USART_ROUTE_RXPEN | USART_ROUTE_CLKPEN | USART_ROUTE_LOCATION_LOC1;
   /* Enabling TX and RX */
   spi->CMD = USART_CMD_TXEN | USART_CMD_RXEN;
@@ -96,7 +106,7 @@ static uint8_t ETHSPI_XferSpi(uint8_t data)
   while (!(spi->STATUS & USART_STATUS_TXC))
   {
   }
-  return (uint8_t)(spi->RXDATA);
+  return (uint8_t) (spi->RXDATA);
 }
 
 
@@ -131,8 +141,7 @@ void ETHSPI_ReadRegister(uint8_t reg, int numBytes, void *data)
   uint8_t first, second;
   uint8_t *rxBuffer = (uint8_t *) data;
 
-  EFM_ASSERT(reg > 0 && reg < 0xFF);
-  EFM_ASSERT(numBytes > 0 && numBytes < 5);
+  EFM_ASSERT((numBytes > 0) && (numBytes < 5));
   EFM_ASSERT(data != NULL);
 
   /* First Opcode:00, ByteEnable and MSB of register address */
@@ -169,7 +178,6 @@ void ETHSPI_WriteRegister(uint8_t reg, int numBytes, void *data)
   uint8_t first, second;
   uint8_t *txBuffer = (uint8_t *) data;
 
-  EFM_ASSERT(reg > 0 && reg < 0xFF);
   EFM_ASSERT(numBytes > 0 && numBytes < 5);
   EFM_ASSERT(data != NULL);
 
@@ -253,7 +261,6 @@ void ETHSPI_ReadFifoContinue(int numBytes, uint8_t *data)
 *****************************************************************************/
 void ETHSPI_WriteFifoContinue(int numBytes, uint8_t *data)
 {
-
   EFM_ASSERT(numBytes >= 0 && numBytes < 12000);
   EFM_ASSERT(data != NULL);
 

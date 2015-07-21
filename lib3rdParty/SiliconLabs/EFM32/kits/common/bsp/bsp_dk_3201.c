@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file
  * @brief Board support package API implementation for BRD3201.
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -464,7 +464,7 @@ int BSP_PeripheralAccess(BSP_Peripheral_TypeDef perf, bool enable)
 
   perfControl = BSP_RegisterRead(&BC_REGISTER->PERICON);
 
-  /* Enable or disable the specificed peripheral by setting board control switch */
+  /* Enable or disable the specified peripheral by setting board control switch */
   if (enable)
   {
     switch (perf)

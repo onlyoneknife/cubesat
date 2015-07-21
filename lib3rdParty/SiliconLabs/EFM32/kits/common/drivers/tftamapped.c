@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file
  * @brief EFM32GG_DK3750, TFT Initialization and setup for Adress Mapped mode
- * @version 3.20.5
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
