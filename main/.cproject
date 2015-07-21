@@ -6,6 +6,7 @@
 		<cconfiguration id="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129" moduleId="org.eclipse.cdt.core.settings" name="GNU ARM v4.8.3 - Debug">
 				<macros>
+					<stringMacro name="FreeRtosPath" type="VALUE_TEXT" value="${workspace_loc}/lib3rdParty/FreeRTOS/"/>
 					<stringMacro name="StudioToolchainPath" type="VALUE_PATH_DIR" value="${StudioToolchainPathFromID:com.silabs.ide.si32.gcc:4.8.3.20131129}"/>
 					<stringMacro name="StudioSdkPath" type="VALUE_PATH_DIR" value="${StudioSdkPathFromID:com.silabs.sdk.si32.efm32.sls:2.0.6}"/>
 				</macros>
@@ -39,12 +40,22 @@
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.builtin.856569822" name="Always branch to builtin functions (-fno-builtin)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.builtin" value="true" valueType="boolean"/>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.prolog.2021930008" name="Generate debugger-friendly prologs (-mno-sched-prolog)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.debug.prolog" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.include.paths.1814609216" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/inc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/CMSIS/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/common/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/config&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/gpiointerrupt/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/nvm/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/rtcdrv/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/sleep/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/spidrv/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libDevice/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libDrivers/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/portable/GCC/ARM_CM3&quot;"/>
 								</option>
 								<inputType id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.609027315" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -55,12 +66,22 @@
 							</tool>
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base.1244808224" name="GNU ARM Assembler" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.assembler.base">
 								<option id="gnu.both.asm.option.include.paths.414369026" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/CMSIS/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emlib/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libDevice/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libDrivers/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/common/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/config&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/gpiointerrupt/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/nvm/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/rtcdrv/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/sleep/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/emdrv/spidrv/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/portable/GCC/ARM_CM3&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${FreeRtosPath}/Source/include&quot;"/>
 								</option>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.1721453679" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
@@ -80,6 +101,9 @@
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base.599416740" name="GNU ARM Archiver" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base"/>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="libDrivers/src/sd.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -160,6 +184,9 @@
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base.2040007912" name="GNU ARM Archiver" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base"/>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="libDrivers/src/sd.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -179,4 +206,5 @@
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>
+	<storageModule moduleId="refreshScope"/>
 </cproject>

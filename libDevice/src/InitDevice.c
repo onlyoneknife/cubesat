@@ -19,10 +19,6 @@
 #include "em_cmu.h"
 #include "em_device.h"
 #include "em_chip.h"
-#include "em_adc.h"
-#include "em_ebi.h"
-#include "em_i2c.h"
-#include "em_usart.h"
 // [Library includes]$
 
 //==============================================================================
@@ -31,15 +27,6 @@
 extern void enter_DefaultMode_from_RESET(void) {
 	// $[Config Calls]
 	CMU_enter_DefaultMode_from_RESET();
-	ADC0_enter_DefaultMode_from_RESET();
-	HFXO_enter_DefaultMode_from_RESET();
-	LFXO_enter_DefaultMode_from_RESET();
-	USART1_enter_DefaultMode_from_RESET();
-	USART2_enter_DefaultMode_from_RESET();
-	UART1_enter_DefaultMode_from_RESET();
-	I2C0_enter_DefaultMode_from_RESET();
-	EBI_enter_DefaultMode_from_RESET();
-	PORTIO_enter_DefaultMode_from_RESET();
 	// [Config Calls]$
 
 
@@ -59,21 +46,6 @@ extern void CMU_enter_DefaultMode_from_RESET(void) {
 	// [LFACLK Setup]$
 
 	// $[Peripheral Clock enables]
-	/* Enable clock for ADC0 */
-	CMU_ClockEnable(cmuClock_ADC0, true);
-
-	/* Enable clock for EBI */
-	CMU_ClockEnable(cmuClock_EBI, true);
-
-	/* Enable clock for I2C0 */
-	CMU_ClockEnable(cmuClock_I2C0, true);
-
-	/* Enable clock for USART1 */
-	CMU_ClockEnable(cmuClock_USART1, true);
-
-	/* Enable clock for USART2 */
-	CMU_ClockEnable(cmuClock_USART2, true);
-
 	/* Enable clock for GPIO by default */
 	CMU_ClockEnable(cmuClock_GPIO, true);
 
@@ -87,53 +59,12 @@ extern void CMU_enter_DefaultMode_from_RESET(void) {
 //================================================================================
 extern void ADC0_enter_DefaultMode_from_RESET(void) {
 	// $[ADC_Init]
-	ADC_Init_TypeDef init = ADC_INIT_DEFAULT;
-
-	init.ovsRateSel                = adcOvsRateSel2;
-	init.lpfMode                   = adcLPFilterBypass;
-	init.warmUpMode                = adcWarmupNormal;
-	init.timebase                  = ADC_TimebaseCalc(0);
-	init.prescale                  = ADC_PrescaleCalc(7000000, 0);
-	init.tailgate                  = 0;
-
-	ADC_Init(ADC0, &init);
 	// [ADC_Init]$
 
 	// $[ADC_InitSingle]
-	ADC_InitSingle_TypeDef initsingle = ADC_INITSINGLE_DEFAULT;
-
-	initsingle.prsSel              = adcPRSSELCh0;
-	initsingle.acqTime             = adcAcqTime1;
-	initsingle.reference           = adcRef1V25;
-	initsingle.resolution          = adcRes12Bit;
-	initsingle.input               = adcSingleInpCh0;
-	initsingle.diff                = 0;
-	initsingle.prsEnable           = 0;
-	initsingle.leftAdjust          = 0;
-	initsingle.rep                 = 0;
-
-	/* Initialize a single sample conversion.
-	 * To start a conversion, use ADC_Start().
-	 * Conversion result can be read with ADC_DataSingleGet(). */
-	ADC_InitSingle(ADC0, &initsingle);
 	// [ADC_InitSingle]$
 
 	// $[ADC_InitScan]
-	ADC_InitScan_TypeDef initscan = ADC_INITSCAN_DEFAULT;
-
-	initscan.prsSel                = adcPRSSELCh0;
-	initscan.acqTime               = adcAcqTime1;
-	initscan.reference             = adcRef1V25;
-	initscan.resolution            = adcRes12Bit;
-	initscan.diff                  = 0;
-	initscan.prsEnable             = 0;
-	initscan.leftAdjust            = 0;
-	initscan.rep                   = 0;
-	initscan.input                 = 0;
-	/* Initialize a scan sequence.
-	 * To start a conversion, use ADC_Start().
-	 * Conversion result can be read with ADC_DataScanGet(). */
-	ADC_InitScan(ADC0, &initscan);
 	// [ADC_InitScan]$
 
 
@@ -208,10 +139,6 @@ extern void BURTC_enter_DefaultMode_from_RESET(void) {
 //================================================================================
 extern void HFXO_enter_DefaultMode_from_RESET(void) {
 	// $[HFXO]
-	CMU->CTRL = (CMU->CTRL & ~_CMU_CTRL_HFXOMODE_MASK) | CMU_CTRL_HFXOMODE_XTAL;
-
-	CMU->CTRL = (CMU->CTRL & ~_CMU_CTRL_HFXOBOOST_MASK) | CMU_CTRL_HFXOBOOST_50PCENT;
-
 	// [HFXO]$
 
 
@@ -222,11 +149,9 @@ extern void HFXO_enter_DefaultMode_from_RESET(void) {
 //================================================================================
 extern void LFXO_enter_DefaultMode_from_RESET(void) {
 	// $[Use oscillator source]
-	CMU->CTRL = (CMU->CTRL & ~_CMU_CTRL_LFXOMODE_MASK) | CMU_CTRL_LFXOMODE_XTAL;
 	// [Use oscillator source]$
 
 	// $[LFXO Boost Percent]
-	CMU->CTRL = (CMU->CTRL & ~_CMU_CTRL_LFXOBOOST_MASK) | CMU_CTRL_LFXOBOOST_100PCENT;
 	// [LFXO Boost Percent]$
 
 	// $[REDLFXO Boost]
@@ -308,30 +233,9 @@ extern void USART1_enter_DefaultMode_from_RESET(void) {
 	// [USART_InitAsync]$
 
 	// $[USART_InitSync]
-	USART_InitSync_TypeDef initsync = USART_INITSYNC_DEFAULT;
-
-	initsync.baudrate              = 115200;
-	initsync.databits              = usartDatabits8;
-	initsync.master                = 1;
-	initsync.msbf                  = 1;
-	initsync.clockMode             = usartClockMode0;
-	#if defined( USART_INPUT_RXPRS ) && defined( USART_TRIGCTRL_AUTOTXTEN )
-	initsync.prsRxEnable           = 0;
-	initsync.prsRxCh               = 0;
-	initsync.autoTx                = 0;
-	#endif
-
-	USART_InitSync(USART1, &initsync);
 	// [USART_InitSync]$
 
 	// $[USART_InitPrsTrigger]
-	USART_PrsTriggerInit_TypeDef initprs = USART_INITPRSTRIGGER_DEFAULT;
-
-	initprs.rxTriggerEnable        = 0;
-	initprs.txTriggerEnable        = 0;
-	initprs.prsTriggerChannel      = usartPrsTriggerCh0;
-
-	USART_InitPrsTrigger(USART1, &initprs);
 	// [USART_InitPrsTrigger]$
 
 
@@ -345,30 +249,9 @@ extern void USART2_enter_DefaultMode_from_RESET(void) {
 	// [USART_InitAsync]$
 
 	// $[USART_InitSync]
-	USART_InitSync_TypeDef initsync = USART_INITSYNC_DEFAULT;
-
-	initsync.baudrate              = 115200;
-	initsync.databits              = usartDatabits8;
-	initsync.master                = 1;
-	initsync.msbf                  = 1;
-	initsync.clockMode             = usartClockMode0;
-	#if defined( USART_INPUT_RXPRS ) && defined( USART_TRIGCTRL_AUTOTXTEN )
-	initsync.prsRxEnable           = 0;
-	initsync.prsRxCh               = 0;
-	initsync.autoTx                = 0;
-	#endif
-
-	USART_InitSync(USART2, &initsync);
 	// [USART_InitSync]$
 
 	// $[USART_InitPrsTrigger]
-	USART_PrsTriggerInit_TypeDef initprs = USART_INITPRSTRIGGER_DEFAULT;
-
-	initprs.rxTriggerEnable        = 0;
-	initprs.txTriggerEnable        = 0;
-	initprs.prsTriggerChannel      = usartPrsTriggerCh0;
-
-	USART_InitPrsTrigger(USART2, &initprs);
 	// [USART_InitPrsTrigger]$
 
 
@@ -392,30 +275,9 @@ extern void UART0_enter_DefaultMode_from_RESET(void) {
 //================================================================================
 extern void UART1_enter_DefaultMode_from_RESET(void) {
 	// $[UART_InitAsync]
-	USART_InitAsync_TypeDef initasync = USART_INITASYNC_DEFAULT;
-
-	initasync.baudrate             = 115200;
-	initasync.databits             = usartDatabits8;
-	initasync.parity               = usartNoParity;
-	initasync.stopbits             = usartStopbits1;
-	initasync.oversampling         = usartOVS16;
-	#if defined( USART_INPUT_RXPRS ) && defined( USART_CTRL_MVDIS )
-	initasync.mvdis                = 0;
-	initasync.prsRxEnable          = 0;
-	initasync.prsRxCh              = 0;
-	#endif
-
-	USART_InitAsync(UART1, &initasync);
 	// [UART_InitAsync]$
 
 	// $[USART_InitPrsTrigger]
-	USART_PrsTriggerInit_TypeDef initprs = USART_INITPRSTRIGGER_DEFAULT;
-
-	initprs.rxTriggerEnable        = 0;
-	initprs.txTriggerEnable        = 0;
-	initprs.prsTriggerChannel      = usartPrsTriggerCh0;
-
-	USART_InitPrsTrigger(UART1, &initprs);
 	// [USART_InitPrsTrigger]$
 
 
@@ -472,13 +334,6 @@ extern void WDOG_enter_DefaultMode_from_RESET(void) {
 //================================================================================
 extern void I2C0_enter_DefaultMode_from_RESET(void) {
 	// $[I2C0 initialization]
-	I2C_Init_TypeDef init = I2C_INIT_DEFAULT;
-
-	init.enable                    = 1;
-	init.master                    = 1;
-	init.freq                      = I2C_FREQ_STANDARD_MAX;
-	init.clhr                      = i2cClockHLRStandard;
-	I2C_Init(I2C0, &init);
 	// [I2C0 initialization]$
 
 
@@ -628,117 +483,7 @@ extern void ETM_enter_DefaultMode_from_RESET(void) {
 //================================================================================
 extern void EBI_enter_DefaultMode_from_RESET(void) {
 	// $[EBI initialization]
-	EBI_Init_TypeDef ebiInit = EBI_INIT_DEFAULT;
-
-	/* Start with initializing the base EBI */
-	ebiInit.mode                   = ebiModeD8A8;
-	ebiInit.ardyPolarity           = ebiActiveLow;
-	ebiInit.alePolarity            = ebiActiveLow;
-	ebiInit.wePolarity             = ebiActiveLow;
-	ebiInit.rePolarity             = ebiActiveLow;
-	ebiInit.csPolarity             = ebiActiveLow;
-	ebiInit.ardyEnable             = 0;
-	ebiInit.ardyDisableTimeout     = 0;
-	ebiInit.addrSetupCycles        = 1;
-	ebiInit.addrHoldCycles         = 0;
-	ebiInit.readSetupCycles        = 0;
-	ebiInit.readStrobeCycles       = 0;
-	ebiInit.readHoldCycles         = 1;
-	ebiInit.writeSetupCycles       = 0;
-	ebiInit.writeStrobeCycles      = 1;
-	ebiInit.writeHoldCycles        = 0;
-	ebiInit.banks                  = 0 | EBI_BANK0 ;
-	ebiInit.csLines                = 0 | EBI_CS0 ;
-
-	/* Generating extra config parameters on Giant/Wonder */
-	ebiInit.blPolarity             = ebiActiveLow;
-	ebiInit.blEnable               = 0;
-	ebiInit.noIdle                 = 0;
-	ebiInit.addrHalfALE            = 0;
-	ebiInit.readPageMode           = 0;
-	ebiInit.readPrefetch           = 0;
-	ebiInit.readHalfRE             = 0;
-	ebiInit.writeBufferDisable     = 0;
-	ebiInit.writeHalfWE            = 0;
-	ebiInit.aLow                   = ebiALowA0;
-	ebiInit.aHigh                  = ebiAHighA0;
-
-	/* Enable/disable EBI after initialization */
-	ebiInit.enable                 = 1;
-	EBI_Init(&ebiInit);
-	/* TFT mode has not been enabled or is not available */
 	// [EBI initialization]$
-
-
-}
-
-//================================================================================
-// PORTIO_enter_DefaultMode_from_RESET
-//================================================================================
-extern void PORTIO_enter_DefaultMode_from_RESET(void) {
-
-	// $[Port A Configuration]
-	// [Port A Configuration]$
-
-
-	// $[Port B Configuration]
-	// [Port B Configuration]$
-
-
-	// $[Port C Configuration]
-	// [Port C Configuration]$
-
-
-	// $[Port D Configuration]
-	// [Port D Configuration]$
-
-
-	// $[Port E Configuration]
-	// [Port E Configuration]$
-
-
-	// $[Port F Configuration]
-	// [Port F Configuration]$
-
-
-	// $[Route Configuration]
-
-	/* Module ACMP0 is configured to location 2 */
-	ACMP0->ROUTE = (ACMP0->ROUTE & ~_ACMP_ROUTE_LOCATION_MASK) | ACMP_ROUTE_LOCATION_LOC2;
-
-	/* Module GPIO is configured to location 1 */
-	GPIO->ROUTE = (GPIO->ROUTE & ~_GPIO_ROUTE_SWLOCATION_MASK) | GPIO_ROUTE_SWLOCATION_LOC1;
-
-	/* Enable signals SWO */
-	GPIO->ROUTE |= GPIO_ROUTE_SWOPEN;
-
-	/* Enable signals APEN_A20, ALB_A0, EBI, ARDY, CS0 */
-	EBI->ROUTE |= EBI_ROUTE_APEN_A20 | EBI_ROUTE_ALB_A0 | EBI_ROUTE_EBIPEN |
-		EBI_ROUTE_ARDYPEN | EBI_ROUTE_CS0PEN;
-
-	/* Module I2C0 is configured to location 1 */
-	I2C0->ROUTE = (I2C0->ROUTE & ~_I2C_ROUTE_LOCATION_MASK) | I2C_ROUTE_LOCATION_LOC1;
-
-	/* Enable signals SCL, SDA */
-	I2C0->ROUTE |= I2C_ROUTE_SCLPEN | I2C_ROUTE_SDAPEN;
-
-	/* Module PCNT0 is configured to location 0 */
-	PCNT0->ROUTE = (PCNT0->ROUTE & ~_PCNT_ROUTE_LOCATION_MASK) | PCNT_ROUTE_LOCATION_LOC0;
-
-	/* Enable signals RX, TX */
-	UART1->ROUTE |= UART_ROUTE_RXPEN | UART_ROUTE_TXPEN;
-
-	/* Module USART1 is configured to location 1 */
-	USART1->ROUTE = (USART1->ROUTE & ~_USART_ROUTE_LOCATION_MASK) | USART_ROUTE_LOCATION_LOC1;
-
-	/* Enable signals CLK, CS, RX, TX */
-	USART1->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | USART_ROUTE_RXPEN |
-		USART_ROUTE_TXPEN;
-
-	/* Enable signals CLK, CS, RX, TX */
-	USART2->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | USART_ROUTE_RXPEN |
-		USART_ROUTE_TXPEN;
-	// [Route Configuration]$
 
 
 }

@@ -49,7 +49,6 @@ extern void PCNT2_enter_DefaultMode_from_RESET(void);
 extern void PRS_enter_DefaultMode_from_RESET(void);
 extern void ETM_enter_DefaultMode_from_RESET(void);
 extern void EBI_enter_DefaultMode_from_RESET(void);
-extern void PORTIO_enter_DefaultMode_from_RESET(void);
 // [Config(Per-Module Mode)Transition Prototypes]$
 
 
