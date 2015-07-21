@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file em_version.h
  * @brief Assign correct part number for include file
- * @version 3.20.7
+ * @version 3.20.13
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -31,8 +31,8 @@
  ******************************************************************************/
 
 
-#ifndef __EM_VERSION_H
-#define __EM_VERSION_H
+#ifndef __SILICON_LABS_EM_VERSION_H_
+#define __SILICON_LABS_EM_VERSION_H_
 
 #include "em_device.h"
 
@@ -51,13 +51,13 @@ extern "C" {
  ******************************************************************************/
 
 /** Version number of emlib peripheral API */
-#define _EMLIB_VERSION 3.20.7
+#define _EMLIB_VERSION 3.20.13
 /** Major version of emlib */
 #define _EMLIB_VERSION_MAJOR 3
 /** Minor version of emlib */
 #define _EMLIB_VERSION_MINOR 20
 /** Patch revision of emlib */
-#define _EMLIB_VERSION_PATCH 7
+#define _EMLIB_VERSION_PATCH 13
 
 /** @} (end addtogroup Version) */
 /** @} (end addtogroup EM_Library) */
@@ -66,4 +66,4 @@ extern "C" {
 }
 #endif
 
-#endif /* __EM_VERSION_H */
+#endif /* __SILICON_LABS_EM_VERSION_H_ */
