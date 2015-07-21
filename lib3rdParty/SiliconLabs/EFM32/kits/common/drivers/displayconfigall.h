@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file displayconfigall.h
  * @brief Main configuration file for the DISPLAY driver software stack.
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>

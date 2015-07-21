@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file display.c
  * @brief Display interface.
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -257,7 +257,7 @@ EMSTATUS DISPLAY_DeviceRegister(DISPLAY_Device_t *device)
   return an <em>EMSTATUS</em> code which indicates whether the operation was
   successful or not, and what type of error may have occurred. The possible
   error codes are listed in display.h.
-  
+
   The second step is typically to retrieve the properties of a DISPLAY device.
   This can be done by calling the <em> DISPLAY_DeviceGet() </em> function
   which receives the following two parameters:
@@ -292,7 +292,7 @@ EMSTATUS DISPLAY_DeviceRegister(DISPLAY_Device_t *device)
   @li DISPLAY_COLOUR_MODE_MONOCHROME_INVERSE
 
   The DISPLAY_COLOUR_MODE_MONOCHROME mode defines a pixel bit value of 0
-  as white, and a pixel bit value of 1 as black. 
+  as white, and a pixel bit value of 1 as black.
   The DISPLAY_COLOUR_MODE_MONOCHROME_INVERSE mode is the opposite, and thus
   defines a pixel bit value of 0 as black, and a pixel bit value of 1 as white.
 
@@ -415,7 +415,7 @@ EMSTATUS DISPLAY_DeviceRegister(DISPLAY_Device_t *device)
       defaults if desired.
   @li And one that ties everything together by including all configuration
       files, called displayconfigall.h (included in display.h).
-  
+
   Normally the application programmer just need to deal with the application
   specific configuration file  <em> displayconfigapp.h </em> which typically
   should be minimalistic and easy to setup. Below is a list of the typical
@@ -557,7 +557,7 @@ EMSTATUS DISPLAY_DeviceRegister(DISPLAY_Device_t *device)
       Location of Display on/off pin.
 
 #define LCD_PORT_DISP_PWR and LCD_PIN_DISP_PWR
-      Location of Display Power pin.
+      Location of Display Power pin (if present on kit).
 
 #define LCD_PORT_EXTMODE and LCD_PIN_EXTMODE
       Location of External COM inversion mode pin.
@@ -591,7 +591,7 @@ EMSTATUS DISPLAY_DeviceRegister(DISPLAY_Device_t *device)
      // The user should select one of the following as  RTC clock source.
 #define PAL_RTC_CLOCK_LFXO
       Selects the LFXO oscillator as source for the RTC clock.
- 
+
 #define PAL_RTC_CLOCK_LFRCO
       Selects the LFRCO oscillator as source for the RTC clock.
 

@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file textdisplayconfig.h
  * @brief Configuration file for textdisplay module.
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>

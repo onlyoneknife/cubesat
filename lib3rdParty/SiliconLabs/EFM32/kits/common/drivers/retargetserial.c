@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file
  * @brief Provide stdio retargeting to USART/UART or LEUART.
- * @version 3.20.5
+ * @version 3.20.12
  *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -115,8 +115,17 @@ void RETARGET_SerialInit(void)
   init.enable = usartDisable;
   USART_InitAsync(usart, &init);
 
-  /* Enable pins at UART1 location #2 */
+  /* Enable pins at correct UART/USART location. */
+  #if defined( USART_ROUTEPEN_RXPEN )
+  usart->ROUTEPEN = USART_ROUTEPEN_RXPEN | USART_ROUTEPEN_TXPEN;
+  usart->ROUTELOC0 = ( usart->ROUTELOC0 &
+                       ~( _USART_ROUTELOC0_TXLOC_MASK
+                          | _USART_ROUTELOC0_RXLOC_MASK ) )
+                     | ( RETARGET_TX_LOCATION << _USART_ROUTELOC0_TXLOC_SHIFT )
+                     | ( RETARGET_RX_LOCATION << _USART_ROUTELOC0_RXLOC_SHIFT );
+  #else
   usart->ROUTE = USART_ROUTE_RXPEN | USART_ROUTE_TXPEN | RETARGET_LOCATION;
+  #endif
 
   /* Clear previous RX interrupts */
   USART_IntClear(RETARGET_UART, USART_IF_RXDATAV);

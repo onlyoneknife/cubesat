@@ -1,4 +1,7 @@
 ================ Revision history ============================================
+3.20.12:
+- Maintenance release.
+
 3.20.5:
 - Maintenance release.
 

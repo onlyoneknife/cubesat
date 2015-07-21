@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file
  * @brief EFM32GG_DK3750, Touch panel driver
- * @version 3.20.5
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
@@ -24,7 +24,7 @@
 #include "calibrate.h"
 #include "bsp.h"
 #ifndef TOUCH_WITHOUT_STORE
-#include "i2cdrv.h"
+#include "i2cspm.h"
 #include "eeprom.h"
 #endif
 
@@ -38,10 +38,14 @@
 #define ADC_Y                     adcSingleInpCh4 /**< Input channel 4 */
 
 /* touchpad PIOs */
-#define TOUCH_X1                  gpioPortD, 5 /**< Port D5 */
-#define TOUCH_X2                  gpioPortD, 4 /**< Port D4 */
-#define TOUCH_Y1                  gpioPortD, 3 /**< Port D3 */
-#define TOUCH_Y2                  gpioPortD, 1 /**< Port D2 */
+#define TOUCH_X1_PORT             gpioPortD     /**< Port D */
+#define TOUCH_X1_PIN              5             /**< Pin 5  */
+#define TOUCH_X2_PORT             gpioPortD     /**< Port D */
+#define TOUCH_X2_PIN              4             /**< Pin 4  */
+#define TOUCH_Y1_PORT             gpioPortD     /**< Port D */
+#define TOUCH_Y1_PIN              3             /**< Pin 3  */
+#define TOUCH_Y2_PORT             gpioPortD     /**< Port D */
+#define TOUCH_Y2_PIN              1             /**< Pin 1  */
 
 /** touch driver states */
 typedef enum
@@ -105,14 +109,19 @@ static uint32_t touch_CountChecksum(uint32_t magic, uint32_t *data, uint32_t len
 /** function loads calibration table from EEPROM, validate it and if OK uses it */
 static void touch_LoadCalibration(void)
 {
-  I2C_Init_TypeDef i2cInit = I2C_INIT_DEFAULT;
+  I2CSPM_Init_TypeDef i2cInit = I2CSPM_INIT_DEFAULT;
   uint32_t         temp, checksum;
   int              count;
   MATRIX           new_matrix;
+
+#if !defined( BSP_STK )
+  BSP_PeripheralAccess(BSP_I2C, true);
+#endif
+
   /* Initialize I2C driver, using standard rate. Devices on DK itself */
   /* supports fast mode, but in case some slower devices are added on */
   /* prototype board, we use standard mode. */
-  I2CDRV_Init(&i2cInit);
+  I2CSPM_Init(&i2cInit);
   count  = EEPROM_Read(I2C0, EEPROM_DVK_ADDR, CALIBRATION_EEPROM_OFFSET, (uint8_t*) &temp, sizeof(temp));
   count += EEPROM_Read(I2C0, EEPROM_DVK_ADDR, CALIBRATION_EEPROM_OFFSET + 4, (uint8_t*) &new_matrix, sizeof(new_matrix));
   if (count == sizeof(new_matrix) + 4)
@@ -217,34 +226,34 @@ void ADC0_IRQHandler(void)
   switch (touch_state)
   {
   case TOUCH_INIT:   /* enter this state if touch panel is not pressed */
-    GPIO_PinModeSet(TOUCH_Y1, gpioModePushPull, 1);
-    GPIO_PinModeSet(TOUCH_Y2, gpioModePushPull, 1);
-    GPIO_PinModeSet(TOUCH_X1, gpioModeInputPullFilter , 0);
-    GPIO_PinModeSet(TOUCH_X2, gpioModeInput, 0);
+    GPIO_PinModeSet(TOUCH_Y1_PORT, TOUCH_Y1_PIN, gpioModePushPull, 1);
+    GPIO_PinModeSet(TOUCH_Y2_PORT, TOUCH_Y2_PIN, gpioModePushPull, 1);
+    GPIO_PinModeSet(TOUCH_X1_PORT, TOUCH_X1_PIN, gpioModeInputPullFilter , 0);
+    GPIO_PinModeSet(TOUCH_X2_PORT, TOUCH_X2_PIN, gpioModeInput, 0);
     sInit.input      = ADC_Y;
     sInit.reference  = adcRefVDD;
     sInit.resolution = adcResOVS;
     sInit.acqTime    = adcAcqTime128;               /* used to slow down */
-    if(GPIO_PinInGet(TOUCH_X2))
+    if(GPIO_PinInGet(TOUCH_X2_PORT, TOUCH_X2_PIN))
     {
       touch_state = TOUCH_MEASURE_Y;
-      GPIO_PinModeSet(TOUCH_X1, gpioModePushPull, 1);
-      GPIO_PinModeSet(TOUCH_X2, gpioModePushPull, 0);
-      GPIO_PinModeSet(TOUCH_Y1, gpioModeInput, 0);
-      GPIO_PinModeSet(TOUCH_Y2, gpioModeInput, 0);
+      GPIO_PinModeSet(TOUCH_X1_PORT, TOUCH_X1_PIN, gpioModePushPull, 1);
+      GPIO_PinModeSet(TOUCH_X2_PORT, TOUCH_X2_PIN, gpioModePushPull, 0);
+      GPIO_PinModeSet(TOUCH_Y1_PORT, TOUCH_Y1_PIN, gpioModeInput, 0);
+      GPIO_PinModeSet(TOUCH_Y2_PORT, TOUCH_Y2_PIN, gpioModeInput, 0);
       sInit.input   = ADC_X;
       sInit.acqTime = adcAcqTime16;                  /* pressed, so speed-up */
     }
     ADC_InitSingle(ADC0, &sInit);
     break;
   case TOUCH_CHECK_PRESS:   /* checks if touch panel is still pressed */
-    if( GPIO_PinInGet(TOUCH_X2) )
+    if( GPIO_PinInGet(TOUCH_X2_PORT, TOUCH_X2_PIN) )
     {
       touch_state = TOUCH_MEASURE_Y;
-      GPIO_PinModeSet(TOUCH_X1, gpioModePushPull, 1);
-      GPIO_PinModeSet(TOUCH_X2, gpioModePushPull, 0);
-      GPIO_PinModeSet(TOUCH_Y1, gpioModeInput, 0);
-      GPIO_PinModeSet(TOUCH_Y2, gpioModeInput, 0);
+      GPIO_PinModeSet(TOUCH_X1_PORT, TOUCH_X1_PIN, gpioModePushPull, 1);
+      GPIO_PinModeSet(TOUCH_X2_PORT, TOUCH_X2_PIN, gpioModePushPull, 0);
+      GPIO_PinModeSet(TOUCH_Y1_PORT, TOUCH_Y1_PIN, gpioModeInput, 0);
+      GPIO_PinModeSet(TOUCH_Y2_PORT, TOUCH_Y2_PIN, gpioModeInput, 0);
       sInit.input   = ADC_X;
       sInit.acqTime = adcAcqTime16;                  /* pressed, so speed-up */
       ADC_InitSingle(ADC0, &sInit);
@@ -275,20 +284,20 @@ void ADC0_IRQHandler(void)
     break;
   case TOUCH_MEASURE_Y:                                             /* touch panel pressed, measure Y position */
     newpos.adcy = (ADC_DataSingleGet(ADC0) + 31) >> 6;              /* reduce ADC resolution to 10-bits */
-    GPIO_PinModeSet(TOUCH_Y1, gpioModePushPull, 0);                 /* to avoid overflow in calibration routines */
-    GPIO_PinModeSet(TOUCH_Y2, gpioModePushPull, 1);
-    GPIO_PinModeSet(TOUCH_X1, gpioModeInput, 0);
-    GPIO_PinModeSet(TOUCH_X2, gpioModeInput, 0);
+    GPIO_PinModeSet(TOUCH_Y1_PORT, TOUCH_Y1_PIN, gpioModePushPull, 0);                 /* to avoid overflow in calibration routines */
+    GPIO_PinModeSet(TOUCH_Y2_PORT, TOUCH_Y2_PIN, gpioModePushPull, 1);
+    GPIO_PinModeSet(TOUCH_X1_PORT, TOUCH_X1_PIN, gpioModeInput, 0);
+    GPIO_PinModeSet(TOUCH_X2_PORT, TOUCH_X2_PIN, gpioModeInput, 0);
     sInit.input = ADC_Y;
     ADC_InitSingle(ADC0, &sInit);
     touch_state = TOUCH_MEASURE_X;
     break;
   case TOUCH_MEASURE_X:   /* touch panel pressed, measure X position */
     newpos.adcx = (ADC_DataSingleGet(ADC0) + 31) >> 6;
-    GPIO_PinModeSet(TOUCH_Y1, gpioModePushPull, 1);
-    GPIO_PinModeSet(TOUCH_Y2, gpioModePushPull, 1);
-    GPIO_PinModeSet(TOUCH_X1, gpioModeInputPullFilter , 0);
-    GPIO_PinModeSet(TOUCH_X2, gpioModeInput, 0);
+    GPIO_PinModeSet(TOUCH_Y1_PORT, TOUCH_Y1_PIN, gpioModePushPull, 1);
+    GPIO_PinModeSet(TOUCH_Y2_PORT, TOUCH_Y2_PIN, gpioModePushPull, 1);
+    GPIO_PinModeSet(TOUCH_X1_PORT, TOUCH_X1_PIN, gpioModeInputPullFilter , 0);
+    GPIO_PinModeSet(TOUCH_X2_PORT, TOUCH_X2_PIN, gpioModeInput, 0);
     sInit.input = ADC_Y;
     ADC_InitSingle(ADC0, &sInit);
     touch_state = TOUCH_CHECK_PRESS;
@@ -310,7 +319,7 @@ int TOUCH_IsBusy(void)
 {
   if( (touch_state == TOUCH_INIT) )
   {
-    return GPIO_PinInGet(TOUCH_X2);
+    return GPIO_PinInGet(TOUCH_X2_PORT, TOUCH_X2_PIN);
   }
 
   if( (touch_state == TOUCH_CHECK_PRESS) )

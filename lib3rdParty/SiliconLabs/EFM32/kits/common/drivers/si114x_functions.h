@@ -4,12 +4,12 @@
 // Copyright 2013 Silicon Laboratories, Inc.
 // http://www.silabs.com
 //
-// File Description:
+// File Description:  
 //
-// Function Prototypes, register and bit definitions for reusable low-level
+// Function Prototypes, register and bit definitions for reusable low-level 
 // Si114x functions.
 //
-// Target:         Si114x
+// Target:         Si114x 
 // Command Line:   None
 //
 //-----------------------------------------------------------------------------
@@ -17,33 +17,7 @@
 #ifndef SI114X_FUNCTIONS_H
 #define SI114X_FUNCTIONS_H
 
-
-#ifndef PGM_TOOLKIT_TYPES
-#define PGM_TOOLKIT_TYPES
-#include "em_device.h"
-typedef signed char       s8;
-typedef signed short      s16;
-typedef signed int        s32;
-typedef unsigned char     u8;
-typedef unsigned short    u16;
-typedef unsigned int      u32;
-
-typedef void *            HANDLE;
-typedef char *            STRING;
-typedef s16               PT_RESULT;
-typedef s8                PT_BOOL;
-
-/** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
-
-typedef struct {
-    I2C_TypeDef *i2c;
-    uint8_t addr;
-  } si114x_i2c_t;
-
-/** @endcond */
-
-#endif
-
+#include "Si114x_types.h"
 
 //
 // Function Prototypes
@@ -57,6 +31,9 @@ s16 Si114xReadFromRegister(HANDLE si114x_handle, u8 address);
 s16 Si114xBlockWrite(HANDLE si114x_handle, u8 address, u8 length, u8 const *values);
 s16 Si114xBlockRead(HANDLE si114x_handle, u8 address, u8 length, u8 *values);
 
+// Delay function used by reset
+void delay_10ms(void);
+
 // Commands to the Si114x
 s16 Si114xReset      (HANDLE si114x_handle);
 s16 Si114xPauseAll   (HANDLE si114x_handle);
@@ -66,13 +43,15 @@ s16 Si114xAlsForce   (HANDLE si114x_handle);
 s16 Si114xPsAlsForce (HANDLE si114x_handle);
 s16 Si114xPsAlsAuto  (HANDLE si114x_handle);
 
-// Read/Write Access to Parameter RAM is implemented as a 'Command' to the
+// Read/Write Access to Parameter RAM is implemented as a 'Command' to the 
 // Si114x
 s16 Si114xParamSet (HANDLE si114x_handle, u8 address, u8 data);
 s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 
-
-
+// Compress
+u8 Si114xCompress(u16 input);
+u16 Uncompress(u8 input);
+ 
 //
 // I2C Registers
 //
@@ -119,10 +98,10 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 #define REG_PARAM_RD              0x2E
 #define REG_CHIP_STAT             0x30
 
-#define REG_UCOEF0                0x13
+#define REG_UCOEF0                0x13  
 #define REG_UCOEF1                0x14
-#define REG_UCOEF2                0x15
-#define REG_UCOEF3                0x16
+#define REG_UCOEF2                0x15  
+#define REG_UCOEF3                0x16  
 
 #define REG_MEAS_RATE_LSB         0x08
 #define REG_MEAS_RATE_MSB         0x09
@@ -163,7 +142,7 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 
 
 
-// REG_IRQ_CFG
+// REG_IRQ_CFG 
 #define  ICG_INTOE                0x01
 #define  ICG_INTMODE              0x02
 
@@ -228,7 +207,7 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 
 //
 // REG_PS_LED21   LED2 Current is upper nibble
-//                LED1 Current is lower nibble
+//                LED1 Current is lower nibble 
 //
 // REG_PS_LED3    LED3 Current is lower nibble
 #define LEDI_000                  0x00
@@ -259,9 +238,9 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 
 //
 // ADC Counters
-// PARAM_PS_ADC_COUNTER
-// PARAM_ALSVIS_ADC_COUNTER
-// PARAM_ALSIR_ADC_COUNTER
+// PARAM_PS_ADC_COUNTER      
+// PARAM_ALSVIS_ADC_COUNTER  
+// PARAM_ALSIR_ADC_COUNTER  
 //
 #define RECCNT_001                0x00
 #define RECCNT_007                0x10
@@ -275,7 +254,7 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 //
 // Proximity LED Selection
 // PARAM_PSLED12_SELECT  PS2 LED Choice is Upper Nibble
-//                       PS1 LED Choice is Lower Nibble
+//                       PS1 LED Choice is Lower Nibble 
 //
 // PARAM_PSLED3_SELECT   PS3 LED Choice is Lower Nibble
 //
@@ -297,8 +276,8 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 #define SEL_LED3_PS3              (LED3_EN)
 
 //
-// PARAM_PS_ENCODING
-// When these bits are set the corresponding measurement
+// PARAM_PS_ENCODING  
+// When these bits are set the corresponding measurement 
 // will report the least significant bits of the
 // ADC is used instead of the most significant bits
 #define PS1_LSB                   0x10
@@ -307,8 +286,8 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 #define PS_ENCODING_MASK          0x70
 
 //
-// PARAM_ALS_ENCODING
-// When these bits are set the corresponding measurement
+// PARAM_ALS_ENCODING 
+// When these bits are set the corresponding measurement 
 // will report the least significant bits of the
 // ADC is used instead of the most significant bits
 #define ALS_VIS_LSB               0x10
@@ -318,14 +297,14 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 
 
 //
-// PARAM_PS_ADC_MISC
-// PARAM_ALS_VIS_ADC_MISC
-// PARAM_ALS_IR_ADC_MISC
+// PARAM_PS_ADC_MISC         
+// PARAM_ALS_VIS_ADC_MISC         
+// PARAM_ALS_IR_ADC_MISC         
 //
 // PS_MODE_MEAS_MODE and NOT_PS_MEAS_MODE are applicable only
 // for PARAM_PS_ADC_MISC.
 //
-//    PS_MEAS_MODE is used to perform normal Proximity measurements.
+//    PS_MEAS_MODE is used to perform normal Proximity measurements. 
 //    While in this operatinal mode, it is possible to choose either
 //    the small IR photodiode or big IR photodiode. The big IR
 //    photodiode is the default for normal operation. The small IR
@@ -334,39 +313,39 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 //
 //    NOT_PS_MEAS_MODE can be applied to PARAM_PS_ADC_MISC.
 //
-//    This allows three PS channels to perform RAW ADC measurements
+//    This allows three PS channels to perform RAW ADC measurements 
 //    on any source (no irLED driven). These measurements will have no
-//    reference, and will have an offset of 0x4000 if the most
-//    significant 16 bits of the 17-bit ADC is reported. Otherwise,
-//    if the PARAM_xxx_ENCODING _LSB settings are set, then the
-//    offset will be 0x8000 (due to bit shifting).
+//    reference, and will have an offset of 0x4000 if the most 
+//    significant 16 bits of the 17-bit ADC is reported. Otherwise, 
+//    if the PARAM_xxx_ENCODING _LSB settings are set, then the 
+//    offset will be 0x8000 (due to bit shifting). 
 //
-//    When performing voltage measurements (INT, LED1, LED2, TEMP),
+//    When performing voltage measurements (INT, LED1, LED2, TEMP), 
 //    a separate VSS measurement should be subtracted from the reading.
 //
 //    When performing measurement with visible photodiode, first take
 //    a no-led measurement and subtract away the visible light measurement.
 //
-//    When performing an optical measurement using either two IR
-//    photodiodes, one should subtract away the no-led measurement from
+//    When performing an optical measurement using either two IR 
+//    photodiodes, one should subtract away the no-led measurement from 
 //    the IR measurement.
 //
 //    Note that the subtraction ordering is significant between
 //    taking visible light photodiode vs IR photodiode
 //    measurement. The raw ADC reading of visible light photodiode
-//    decreases with increasing light levels while the raw ADC reading
+//    decreases with increasing light levels while the raw ADC reading 
 //    of IR light photodiode increases with increasing light levels.
 //
 // HSIG_EN means 'high signal range enable'. The ADC would
 // be able to operate with higher light levels, but at the
-// expense of sensitivity. This setting can be used for
+// expense of sensitivity. This setting can be used for 
 // operation under direct sunlight.
 //
-// PARAM_PS_ADC_MISC, PARAM_ALSVIS_ADC_MISC and PARAM_ALSIR_ADC_MISC
+// PARAM_PS_ADC_MISC, PARAM_ALSVIS_ADC_MISC and PARAM_ALSIR_ADC_MISC    
 // can use HSIG_EN also.
+// 
 //
-//
-#define NOT_PS_MEAS_MODE          0x00
+#define NOT_PS_MEAS_MODE          0x00 
 #define PS_MEAS_MODE              0x04
 #define HSIG_EN                   0x20
 #define RANGE_EN                  0x20
@@ -376,14 +355,14 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 
 //
 // ADC Mux Settings
-// PARAM_PS1_ADC_MUX    See PARAM_PS_ADC_MISC also
+// PARAM_PS1_ADC_MUX    See PARAM_PS_ADC_MISC also 
 // PARAM_PS2_ADC_MUX    See PARAM_PS_ADC_MISC also
 // PARAM_PS3_ADC_MUX    See PARAM_PS_ADC_MISC also
 //
 // PARAM_VIS_ADC_MUX    MUX_ALS_VIS or MUX_NONE only
 // PARAM_IR_ADC_MUX     MUX_ALS_IR, MUX_PS_IR or MUX_NONE only
 // PARAM_AUX_ADC_MUX    MUX_VTEMP, MUX_LED1, MUX_LED2, MUX_INT
-//                      to use anything other than MUX_VTEMP,
+//                      to use anything other than MUX_VTEMP, 
 //                      ANA_IN_KEY should be unlocked first.
 //
 #define MUX_SMALL_IR              0x00
@@ -399,9 +378,9 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 
 //
 // ADC Dividers
-// PARAM_PS_ADC_GAIN
-// PARAM_ALSVIS_ADC_GAIN
-// PARAM_ALSIR_ADC_GAIN
+// PARAM_PS_ADC_GAIN       
+// PARAM_ALSVIS_ADC_GAIN  
+// PARAM_ALSIR_ADC_GAIN 
 //
 #define ADC_NORM                  0x00
 #define ADC_DIV2                  0x01
@@ -422,7 +401,7 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 #define HW_KEY_VAL0               0x17
 
 // Sleep Control
-// PARAM_SLEEP_CTRL
+// PARAM_SLEEP_CTRL 
 #define SLEEP_DISABLED            0x01
 
 // ANA_IN_KEY value
@@ -431,7 +410,9 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 #define AMA_KEY_3A                0x62
 #define ANA_KEY_3B                0x3b
 
-//
+
+
+// 
 // si114x_calibration.h
 //
 //
@@ -444,40 +425,95 @@ s16 Si114xParamRead(HANDLE si114x_handle, u8 address);
 // This structure is used to store the result of the calibration retrieval
 //
 
-/** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
-
-typedef struct
+typedef struct 
 {
-    int cal;
+    u32     vispd_correction;
+    u32     irpd_correction;
+    u32     adcrange_ratio;
+    u32     irsize_ratio;
+    u32     ledi_ratio;
+    u8      *ucoef_p;
 } SI114X_CAL_S;
 
-/** @endcond */
-
-s16 si114x_get_calibration( HANDLE si114x_handle, SI114X_CAL_S *si114x_cal, char security);
-
-
 //
-// si114x_set_ucoef() takes in a reference ucoef, then modifies it based on
-// calibration.
+// si114x_calibration() performs some initial checking based on the security
+// level. If the checks fail, the function returns without attempting
+// to fetch calibration values. The reason for the checking is that the Si114x 
+// uses the same registers to store calibration values as used for storing 
+// proximity and ambient light measurements. Therefore, this function needs 
+// to be used only if there is no possibility of an autonomous process possibly 
+// overwriting the output registers.
+//
+// If the checks are successful, then the si114x retrieves the compressed
+// values from the Si114x, then populates the SI114X_CAL_S   structure whose
+// pointer is passed to si114x_calibration()
 //
 // If there are any errors, si114x_cal   is populated with default values
-//
+//  
 // Input:
 //      si114x_handle   handle passed to low level routines to initiate
 //                      i2c communications
 //
-//      ref_ucoef       if NULL, a clear overlay is assumed
-//                      otherwise, 4 bytes representing the reference
-//                      coefficients are passed.
+//      si114x_cal      pointer to an SI114X_CAL_S   structure that
+//                      will hold the calibration values from the Si114x
+//                      If there are any errors, si114x_cal is populated 
+//                      with default values.
+//
+//      security
+//         0            Minimal checking
+//         1            Checks to make sure that interface registers
+//                      are zero, otherwise, returns -1
+//                      interface registers are zero only when the Si114x
+//                      has been reset, and no autonomous measurements have
+//                      started.
+//
+// Side-effects:
+//     - Writes 0x11 to command reg to retrieve factory calibration values in 
+//       buffer[0] to buffer[11]
+//
+//     - Calls the various helper functions such as vispd_correction()
+//       irpd_correction, to populate the SI114X_CAL_S structure
+//
+//     - Writes 0x12 to command reg to retrieve factory cal_index to 
+//       buffer[12] to buffer[13]
+//
+// Return:
+//           0          No errors
+//          -1          Security Check failed
+//          -2          i2c communication error
+//          -3          Chip does not support factory calibration
+//          -4          Bad si114x_handle or si114x_cal
+s16 si114x_get_calibration( HANDLE si114x_handle, SI114X_CAL_S *si114x_cal, char security);
+
+
+//
+// si114x_set_ucoef() takes in an optional input ucoef pointer, then modifies 
+// it based on calibration. If the input ucoef is NULL, default values for
+// clear overlay is assumed and then the si114x_cal is used to adjust it
+// before setting the ucoef. Note that the Si114x ucoef registers are updated by 
+// this function; no additional action is required. This routine also performs
+// the necessary querying of the chip identification to make sure that it is
+// a uvindex-capable device.
+//
+// Input:
+//      si114x_handle   handle passed to low level routines to initiate
+//                      i2c communications
+//      
+//      input_ucoef     if NULL, a clear overlay is assumed, and datasheet
+//                      values for ucoef is used.
+//
+//                      Otherwise, pointer to 4 bytes array representing 
+//                      the reference coefficients is passed. 
 //
 //      si114x_cal      pointer to an SI114X_CAL_S   structure that
 //                      will hold the calibration values from the Si114x
+//
 // Return:
 //           0          No errors
 //          -1          Device is neither Si1132, Si1145, Si1146 nor Si1147
 //
 
-s16 si114x_set_ucoef( HANDLE si114x_handle, u8 ref_ucoef[], SI114X_CAL_S *si114x_cal );
+s16 si114x_set_ucoef( HANDLE si114x_handle, u8 input_ucoef[], SI114X_CAL_S *si114x_cal );
 
 
 #endif // #define SI114X_FUNCTIONS_H

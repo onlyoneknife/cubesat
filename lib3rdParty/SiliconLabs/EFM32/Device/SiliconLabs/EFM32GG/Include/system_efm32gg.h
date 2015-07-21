@@ -1,10 +1,10 @@
 /***************************************************************************//**
  * @file system_efm32gg.h
  * @brief CMSIS Cortex-M3 System Layer for EFM32GG devices.
- * @version 3.20.7
+ * @version 3.20.13
  ******************************************************************************
  * @section License
- * <b>(C) Copyright 2014 Silicon Laboratories, Inc. http://www.silabs.com</b>
+ * <b>(C) Copyright 2015 Silicon Laboratories, Inc. http://www.silabs.com</b>
  ******************************************************************************
  *
  * Permission is granted to anyone to use this software for any purpose,
@@ -30,8 +30,8 @@
  *
  *****************************************************************************/
 
-#ifndef __SYSTEM_EFM32GG_H
-#define __SYSTEM_EFM32GG_H
+#ifndef __SILICON_LABS_SYSTEM_EFM32GG_H__
+#define __SILICON_LABS_SYSTEM_EFM32GG_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -135,4 +135,4 @@ void SystemLFXOClockSet(uint32_t freq);
 #ifdef __cplusplus
 }
 #endif
-#endif /* __SYSTEM_EFM32GG_H */
+#endif /* __SILICON_LABS_SYSTEM_EFM32GG_H__ */

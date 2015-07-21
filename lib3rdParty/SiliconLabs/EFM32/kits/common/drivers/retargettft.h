@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file
  * @brief Retarget stdout to TFT
- * @version 3.20.5
+ * @version 3.20.12
  ******************************************************************************
  * @section License
  * <b>(C) Copyright 2012 Energy Micro AS, http://www.energymicro.com</b>
