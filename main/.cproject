@@ -101,8 +101,9 @@
 							<tool id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base.599416740" name="GNU ARM Archiver" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.archiver.base"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129.289327383" name="main.hwconf" rcbsApplicability="disable" resourcePath="main.hwconf" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry excluding="libDrivers/src/sd.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="main.hwconf|libDrivers/src/sd.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -206,5 +207,12 @@
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="GNU ARM v4.8.3 - Release">
+			<resource resourceType="PROJECT" workspacePath="/main"/>
+		</configuration>
+		<configuration configurationName="GNU ARM v4.8.3 - Debug">
+			<resource resourceType="PROJECT" workspacePath="/main"/>
+		</configuration>
+	</storageModule>
 </cproject>
