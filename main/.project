@@ -38,7 +38,7 @@
 		<link>
 			<name>emlib</name>
 			<type>2</type>
-			<locationURI>STUDIO_SDK_LOC/emlib</locationURI>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/SiliconLabs/EFM32/emlib/src</locationURI>
 		</link>
 		<link>
 			<name>libDevice</name>

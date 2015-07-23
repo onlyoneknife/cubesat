@@ -59,6 +59,11 @@
 void DRIVERS_Init(void)
 {
 
+	/* Enable I2C0 is slave mode */
+	I2C0_Setup();
+
+	/* Enable USART2 in SPI slave mode */
+	//SPI_Setup();
 
 }
 
@@ -88,10 +93,11 @@ int main(void)
   /* Initialize EFM32 Chip Settings */
   CHIP_Init();
 
+  /* Transition to Default Mode */
+  enter_DefaultMode_from_RESET();
+
   /* Initialize Hardware Drivers */
   DRIVERS_Init();
-
-  enter_DefaultMode_from_RESET();
 
   /* Create task for blinking leds */
   xTaskCreate( LedBlink,

@@ -19,6 +19,8 @@
 #include "em_cmu.h"
 #include "em_device.h"
 #include "em_chip.h"
+#include "em_i2c.h"
+#include "em_usart.h"
 // [Library includes]$
 
 //==============================================================================
@@ -27,6 +29,8 @@
 extern void enter_DefaultMode_from_RESET(void) {
 	// $[Config Calls]
 	CMU_enter_DefaultMode_from_RESET();
+	USART2_enter_DefaultMode_from_RESET();
+	I2C0_enter_DefaultMode_from_RESET();
 	PORTIO_enter_DefaultMode_from_RESET();
 	// [Config Calls]$
 
@@ -47,6 +51,12 @@ extern void CMU_enter_DefaultMode_from_RESET(void) {
 	// [LFACLK Setup]$
 
 	// $[Peripheral Clock enables]
+	/* Enable clock for I2C0 */
+	CMU_ClockEnable(cmuClock_I2C0, true);
+
+	/* Enable clock for USART2 */
+	CMU_ClockEnable(cmuClock_USART2, true);
+
 	/* Enable clock for GPIO by default */
 	CMU_ClockEnable(cmuClock_GPIO, true);
 
@@ -250,9 +260,30 @@ extern void USART2_enter_DefaultMode_from_RESET(void) {
 	// [USART_InitAsync]$
 
 	// $[USART_InitSync]
+	USART_InitSync_TypeDef initsync = USART_INITSYNC_DEFAULT;
+
+	initsync.baudrate              = 115200;
+	initsync.databits              = usartDatabits8;
+	initsync.master                = 1;
+	initsync.msbf                  = 1;
+	initsync.clockMode             = usartClockMode0;
+	#if defined( USART_INPUT_RXPRS ) && defined( USART_TRIGCTRL_AUTOTXTEN )
+	initsync.prsRxEnable           = 0;
+	initsync.prsRxCh               = 0;
+	initsync.autoTx                = 0;
+	#endif
+
+	USART_InitSync(USART2, &initsync);
 	// [USART_InitSync]$
 
 	// $[USART_InitPrsTrigger]
+	USART_PrsTriggerInit_TypeDef initprs = USART_INITPRSTRIGGER_DEFAULT;
+
+	initprs.rxTriggerEnable        = 0;
+	initprs.txTriggerEnable        = 0;
+	initprs.prsTriggerChannel      = usartPrsTriggerCh0;
+
+	USART_InitPrsTrigger(USART2, &initprs);
 	// [USART_InitPrsTrigger]$
 
 
@@ -335,6 +366,13 @@ extern void WDOG_enter_DefaultMode_from_RESET(void) {
 //================================================================================
 extern void I2C0_enter_DefaultMode_from_RESET(void) {
 	// $[I2C0 initialization]
+	I2C_Init_TypeDef init = I2C_INIT_DEFAULT;
+
+	init.enable                    = 1;
+	init.master                    = 0;
+	init.freq                      = I2C_FREQ_STANDARD_MAX;
+	init.clhr                      = i2cClockHLRStandard;
+	I2C_Init(I2C0, &init);
 	// [I2C0 initialization]$
 
 
@@ -506,6 +544,27 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 
 
 	// $[Port C Configuration]
+
+	/* Pin PC0 is configured to Open-drain with pull-up and filter */
+	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE0_MASK) | GPIO_P_MODEL_MODE0_WIREDANDPULLUPFILTER;
+	GPIO->P[2].DOUT |= (1 << 0);
+
+	/* Pin PC1 is configured to Open-drain with pull-up and filter */
+	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE1_MASK) | GPIO_P_MODEL_MODE1_WIREDANDPULLUPFILTER;
+	GPIO->P[2].DOUT |= (1 << 1);
+
+	/* Pin PC2 is configured to Input enabled */
+	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE2_MASK) | GPIO_P_MODEL_MODE2_INPUT;
+
+	/* Pin PC3 is configured to Push-pull */
+	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE3_MASK) | GPIO_P_MODEL_MODE3_PUSHPULL;
+	GPIO->P[2].DOUT |= (1 << 3);
+
+	/* Pin PC4 is configured to Input enabled */
+	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE4_MASK) | GPIO_P_MODEL_MODE4_INPUT;
+
+	/* Pin PC5 is configured to Input enabled */
+	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE5_MASK) | GPIO_P_MODEL_MODE5_INPUT;
 	// [Port C Configuration]$
 
 
@@ -523,8 +582,18 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 
 	// $[Route Configuration]
 
+	/* Module I2C0 is configured to location 4 */
+	I2C0->ROUTE = (I2C0->ROUTE & ~_I2C_ROUTE_LOCATION_MASK) | I2C_ROUTE_LOCATION_LOC4;
+
+	/* Enable signals SCL, SDA */
+	I2C0->ROUTE |= I2C_ROUTE_SCLPEN | I2C_ROUTE_SDAPEN;
+
 	/* Module PCNT0 is configured to location 0 */
 	PCNT0->ROUTE = (PCNT0->ROUTE & ~_PCNT_ROUTE_LOCATION_MASK) | PCNT_ROUTE_LOCATION_LOC0;
+
+	/* Enable signals CLK, CS, RX, TX */
+	USART2->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | USART_ROUTE_RXPEN |
+		USART_ROUTE_TXPEN;
 	// [Route Configuration]$
 
 
