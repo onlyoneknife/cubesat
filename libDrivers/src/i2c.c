@@ -23,7 +23,7 @@ uint16_t RxBufferTail = 0;
 /**************************************************************************//**
  * @brief  Setup I2C
  *****************************************************************************/
-void I2C0_Setup(void)
+void I2C0_setup(void)
 {
   /* Setting up to enable slave mode */
   I2C0->SADDR |= I2C_ADDRESS << _I2C_SADDR_ADDR_SHIFT;

@@ -1,3 +1,9 @@
+
+/**************************************************************************//**
+ * THIS CONTENT HAS BEEN ALTERED FROM THE ORIGINAL SOFTWARE AND IS SUBJECT TO
+ * EXISTING LICENSE TERMS AND RESTRICTIONS FROM A THIRD PARTY
+ *****************************************************************************/
+
 /**************************************************************************//**
  * @file spi.c
  * @brief SPI
@@ -31,10 +37,17 @@
  *
  ******************************************************************************/
 
-#include "em_device.h"
+
+
+/* Driver Includes */
 #include "spi.h"
+
+/* EFM32 Includes */
+#include "em_device.h"
+#include "em_usart.h"
+#include "em_chip.h"
 #include "em_gpio.h"
-#include "spi_project.h"
+#include "em_cmu.h"
 
 
 /* Buffer pointers and indexes */
@@ -49,7 +62,6 @@ int masterRxBufferSize;
 volatile int masterRxBufferIndex;
 
 
-
 /**************************************************************************//**
  * @brief Setup a USART as SPI
  * @param spiNumber is the number of the USART to use (e.g. 1 USART1)
@@ -58,126 +70,58 @@ volatile int masterRxBufferIndex;
  *****************************************************************************/
 void SPI_setup(uint8_t spiNumber, uint8_t location, bool master)
 {
+  USART_InitSync_TypeDef initsync = USART_INITSYNC_DEFAULT;
+  USART_PrsTriggerInit_TypeDef initprs = USART_INITPRSTRIGGER_DEFAULT;
   USART_TypeDef *spi;
+
+  CMU_Clock_TypeDef clock;
 
   /* Determining USART */
   switch (spiNumber)
   {
   case 0:
-    spi = USART0;
+    spi   = USART0;
+    clock = cmuClock_USART0;
     break;
   case 1:
     spi = USART1;
+    clock = cmuClock_USART1;
     break;
   case 2:
     spi = USART2;
+    clock = cmuClock_USART2;
     break;
   default:
     return;
   }
 
-  /* Setting baudrate */
-  spi->CLKDIV = 128 * (SPI_PERCLK_FREQUENCY / SPI_BAUDRATE - 2);
+  /* Enabling clock to USART peripheral */
+  CMU_ClockEnable(clock, true);
 
-  /* Configure SPI */
-  /* Using synchronous (SPI) mode*/
-  spi->CTRL = USART_CTRL_SYNC;
-  /* Clearing old transfers/receptions, and disabling interrupts */
-  spi->CMD = USART_CMD_CLEARRX | USART_CMD_CLEARTX;
-  spi->IEN = 0;
-  /* Enabling pins and setting location */
-  spi->ROUTE = USART_ROUTE_TXPEN | USART_ROUTE_RXPEN | USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | (location << 8);
+  /* Initializing USART in synchronous mode */
+  initsync.baudrate              = 115200;
+  initsync.databits              = usartDatabits8;
+  initsync.master                = master;
+  initsync.msbf                  = true;
+  initsync.clockMode             = usartClockMode0;
+  #if defined( USART_INPUT_RXPRS ) && defined( USART_TRIGCTRL_AUTOTXTEN )
+  initsync.prsRxEnable           = false;
+  initsync.prsRxCh               = false;
+  initsync.autoTx                = false;
+  #endif
+
+  USART_InitSync(spi, &initsync);
   
-  /* Set GPIO config to slave */
-  GPIO_Mode_TypeDef gpioModeMosi = gpioModeInput;
-  GPIO_Mode_TypeDef gpioModeMiso = gpioModePushPull;
-  GPIO_Mode_TypeDef gpioModeCs   = gpioModeInput;
-  GPIO_Mode_TypeDef gpioModeClk  = gpioModeInput;
-  
-  /* Set to master and to control the CS line */
-  if (master)
-  {
-    /* Enabling Master, TX and RX */
-    spi->CMD   = USART_CMD_MASTEREN | USART_CMD_TXEN | USART_CMD_RXEN;
-    spi->CTRL |= USART_CTRL_AUTOCS;
-    
-    /* Set GPIO config to master */
-    gpioModeMosi = gpioModePushPull;
-    gpioModeMiso = gpioModeInput;
-    gpioModeCs   = gpioModePushPull;
-    gpioModeClk  = gpioModePushPull;
-  }
-  else
-  {
-    /* Enabling TX and RX */
-    spi->CMD = USART_CMD_TXEN | USART_CMD_RXEN;
-  }
+  /* Initializing Peripheral Reflex System Trigger */
+  initprs.rxTriggerEnable        = false;
+  initprs.txTriggerEnable        = false;
+  initprs.prsTriggerChannel      = usartPrsTriggerCh0;
 
-  /* Clear previous interrupts */
-  spi->IFC = _USART_IFC_MASK;
+  USART_InitPrsTrigger(spi, &initprs);
 
-  /* IO configuration */
-  switch(spiNumber)
-  {
-    case 0: switch(location)
-            {
-              case 0: /* IO configuration (USART 0, Location #0) */
-                      GPIO_PinModeSet(gpioPortE, 10, gpioModeMosi, 0); /* MOSI */
-                      GPIO_PinModeSet(gpioPortE, 11, gpioModeMiso, 0); /* MISO */
-                      GPIO_PinModeSet(gpioPortE, 13, gpioModeCs,   0); /* CS */
-                      GPIO_PinModeSet(gpioPortE, 12, gpioModeClk,  0); /* Clock */
-                      break;
-              case 1: /* IO configuration (USART 0, Location #1) */
-                      GPIO_PinModeSet(gpioPortE, 7, gpioModeMosi, 0);  /* MOSI */ 
-                      GPIO_PinModeSet(gpioPortE, 6, gpioModeMiso, 0);  /* MISO */
-                      GPIO_PinModeSet(gpioPortE, 4, gpioModeCs,   0);  /* CS */
-                      GPIO_PinModeSet(gpioPortE, 5, gpioModeClk,  0);  /* Clock */
-                      break;
-              case 2: /* IO configuration (USART 0, Location #2) */
-                      GPIO_PinModeSet(gpioPortC, 11, gpioModeMosi, 0); /* MOSI */
-                      GPIO_PinModeSet(gpioPortC, 10, gpioModeMiso, 0); /* MISO */
-                      GPIO_PinModeSet(gpioPortC,  8, gpioModeCs,   0); /* CS */
-                      GPIO_PinModeSet(gpioPortC,  9, gpioModeClk,  0); /* Clock */
-                      break;
-            default: break;
-            }
-            break;
-    case 1: switch(location)
-            {
-              case 0: /* IO configuration (USART 1, Location #0) */
-                      GPIO_PinModeSet(gpioPortC, 0, gpioModeMosi, 0);  /* MOSI */
-                      GPIO_PinModeSet(gpioPortC, 1, gpioModeMiso, 0);  /* MISO */
-                      GPIO_PinModeSet(gpioPortB, 8, gpioModeCs,   0);  /* CS */
-                      GPIO_PinModeSet(gpioPortB, 7, gpioModeClk,  0);  /* Clock */
-                      break;
-              case 1: /* IO configuration (USART 1, Location #1) */
-                      GPIO_PinModeSet(gpioPortD, 0, gpioModeMosi, 0);  /* MOSI */
-                      GPIO_PinModeSet(gpioPortD, 1, gpioModeMiso, 0);  /* MISO */
-                      GPIO_PinModeSet(gpioPortD, 3, gpioModeCs,   0);  /* CS */
-                      GPIO_PinModeSet(gpioPortD, 2, gpioModeClk,  0);  /* Clock */
-                      break;              
-            default: break;
-            }
-            break;
-    case 2: switch(location)
-            {
-              case 0: /* IO configuration (USART 2, Location #0) */
-                      GPIO_PinModeSet(gpioPortC, 2, gpioModeMosi, 0);  /* MOSI */
-                      GPIO_PinModeSet(gpioPortC, 3, gpioModeMiso, 0);  /* MISO */
-                      GPIO_PinModeSet(gpioPortC, 5, gpioModeCs,   0);  /* CS */
-                      GPIO_PinModeSet(gpioPortC, 4, gpioModeClk,  0);  /* Clock */
-                      break;
-              case 1: /* IO configuration (USART 2, Location #1) */
-                      GPIO_PinModeSet(gpioPortB, 3, gpioModeMosi, 0);  /* MOSI */
-                      GPIO_PinModeSet(gpioPortB, 4, gpioModeMiso, 0);  /* MISO */
-                      GPIO_PinModeSet(gpioPortB, 6, gpioModeCs,   0);  /* CS */
-                      GPIO_PinModeSet(gpioPortB, 5, gpioModeClk,  0);  /* Clock */
-                      break;              
-            default: break;
-            }
-            break;
-    default: break;  
-  }
+  /* Enable signals CLK, CS, RX, TX and set location */
+  spi->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | USART_ROUTE_RXPEN |
+  	  USART_ROUTE_TXPEN | (location << _USART_ROUTE_LOCATION_SHIFT);
 }
 
 
@@ -258,6 +202,31 @@ void SPI2_setupRXInt(char* receiveBuffer, int bytesToReceive)
 
 
 /**************************************************************************//**
+ * @brief USART2 TX IRQ Handler Setup
+ * @param transmitBuffer points to the data to send
+ * @param transmitBufferSize indicates the number of bytes to send
+ *****************************************************************************/
+void SPI2_setupTXInt(char* transmitBuffer, int transmitBufferSize)
+{
+  USART_TypeDef *spi = USART2;
+
+  /* Setting up pointer and indexes */
+  slaveTxBuffer      = transmitBuffer;
+  slaveTxBufferSize  = transmitBufferSize;
+  slaveTxBufferIndex = 0;
+
+  /* Clear TX */
+  spi->CMD = USART_CMD_CLEARTX;
+
+  /* Enable interrupts */
+  NVIC_ClearPendingIRQ(USART2_TX_IRQn);
+  NVIC_EnableIRQ(USART2_TX_IRQn);
+  spi->IEN |= USART_IEN_TXBL;
+}
+
+
+
+/**************************************************************************//**
  * @brief USART1 IRQ Handler Setup
  * @param receiveBuffer points to where received data is to be stored
  * @param receiveBufferSize indicates the number of bytes to receive
@@ -268,6 +237,21 @@ void SPI1_setupSlaveInt(char* receiveBuffer, int receiveBufferSize, char* transm
 {
   SPI1_setupRXInt(receiveBuffer, receiveBufferSize);
   SPI1_setupTXInt(transmitBuffer, transmitBufferSize);
+}
+
+
+
+/**************************************************************************//**
+ * @brief USART2 IRQ Handler Setup
+ * @param receiveBuffer points to where received data is to be stored
+ * @param receiveBufferSize indicates the number of bytes to receive
+ * @param transmitBuffer points to the data to send
+ * @param transmitBufferSize indicates the number of bytes to send
+ *****************************************************************************/
+void SPI2_setupSlaveInt(char* receiveBuffer, int receiveBufferSize, char* transmitBuffer, int transmitBufferSize)
+{
+  SPI2_setupRXInt(receiveBuffer, receiveBufferSize);
+  SPI2_setupTXInt(transmitBuffer, transmitBufferSize);
 }
 
 
@@ -355,3 +339,32 @@ void USART2_RX_IRQHandler(void)
 }
 
 
+
+/**************************************************************************//**
+ * @brief USART2 TX IRQ Handler
+ *****************************************************************************/
+void USART2_TX_IRQHandler(void)
+{
+  USART_TypeDef *spi = USART2;
+
+  if (spi->STATUS & USART_STATUS_TXBL)
+  {
+    /* Checking that valid data is to be transferred */
+    if (slaveTxBuffer != 0)
+    {
+      /* Writing new data */
+      spi->TXDATA = slaveTxBuffer[slaveTxBufferIndex];
+      slaveTxBufferIndex++;
+      /*Checking if more data is to be transferred */
+      if (slaveTxBufferIndex == slaveTxBufferSize)
+      {
+        slaveTxBuffer = 0;
+      }
+    }
+    else
+    {
+      /* Sending 0 if no data to send */
+      spi->TXDATA = 0;
+    }
+  }
+}

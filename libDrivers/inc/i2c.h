@@ -17,7 +17,7 @@
 
 #define I2C_DELAY              (1 / portTICK_RATE_MS)
 
-void I2C0_Setup(void);
+void I2C0_setup(void);
 
 void I2C0_IRQHandler(void);
 

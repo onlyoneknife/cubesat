@@ -36,8 +36,13 @@
 #include <stdbool.h>
 #include "em_device.h"
 
+#define NO_RX                    0
+#define NO_TX                    NO_RX
+
 void SPI_setup(uint8_t spiNumber, uint8_t location, bool master);
+void SPI1_setupRXInt(char* receiveBuffer, int bytesToReceive);
 void SPI2_setupRXInt(char* receiveBuffer, int bytesToReceive);
 void SPI1_setupSlaveInt(char* receiveBuffer, int receiveBufferSize, char* transmitBuffer, int transmitBufferSize);
+void SPI2_setupSlaveInt(char* receiveBuffer, int receiveBufferSize, char* transmitBuffer, int transmitBufferSize);
 
 #endif

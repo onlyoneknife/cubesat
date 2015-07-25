@@ -36,6 +36,7 @@
 #include "mag.h"
 #include "i2c.h"
 #include "tempsense.h"
+#include "spi.h"
 #include "sleep.h"
 
 /* FreeRTOS Includes */
@@ -49,9 +50,18 @@
 #define LEDBLINK_STACK_SIZE        (configMINIMAL_STACK_SIZE + 10)
 #define LEDBLINK_TASK_PRIORITY     (tskIDLE_PRIORITY + 1)
 
+#define SPI2RECEIVE_STACK_SIZE     (configMINIMAL_STACK_SIZE + 100)
+#define SPI2RECEIVE_TASK_PRIORITY  (tskIDLE_PRIORITY + 1)
+
 #define LED_DELAY                  (50 / portTICK_RATE_MS)
 #define LED_PORT    		       (gpioPortA)
 #define LED_PIN     		       (7)
+
+#define BUFFERSIZE                 (5)
+
+char    receiveBuffer[BUFFERSIZE];
+
+
 
 /**************************************************************************//**
  * @brief Initialize drivers
@@ -60,12 +70,14 @@ void DRIVERS_Init(void)
 {
 
 	/* Enable I2C0 is slave mode */
-	I2C0_Setup();
+	I2C0_setup();
 
 	/* Enable USART2 in SPI slave mode */
-	//SPI_Setup();
+	SPI_setup(2, 1, 0);
 
 }
+
+
 
 /**************************************************************************//**
  * @brief Simple task which is blinking led
@@ -84,6 +96,28 @@ static void LedBlink(void *pParameters)
     vTaskDelay(LED_DELAY);
   }
 }
+
+
+
+/**************************************************************************//**
+ * @brief Simple task which is receiving as a slave on USART2
+ *****************************************************************************/
+static void SPI2Receive(void *pParameters)
+{
+
+  pParameters = pParameters;   /* to quiet warnings */
+
+  for (;;)
+  {
+	/* Data reception as slave */
+	/* *********************** */
+	/*Setting up both RX and TX interrupts for slave */
+	SPI2_setupSlaveInt(receiveBuffer, BUFFERSIZE, NO_TX, NO_TX);
+	vTaskDelay(50 / portTICK_RATE_MS);
+  }
+}
+
+
 
 /**************************************************************************//**
  * @brief  Main function
@@ -106,6 +140,14 @@ int main(void)
 		       NULL,
 		       LEDBLINK_TASK_PRIORITY,
 		       NULL );
+
+  /* Create task for receiving on USART2 */
+   xTaskCreate( SPI2Receive,
+ 		       (const char *) "SPI2Receive",
+ 		       SPI2RECEIVE_STACK_SIZE,
+ 		       NULL,
+ 		       SPI2RECEIVE_TASK_PRIORITY,
+ 		       NULL );
 
   /*Start FreeRTOS Scheduler*/
   vTaskStartScheduler();
