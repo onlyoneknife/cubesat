@@ -21,6 +21,7 @@
 #include "em_chip.h"
 #include "em_gpio.h"
 #include "em_i2c.h"
+#include "em_usart.h"
 // [Library includes]$
 
 //==============================================================================
@@ -29,6 +30,7 @@
 extern void enter_DefaultMode_from_RESET(void) {
 	// $[Config Calls]
 	CMU_enter_DefaultMode_from_RESET();
+	USART1_enter_DefaultMode_from_RESET();
 	I2C0_enter_DefaultMode_from_RESET();
 	PORTIO_enter_DefaultMode_from_RESET();
 	// [Config Calls]$
@@ -52,6 +54,9 @@ extern void CMU_enter_DefaultMode_from_RESET(void) {
 	// $[Peripheral Clock enables]
 	/* Enable clock for I2C0 */
 	CMU_ClockEnable(cmuClock_I2C0, true);
+
+	/* Enable clock for USART1 */
+	CMU_ClockEnable(cmuClock_USART1, true);
 
 	/* Enable clock for GPIO by default */
 	CMU_ClockEnable(cmuClock_GPIO, true);
@@ -240,9 +245,30 @@ extern void USART1_enter_DefaultMode_from_RESET(void) {
 	// [USART_InitAsync]$
 
 	// $[USART_InitSync]
+	USART_InitSync_TypeDef initsync = USART_INITSYNC_DEFAULT;
+
+	initsync.baudrate              = 115200;
+	initsync.databits              = usartDatabits8;
+	initsync.master                = 1;
+	initsync.msbf                  = 1;
+	initsync.clockMode             = usartClockMode0;
+	#if defined( USART_INPUT_RXPRS ) && defined( USART_TRIGCTRL_AUTOTXTEN )
+	initsync.prsRxEnable           = 0;
+	initsync.prsRxCh               = 0;
+	initsync.autoTx                = 0;
+	#endif
+
+	USART_InitSync(USART1, &initsync);
 	// [USART_InitSync]$
 
 	// $[USART_InitPrsTrigger]
+	USART_PrsTriggerInit_TypeDef initprs = USART_INITPRSTRIGGER_DEFAULT;
+
+	initprs.rxTriggerEnable        = 0;
+	initprs.txTriggerEnable        = 0;
+	initprs.prsTriggerChannel      = usartPrsTriggerCh0;
+
+	USART_InitPrsTrigger(USART1, &initprs);
 	// [USART_InitPrsTrigger]$
 
 
@@ -539,6 +565,22 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 
 
 	// $[Port D Configuration]
+
+	/* Pin PD0 is configured to Push-pull */
+	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE0_MASK) | GPIO_P_MODEL_MODE0_PUSHPULL;
+	GPIO->P[3].DOUT |= (1 << 0);
+
+	/* Pin PD1 is configured to Input enabled with filter */
+	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE1_MASK) | GPIO_P_MODEL_MODE1_INPUT;
+	GPIO->P[3].DOUT |= (1 << 1);
+
+	/* Pin PD2 is configured to Push-pull */
+	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE2_MASK) | GPIO_P_MODEL_MODE2_PUSHPULL;
+	GPIO->P[3].DOUT |= (1 << 2);
+
+	/* Pin PD3 is configured to Push-pull */
+	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE3_MASK) | GPIO_P_MODEL_MODE3_PUSHPULL;
+	GPIO->P[3].DOUT |= (1 << 3);
 	// [Port D Configuration]$
 
 
