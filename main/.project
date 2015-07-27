@@ -38,17 +38,22 @@
 		<link>
 			<name>emlib</name>
 			<type>2</type>
-			<locationURI>STUDIO_SDK_LOC/emlib</locationURI>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/SiliconLabs/EFM32/emlib/src</locationURI>
 		</link>
 		<link>
-			<name>libDevice</name>
+			<name>inc</name>
 			<type>2</type>
-			<locationURI>WORKSPACE_LOC/libDevice</locationURI>
+			<locationURI>WORKSPACE_LOC/libDevice/inc</locationURI>
 		</link>
 		<link>
 			<name>libDrivers</name>
 			<type>2</type>
 			<locationURI>WORKSPACE_LOC/libDrivers</locationURI>
+		</link>
+		<link>
+			<name>src</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/libDevice/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
