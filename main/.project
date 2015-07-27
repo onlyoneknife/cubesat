@@ -31,6 +31,11 @@
 			<locationURI>WORKSPACE_LOC/lib3rdParty/CMSIS</locationURI>
 		</link>
 		<link>
+			<name>FatFS</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/FatFS</locationURI>
+		</link>
+		<link>
 			<name>FreeRTOS</name>
 			<type>2</type>
 			<locationURI>WORKSPACE_LOC/lib3rdParty/FreeRTOS/Source</locationURI>
