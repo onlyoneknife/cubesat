@@ -23,19 +23,8 @@ uint16_t RxBufferTail = 0;
 /**************************************************************************//**
  * @brief  Setup I2C
  *****************************************************************************/
-void setupI2C(void)
+void I2C0_setup(void)
 {
-  I2C_Init_TypeDef i2cInit = I2C_INIT_DEFAULT;
-
-
-  /* Enable pins at location 1 */
-  I2C0->ROUTE = I2C_ROUTE_SDAPEN |
-                I2C_ROUTE_SCLPEN |
-                (1 << _I2C_ROUTE_LOCATION_SHIFT);
-
-  /* Initializing the I2C */
-  I2C_Init(I2C0, &i2cInit);
-
   /* Setting up to enable slave mode */
   I2C0->SADDR |= I2C_ADDRESS << _I2C_SADDR_ADDR_SHIFT;
   I2C0->CTRL  |= I2C_CTRL_SLAVE | I2C_CTRL_AUTOACK | I2C_CTRL_AUTOSN;
@@ -106,52 +95,38 @@ void I2C0_IRQHandler(void)
   int status;
   status = I2C0->IF;
 
-  TxBufferTail %= I2C_MAX_TX_BUFFER_SIZE;
-  RxBufferHead %= I2C_MAX_RX_BUFFER_SIZE;
-
   if (status & I2C_IF_ADDR)
   {
     /* Address Match */
     I2C_IntClear(I2C0, I2C_IFC_ADDR);
     if (I2C0->RXDATA & 0x01)
     {
-
-      /* Master read, enable slave Tx */
+      /* Mater read, enable slave Tx */
       I2C0->IEN |= I2C_IEN_ACK;
-      I2C0->TXDATA = TxBuffer[TxBufferTail];
-      TxBuffer[TxBufferTail] = '\0';
-      if (TxBufferSize > 0) {
-      	TxBufferSize--;
-      	TxBufferTail++;
-      }
+      I2C0->TXDATA = TxBuffer[TxBufferHead++];
     }
     else
     {
-      /* Master write, enable slave Rx */
+      /* Mater write, enable slave Rx */
       I2C0->IEN |= I2C_IEN_RXDATAV;
     }
   }
-  else if ( (status & I2C_IF_RXDATAV) && RxBufferSize < I2C_MAX_RX_BUFFER_SIZE )
+  else if (status & I2C_IF_RXDATAV)
   {
     /* Data received */
-    RxBufferSize++;
-    RxBuffer[RxBufferHead++] = I2C0->RXDATA;
+	TxBuffer[TxBufferHead++] = I2C0->RXDATA;
   }
   else if (status & I2C_IF_ACK)
   {
     /* ACK received, send next data */
     I2C_IntClear(I2C0, I2C_IFC_ACK);
-    I2C0->TXDATA = TxBuffer[TxBufferTail];
-    TxBuffer[TxBufferTail] = '\0';
-    if (TxBufferSize > 0) {
-    	TxBufferSize--;
-    	TxBufferTail++;
-    }
+    I2C0->TXDATA = TxBuffer[TxBufferHead++];
   }
   else
   {
     /* Stop received, Tx/Rx is ended */
     I2C_IntClear(I2C0, I2C_IFC_SSTOP);
     I2C0->IEN &= ~(I2C_IEN_ACK + I2C_IEN_RXDATAV);
+    TxBufferHead = 0;
   }
 }
