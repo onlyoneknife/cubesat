@@ -50,57 +50,6 @@ static uint8_t WaitReady(void)
 
 /**************************************************************************//**
  * @brief
- *  Initialize the SPI peripheral for microSD card usage.
- *  SPI pins and speed etc. is defined in microsdconfig.h.
- *****************************************************************************/
-void MICROSD_Init(void)
-{
-  USART_InitSync_TypeDef init = USART_INITSYNC_DEFAULT;
-
-  /* Enabling clock to USART 0 */
-  CMU_ClockEnable(MICROSD_CMUCLOCK, true);
-  CMU_ClockEnable(cmuClock_GPIO, true);
-
-  /* Initialize USART in SPI master mode. */
-  xfersPrMsec   = MICROSD_LO_SPI_FREQ / 8000;
-  init.baudrate = MICROSD_LO_SPI_FREQ;
-  init.msbf     = true;
-  USART_InitSync(MICROSD_USART, &init);
-
-  /* Enabling pins and setting location, SPI CS not enable */
-  MICROSD_USART->ROUTE = USART_ROUTE_TXPEN | USART_ROUTE_RXPEN |
-                         USART_ROUTE_CLKPEN | MICROSD_LOC;
-
-#if defined( USART_CTRL_SMSDELAY )
-  /* This will allow us to use higher baudrate. */
-  MICROSD_USART->CTRL |= USART_CTRL_SMSDELAY;
-#endif
-
-  /* IO configuration */
-  GPIO_PinModeSet(MICROSD_GPIOPORT, MICROSD_MOSIPIN, gpioModePushPull, 0);  /* MOSI */
-  GPIO_PinModeSet(MICROSD_GPIOPORT, MICROSD_MISOPIN, gpioModeInputPull, 1); /* MISO */
-  GPIO_PinModeSet(MICROSD_GPIOPORT, MICROSD_CSPIN,   gpioModePushPull, 1);  /* CS */
-  GPIO_PinModeSet(MICROSD_GPIOPORT, MICROSD_CLKPIN,  gpioModePushPull, 0);  /* CLK */
-}
-
-/**************************************************************************//**
- * @brief
- *  Deinitialize SPI peripheral.
- *  Turn off the SPI peripheral and disable SPI GPIO pins.
- *****************************************************************************/
-void MICROSD_Deinit(void)
-{
-  USART_Reset(MICROSD_USART);
-
-  /* IO configuration (USART 0, Location #0) */
-  GPIO_PinModeSet(MICROSD_GPIOPORT, MICROSD_MOSIPIN, gpioModeDisabled, 0);  /* MOSI */
-  GPIO_PinModeSet(MICROSD_GPIOPORT, MICROSD_MISOPIN, gpioModeDisabled, 0);  /* MISO */
-  GPIO_PinModeSet(MICROSD_GPIOPORT, MICROSD_CSPIN,   gpioModeDisabled, 0);  /* CS */
-  GPIO_PinModeSet(MICROSD_GPIOPORT, MICROSD_CLKPIN,  gpioModeDisabled, 0);  /* Clock */
-}
-
-/**************************************************************************//**
- * @brief
  *  Do one SPI transfer.
  *
  * @param data

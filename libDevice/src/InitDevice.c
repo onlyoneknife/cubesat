@@ -557,30 +557,30 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 	/* Pin PB6 is configured to Input enabled with pull-up and filter */
 	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE6_MASK) | GPIO_P_MODEL_MODE6_INPUTPULLFILTER;
 	GPIO->P[1].DOUT |= (1 << 6);
+
+	/* Pin PB7 is configured to Push-pull */
+	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE7_MASK) | GPIO_P_MODEL_MODE7_PUSHPULL;
+	GPIO->P[1].DOUT |= (1 << 7);
+
+	/* Pin PB8 is configured to Push-pull */
+	GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE8_MASK) | GPIO_P_MODEH_MODE8_PUSHPULL;
+	GPIO->P[1].DOUT |= (1 << 8);
 	// [Port B Configuration]$
 
 
 	// $[Port C Configuration]
+
+	/* Pin PC0 is configured to Push-pull */
+	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE0_MASK) | GPIO_P_MODEL_MODE0_PUSHPULL;
+	GPIO->P[2].DOUT |= (1 << 0);
+
+	/* Pin PC1 is configured to Input enabled with filter */
+	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE1_MASK) | GPIO_P_MODEL_MODE1_INPUT;
+	GPIO->P[2].DOUT |= (1 << 1);
 	// [Port C Configuration]$
 
 
 	// $[Port D Configuration]
-
-	/* Pin PD0 is configured to Push-pull */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE0_MASK) | GPIO_P_MODEL_MODE0_PUSHPULL;
-	GPIO->P[3].DOUT |= (1 << 0);
-
-	/* Pin PD1 is configured to Input enabled with filter */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE1_MASK) | GPIO_P_MODEL_MODE1_INPUT;
-	GPIO->P[3].DOUT |= (1 << 1);
-
-	/* Pin PD2 is configured to Push-pull */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE2_MASK) | GPIO_P_MODEL_MODE2_PUSHPULL;
-	GPIO->P[3].DOUT |= (1 << 2);
-
-	/* Pin PD3 is configured to Push-pull */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE3_MASK) | GPIO_P_MODEL_MODE3_PUSHPULL;
-	GPIO->P[3].DOUT |= (1 << 3);
 	// [Port D Configuration]$
 
 
@@ -611,15 +611,9 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 	/* Module PCNT0 is configured to location 0 */
 	PCNT0->ROUTE = (PCNT0->ROUTE & ~_PCNT_ROUTE_LOCATION_MASK) | PCNT_ROUTE_LOCATION_LOC0;
 
-	/* Module USART1 is configured to location 1 */
-	USART1->ROUTE = (USART1->ROUTE & ~_USART_ROUTE_LOCATION_MASK) | USART_ROUTE_LOCATION_LOC1;
-
 	/* Enable signals CLK, CS, RX, TX */
 	USART1->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | USART_ROUTE_RXPEN |
 		USART_ROUTE_TXPEN;
-
-	/* Module USART2 is configured to location 1 */
-	USART2->ROUTE = (USART2->ROUTE & ~_USART_ROUTE_LOCATION_MASK) | USART_ROUTE_LOCATION_LOC1;
 	// [Route Configuration]$
 
 

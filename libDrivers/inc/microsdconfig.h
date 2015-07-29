@@ -18,16 +18,14 @@
 
 /* Don't increase MICROSD_HI_SPI_FREQ beyond 8MHz. Next step will be 16MHz  */
 /* which is out of spec.                                                    */
-#define MICROSD_HI_SPI_FREQ     8000000
+#define MICROSD_HI_SPI_FREQ     115200
 
 #define MICROSD_LO_SPI_FREQ     100000
-#define MICROSD_USART           USART0
-#define MICROSD_LOC             USART_ROUTE_LOCATION_LOC2
-#define MICROSD_CMUCLOCK        cmuClock_USART0
+#define MICROSD_USART           USART1
+#define MICROSD_LOC             USART_ROUTE_LOCATION_LOC0
+#define MICROSD_CMUCLOCK        cmuClock_USART1
 #define MICROSD_GPIOPORT        gpioPortC
-#define MICROSD_MOSIPIN         11
-#define MICROSD_MISOPIN         10
-#define MICROSD_CSPIN           8
-#define MICROSD_CLKPIN          9
+#define MICROSD_CSPIN           9
+
 
 #endif /* __MICROSDCONFIG_H */
