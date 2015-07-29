@@ -22,26 +22,28 @@
 #include <stdio.h>
 #include <stdint.h>
 
-/* EFM32 Includes */
+/* EFM32 EMLIB Includes */
 #include "InitDevice.h"
 #include "em_device.h"
 #include "em_chip.h"
 #include "em_gpio.h"
 
-/* Driver Includes */
-#include "sharedtypes.h"
+/* EFM32 Driver Includes */
 #include "diskio.h"
 #include "microsd.h"
 #include "ff.h"
+#include "sleep.h"
+#include "i2c.h"
+#include "spi.h"
+
+/* Other Driver Includes */
+#include "sharedtypes.h"
 #include "gyro.h"
 #include "rtc.h"
 #include "fram.h"
 #include "mag.h"
-#include "i2c.h"
 #include "tempsense.h"
 #include "spi.h"
-#include "sleep.h"
-
 
 /* FreeRTOS Includes */
 #include "FreeRTOSConfig.h"
@@ -109,11 +111,11 @@ DWORD get_fattime(void)
 void DRIVERS_Init(void)
 {
 
-	/* Enable I2C0 is slave mode */
-	I2C0_setup();
+  /* Enable I2C0 is slave mode */
+  I2C0_setup();
 
-	/* Enable USART2 in SPI slave mode */
-	SPI_setup(2, 1, 0);
+  /* Enable USART2 in SPI slave mode */
+  SPI_setup(2, 1, 0);
 
 }
 
@@ -191,106 +193,101 @@ int main(void)
     break;
   }
 
-  GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
-
   /* Initialize filesystem */
-    if (f_mount(0, &Fatfs) != FR_OK)
-    {
-      /* Error.No micro-SD with FAT32 is present */
-      while(1);
-    }
+  res = f_mount(0, &Fatfs);
+  if (res != FR_OK)
+  {
+    /* Error.No micro-SD with FAT32 is present */
+    while(1);
+  }
 
-    GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
-
-    /*Step4*/
-    /* Open  the file for write */
-     res = f_open(&fsrc, TEST_FILENAME,  FA_WRITE);
-     if (res != FR_OK)
-     {
-       /*  If file does not exist create it*/
-       res = f_open(&fsrc, TEST_FILENAME, FA_CREATE_ALWAYS | FA_WRITE );
-        if (res != FR_OK)
-       {
-        /* Error. Cannot create the file */
-        while(1);
-      }
-     }
-
-    /*Step5*/
-    /*Set the file write pointer to first location */
-    res = f_lseek(&fsrc, 0);
-     if (res != FR_OK)
-    {
-      /* Error. Cannot set the file write pointer */
-      while(1);
-    }
-
-    /*Step6*/
-    /*Write a buffer to file*/
-     GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
-     res = f_write(&fsrc, ramBufferWrite, filecounter, &bw);
-     GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
-     if ((res != FR_OK) || (filecounter != bw))
-    {
-      /* Error. Cannot write the file */
-      while(1);
-    }
-
-    /*Step7*/
-    /* Close the file */
-    f_close(&fsrc);
+  /*Step4*/
+  /* Open  the file for write */
+  res = f_open(&fsrc, TEST_FILENAME,  FA_WRITE);
+  if (res != FR_OK)
+  {
+    /*  If file does not exist create it*/
+    res = f_open(&fsrc, TEST_FILENAME, FA_CREATE_ALWAYS | FA_WRITE );
     if (res != FR_OK)
-    {
-      /* Error. Cannot close the file */
-      while(1);
-    }
-
-    /*Step8*/
-    /* Open the file for read */
-    res = f_open(&fsrc, TEST_FILENAME,  FA_READ);
-     if (res != FR_OK)
     {
       /* Error. Cannot create the file */
       while(1);
     }
+  }
 
-     /*Step9*/
-     /*Set the file read pointer to first location */
-     res = f_lseek(&fsrc, 0);
-     if (res != FR_OK)
+  /*Step5*/
+  /*Set the file write pointer to first location */
+  res = f_lseek(&fsrc, 0);
+  if (res != FR_OK)
+  {
+    /* Error. Cannot set the file write pointer */
+    while(1);
+  }
+
+  /*Step6*/
+  /*Write a buffer to file*/
+  res = f_write(&fsrc, ramBufferWrite, filecounter, &bw);
+  if ((res != FR_OK) || (filecounter != bw))
+  {
+    /* Error. Cannot write the file */
+  while(1);
+  }
+
+  /*Step7*/
+  /* Close the file */
+  f_close(&fsrc);
+  if (res != FR_OK)
+  {
+    /* Error. Cannot close the file */
+    while(1);
+  }
+
+  /*Step8*/
+  /* Open the file for read */
+  res = f_open(&fsrc, TEST_FILENAME,  FA_READ);
+  if (res != FR_OK)
+  {
+    /* Error. Cannot create the file */
+    while(1);
+  }
+
+  /*Step9*/
+  /*Set the file read pointer to first location */
+  res = f_lseek(&fsrc, 0);
+  if (res != FR_OK)
+  {
+    /* Error. Cannot set the file pointer */
+    while(1);
+  }
+
+  /*Step10*/
+  /* Read some data from file */
+  res = f_read(&fsrc, ramBufferRead, filecounter, &br);
+  if ((res != FR_OK) || (filecounter != br))
+  {
+    /* Error. Cannot read the file */
+    while(1);
+  }
+
+  /*Step11*/
+  /* Close the file */
+  f_close(&fsrc);
+  if (res != FR_OK)
+  {
+    /* Error. Cannot close the file */
+    while(1);
+  }
+
+  /*Step12*/
+  /*Compare ramBufferWrite and ramBufferRead */
+  for(i = 0; i < filecounter ; i++)
+  {
+    if ((ramBufferWrite[i]) != (ramBufferRead[i]))
     {
-      /* Error. Cannot set the file pointer */
+      /* Error compare buffers*/
       while(1);
     }
-
-    /*Step10*/
-    /* Read some data from file */
-    res = f_read(&fsrc, ramBufferRead, filecounter, &br);
-     if ((res != FR_OK) || (filecounter != br))
-    {
-      /* Error. Cannot read the file */
-      while(1);
-    }
-
-    /*Step11*/
-    /* Close the file */
-    f_close(&fsrc);
-    if (res != FR_OK)
-    {
-      /* Error. Cannot close the file */
-      while(1);
-    }
-
-    /*Step12*/
-    /*Compare ramBufferWrite and ramBufferRead */
-    for(i = 0; i < filecounter ; i++)
-    {
-      if ((ramBufferWrite[i]) != (ramBufferRead[i]))
-      {
-        /* Error compare buffers*/
-        while(1);
-      }
-    }
+  }
 
 #endif
 
