@@ -50,6 +50,22 @@ static uint8_t WaitReady(void)
 
 /**************************************************************************//**
  * @brief
+ *  Initialize the SPI peripheral for microSD card usage.
+ *  SPI pins and speed etc. is defined in microsdconfig.h.
+ *****************************************************************************/
+void MICROSD_Init(void)
+{
+
+  xfersPrMsec   = MICROSD_LO_SPI_FREQ / 8000;
+
+#if defined( USART_CTRL_SMSDELAY )
+  /* This will allow us to use higher baudrate. */
+  MICROSD_USART->CTRL |= USART_CTRL_SMSDELAY;
+#endif
+}
+
+/**************************************************************************//**
+ * @brief
  *  Do one SPI transfer.
  *
  * @param data
