@@ -30,6 +30,9 @@
 
 /* Driver Includes */
 #include "sharedtypes.h"
+#include "diskio.h"
+#include "microsd.h"
+#include "ff.h"
 #include "gyro.h"
 #include "rtc.h"
 #include "fram.h"
@@ -38,6 +41,7 @@
 #include "tempsense.h"
 #include "spi.h"
 #include "sleep.h"
+
 
 /* FreeRTOS Includes */
 #include "FreeRTOSConfig.h"
@@ -57,11 +61,47 @@
 #define LED_PORT    		       (gpioPortA)
 #define LED_PIN     		       (7)
 
-#define BUFFERSIZE                 (5)
+#define BUFFERSIZE                 (1024)
 
 char    receiveBuffer[BUFFERSIZE];
 
 
+#define USE_SD_CARD                (true)
+
+#if USE_SD_CARD == true
+/* Ram buffers
+ * BUFFERSIZE should be between 512 and 1024, depending on available ram *****/
+#define BUFFERSIZE      1024
+/* Filename to open/write/read from SD-card */
+#define TEST_FILENAME    "test.txt"
+
+FIL fsrc;			            	/* File objects */
+FATFS Fatfs;			        	/* File system specific */
+FRESULT res;				        /* FatFs function common result code */
+UINT br, bw;			        	/* File read/write count */
+DSTATUS resCard;		            /* SDcard status */
+int8_t ramBufferWrite[BUFFERSIZE];	/* Temporary buffer for write file */
+int8_t ramBufferRead[BUFFERSIZE];	/* Temporary buffer for read file */
+int8_t StringBuffer[] = "EFM32 ...the world's most energy friendly microcontrollers !";
+int16_t i;
+int16_t filecounter;
+
+/***************************************************************************//**
+ * @brief
+ *   This function is required by the FAT file system in order to provide
+ *   timestamps for created files. Since this example does not include a
+ *   reliable clock we hardcode a value here.
+ *
+ *   Refer to drivers/fatfs/doc/en/fattime.html for the format of this DWORD.
+ * @return
+ *    A DWORD containing the current time and date as a packed datastructure.
+ ******************************************************************************/
+DWORD get_fattime(void)
+{
+  return (28 << 25) | (2 << 21) | (1 << 16);
+}
+
+#endif
 
 /**************************************************************************//**
  * @brief Initialize drivers
@@ -85,7 +125,7 @@ void DRIVERS_Init(void)
 static void LedBlink(void *pParameters)
 {
 
-  pParameters = pParameters;   /* to quiet warnings */
+  //pParameters = pParameters;   /* to quiet warnings */
 
   for (;;)
   {
@@ -105,7 +145,7 @@ static void LedBlink(void *pParameters)
 static void SPI2Receive(void *pParameters)
 {
 
-  pParameters = pParameters;   /* to quiet warnings */
+  //pParameters = pParameters;   /* to quiet warnings */
 
   for (;;)
   {
@@ -132,6 +172,127 @@ int main(void)
 
   /* Initialize Hardware Drivers */
   DRIVERS_Init();
+
+  GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
+
+#if USE_SD_CARD == true
+
+  resCard = disk_initialize(0);       /*Check micro-SD card status */
+
+  switch(resCard)
+  {
+  case STA_NOINIT:                    /* Drive not initialized */
+    break;
+  case STA_NODISK:                    /* No medium in the drive */
+    break;
+  case STA_PROTECT:                   /* Write protected */
+    break;
+  default:
+    break;
+  }
+
+  GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
+
+  /* Initialize filesystem */
+    if (f_mount(0, &Fatfs) != FR_OK)
+    {
+      /* Error.No micro-SD with FAT32 is present */
+      while(1);
+    }
+
+    GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
+
+    /*Step4*/
+    /* Open  the file for write */
+     res = f_open(&fsrc, TEST_FILENAME,  FA_WRITE);
+     if (res != FR_OK)
+     {
+       /*  If file does not exist create it*/
+       res = f_open(&fsrc, TEST_FILENAME, FA_CREATE_ALWAYS | FA_WRITE );
+        if (res != FR_OK)
+       {
+        /* Error. Cannot create the file */
+        while(1);
+      }
+     }
+
+    /*Step5*/
+    /*Set the file write pointer to first location */
+    res = f_lseek(&fsrc, 0);
+     if (res != FR_OK)
+    {
+      /* Error. Cannot set the file write pointer */
+      while(1);
+    }
+
+    /*Step6*/
+    /*Write a buffer to file*/
+     GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
+     res = f_write(&fsrc, ramBufferWrite, filecounter, &bw);
+     GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
+     if ((res != FR_OK) || (filecounter != bw))
+    {
+      /* Error. Cannot write the file */
+      while(1);
+    }
+
+    /*Step7*/
+    /* Close the file */
+    f_close(&fsrc);
+    if (res != FR_OK)
+    {
+      /* Error. Cannot close the file */
+      while(1);
+    }
+
+    /*Step8*/
+    /* Open the file for read */
+    res = f_open(&fsrc, TEST_FILENAME,  FA_READ);
+     if (res != FR_OK)
+    {
+      /* Error. Cannot create the file */
+      while(1);
+    }
+
+     /*Step9*/
+     /*Set the file read pointer to first location */
+     res = f_lseek(&fsrc, 0);
+     if (res != FR_OK)
+    {
+      /* Error. Cannot set the file pointer */
+      while(1);
+    }
+
+    /*Step10*/
+    /* Read some data from file */
+    res = f_read(&fsrc, ramBufferRead, filecounter, &br);
+     if ((res != FR_OK) || (filecounter != br))
+    {
+      /* Error. Cannot read the file */
+      while(1);
+    }
+
+    /*Step11*/
+    /* Close the file */
+    f_close(&fsrc);
+    if (res != FR_OK)
+    {
+      /* Error. Cannot close the file */
+      while(1);
+    }
+
+    /*Step12*/
+    /*Compare ramBufferWrite and ramBufferRead */
+    for(i = 0; i < filecounter ; i++)
+    {
+      if ((ramBufferWrite[i]) != (ramBufferRead[i]))
+      {
+        /* Error compare buffers*/
+        while(1);
+      }
+    }
+
+#endif
 
   /* Create task for blinking leds */
   xTaskCreate( LedBlink,
