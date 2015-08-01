@@ -175,7 +175,14 @@ int main(void)
   /* Initialize Hardware Drivers */
   DRIVERS_Init();
 
-  GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
+  /*Step1*/
+  /*Initialization file buffer write */
+  filecounter = sizeof(StringBuffer);
+
+  for(i = 0; i < filecounter ; i++)
+  {
+     ramBufferWrite[i] = StringBuffer[i];
+  }
 
 #if USE_SD_CARD == true
 

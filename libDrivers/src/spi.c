@@ -119,8 +119,14 @@ void SPI_setup(uint8_t spiNumber, uint8_t location, bool master)
 
   USART_InitPrsTrigger(spi, &initprs);
 
-  /* Enable signals CLK, CS, RX, TX and set location */
-  spi->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | USART_ROUTE_RXPEN |
+  /* Enable signal CS for slave mode */
+  if (!master)
+  {
+    spi->ROUTE |= USART_ROUTE_CSPEN;
+  } 
+
+  /* Enable signals CLK, RX, TX and set location */
+  spi->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_RXPEN |
   	  USART_ROUTE_TXPEN | (location << _USART_ROUTE_LOCATION_SHIFT);
 }
 

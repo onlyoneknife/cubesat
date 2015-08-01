@@ -24,8 +24,8 @@
 #define MICROSD_USART           USART1
 #define MICROSD_LOC             USART_ROUTE_LOCATION_LOC0
 #define MICROSD_CMUCLOCK        cmuClock_USART1
-#define MICROSD_GPIOPORT        gpioPortC
-#define MICROSD_CSPIN           9
+#define MICROSD_GPIOPORT        gpioPortB
+#define MICROSD_CSPIN           8
 
 
 #endif /* __MICROSDCONFIG_H */

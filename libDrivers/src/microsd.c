@@ -198,8 +198,8 @@ int MICROSD_BlockRx(uint8_t *buff, uint32_t btr)
   } while (btr);
 
   /* Next two bytes is the CRC which we discard. */
-  while (!(MICROSD_USART->STATUS & USART_STATUS_RXDATAV));
-  MICROSD_USART->RXDOUBLE;
+  //while (!(MICROSD_USART->STATUS & USART_STATUS_RXDATAV));
+  //MICROSD_USART->RXDOUBLE;
 
   /* Restore old settings. */
   MICROSD_USART->FRAME = framectrl;
