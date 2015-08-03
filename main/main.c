@@ -60,8 +60,8 @@
 #define SPI2RECEIVE_TASK_PRIORITY  (tskIDLE_PRIORITY + 1)
 
 #define LED_DELAY                  (50 / portTICK_RATE_MS)
-#define LED_PORT    		       (gpioPortA)
-#define LED_PIN     		       (7)
+#define LED_PORT               (gpioPortA)
+#define LED_PIN                (7)
 
 #define BUFFERSIZE                 (1024)
 
@@ -77,13 +77,13 @@ char    receiveBuffer[BUFFERSIZE];
 /* Filename to open/write/read from SD-card */
 #define TEST_FILENAME    "test.txt"
 
-FIL fsrc;			            	/* File objects */
-FATFS Fatfs;			        	/* File system specific */
-FRESULT res;				        /* FatFs function common result code */
-UINT br, bw;			        	/* File read/write count */
-DSTATUS resCard;		            /* SDcard status */
-int8_t ramBufferWrite[BUFFERSIZE];	/* Temporary buffer for write file */
-int8_t ramBufferRead[BUFFERSIZE];	/* Temporary buffer for read file */
+FIL fsrc;                   /* File objects */
+FATFS Fatfs;                /* File system specific */
+FRESULT res;                /* FatFs function common result code */
+UINT br, bw;                /* File read/write count */
+DSTATUS resCard;                /* SDcard status */
+int8_t ramBufferWrite[BUFFERSIZE];  /* Temporary buffer for write file */
+int8_t ramBufferRead[BUFFERSIZE]; /* Temporary buffer for read file */
 int8_t StringBuffer[] = "EFM32 ...the world's most energy friendly microcontrollers !";
 int16_t i;
 int16_t filecounter;
@@ -132,7 +132,7 @@ static void LedBlink(void *pParameters)
   for (;;)
   {
     /* Set LSB of count value on LED */
-	GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
+  GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
     vTaskDelay(LED_DELAY);
     GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
     vTaskDelay(LED_DELAY);
@@ -151,11 +151,11 @@ static void SPI2Receive(void *pParameters)
 
   for (;;)
   {
-	/* Data reception as slave */
-	/* *********************** */
-	/*Setting up both RX and TX interrupts for slave */
-	SPI2_setupSlaveInt(receiveBuffer, BUFFERSIZE, NO_TX, NO_TX);
-	vTaskDelay(50 / portTICK_RATE_MS);
+  /* Data reception as slave */
+  /* *********************** */
+  /*Setting up both RX and TX interrupts for slave */
+  SPI2_setupSlaveInt(receiveBuffer, BUFFERSIZE, NO_TX, NO_TX);
+  vTaskDelay(50 / portTICK_RATE_MS);
   }
 }
 
@@ -175,7 +175,8 @@ int main(void)
   /* Initialize Hardware Drivers */
   DRIVERS_Init();
 
-  /*Step1*/
+#if USE_SD_CARD == true
+
   /*Initialization file buffer write */
   filecounter = sizeof(StringBuffer);
 
@@ -183,8 +184,6 @@ int main(void)
   {
      ramBufferWrite[i] = StringBuffer[i];
   }
-
-#if USE_SD_CARD == true
 
   resCard = disk_initialize(0);       /*Check micro-SD card status */
 
@@ -208,7 +207,6 @@ int main(void)
     while(1);
   }
 
-  /*Step4*/
   /* Open  the file for write */
   res = f_open(&fsrc, TEST_FILENAME,  FA_WRITE);
   if (res != FR_OK)
@@ -222,7 +220,6 @@ int main(void)
     }
   }
 
-  /*Step5*/
   /*Set the file write pointer to first location */
   res = f_lseek(&fsrc, 0);
   if (res != FR_OK)
@@ -231,7 +228,6 @@ int main(void)
     while(1);
   }
 
-  /*Step6*/
   /*Write a buffer to file*/
   res = f_write(&fsrc, ramBufferWrite, filecounter, &bw);
   if ((res != FR_OK) || (filecounter != bw))
@@ -240,7 +236,6 @@ int main(void)
   while(1);
   }
 
-  /*Step7*/
   /* Close the file */
   f_close(&fsrc);
   if (res != FR_OK)
@@ -249,7 +244,6 @@ int main(void)
     while(1);
   }
 
-  /*Step8*/
   /* Open the file for read */
   res = f_open(&fsrc, TEST_FILENAME,  FA_READ);
   if (res != FR_OK)
@@ -258,7 +252,6 @@ int main(void)
     while(1);
   }
 
-  /*Step9*/
   /*Set the file read pointer to first location */
   res = f_lseek(&fsrc, 0);
   if (res != FR_OK)
@@ -267,7 +260,6 @@ int main(void)
     while(1);
   }
 
-  /*Step10*/
   /* Read some data from file */
   res = f_read(&fsrc, ramBufferRead, filecounter, &br);
   if ((res != FR_OK) || (filecounter != br))
@@ -276,7 +268,6 @@ int main(void)
     while(1);
   }
 
-  /*Step11*/
   /* Close the file */
   f_close(&fsrc);
   if (res != FR_OK)
@@ -285,7 +276,6 @@ int main(void)
     while(1);
   }
 
-  /*Step12*/
   /*Compare ramBufferWrite and ramBufferRead */
   for(i = 0; i < filecounter ; i++)
   {
@@ -300,19 +290,19 @@ int main(void)
 
   /* Create task for blinking leds */
   xTaskCreate( LedBlink,
-		       (const char *) "LedBlink",
-		       LEDBLINK_STACK_SIZE,
-		       NULL,
-		       LEDBLINK_TASK_PRIORITY,
-		       NULL );
+           (const char *) "LedBlink",
+           LEDBLINK_STACK_SIZE,
+           NULL,
+           LEDBLINK_TASK_PRIORITY,
+           NULL );
 
   /* Create task for receiving on USART2 */
    xTaskCreate( SPI2Receive,
- 		       (const char *) "SPI2Receive",
- 		       SPI2RECEIVE_STACK_SIZE,
- 		       NULL,
- 		       SPI2RECEIVE_TASK_PRIORITY,
- 		       NULL );
+           (const char *) "SPI2Receive",
+           SPI2RECEIVE_STACK_SIZE,
+           NULL,
+           SPI2RECEIVE_TASK_PRIORITY,
+           NULL );
 
   /*Start FreeRTOS Scheduler*/
   vTaskStartScheduler();
