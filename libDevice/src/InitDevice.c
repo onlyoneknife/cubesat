@@ -31,6 +31,7 @@ extern void enter_DefaultMode_from_RESET(void) {
 	// $[Config Calls]
 	CMU_enter_DefaultMode_from_RESET();
 	USART1_enter_DefaultMode_from_RESET();
+	UART1_enter_DefaultMode_from_RESET();
 	I2C0_enter_DefaultMode_from_RESET();
 	PORTIO_enter_DefaultMode_from_RESET();
 	// [Config Calls]$
@@ -308,9 +309,30 @@ extern void UART0_enter_DefaultMode_from_RESET(void) {
 //================================================================================
 extern void UART1_enter_DefaultMode_from_RESET(void) {
 	// $[UART_InitAsync]
+	USART_InitAsync_TypeDef initasync = USART_INITASYNC_DEFAULT;
+
+	initasync.baudrate             = 115200;
+	initasync.databits             = usartDatabits8;
+	initasync.parity               = usartNoParity;
+	initasync.stopbits             = usartStopbits1;
+	initasync.oversampling         = usartOVS16;
+	#if defined( USART_INPUT_RXPRS ) && defined( USART_CTRL_MVDIS )
+	initasync.mvdis                = 0;
+	initasync.prsRxEnable          = 0;
+	initasync.prsRxCh              = 0;
+	#endif
+
+	USART_InitAsync(UART1, &initasync);
 	// [UART_InitAsync]$
 
 	// $[USART_InitPrsTrigger]
+	USART_PrsTriggerInit_TypeDef initprs = USART_INITPRSTRIGGER_DEFAULT;
+
+	initprs.rxTriggerEnable        = 0;
+	initprs.txTriggerEnable        = 0;
+	initprs.prsTriggerChannel      = usartPrsTriggerCh0;
+
+	USART_InitPrsTrigger(UART1, &initprs);
 	// [USART_InitPrsTrigger]$
 
 
@@ -535,75 +557,79 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 
 	// $[Port A Configuration]
 
-	/* Pin PA7 is configured to Push-pull */
-	GPIO->P[0].MODEL = (GPIO->P[0].MODEL & ~_GPIO_P_MODEL_MODE7_MASK) | GPIO_P_MODEL_MODE7_PUSHPULL;
+	/* Pin PA9 is configured to Push-pull */
+	GPIO->P[0].MODEH = (GPIO->P[0].MODEH & ~_GPIO_P_MODEH_MODE9_MASK) | GPIO_P_MODEH_MODE9_PUSHPULL;
+	GPIO->P[0].DOUT |= (1 << 9);
 	// [Port A Configuration]$
 
 
 	// $[Port B Configuration]
 
-	/* Pin PB3 is configured to Input enabled with filter */
-	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE3_MASK) | GPIO_P_MODEL_MODE3_INPUT;
-	GPIO->P[1].DOUT |= (1 << 3);
+	/* Pin PB5 is configured to Push-pull */
+	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE5_MASK) | GPIO_P_MODEL_MODE5_PUSHPULL;
 
-	/* Pin PB4 is configured to Push-pull */
-	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE4_MASK) | GPIO_P_MODEL_MODE4_PUSHPULL;
-	GPIO->P[1].DOUT |= (1 << 4);
+	/* Pin PB6 is configured to Push-pull */
+	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE6_MASK) | GPIO_P_MODEL_MODE6_PUSHPULL;
 
-	/* Pin PB5 is configured to Input enabled with filter */
-	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE5_MASK) | GPIO_P_MODEL_MODE5_INPUT;
-	GPIO->P[1].DOUT |= (1 << 5);
+	/* Pin PB11 is configured to Push-pull */
+	GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE11_MASK) | GPIO_P_MODEH_MODE11_PUSHPULL;
 
-	/* Pin PB6 is configured to Input enabled with pull-up and filter */
-	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE6_MASK) | GPIO_P_MODEL_MODE6_INPUTPULLFILTER;
-	GPIO->P[1].DOUT |= (1 << 6);
-
-	/* Pin PB7 is configured to Push-pull */
-	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE7_MASK) | GPIO_P_MODEL_MODE7_PUSHPULL;
-	GPIO->P[1].DOUT |= (1 << 7);
-
-	/* Pin PB8 is configured to Push-pull */
-	GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE8_MASK) | GPIO_P_MODEH_MODE8_PUSHPULL;
-	GPIO->P[1].DOUT |= (1 << 8);
+	/* Pin PB12 is configured to Push-pull */
+	GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE12_MASK) | GPIO_P_MODEH_MODE12_PUSHPULL;
 	// [Port B Configuration]$
 
 
 	// $[Port C Configuration]
 
-	/* Pin PC0 is configured to Push-pull */
-	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE0_MASK) | GPIO_P_MODEL_MODE0_PUSHPULL;
-	GPIO->P[2].DOUT |= (1 << 0);
+	/* Pin PC12 is configured to Push-pull */
+	GPIO->P[2].MODEH = (GPIO->P[2].MODEH & ~_GPIO_P_MODEH_MODE12_MASK) | GPIO_P_MODEH_MODE12_PUSHPULL;
+	GPIO->P[2].DOUT |= (1 << 12);
 
-	/* Pin PC1 is configured to Input enabled with filter */
-	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE1_MASK) | GPIO_P_MODEL_MODE1_INPUT;
-	GPIO->P[2].DOUT |= (1 << 1);
+	/* Pin PC13 is configured to Input enabled with filter */
+	GPIO->P[2].MODEH = (GPIO->P[2].MODEH & ~_GPIO_P_MODEH_MODE13_MASK) | GPIO_P_MODEH_MODE13_INPUT;
+	GPIO->P[2].DOUT |= (1 << 13);
 	// [Port C Configuration]$
 
 
 	// $[Port D Configuration]
+
+	/* Pin PD0 is configured to Push-pull */
+	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE0_MASK) | GPIO_P_MODEL_MODE0_PUSHPULL;
+
+	/* Pin PD1 is configured to Input enabled */
+	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE1_MASK) | GPIO_P_MODEL_MODE1_INPUT;
+
+	/* Pin PD2 is configured to Push-pull */
+	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE2_MASK) | GPIO_P_MODEL_MODE2_PUSHPULL;
+
+	/* Pin PD3 is configured to Push-pull */
+	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE3_MASK) | GPIO_P_MODEL_MODE3_PUSHPULL;
+
+	/* Pin PD6 is configured to Open-drain with pull-up and filter */
+	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE6_MASK) | GPIO_P_MODEL_MODE6_WIREDANDPULLUPFILTER;
+	GPIO->P[3].DOUT |= (1 << 6);
+
+	/* Pin PD7 is configured to Open-drain with pull-up and filter */
+	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE7_MASK) | GPIO_P_MODEL_MODE7_WIREDANDPULLUPFILTER;
+	GPIO->P[3].DOUT |= (1 << 7);
 	// [Port D Configuration]$
 
 
 	// $[Port E Configuration]
-
-	/* Pin PE12 is configured to Open-drain with pull-up and filter */
-	GPIO->P[4].MODEH = (GPIO->P[4].MODEH & ~_GPIO_P_MODEH_MODE12_MASK) | GPIO_P_MODEH_MODE12_WIREDANDPULLUPFILTER;
-	GPIO->P[4].DOUT |= (1 << 12);
-
-	/* Pin PE13 is configured to Open-drain with pull-up and filter */
-	GPIO->P[4].MODEH = (GPIO->P[4].MODEH & ~_GPIO_P_MODEH_MODE13_MASK) | GPIO_P_MODEH_MODE13_WIREDANDPULLUPFILTER;
-	GPIO->P[4].DOUT |= (1 << 13);
 	// [Port E Configuration]$
 
 
 	// $[Port F Configuration]
+
+	/* Pin PF6 is configured to Push-pull */
+	GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE6_MASK) | GPIO_P_MODEL_MODE6_PUSHPULL;
 	// [Port F Configuration]$
 
 
 	// $[Route Configuration]
 
-	/* Module I2C0 is configured to location 6 */
-	I2C0->ROUTE = (I2C0->ROUTE & ~_I2C_ROUTE_LOCATION_MASK) | I2C_ROUTE_LOCATION_LOC6;
+	/* Module I2C0 is configured to location 1 */
+	I2C0->ROUTE = (I2C0->ROUTE & ~_I2C_ROUTE_LOCATION_MASK) | I2C_ROUTE_LOCATION_LOC1;
 
 	/* Enable signals SCL, SDA */
 	I2C0->ROUTE |= I2C_ROUTE_SCLPEN | I2C_ROUTE_SDAPEN;
@@ -611,8 +637,14 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 	/* Module PCNT0 is configured to location 0 */
 	PCNT0->ROUTE = (PCNT0->ROUTE & ~_PCNT_ROUTE_LOCATION_MASK) | PCNT_ROUTE_LOCATION_LOC0;
 
+	/* Enable signals RX, TX */
+	UART1->ROUTE |= UART_ROUTE_RXPEN | UART_ROUTE_TXPEN;
+
+	/* Module USART1 is configured to location 1 */
+	USART1->ROUTE = (USART1->ROUTE & ~_USART_ROUTE_LOCATION_MASK) | USART_ROUTE_LOCATION_LOC1;
+
 	/* Enable signals CLK, CS, RX, TX */
-	USART1->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_RXPEN |
+	USART1->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | USART_ROUTE_RXPEN |
 		USART_ROUTE_TXPEN;
 	// [Route Configuration]$
 
