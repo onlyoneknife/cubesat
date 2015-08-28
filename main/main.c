@@ -32,6 +32,7 @@
 #include "diskio.h"
 #include "microsd.h"
 #include "ff.h"
+#include "fatfs.h"
 #include "sleep.h"
 #include "i2c.h"
 #include "spi.h"
@@ -60,33 +61,14 @@
 #define SPI2RECEIVE_TASK_PRIORITY  (tskIDLE_PRIORITY + 1)
 
 #define LED_DELAY                  (50 / portTICK_RATE_MS)
-#define LED_PORT               (gpioPortA)
-#define LED_PIN                (7)
+#define LED_PORT                   (gpioPortA)
+#define LED_PIN                    (9)
 
-#define BUFFERSIZE                 (1024)
-
-char    receiveBuffer[BUFFERSIZE];
-
-
-#define USE_SD_CARD                (true)
-
-#if USE_SD_CARD == true
 /* Ram buffers
  * BUFFERSIZE should be between 512 and 1024, depending on available ram *****/
 #define BUFFERSIZE      1024
-/* Filename to open/write/read from SD-card */
-#define TEST_FILENAME    "test.txt"
 
-FIL fsrc;                   /* File objects */
-FATFS Fatfs;                /* File system specific */
-FRESULT res;                /* FatFs function common result code */
-UINT br, bw;                /* File read/write count */
-DSTATUS resCard;                /* SDcard status */
-int8_t ramBufferWrite[BUFFERSIZE];  /* Temporary buffer for write file */
-int8_t ramBufferRead[BUFFERSIZE]; /* Temporary buffer for read file */
-int8_t StringBuffer[] = "EFM32 ...the world's most energy friendly microcontrollers !";
-int16_t i;
-int16_t filecounter;
+char   receiveBuffer[BUFFERSIZE];
 
 /***************************************************************************//**
  * @brief
@@ -103,8 +85,6 @@ DWORD get_fattime(void)
   return (28 << 25) | (2 << 21) | (1 << 16);
 }
 
-#endif
-
 /**************************************************************************//**
  * @brief Initialize drivers
  *****************************************************************************/
@@ -114,9 +94,17 @@ void DRIVERS_Init(void)
   /* Enable I2C0 is slave mode */
   I2C0_setup();
 
-  /* Enable USART2 in SPI slave mode */
-  SPI_setup(2, 1, 0);
+  GPIO->P[gpioPortD].DOUTSET = 1 << 3;
+  GPIO->P[gpioPortB].DOUTSET = 1 << 5;
+  GPIO->P[gpioPortF].DOUTSET = 0 << 6;
+  GPIO->P[gpioPortB].DOUTSET = 1 << 6;
+  GPIO->P[gpioPortB].DOUTSET = 1 << 11;
+  GPIO->P[gpioPortB].DOUTSET = 1 << 12;
 
+  FATFS_Init();
+
+  /* Enable USART2 in SPI slave mode */
+  SPI_setup(USART2, LOCATION(0), SLAVE);
 }
 
 
@@ -127,7 +115,7 @@ void DRIVERS_Init(void)
 static void LedBlink(void *pParameters)
 {
 
-  //pParameters = pParameters;   /* to quiet warnings */
+  pParameters = pParameters;   /* to quiet warnings */
 
   for (;;)
   {
@@ -147,7 +135,7 @@ static void LedBlink(void *pParameters)
 static void SPI2Receive(void *pParameters)
 {
 
-  //pParameters = pParameters;   /* to quiet warnings */
+  pParameters = pParameters;   /* to quiet warnings */
 
   for (;;)
   {
@@ -175,118 +163,8 @@ int main(void)
   /* Initialize Hardware Drivers */
   DRIVERS_Init();
 
-#if USE_SD_CARD == true
+  FATFS_Write( "Hello!", "hello.txt");
 
-  /*Initialization file buffer write */
-  filecounter = sizeof(StringBuffer);
-
-  for(i = 0; i < filecounter ; i++)
-  {
-     ramBufferWrite[i] = StringBuffer[i];
-  }
-
-  resCard = disk_initialize(0);       /*Check micro-SD card status */
-
-  switch(resCard)
-  {
-  case STA_NOINIT:                    /* Drive not initialized */
-    break;
-  case STA_NODISK:                    /* No medium in the drive */
-    break;
-  case STA_PROTECT:                   /* Write protected */
-    break;
-  default:
-    break;
-  }
-
-  /* Initialize filesystem */
-  res = f_mount(0, &Fatfs);
-  if (res != FR_OK)
-  {
-    /* Error.No micro-SD with FAT32 is present */
-    while(1);
-  }
-
-  /* Open  the file for write */
-  res = f_open(&fsrc, TEST_FILENAME,  FA_WRITE);
-  if (res != FR_OK)
-  {
-    /*  If file does not exist create it*/
-    res = f_open(&fsrc, TEST_FILENAME, FA_CREATE_ALWAYS | FA_WRITE );
-    if (res != FR_OK)
-    {
-      /* Error. Cannot create the file */
-      while(1);
-    }
-  }
-
-  /*Set the file write pointer to first location */
-  res = f_lseek(&fsrc, 0);
-  if (res != FR_OK)
-  {
-    /* Error. Cannot set the file write pointer */
-    while(1);
-  }
-
-  /*Write a buffer to file*/
-  res = f_write(&fsrc, ramBufferWrite, filecounter, &bw);
-  if ((res != FR_OK) || (filecounter != bw))
-  {
-    /* Error. Cannot write the file */
-  while(1);
-  }
-
-  /* Close the file */
-  f_close(&fsrc);
-  if (res != FR_OK)
-  {
-    /* Error. Cannot close the file */
-    while(1);
-  }
-
-  /* Open the file for read */
-  res = f_open(&fsrc, TEST_FILENAME,  FA_READ);
-  if (res != FR_OK)
-  {
-    /* Error. Cannot create the file */
-    while(1);
-  }
-
-  /*Set the file read pointer to first location */
-  res = f_lseek(&fsrc, 0);
-  if (res != FR_OK)
-  {
-    /* Error. Cannot set the file pointer */
-    while(1);
-  }
-
-  /* Read some data from file */
-  res = f_read(&fsrc, ramBufferRead, filecounter, &br);
-  if ((res != FR_OK) || (filecounter != br))
-  {
-    /* Error. Cannot read the file */
-    while(1);
-  }
-
-  /* Close the file */
-  f_close(&fsrc);
-  if (res != FR_OK)
-  {
-    /* Error. Cannot close the file */
-    while(1);
-  }
-
-  /*Compare ramBufferWrite and ramBufferRead */
-  for(i = 0; i < filecounter ; i++)
-  {
-    if ((ramBufferWrite[i]) != (ramBufferRead[i]))
-    {
-      /* Error compare buffers*/
-      while(1);
-    }
-  }
-
-#endif
 
   /* Create task for blinking leds */
   xTaskCreate( LedBlink,
@@ -297,7 +175,7 @@ int main(void)
            NULL );
 
   /* Create task for receiving on USART2 */
-   xTaskCreate( SPI2Receive,
+  xTaskCreate( SPI2Receive,
            (const char *) "SPI2Receive",
            SPI2RECEIVE_STACK_SIZE,
            NULL,
