@@ -10,8 +10,6 @@
 #include "integer.h"
 
 
-/* Status of Disk Functions */
-typedef BYTE	DSTATUS;
 
 /* Results of Disk Functions */
 typedef enum {
@@ -26,6 +24,17 @@ typedef enum {
 /*---------------------------------------*/
 /* Prototypes for disk control functions. */
 
+/* Status of Disk Functions */
+typedef BYTE	DSTATUS;
+
+/* Disk Status Bits (DSTATUS) */
+#define STA_OK              0   /* Succeeded */
+#define STA_NOINIT          1   /* Drive not initialized */
+#define STA_NODISK          2   /* No medium in the drive */
+#define STA_NOFAT32         3   /* No micro-SD with FAT32 is present */
+#define STA_PROTECT         4   /* Write protected */
+
+
 DSTATUS disk_initialize (BYTE);
 DSTATUS disk_status (BYTE);
 DRESULT disk_read (BYTE, BYTE*, DWORD, BYTE);
@@ -33,13 +42,6 @@ DRESULT disk_read (BYTE, BYTE*, DWORD, BYTE);
 DRESULT disk_write (BYTE, const BYTE*, DWORD, BYTE);
 #endif
 DRESULT disk_ioctl (BYTE, BYTE, void*);
-
-
-/* Disk Status Bits (DSTATUS) */
-
-#define STA_NOINIT		0x01	/* Drive not initialized */
-#define STA_NODISK		0x02	/* No medium in the drive */
-#define STA_PROTECT		0x04	/* Write protected */
 
 
 /* Command code for disk_ioctrl fucntion */
@@ -55,7 +57,7 @@ DRESULT disk_ioctl (BYTE, BYTE, void*);
 #define CTRL_POWER			5	/* Get/Set power status */
 #define CTRL_LOCK			6	/* Lock/Unlock media removal */
 #define CTRL_EJECT			7	/* Eject media */
-#define CTRL_INVALIDATE 	8 /* Added by Energy Micro AS. */
+#define CTRL_INVALIDATE 	8   /* Added by Energy Micro AS. */
 
 
 /* MMC/SDC specific ioctl command */
@@ -74,11 +76,11 @@ DRESULT disk_ioctl (BYTE, BYTE, void*);
 #define NAND_FORMAT			30	/* Create physical format */
 
 /* SD Card type definitions (CardType) */
-#define CT_MMC			0x01
-#define CT_SD1			0x02
-#define CT_SD2			0x04
-#define CT_SDC			(CT_SD1|CT_SD2)
-#define CT_BLOCK		0x08
+#define CT_MMC			    0x01
+#define CT_SD1			    0x02
+#define CT_SD2			    0x04
+#define CT_SDC			    (CT_SD1|CT_SD2)
+#define CT_BLOCK		    0x08
 
 #define _DISKIO
 #endif
