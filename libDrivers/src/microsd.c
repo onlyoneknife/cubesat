@@ -15,6 +15,17 @@
  *
  ******************************************************************************/
 
+/**************************************************************************//**
+ * THIS CONTENT HAS BEEN ALTERED FROM THE ORIGINAL SOFTWARE AND IS SUBJECT TO
+ * EXISTING LICENSE TERMS AND RESTRICTIONS FROM A THIRD PARTY
+ *****************************************************************************
+ * Modified by:   Stefan Damkjar
+ * Date Modified: 2015-08-25
+ * Description:   MICROSD_Init has been modified because USART initialization is
+ *                achieved by the Simplicity Studio Hardware Configurator App.
+ *
+ ******************************************************************************/
+
 
 #include "diskio.h"
 #include "microsd.h"
@@ -51,7 +62,7 @@ static uint8_t WaitReady(void)
 /**************************************************************************//**
  * @brief
  *  Initialize the SPI peripheral for microSD card usage.
- *  SPI pins and speed etc. is defined in microsdconfig.h.
+ *  SPI pins and speed etc. i  s defined in microsdconfig.h.
  *****************************************************************************/
 void MICROSD_Init(void)
 {
@@ -198,8 +209,8 @@ int MICROSD_BlockRx(uint8_t *buff, uint32_t btr)
   } while (btr);
 
   /* Next two bytes is the CRC which we discard. */
-  while (!(MICROSD_USART->STATUS & USART_STATUS_RXDATAV));
-  MICROSD_USART->RXDOUBLE;
+  //while (!(MICROSD_USART->STATUS & USART_STATUS_RXDATAV));
+  //MICROSD_USART->RXDOUBLE;
 
   /* Restore old settings. */
   MICROSD_USART->FRAME = framectrl;

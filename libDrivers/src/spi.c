@@ -68,27 +68,26 @@ volatile int masterRxBufferIndex;
  * @param location is the GPIO location to use for the device
  * @param master set if the SPI is to be master
  *****************************************************************************/
-void SPI_setup(uint8_t spiNumber, uint8_t location, bool master)
+void SPI_setup(USART_TypeDef *spi, uint8_t location, bool master)
 {
   USART_InitSync_TypeDef initsync = USART_INITSYNC_DEFAULT;
   USART_PrsTriggerInit_TypeDef initprs = USART_INITPRSTRIGGER_DEFAULT;
-  USART_TypeDef *spi;
 
   CMU_Clock_TypeDef clock;
 
   /* Determining USART */
-  switch (spiNumber)
+  switch ((int)spi)
   {
-  case 0:
+  case (int)USART0:
     spi   = USART0;
     clock = cmuClock_USART0;
     break;
-  case 1:
-    spi = USART1;
+  case (int)USART1:
+    spi   = USART1;
     clock = cmuClock_USART1;
     break;
-  case 2:
-    spi = USART2;
+  case (int)USART2:
+    spi   = USART2;
     clock = cmuClock_USART2;
     break;
   default:
@@ -119,8 +118,14 @@ void SPI_setup(uint8_t spiNumber, uint8_t location, bool master)
 
   USART_InitPrsTrigger(spi, &initprs);
 
-  /* Enable signals CLK, CS, RX, TX and set location */
-  spi->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | USART_ROUTE_RXPEN |
+  /* Enable signal CS for slave mode */
+  if (!master)
+  {
+    spi->ROUTE |= USART_ROUTE_CSPEN;
+  } 
+
+  /* Enable signals CLK, RX, TX and set location */
+  spi->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_RXPEN |
   	  USART_ROUTE_TXPEN | (location << _USART_ROUTE_LOCATION_SHIFT);
 }
 
