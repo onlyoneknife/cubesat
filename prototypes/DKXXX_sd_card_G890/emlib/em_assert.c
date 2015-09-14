@@ -1,9 +1,8 @@
-/**************************************************************************//**
- * @file spi.h
- * @brief SPI prototypes and definitions
- * @author Silicon Labs
- * @version 1.14
- ******************************************************************************
+/***************************************************************************//**
+ * @file em_assert.c
+ * @brief Assert API
+ * @version 3.20.13
+ *******************************************************************************
  * @section License
  * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
  *******************************************************************************
@@ -30,24 +29,41 @@
  * arising from your use of this Software.
  *
  ******************************************************************************/
-#ifndef __SPI_H
-#define __SPI_H
 
-#include <stdbool.h>
-#include "em_device.h"
 
-#define NO_RX                    (0)
-#define NO_TX                    (NO_RX)
+#include "em_assert.h"
 
-#define LOCATION(n)              (n)
+#if defined(DEBUG_EFM)
 
-#define MASTER                   (true)
-#define SLAVE                    (false)
+/***************************************************************************//**
+ * @brief
+ *   EFM internal assert handling.
+ *
+ *   This function is invoked through EFM_ASSERT() macro usage only, it should
+ *   not be used explicitly.
+ *
+ *   Currently this implementation only enters an indefinite loop, allowing
+ *   the use of a debugger to determine cause of failure. By defining
+ *   DEBUG_EFM_USER to the preprocessor for all files, a user defined version
+ *   of this function must be defined and will be invoked instead, possibly
+ *   providing output of assertion location.
+ *
+ *   Please notice that this function is not used unless DEBUG_EFM is defined
+ *   during preprocessing of EFM_ASSERT() usage.
+ *
+ * @par file
+ *   Name of source file where assertion failed.
+ *
+ * @par line
+ *   Line number in source file where assertion failed.
+ ******************************************************************************/
+void assertEFM(const char *file, int line)
+{
+  (void)file;  /* Unused parameter */
+  (void)line;  /* Unused parameter */
 
-void SPI_setup(USART_TypeDef *spi, uint8_t location, bool master);
-void SPI1_setupRXInt(char* receiveBuffer, int bytesToReceive);
-void SPI2_setupRXInt(char* receiveBuffer, int bytesToReceive);
-void SPI1_setupSlaveInt(char* receiveBuffer, int receiveBufferSize, char* transmitBuffer, int transmitBufferSize);
-void SPI2_setupSlaveInt(char* receiveBuffer, int receiveBufferSize, char* transmitBuffer, int transmitBufferSize);
+  while (1)
+    ;
+}
 
-#endif
+#endif /* DEBUG_EFM */
