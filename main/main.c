@@ -139,7 +139,7 @@ static void SPI2Receive(void *pParameters)
 
   for (;;)
   {
-  /* Data reception as slave */
+  /* Data reception as slave  */
   /* *********************** */
   /*Setting up both RX and TX interrupts for slave */
   SPI2_setupSlaveInt(receiveBuffer, BUFFERSIZE, NO_TX, NO_TX);
