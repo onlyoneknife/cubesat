@@ -92,8 +92,16 @@ void DRIVERS_Init(void)
 {
 
   /* Enable I2C0 is slave mode */
-  I2C0_setup();
+  //I2C0_setup();
 
+  /* Initialize chip select lines
+   * 	D3 -> Accel/Mag
+   * 	B5 -> Gyro
+   * 	F6 -> RTC (Active High)
+   * 	B6 -> FRAM
+   * 	B11-> SD Card
+   * 	B12-> Breakout
+   */
   GPIO->P[gpioPortD].DOUTSET = 1 << 3;
   GPIO->P[gpioPortB].DOUTSET = 1 << 5;
   GPIO->P[gpioPortF].DOUTSET = 0 << 6;
@@ -101,7 +109,7 @@ void DRIVERS_Init(void)
   GPIO->P[gpioPortB].DOUTSET = 1 << 11;
   GPIO->P[gpioPortB].DOUTSET = 1 << 12;
 
-  FATFS_Init();
+  //FATFS_Init();
 
   /* Enable USART2 in SPI slave mode */
   SPI_setup(USART2, LOCATION(0), SLAVE);
@@ -163,7 +171,7 @@ int main(void)
   /* Initialize Hardware Drivers */
   DRIVERS_Init();
 
-  FATFS_Write( "Hello!", "hello.txt");
+  //FATFS_Write( "Hello!", "hello.txt");
 
 
   /* Create task for blinking leds */
