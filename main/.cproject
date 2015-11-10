@@ -200,15 +200,6 @@
 		<project id="main.com.silabs.ide.project.core.cdt.cdtMbsProjectType.1141451398" name="SLS CDT Project" projectType="com.silabs.ide.project.core.cdt.cdtMbsProjectType"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129;com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.167035260;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.609027315">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.release#com.silabs.ide.si32.gcc:4.8.3.20131129;com.silabs.ide.si32.gcc.release#com.silabs.ide.si32.gcc:4.8.3.20131129.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1380320321;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.1018764843">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="GNU ARM v4.8.3 - Release">
 			<resource resourceType="PROJECT" workspacePath="/main"/>
@@ -216,5 +207,17 @@
 		<configuration configurationName="GNU ARM v4.8.3 - Debug">
 			<resource resourceType="PROJECT" workspacePath="/main"/>
 		</configuration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.release#com.silabs.ide.si32.gcc:4.8.3.20131129;com.silabs.ide.si32.gcc.release#com.silabs.ide.si32.gcc:4.8.3.20131129.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.2017602764;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.489261329">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129;com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1106142351;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.1452913784">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129@0;com.silabs.ide.si32.gcc.debug#com.silabs.ide.si32.gcc:4.8.3.20131129@0.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.1564937032;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.326016380">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
 	</storageModule>
 </cproject>
