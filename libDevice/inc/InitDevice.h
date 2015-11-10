@@ -16,14 +16,14 @@ extern void enter_DefaultMode_from_RESET(void);
 // [Mode Transition Prototypes]$
 
 // $[Config(Per-Module Mode)Transition Prototypes]
+extern void HFXO_enter_DefaultMode_from_RESET(void);
+extern void LFXO_enter_DefaultMode_from_RESET(void);
 extern void CMU_enter_DefaultMode_from_RESET(void);
 extern void ADC0_enter_DefaultMode_from_RESET(void);
 extern void ACMP0_enter_DefaultMode_from_RESET(void);
 extern void ACMP1_enter_DefaultMode_from_RESET(void);
 extern void DAC0_enter_DefaultMode_from_RESET(void);
 extern void BURTC_enter_DefaultMode_from_RESET(void);
-extern void HFXO_enter_DefaultMode_from_RESET(void);
-extern void LFXO_enter_DefaultMode_from_RESET(void);
 extern void RTC_enter_DefaultMode_from_RESET(void);
 extern void OPAMP0_enter_DefaultMode_from_RESET(void);
 extern void OPAMP1_enter_DefaultMode_from_RESET(void);
@@ -51,7 +51,6 @@ extern void ETM_enter_DefaultMode_from_RESET(void);
 extern void EBI_enter_DefaultMode_from_RESET(void);
 extern void PORTIO_enter_DefaultMode_from_RESET(void);
 // [Config(Per-Module Mode)Transition Prototypes]$
-
 
 #endif
 
