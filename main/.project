@@ -26,29 +26,14 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>CMSIS</name>
-			<type>2</type>
-			<locationURI>WORKSPACE_LOC/lib3rdParty/CMSIS</locationURI>
-		</link>
-		<link>
-			<name>FatFS</name>
-			<type>2</type>
-			<locationURI>WORKSPACE_LOC/lib3rdParty/FatFS</locationURI>
-		</link>
-		<link>
-			<name>FreeRTOS</name>
-			<type>2</type>
-			<locationURI>WORKSPACE_LOC/lib3rdParty/FreeRTOS/Source</locationURI>
-		</link>
-		<link>
-			<name>emlib</name>
-			<type>2</type>
-			<locationURI>WORKSPACE_LOC/lib3rdParty/SiliconLabs/EFM32/emlib/src</locationURI>
-		</link>
-		<link>
 			<name>inc</name>
 			<type>2</type>
 			<locationURI>WORKSPACE_LOC/libDevice/inc</locationURI>
+		</link>
+		<link>
+			<name>lib3rdParty</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>libDrivers</name>
@@ -59,6 +44,31 @@
 			<name>src</name>
 			<type>2</type>
 			<locationURI>WORKSPACE_LOC/libDevice/src</locationURI>
+		</link>
+		<link>
+			<name>lib3rdParty/CMSIS</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/CMSIS</locationURI>
+		</link>
+		<link>
+			<name>lib3rdParty/FatFS</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/FatFS</locationURI>
+		</link>
+		<link>
+			<name>lib3rdParty/FreeRTOS</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/FreeRTOS/Source</locationURI>
+		</link>
+		<link>
+			<name>lib3rdParty/emlib</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/SiliconLabs/EFM32/emlib/src</locationURI>
+		</link>
+		<link>
+			<name>lib3rdParty/libcsp</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/libcsp/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
