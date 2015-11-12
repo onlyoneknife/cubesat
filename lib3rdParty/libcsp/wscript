@@ -67,6 +67,11 @@ def options(ctx):
 	gr.add_option('--with-freertos', metavar='PATH', default=None, help='Set path to FreeRTOS header files')
 	gr.add_option('--enable-init-shutdown', action='store_true', help='Use init system commands for shutdown/reboot')
 
+	# OCP Stefan 11/11/15 - 'Added board options based on LPC17xx port'
+	# Board 
+	gr.add_option('--with-lpc17xx', help='Set board to LPC17xx')
+	gr.add_option('--with-efm32', help='Set board to EFM32')
+
 	# Options
 	gr.add_option('--with-rdp-max-window', metavar='SIZE', type=int, default=20, help='Set maximum window size for RDP')
 	gr.add_option('--with-max-bind-port', metavar='PORT', type=int, default=31, help='Set maximum bindable port')
@@ -88,12 +93,21 @@ def configure(ctx):
 	if not ctx.options.with_driver_can in (None, 'socketcan', 'at91sam7a1', 'at91sam7a3', 'at90can128'):
 		ctx.fatal('--with-driver-can must be either \'socketcan\', \'at91sam7a1\', \'at91sam7a3\', \'at90can128\'')
 
+	# OCP Stefan 11/11/15 - 'Added lpc17xx and efm32 options based on LPC17xx port'
 	# Validate USART drivers
-	if not ctx.options.with_driver_usart in (None, 'windows', 'linux'):
-		ctx.fatal('--with-driver-usart must be either \'windows\' or \'linux\'')
+	if not ctx.options.with_driver_usart in (None, 'windows', 'linux', 'lpc1769', 'efm32'):
+		ctx.fatal('--with-driver-usart must be either \'windows\', \'linux\', \'lpc1769\' or \'efm32\'')
 
 	if not ctx.options.with_loglevel in ('error', 'warn', 'info', 'debug'):
 		ctx.fatal('--with-loglevel must be either \'error\', \'warn\', \'info\' or \'debug\'')
+
+	# OCP Stefan 12/11/15 - 'Added validation check based on LPC17xx port'
+	# Validate board
+	if not ctx.options.with-lpc17xx in (None, 'lpc1769'):
+		ctx.fatal('--with-lpc17xx must be \'lpc1769\'')
+
+	if not ctx.options.with-efm32 in (None, 'efm32'):
+		ctx.fatal('--with-efm32 must me \'efm32\'')
 
 	# Setup and validate toolchain
 	if ctx.options.toolchain:
