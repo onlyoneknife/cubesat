@@ -64,11 +64,14 @@
 #define LED_PORT                   (gpioPortA)
 #define LED_PIN                    (9)
 
-/* Ram buffers
- * BUFFERSIZE should be between 512 and 1024, depending on available ram *****/
-#define BUFFERSIZE      1024
+/* Ram buffers */
 
-char   receiveBuffer[BUFFERSIZE];
+char   transmitBuffer[] = "HELLO";
+#define TXBUFFERSIZE      (sizeof(transmitBuffer)/sizeof(char))
+
+/* RXBUFFERSIZE should be between 512 and 1024, depending on available ram *****/
+#define RXBUFFERSIZE      1024
+char   receiveBuffer[RXBUFFERSIZE];
 
 /***************************************************************************//**
  * @brief
@@ -150,7 +153,7 @@ static void SPI2Receive(void *pParameters)
   /* Data reception as slave */
   /* *********************** */
   /*Setting up both RX and TX interrupts for slave */
-  SPI2_setupSlaveInt(receiveBuffer, BUFFERSIZE, NO_TX, NO_TX);
+  SPI2_setupSlaveInt(receiveBuffer, RXBUFFERSIZE, transmitBuffer, TXBUFFERSIZE);
   vTaskDelay(50 / portTICK_RATE_MS);
   }
 }
