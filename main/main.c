@@ -64,8 +64,11 @@
 #define LED_PORT                   (gpioPortA)
 #define LED_PIN                    (9)
 
-/* Ram buffers */
+/* CSP Settings */
+#define CSP_ADDRESS                (1)      // Address of local CSP node
+#define CSP_PORT                   (10)		// Port to send test traffic to
 
+/* Ram Buffers */
 char   transmitBuffer[] = "HELLO";
 #define TXBUFFERSIZE      (sizeof(transmitBuffer)/sizeof(char))
 
@@ -118,8 +121,6 @@ void DRIVERS_Init(void)
   SPI_setup(USART2, LOCATION(0), SLAVE);
 }
 
-
-
 /**************************************************************************//**
  * @brief Simple task which is blinking led
  *****************************************************************************/
@@ -137,8 +138,6 @@ static void LedBlink(void *pParameters)
     vTaskDelay(LED_DELAY);
   }
 }
-
-
 
 /**************************************************************************//**
  * @brief Simple task which is receiving as a slave on USART2
@@ -158,8 +157,6 @@ static void SPI2Receive(void *pParameters)
   }
 }
 
-
-
 /**************************************************************************//**
  * @brief  Main function
  *****************************************************************************/
@@ -174,8 +171,17 @@ int main(void)
   /* Initialize Hardware Drivers */
   DRIVERS_Init();
 
+  /* Initialize CSP */
+  csp_init(CSP_ADDRESS);
+  /* Start buffer handling;  10 buffers, 300 bytes long each */
+  csp_buffer_init(10, 300);
+  /* Start router task with 500 word stack, OS task priority 1 */
+  csp_route_start_task(500, 1);
+
   //FATFS_Write( "Hello!", "hello.txt");
 
+  csp_thread_handle_t handle_client;
+  csp_thread_create(task_client, (signed char *) "SERVER", 1000, NULL, 0, &handle_client);
 
   /* Create task for blinking leds */
   xTaskCreate( LedBlink,
@@ -199,7 +205,6 @@ int main(void)
   /* Infinite loop */
   for( ;; ) { /* do nothing */ }
   return 0;
-
 }
 
 void vApplicationIdleHook( void )
