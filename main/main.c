@@ -198,5 +198,11 @@ int main(void)
 
   /* Infinite loop */
   for( ;; ) { /* do nothing */ }
+  return 0;
 
+}
+
+void vApplicationIdleHook( void )
+{
+     /* This example does not use the idle hook to perform any processing. */
 }
