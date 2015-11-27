@@ -54,6 +54,11 @@
 #include "semphr.h"
 #include "croutine.h"
 
+/* LibCSP Includes */
+#include <csp/csp.h>
+#include <csp/arch/csp_thread.h>
+#include <csp/interfaces/csp_if_i2c.h>
+
 #define LEDBLINK_STACK_SIZE        (configMINIMAL_STACK_SIZE + 10)
 #define LEDBLINK_TASK_PRIORITY     (tskIDLE_PRIORITY + 1)
 
@@ -67,14 +72,13 @@
 /* CSP Settings */
 #define CSP_ADDRESS                (1)      // Address of local CSP node
 #define CSP_PORT                   (10)		// Port to send test traffic to
-
 /* Ram Buffers */
-char   transmitBuffer[] = "HELLO";
+char transmitBuffer[] = "HELLO";
 #define TXBUFFERSIZE      (sizeof(transmitBuffer)/sizeof(char))
 
 /* RXBUFFERSIZE should be between 512 and 1024, depending on available ram *****/
 #define RXBUFFERSIZE      1024
-char   receiveBuffer[RXBUFFERSIZE];
+char receiveBuffer[RXBUFFERSIZE];
 
 /***************************************************************************//**
  * @brief
@@ -86,128 +90,115 @@ char   receiveBuffer[RXBUFFERSIZE];
  * @return
  *    A DWORD containing the current time and date as a packed datastructure.
  ******************************************************************************/
-DWORD get_fattime(void)
-{
-  return (28 << 25) | (2 << 21) | (1 << 16);
+DWORD get_fattime(void) {
+	return (28 << 25) | (2 << 21) | (1 << 16);
 }
 
 /**************************************************************************//**
  * @brief Initialize drivers
  *****************************************************************************/
-void DRIVERS_Init(void)
-{
+void DRIVERS_Init(void) {
 
-  /* Enable I2C0 is slave mode */
-  //I2C0_setup();
+	/* Enable I2C0 is slave mode */
+	//I2C0_setup();
+	/* Initialize chip select lines
+	 * 	D3 -> Accel/Mag
+	 * 	B5 -> Gyro
+	 * 	F6 -> RTC (Active High)
+	 * 	B6 -> FRAM
+	 * 	B11-> SD Card
+	 * 	B12-> Breakout
+	 */
+	GPIO ->P[gpioPortD].DOUTSET = 1 << 3;
+	GPIO ->P[gpioPortB].DOUTSET = 1 << 5;
+	GPIO ->P[gpioPortF].DOUTSET = 0 << 6;
+	GPIO ->P[gpioPortB].DOUTSET = 1 << 6;
+	GPIO ->P[gpioPortB].DOUTSET = 1 << 11;
+	GPIO ->P[gpioPortB].DOUTSET = 1 << 12;
 
-  /* Initialize chip select lines
-   * 	D3 -> Accel/Mag
-   * 	B5 -> Gyro
-   * 	F6 -> RTC (Active High)
-   * 	B6 -> FRAM
-   * 	B11-> SD Card
-   * 	B12-> Breakout
-   */
-  GPIO->P[gpioPortD].DOUTSET = 1 << 3;
-  GPIO->P[gpioPortB].DOUTSET = 1 << 5;
-  GPIO->P[gpioPortF].DOUTSET = 0 << 6;
-  GPIO->P[gpioPortB].DOUTSET = 1 << 6;
-  GPIO->P[gpioPortB].DOUTSET = 1 << 11;
-  GPIO->P[gpioPortB].DOUTSET = 1 << 12;
+	//FATFS_Init();
 
-  //FATFS_Init();
-
-  /* Enable USART2 in SPI slave mode */
-  SPI_setup(USART2, LOCATION(0), SLAVE);
+	/* Enable USART2 in SPI slave mode */
+	SPI_setup(USART2, LOCATION(0), SLAVE);
 }
 
 /**************************************************************************//**
  * @brief Simple task which is blinking led
  *****************************************************************************/
-static void LedBlink(void *pParameters)
-{
+static void LedBlink(void *pParameters) {
 
-  pParameters = pParameters;   /* to quiet warnings */
+	pParameters = pParameters; /* to quiet warnings */
 
-  for (;;)
-  {
-    /* Set LSB of count value on LED */
-  GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
-    vTaskDelay(LED_DELAY);
-    GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
-    vTaskDelay(LED_DELAY);
-  }
+	for (;;) {
+		/* Set LSB of count value on LED */
+		GPIO ->P[LED_PORT].DOUTSET = 1 << LED_PIN;
+		vTaskDelay(LED_DELAY);
+		GPIO ->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
+		vTaskDelay(LED_DELAY);
+	}
 }
 
 /**************************************************************************//**
  * @brief Simple task which is receiving as a slave on USART2
  *****************************************************************************/
-static void SPI2Receive(void *pParameters)
-{
+static void SPI2Receive(void *pParameters) {
 
-  pParameters = pParameters;   /* to quiet warnings */
+	pParameters = pParameters; /* to quiet warnings */
 
-  for (;;)
-  {
-  /* Data reception as slave */
-  /* *********************** */
-  /*Setting up both RX and TX interrupts for slave */
-  SPI2_setupSlaveInt(receiveBuffer, RXBUFFERSIZE, transmitBuffer, TXBUFFERSIZE);
-  vTaskDelay(50 / portTICK_RATE_MS);
-  }
+	for (;;) {
+		/* Data reception as slave */
+		/* *********************** */
+		/*Setting up both RX and TX interrupts for slave */
+		SPI2_setupSlaveInt(receiveBuffer, RXBUFFERSIZE, transmitBuffer,
+				TXBUFFERSIZE);
+		vTaskDelay(50 / portTICK_RATE_MS);
+	}
 }
 
 /**************************************************************************//**
  * @brief  Main function
  *****************************************************************************/
-int main(void)
-{
-  /* Initialize EFM32 Chip Settings */
-  CHIP_Init();
+int main(void) {
+	/* Initialize EFM32 Chip Settings */
+	CHIP_Init();
 
-  /* Transition to Default Mode */
-  enter_DefaultMode_from_RESET();
+	/* Transition to Default Mode */
+	enter_DefaultMode_from_RESET();
 
-  /* Initialize Hardware Drivers */
-  DRIVERS_Init();
+	/* Initialize Hardware Drivers */
+	DRIVERS_Init();
 
-  /* Initialize CSP */
-  csp_init(CSP_ADDRESS);
-  /* Start buffer handling;  10 buffers, 300 bytes long each */
-  csp_buffer_init(10, 300);
-  /* Start router task with 500 word stack, OS task priority 1 */
-  csp_route_start_task(500, 1);
+	/* Start buffer handling;  10 buffers, 300 bytes long each */
+	csp_buffer_init(10, 300);
+	/* Initialize CSP */
+	csp_init(CSP_ADDRESS);
+	/* Start router task with 500 word stack, OS task priority 1 */
+	csp_route_start_task(500, 1);
+	/* Initialize I2C nodes */
 
-  //FATFS_Write( "Hello!", "hello.txt");
+	//FATFS_Write( "Hello!", "hello.txt");
 
-  csp_thread_handle_t handle_client;
-  csp_thread_create(task_client, (signed char *) "SERVER", 1000, NULL, 0, &handle_client);
+	csp_thread_handle_t handle_client;
+	csp_thread_create(task_client, (signed char *) "SERVER", 1000, NULL, 0,
+			&handle_client);
 
-  /* Create task for blinking leds */
-  xTaskCreate( LedBlink,
-           (const char *) "LedBlink",
-           LEDBLINK_STACK_SIZE,
-           NULL,
-           LEDBLINK_TASK_PRIORITY,
-           NULL );
+	/* Create task for blinking leds */
+	xTaskCreate(LedBlink, (const char * ) "LedBlink", LEDBLINK_STACK_SIZE, NULL,
+			LEDBLINK_TASK_PRIORITY, NULL);
 
-  /* Create task for receiving on USART2 */
-  xTaskCreate( SPI2Receive,
-           (const char *) "SPI2Receive",
-           SPI2RECEIVE_STACK_SIZE,
-           NULL,
-           SPI2RECEIVE_TASK_PRIORITY,
-           NULL );
+	/* Create task for receiving on USART2 */
+	xTaskCreate(SPI2Receive, (const char * ) "SPI2Receive",
+			SPI2RECEIVE_STACK_SIZE, NULL, SPI2RECEIVE_TASK_PRIORITY, NULL);
 
-  /*Start FreeRTOS Scheduler*/
-  vTaskStartScheduler();
+	/*Start FreeRTOS Scheduler*/
+	vTaskStartScheduler();
 
-  /* Infinite loop */
-  for( ;; ) { /* do nothing */ }
-  return 0;
+	/* Infinite loop */
+	for (;;) { /* do nothing */
+	}
+	return 0;
 }
 
-void vApplicationIdleHook( void )
-{
-     /* This example does not use the idle hook to perform any processing. */
+void vApplicationIdleHook(void) {
+	/* This example does not use the idle hook to perform any processing. */
 }
