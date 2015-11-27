@@ -30,7 +30,6 @@
  *
  ******************************************************************************/
 
-
 #include <stdint.h>
 #include "em_int.h"
 
@@ -67,7 +66,6 @@
 /** Interrupt lock level counter. Set to zero initially as we normally enter
  * main with interrupts enabled  */
 uint32_t INT_LockCnt = 0;
-
 
 /** @} (end addtogroup INT) */
 /** @} (end addtogroup EM_Library) */

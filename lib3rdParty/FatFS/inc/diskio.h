@@ -1,6 +1,6 @@
 /*-----------------------------------------------------------------------
-/  Low level disk interface modlue include file
-/-----------------------------------------------------------------------*/
+ /  Low level disk interface modlue include file
+ /-----------------------------------------------------------------------*/
 
 #ifndef _DISKIO
 
@@ -9,23 +9,20 @@
 
 #include "integer.h"
 
-
-
 /* Results of Disk Functions */
 typedef enum {
-	RES_OK = 0,		/* 0: Successful */
-	RES_ERROR,		/* 1: R/W Error */
-	RES_WRPRT,		/* 2: Write Protected */
-	RES_NOTRDY,		/* 3: Not Ready */
-	RES_PARERR		/* 4: Invalid Parameter */
+	RES_OK = 0, /* 0: Successful */
+	RES_ERROR, /* 1: R/W Error */
+	RES_WRPRT, /* 2: Write Protected */
+	RES_NOTRDY, /* 3: Not Ready */
+	RES_PARERR /* 4: Invalid Parameter */
 } DRESULT;
-
 
 /*---------------------------------------*/
 /* Prototypes for disk control functions. */
 
 /* Status of Disk Functions */
-typedef BYTE	DSTATUS;
+typedef BYTE DSTATUS;
 
 /* Disk Status Bits (DSTATUS) */
 #define STA_OK              0   /* Succeeded */
@@ -34,15 +31,13 @@ typedef BYTE	DSTATUS;
 #define STA_NOFAT32         3   /* No micro-SD with FAT32 is present */
 #define STA_PROTECT         4   /* Write protected */
 
-
-DSTATUS disk_initialize (BYTE);
-DSTATUS disk_status (BYTE);
-DRESULT disk_read (BYTE, BYTE*, DWORD, BYTE);
+DSTATUS disk_initialize(BYTE);
+DSTATUS disk_status(BYTE);
+DRESULT disk_read(BYTE, BYTE*, DWORD, BYTE);
 #if	_READONLY == 0
-DRESULT disk_write (BYTE, const BYTE*, DWORD, BYTE);
+DRESULT disk_write(BYTE, const BYTE*, DWORD, BYTE);
 #endif
-DRESULT disk_ioctl (BYTE, BYTE, void*);
-
+DRESULT disk_ioctl(BYTE, BYTE, void*);
 
 /* Command code for disk_ioctrl fucntion */
 
@@ -58,7 +53,6 @@ DRESULT disk_ioctl (BYTE, BYTE, void*);
 #define CTRL_LOCK			6	/* Lock/Unlock media removal */
 #define CTRL_EJECT			7	/* Eject media */
 #define CTRL_INVALIDATE 	8   /* Added by Energy Micro AS. */
-
 
 /* MMC/SDC specific ioctl command */
 #define MMC_GET_TYPE		10	/* Get card type */

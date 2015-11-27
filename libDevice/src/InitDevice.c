@@ -494,27 +494,27 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 	// $[Port A Configuration]
 
 	/* Pin PA9 is configured to Push-pull */
-	GPIO->P[0].MODEH = (GPIO->P[0].MODEH & ~_GPIO_P_MODEH_MODE9_MASK)
+	GPIO ->P[0].MODEH = (GPIO ->P[0].MODEH & ~_GPIO_P_MODEH_MODE9_MASK)
 			| GPIO_P_MODEH_MODE9_PUSHPULL;
 	// [Port A Configuration]$
 
 	// $[Port B Configuration]
 
-	/* Pin PB5 is configured to Push-pull */
-	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE5_MASK)
-			| GPIO_P_MODEL_MODE5_PUSHPULL;
+	/* Pin PB5 is configured to Push-pull */GPIO ->P[1].MODEL =
+			(GPIO ->P[1].MODEL & ~_GPIO_P_MODEL_MODE5_MASK)
+					| GPIO_P_MODEL_MODE5_PUSHPULL;
 
-	/* Pin PB6 is configured to Push-pull */
-	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE6_MASK)
-			| GPIO_P_MODEL_MODE6_PUSHPULL;
+	/* Pin PB6 is configured to Push-pull */GPIO ->P[1].MODEL =
+			(GPIO ->P[1].MODEL & ~_GPIO_P_MODEL_MODE6_MASK)
+					| GPIO_P_MODEL_MODE6_PUSHPULL;
 
-	/* Pin PB11 is configured to Push-pull */
-	GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE11_MASK)
-			| GPIO_P_MODEH_MODE11_PUSHPULL;
+	/* Pin PB11 is configured to Push-pull */GPIO ->P[1].MODEH =
+			(GPIO ->P[1].MODEH & ~_GPIO_P_MODEH_MODE11_MASK)
+					| GPIO_P_MODEH_MODE11_PUSHPULL;
 
-	/* Pin PB12 is configured to Push-pull */
-	GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE12_MASK)
-			| GPIO_P_MODEH_MODE12_PUSHPULL;
+	/* Pin PB12 is configured to Push-pull */GPIO ->P[1].MODEH =
+			(GPIO ->P[1].MODEH & ~_GPIO_P_MODEH_MODE12_MASK)
+					| GPIO_P_MODEH_MODE12_PUSHPULL;
 	// [Port B Configuration]$
 
 	// $[Port C Configuration]
@@ -522,21 +522,21 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 
 	// $[Port D Configuration]
 
-	/* Pin PD0 is configured to Push-pull */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE0_MASK)
-			| GPIO_P_MODEL_MODE0_PUSHPULL;
+	/* Pin PD0 is configured to Push-pull */GPIO ->P[3].MODEL =
+			(GPIO ->P[3].MODEL & ~_GPIO_P_MODEL_MODE0_MASK)
+					| GPIO_P_MODEL_MODE0_PUSHPULL;
 
-	/* Pin PD1 is configured to Input enabled */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE1_MASK)
-			| GPIO_P_MODEL_MODE1_INPUT;
+	/* Pin PD1 is configured to Input enabled */GPIO ->P[3].MODEL =
+			(GPIO ->P[3].MODEL & ~_GPIO_P_MODEL_MODE1_MASK)
+					| GPIO_P_MODEL_MODE1_INPUT;
 
-	/* Pin PD2 is configured to Push-pull */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE2_MASK)
-			| GPIO_P_MODEL_MODE2_PUSHPULL;
+	/* Pin PD2 is configured to Push-pull */GPIO ->P[3].MODEL =
+			(GPIO ->P[3].MODEL & ~_GPIO_P_MODEL_MODE2_MASK)
+					| GPIO_P_MODEL_MODE2_PUSHPULL;
 
-	/* Pin PD3 is configured to Push-pull */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE3_MASK)
-			| GPIO_P_MODEL_MODE3_PUSHPULL;
+	/* Pin PD3 is configured to Push-pull */GPIO ->P[3].MODEL =
+			(GPIO ->P[3].MODEL & ~_GPIO_P_MODEL_MODE3_MASK)
+					| GPIO_P_MODEL_MODE3_PUSHPULL;
 	// [Port D Configuration]$
 
 	// $[Port E Configuration]
@@ -544,23 +544,22 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 
 	// $[Port F Configuration]
 
-	/* Pin PF6 is configured to Push-pull */
-	GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE6_MASK)
-			| GPIO_P_MODEL_MODE6_PUSHPULL;
+	/* Pin PF6 is configured to Push-pull */GPIO ->P[5].MODEL =
+			(GPIO ->P[5].MODEL & ~_GPIO_P_MODEL_MODE6_MASK)
+					| GPIO_P_MODEL_MODE6_PUSHPULL;
 	// [Port F Configuration]$
 
 	// $[Route Configuration]
 
-	/* Module PCNT0 is configured to location 0 */
-	PCNT0->ROUTE = (PCNT0->ROUTE & ~_PCNT_ROUTE_LOCATION_MASK)
-			| PCNT_ROUTE_LOCATION_LOC0;
+	/* Module PCNT0 is configured to location 0 */PCNT0 ->ROUTE = (PCNT0 ->ROUTE
+			& ~_PCNT_ROUTE_LOCATION_MASK) | PCNT_ROUTE_LOCATION_LOC0;
 
-	/* Module USART1 is configured to location 1 */
-	USART1->ROUTE = (USART1->ROUTE & ~_USART_ROUTE_LOCATION_MASK)
-			| USART_ROUTE_LOCATION_LOC1;
+	/* Module USART1 is configured to location 1 */USART1 ->ROUTE =
+			(USART1 ->ROUTE & ~_USART_ROUTE_LOCATION_MASK)
+					| USART_ROUTE_LOCATION_LOC1;
 
 	/* Enable signals CLK, CS, RX, TX */
-	USART1->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | USART_ROUTE_RXPEN
+	USART1 ->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | USART_ROUTE_RXPEN
 			| USART_ROUTE_TXPEN;
 	// [Route Configuration]$
 

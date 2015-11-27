@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk) 
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk) 
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -52,9 +52,9 @@ void csp_conn_check_timeouts(void) {
 #ifdef CSP_USE_RDP
 	int i;
 	for (i = 0; i < CSP_CONN_MAX; i++)
-		if (arr_conn[i].state == CONN_OPEN)
-			if (arr_conn[i].idin.flags & CSP_FRDP)
-				csp_rdp_check_timeouts(&arr_conn[i]);
+	if (arr_conn[i].state == CONN_OPEN)
+	if (arr_conn[i].idin.flags & CSP_FRDP)
+	csp_rdp_check_timeouts(&arr_conn[i]);
 #endif
 }
 
@@ -91,14 +91,15 @@ int csp_conn_enqueue_packet(csp_conn_t * conn, csp_packet_t * packet) {
 		return CSP_ERR_INVAL;
 
 	int rxq;
-	if (packet != NULL) {
+	if (packet != NULL ) {
 		rxq = csp_conn_get_rxq(packet->id.pri);
 	} else {
 		rxq = CSP_RX_QUEUES - 1;
 	}
 
 	if (csp_queue_enqueue(conn->rx_queue[rxq], &packet, 0) != CSP_QUEUE_OK) {
-		csp_log_error("RX queue %p full with %u items", conn->rx_queue[rxq], csp_queue_size(conn->rx_queue[rxq]));
+		csp_log_error("RX queue %p full with %u items", conn->rx_queue[rxq],
+				csp_queue_size(conn->rx_queue[rxq]));
 		return CSP_ERR_NOMEM;
 	}
 
@@ -117,7 +118,8 @@ int csp_conn_init(void) {
 
 	/* Initialize source port */
 	srand(csp_get_ms());
-	sport = (rand() % (CSP_ID_PORT_MAX - CSP_MAX_BIND_PORT)) + (CSP_MAX_BIND_PORT + 1);
+	sport = (rand() % (CSP_ID_PORT_MAX - CSP_MAX_BIND_PORT))
+			+ (CSP_MAX_BIND_PORT + 1);
 
 	if (csp_bin_sem_create(&sport_lock) != CSP_SEMAPHORE_OK) {
 		csp_log_error("No more memory for sport semaphore");
@@ -127,7 +129,8 @@ int csp_conn_init(void) {
 	int i, prio;
 	for (i = 0; i < CSP_CONN_MAX; i++) {
 		for (prio = 0; prio < CSP_RX_QUEUES; prio++)
-			arr_conn[i].rx_queue[prio] = csp_queue_create(CSP_RX_QUEUE_LENGTH, sizeof(csp_packet_t *));
+			arr_conn[i].rx_queue[prio] = csp_queue_create(CSP_RX_QUEUE_LENGTH,
+					sizeof(csp_packet_t *));
 
 #ifdef CSP_USE_QOS
 		arr_conn[i].rx_event = csp_queue_create(CSP_CONN_QUEUE_LENGTH, sizeof(int));
@@ -164,11 +167,12 @@ csp_conn_t * csp_conn_find(uint32_t id, uint32_t mask) {
 
 	for (i = 0; i < CSP_CONN_MAX; i++) {
 		conn = &arr_conn[i];
-		if ((conn->state != CONN_CLOSED) && (conn->type == CONN_CLIENT) && (conn->idin.ext & mask) == (id & mask))
+		if ((conn->state != CONN_CLOSED) && (conn->type == CONN_CLIENT)
+				&& (conn->idin.ext & mask) == (id & mask))
 			return conn;
 	}
-	
-	return NULL;
+
+	return NULL ;
 
 }
 
@@ -180,8 +184,9 @@ int csp_conn_flush_rx_queue(csp_conn_t * conn) {
 
 	/* Flush packet queues */
 	for (prio = 0; prio < CSP_RX_QUEUES; prio++) {
-		while (csp_queue_dequeue(conn->rx_queue[prio], &packet, 0) == CSP_QUEUE_OK)
-			if (packet != NULL)
+		while (csp_queue_dequeue(conn->rx_queue[prio], &packet, 0)
+				== CSP_QUEUE_OK)
+			if (packet != NULL )
 				csp_buffer_free(packet);
 	}
 
@@ -203,7 +208,7 @@ csp_conn_t * csp_conn_allocate(csp_conn_type_t type) {
 
 	if (csp_bin_sem_wait(&conn_lock, 100) != CSP_SEMAPHORE_OK) {
 		csp_log_error("Failed to lock conn array");
-		return NULL;
+		return NULL ;
 	}
 
 	/* Search for free connection */
@@ -220,7 +225,7 @@ csp_conn_t * csp_conn_allocate(csp_conn_type_t type) {
 	if (conn->state == CONN_OPEN) {
 		csp_log_error("No more free connections");
 		csp_bin_sem_post(&conn_lock);
-		return NULL;
+		return NULL ;
 	}
 
 	conn->state = CONN_OPEN;
@@ -255,7 +260,7 @@ csp_conn_t * csp_conn_new(csp_id_t idin, csp_id_t idout) {
 
 int csp_close(csp_conn_t * conn) {
 
-	if (conn == NULL) {
+	if (conn == NULL ) {
 		csp_log_error("NULL Pointer given to csp_close");
 		return CSP_ERR_INVAL;
 	}
@@ -268,8 +273,8 @@ int csp_close(csp_conn_t * conn) {
 #ifdef CSP_USE_RDP
 	/* Ensure RDP knows this connection is closing */
 	if (conn->idin.flags & CSP_FRDP || conn->idout.flags & CSP_FRDP)
-		if (csp_rdp_close(conn) == CSP_ERR_AGAIN)
-			return CSP_ERR_NONE;
+	if (csp_rdp_close(conn) == CSP_ERR_AGAIN)
+	return CSP_ERR_NONE;
 #endif
 
 	/* Lock connection array while closing connection */
@@ -287,7 +292,7 @@ int csp_close(csp_conn_t * conn) {
 	/* Reset RDP state */
 #ifdef CSP_USE_RDP
 	if (conn->idin.flags & CSP_FRDP)
-		csp_rdp_flush_all(conn);
+	csp_rdp_flush_all(conn);
 #endif
 
 	/* Unlock connection array */
@@ -296,7 +301,8 @@ int csp_close(csp_conn_t * conn) {
 	return CSP_ERR_NONE;
 }
 
-csp_conn_t * csp_connect(uint8_t prio, uint8_t dest, uint8_t dport, uint32_t timeout, uint32_t opts) {
+csp_conn_t * csp_connect(uint8_t prio, uint8_t dest, uint8_t dport,
+		uint32_t timeout, uint32_t opts) {
 
 	/* Force options on all connections */
 	opts |= CSP_CONNECTION_SO;
@@ -320,8 +326,9 @@ csp_conn_t * csp_connect(uint8_t prio, uint8_t dest, uint8_t dport, uint32_t tim
 		incoming_id.flags |= CSP_FRDP;
 		outgoing_id.flags |= CSP_FRDP;
 #else
-		csp_log_error("Attempt to create RDP connection, but CSP was compiled without RDP support");
-		return NULL;
+		csp_log_error(
+				"Attempt to create RDP connection, but CSP was compiled without RDP support");
+		return NULL ;
 #endif
 	}
 
@@ -330,8 +337,9 @@ csp_conn_t * csp_connect(uint8_t prio, uint8_t dest, uint8_t dport, uint32_t tim
 		outgoing_id.flags |= CSP_FHMAC;
 		incoming_id.flags |= CSP_FHMAC;
 #else
-		csp_log_error("Attempt to create HMAC authenticated connection, but CSP was compiled without HMAC support");
-		return NULL;
+		csp_log_error(
+				"Attempt to create HMAC authenticated connection, but CSP was compiled without HMAC support");
+		return NULL ;
 #endif
 	}
 
@@ -340,8 +348,9 @@ csp_conn_t * csp_connect(uint8_t prio, uint8_t dest, uint8_t dport, uint32_t tim
 		outgoing_id.flags |= CSP_FXTEA;
 		incoming_id.flags |= CSP_FXTEA;
 #else
-		csp_log_error("Attempt to create XTEA encrypted connection, but CSP was compiled without XTEA support");
-		return NULL;
+		csp_log_error(
+				"Attempt to create XTEA encrypted connection, but CSP was compiled without XTEA support");
+		return NULL ;
 #endif
 	}
 
@@ -350,17 +359,18 @@ csp_conn_t * csp_connect(uint8_t prio, uint8_t dest, uint8_t dport, uint32_t tim
 		outgoing_id.flags |= CSP_FCRC32;
 		incoming_id.flags |= CSP_FCRC32;
 #else
-		csp_log_error("Attempt to create CRC32 validated connection, but CSP was compiled without CRC32 support");
-		return NULL;
+		csp_log_error(
+				"Attempt to create CRC32 validated connection, but CSP was compiled without CRC32 support");
+		return NULL ;
 #endif
 	}
-	
+
 	/* Find an unused ephemeral port */
 	csp_conn_t * conn;
 
 	/* Wait for sport lock */
 	if (csp_bin_sem_wait(&sport_lock, 1000) != CSP_SEMAPHORE_OK)
-		return NULL;
+		return NULL ;
 
 	uint8_t start = sport;
 	while (++sport != start) {
@@ -369,12 +379,12 @@ csp_conn_t * csp_connect(uint8_t prio, uint8_t dest, uint8_t dport, uint32_t tim
 
 		outgoing_id.sport = sport;
 		incoming_id.dport = sport;
-		
+
 		/* Match on destination port of _incoming_ identifier */
 		conn = csp_conn_find(incoming_id.ext, CSP_ID_DPORT_MASK);
 
 		/* Break if we found an unused ephemeral port */
-		if (conn == NULL)
+		if (conn == NULL )
 			break;
 	}
 
@@ -383,12 +393,12 @@ csp_conn_t * csp_connect(uint8_t prio, uint8_t dest, uint8_t dport, uint32_t tim
 
 	/* If no available ephemeral port was found */
 	if (sport == start)
-		return NULL;
+		return NULL ;
 
 	/* Get storage for new connection */
 	conn = csp_conn_new(incoming_id, outgoing_id);
-	if (conn == NULL)
-		return NULL;
+	if (conn == NULL )
+		return NULL ;
 
 	/* Set connection options */
 	conn->opts = opts;
@@ -448,12 +458,12 @@ void csp_conn_print_table(void) {
 
 	for (i = 0; i < CSP_CONN_MAX; i++) {
 		conn = &arr_conn[i];
-		printf("[%02u %p] S:%u, %u -> %u, %u -> %u, sock: %p\n",
-				i, conn, conn->state, conn->idin.src, conn->idin.dst,
-				conn->idin.dport, conn->idin.sport, conn->socket);
+		printf("[%02u %p] S:%u, %u -> %u, %u -> %u, sock: %p\n", i, conn,
+				conn->state, conn->idin.src, conn->idin.dst, conn->idin.dport,
+				conn->idin.sport, conn->socket);
 #ifdef CSP_USE_RDP
 		if (conn->idin.flags & CSP_FRDP)
-			csp_rdp_conn_print(conn);
+		csp_rdp_conn_print(conn);
 #endif
 	}
 }
@@ -470,9 +480,10 @@ int csp_conn_print_table_str(char * str_buf, int str_size) {
 
 	for (i = start; i < CSP_CONN_MAX; i++) {
 		conn = &arr_conn[i];
-		snprintf(buf, sizeof(buf), "[%02u %p] S:%u, %u -> %u, %u -> %u, sock: %p\n",
-				i, conn, conn->state, conn->idin.src, conn->idin.dst,
-				conn->idin.dport, conn->idin.sport, conn->socket);
+		snprintf(buf, sizeof(buf),
+				"[%02u %p] S:%u, %u -> %u, %u -> %u, sock: %p\n", i, conn,
+				conn->state, conn->idin.src, conn->idin.dst, conn->idin.dport,
+				conn->idin.sport, conn->socket);
 
 		strncat(str_buf, buf, str_size);
 		if ((str_size -= strlen(buf)) <= 0)

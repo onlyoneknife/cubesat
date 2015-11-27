@@ -31,7 +31,6 @@
  *
  ******************************************************************************/
 
-
 #include "em_leuart.h"
 #if defined(LEUART_COUNT) && (LEUART_COUNT > 0)
 
@@ -55,7 +54,6 @@
  ******************************************************************************/
 
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
-
 
 /** Validation of LEUART register block pointer reference
  *  for assert statements. */
@@ -85,20 +83,18 @@
  * @param[in] mask
  *   Bitmask corresponding to SYNCBUSY register defined bits, indicating
  *   registers that must complete any ongoing synchronization.
- ******************************************************************************/
-__STATIC_INLINE void LEUART_Sync(LEUART_TypeDef *leuart, uint32_t mask)
-{
-  /* Avoid deadlock if modifying the same register twice when freeze mode is */
-  /* activated. */
-  if (leuart->FREEZE & LEUART_FREEZE_REGFREEZE)
-  {
-    return;
-  }
+ ******************************************************************************/__STATIC_INLINE void LEUART_Sync(
+		LEUART_TypeDef *leuart, uint32_t mask) {
+	/* Avoid deadlock if modifying the same register twice when freeze mode is */
+	/* activated. */
+	if (leuart->FREEZE & LEUART_FREEZE_REGFREEZE) {
+		return;
+	}
 
-  /* Wait for any pending previous write operation to have been completed */
-  /* in low frequency domain */
-  while (leuart->SYNCBUSY & mask)
-    ;
+	/* Wait for any pending previous write operation to have been completed */
+	/* in low frequency domain */
+	while (leuart->SYNCBUSY & mask)
+		;
 }
 
 /** @endcond */
@@ -127,70 +123,68 @@ __STATIC_INLINE void LEUART_Sync(LEUART_TypeDef *leuart, uint32_t mask)
  * @return
  *   Baudrate with given settings.
  ******************************************************************************/
-uint32_t LEUART_BaudrateCalc(uint32_t refFreq, uint32_t clkdiv)
-{
-  uint32_t divisor;
-  uint32_t remainder;
-  uint32_t quotient;
-  uint32_t br;
+uint32_t LEUART_BaudrateCalc(uint32_t refFreq, uint32_t clkdiv) {
+	uint32_t divisor;
+	uint32_t remainder;
+	uint32_t quotient;
+	uint32_t br;
 
-  /* Mask out unused bits */
-  clkdiv &= _LEUART_CLKDIV_MASK;
+	/* Mask out unused bits */
+	clkdiv &= _LEUART_CLKDIV_MASK;
 
-  /* We want to use integer division to avoid forcing in float division */
-  /* utils, and yet keep rounding effect errors to a minimum. */
+	/* We want to use integer division to avoid forcing in float division */
+	/* utils, and yet keep rounding effect errors to a minimum. */
 
-  /*
-   * Baudrate is given by:
-   *
-   * br = fLEUARTn/(1 + (CLKDIV / 256))
-   *
-   * which can be rewritten to
-   *
-   * br = (256 * fLEUARTn)/(256 + CLKDIV)
-   *
-   * Normally, with fLEUARTn appr 32768Hz, there is no problem with overflow
-   * if using 32 bit arithmetic. However, since fLEUARTn may be derived from
-   * HFCORECLK as well, we must consider overflow when using integer arithmetic.
-   */
+	/*
+	 * Baudrate is given by:
+	 *
+	 * br = fLEUARTn/(1 + (CLKDIV / 256))
+	 *
+	 * which can be rewritten to
+	 *
+	 * br = (256 * fLEUARTn)/(256 + CLKDIV)
+	 *
+	 * Normally, with fLEUARTn appr 32768Hz, there is no problem with overflow
+	 * if using 32 bit arithmetic. However, since fLEUARTn may be derived from
+	 * HFCORECLK as well, we must consider overflow when using integer arithmetic.
+	 */
 
-  /*
-   * The basic problem with integer division in the above formula is that
-   * the dividend (256 * fLEUARTn) may become higher than max 32 bit
-   * integer. Yet we want to evaluate dividend first before dividing in
-   * order to get as small rounding effects as possible. We do not want
-   * to make too harsh restrictions on max fLEUARTn value either.
-   *
-   * For division a/b, we can write
-   *
-   * a = qb + r
-   *
-   * where q is the quotient and r is the remainder, both integers.
-   *
-   * The orignal baudrate formula can be rewritten as
-   *
-   * br = 256a / b = 256(qb + r)/b = 256q + 256r/b
-   *
-   * where a is 'refFreq' and b is 'divisor', referring to variable names.
-   */
+	/*
+	 * The basic problem with integer division in the above formula is that
+	 * the dividend (256 * fLEUARTn) may become higher than max 32 bit
+	 * integer. Yet we want to evaluate dividend first before dividing in
+	 * order to get as small rounding effects as possible. We do not want
+	 * to make too harsh restrictions on max fLEUARTn value either.
+	 *
+	 * For division a/b, we can write
+	 *
+	 * a = qb + r
+	 *
+	 * where q is the quotient and r is the remainder, both integers.
+	 *
+	 * The orignal baudrate formula can be rewritten as
+	 *
+	 * br = 256a / b = 256(qb + r)/b = 256q + 256r/b
+	 *
+	 * where a is 'refFreq' and b is 'divisor', referring to variable names.
+	 */
 
-  divisor = 256 + clkdiv;
+	divisor = 256 + clkdiv;
 
-  quotient  = refFreq / divisor;
-  remainder = refFreq % divisor;
+	quotient = refFreq / divisor;
+	remainder = refFreq % divisor;
 
-  /* Since divisor >= 256, the below cannot exceed max 32 bit value. */
-  br = 256 * quotient;
+	/* Since divisor >= 256, the below cannot exceed max 32 bit value. */
+	br = 256 * quotient;
 
-  /*
-   * Remainder < (256 + clkdiv), which means dividend (256 * remainder) worst case is
-   * 256*(256 + 0x7ff8) = 0x80F800.
-   */
-  br += (256 * remainder) / divisor;
+	/*
+	 * Remainder < (256 + clkdiv), which means dividend (256 * remainder) worst case is
+	 * 256*(256 + 0x7ff8) = 0x80F800.
+	 */
+	br += (256 * remainder) / divisor;
 
-  return br;
+	return br;
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -206,33 +200,28 @@ uint32_t LEUART_BaudrateCalc(uint32_t refFreq, uint32_t clkdiv)
  * @return
  *   Current baudrate.
  ******************************************************************************/
-uint32_t LEUART_BaudrateGet(LEUART_TypeDef *leuart)
-{
-  uint32_t          freq;
-  CMU_Clock_TypeDef clock;
+uint32_t LEUART_BaudrateGet(LEUART_TypeDef *leuart) {
+	uint32_t freq;
+	CMU_Clock_TypeDef clock;
 
-  /* Get current frequency */
-  if (leuart == LEUART0)
-  {
-    clock = cmuClock_LEUART0;
-  }
+	/* Get current frequency */
+	if (leuart == LEUART0 ) {
+		clock = cmuClock_LEUART0;
+	}
 #if (LEUART_COUNT > 1)
-  else if (leuart == LEUART1)
-  {
-    clock = cmuClock_LEUART1;
-  }
+	else if (leuart == LEUART1 ) {
+		clock = cmuClock_LEUART1;
+	}
 #endif
-  else
-  {
-    EFM_ASSERT(0);
-    return 0;
-  }
+	else {
+		EFM_ASSERT(0);
+		return 0;
+	}
 
-  freq = CMU_ClockFreqGet(clock);
+	freq = CMU_ClockFreqGet(clock);
 
-  return LEUART_BaudrateCalc(freq, leuart->CLKDIV);
+	return LEUART_BaudrateCalc(freq, leuart->CLKDIV);
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -254,82 +243,75 @@ uint32_t LEUART_BaudrateGet(LEUART_TypeDef *leuart)
  * @param[in] baudrate
  *   Baudrate to try to achieve for LEUART.
  ******************************************************************************/
-void LEUART_BaudrateSet(LEUART_TypeDef *leuart,
-                        uint32_t refFreq,
-                        uint32_t baudrate)
-{
-  uint32_t          clkdiv;
-  CMU_Clock_TypeDef clock;
+void LEUART_BaudrateSet(LEUART_TypeDef *leuart, uint32_t refFreq,
+		uint32_t baudrate) {
+	uint32_t clkdiv;
+	CMU_Clock_TypeDef clock;
 
-  /* Inhibit divide by 0 */
-  EFM_ASSERT(baudrate);
+	/* Inhibit divide by 0 */
+	EFM_ASSERT(baudrate);
 
-  /*
-   * We want to use integer division to avoid forcing in float division
-   * utils, and yet keep rounding effect errors to a minimum.
-   *
-   * CLKDIV in asynchronous mode is given by:
-   *
-   * CLKDIV = 256*(fLEUARTn/br - 1) = ((256*fLEUARTn)/br) - 256
-   *
-   * Normally, with fLEUARTn appr 32768Hz, there is no problem with overflow
-   * if using 32 bit arithmetic. However, since fLEUARTn may be derived from
-   * HFCORECLK as well, we must consider overflow when using integer arithmetic.
-   *
-   * The basic problem with integer division in the above formula is that
-   * the dividend (256 * fLEUARTn) may become higher than max 32 bit
-   * integer. Yet, we want to evaluate dividend first before dividing in
-   * order to get as small rounding effects as possible. We do not want
-   * to make too harsh restrictions on max fLEUARTn value either.
-   *
-   * Since the last 3 bits of CLKDIV are don't care, we can base our
-   * integer arithmetic on the below formula
-   *
-   * CLKDIV/8 = ((32*fLEUARTn)/br) - 32
-   *
-   * and calculate 1/8 of CLKDIV first. This allows for fLEUARTn
-   * up to 128MHz without overflowing a 32 bit value!
-   */
+	/*
+	 * We want to use integer division to avoid forcing in float division
+	 * utils, and yet keep rounding effect errors to a minimum.
+	 *
+	 * CLKDIV in asynchronous mode is given by:
+	 *
+	 * CLKDIV = 256*(fLEUARTn/br - 1) = ((256*fLEUARTn)/br) - 256
+	 *
+	 * Normally, with fLEUARTn appr 32768Hz, there is no problem with overflow
+	 * if using 32 bit arithmetic. However, since fLEUARTn may be derived from
+	 * HFCORECLK as well, we must consider overflow when using integer arithmetic.
+	 *
+	 * The basic problem with integer division in the above formula is that
+	 * the dividend (256 * fLEUARTn) may become higher than max 32 bit
+	 * integer. Yet, we want to evaluate dividend first before dividing in
+	 * order to get as small rounding effects as possible. We do not want
+	 * to make too harsh restrictions on max fLEUARTn value either.
+	 *
+	 * Since the last 3 bits of CLKDIV are don't care, we can base our
+	 * integer arithmetic on the below formula
+	 *
+	 * CLKDIV/8 = ((32*fLEUARTn)/br) - 32
+	 *
+	 * and calculate 1/8 of CLKDIV first. This allows for fLEUARTn
+	 * up to 128MHz without overflowing a 32 bit value!
+	 */
 
-  /* Get current frequency? */
-  if (!refFreq)
-  {
-    if (leuart == LEUART0)
-    {
-      clock = cmuClock_LEUART0;
-    }
+	/* Get current frequency? */
+	if (!refFreq) {
+		if (leuart == LEUART0 ) {
+			clock = cmuClock_LEUART0;
+		}
 #if (LEUART_COUNT > 1)
-    else if (leuart == LEUART1)
-    {
-      clock = cmuClock_LEUART1;
-    }
+		else if (leuart == LEUART1 ) {
+			clock = cmuClock_LEUART1;
+		}
 #endif
-    else
-    {
-      EFM_ASSERT(0);
-      return;
-    }
+		else {
+			EFM_ASSERT(0);
+			return;
+		}
 
-    refFreq = CMU_ClockFreqGet(clock);
-  }
+		refFreq = CMU_ClockFreqGet(clock);
+	}
 
-  /* Calculate and set CLKDIV with fractional bits */
-  clkdiv  = (32 * refFreq) / baudrate;
-  clkdiv -= 32;
-  clkdiv *= 8;
+	/* Calculate and set CLKDIV with fractional bits */
+	clkdiv = (32 * refFreq) / baudrate;
+	clkdiv -= 32;
+	clkdiv *= 8;
 
-  /* Verify that resulting clock divider is within limits */
-  EFM_ASSERT(clkdiv <= _LEUART_CLKDIV_MASK);
+	/* Verify that resulting clock divider is within limits */
+	EFM_ASSERT(clkdiv <= _LEUART_CLKDIV_MASK);
 
-  /* If EFM_ASSERT is not enabled, make sure we don't write to reserved bits */
-  clkdiv &= _LEUART_CLKDIV_MASK;
+	/* If EFM_ASSERT is not enabled, make sure we don't write to reserved bits */
+	clkdiv &= _LEUART_CLKDIV_MASK;
 
-  /* LF register about to be modified require sync. busy check */
-  LEUART_Sync(leuart, LEUART_SYNCBUSY_CLKDIV);
+	/* LF register about to be modified require sync. busy check */
+	LEUART_Sync(leuart, LEUART_SYNCBUSY_CLKDIV);
 
-  leuart->CLKDIV = clkdiv;
+	leuart->CLKDIV = clkdiv;
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -351,26 +333,24 @@ void LEUART_BaudrateSet(LEUART_TypeDef *leuart,
  * @param[in] enable
  *   Select status for receiver/transmitter.
  ******************************************************************************/
-void LEUART_Enable(LEUART_TypeDef *leuart, LEUART_Enable_TypeDef enable)
-{
-  uint32_t tmp;
+void LEUART_Enable(LEUART_TypeDef *leuart, LEUART_Enable_TypeDef enable) {
+	uint32_t tmp;
 
-  /* Make sure the module exists on the selected chip */
-  EFM_ASSERT(LEUART_REF_VALID(leuart));
+	/* Make sure the module exists on the selected chip */
+	EFM_ASSERT(LEUART_REF_VALID(leuart));
 
-  /* Disable as specified */
-  tmp   = ~((uint32_t)(enable));
-  tmp  &= (_LEUART_CMD_RXEN_MASK | _LEUART_CMD_TXEN_MASK);
-  tmp <<= 1;
-  /* Enable as specified */
-  tmp |= (uint32_t)(enable);
+	/* Disable as specified */
+	tmp = ~((uint32_t) (enable));
+	tmp &= (_LEUART_CMD_RXEN_MASK | _LEUART_CMD_TXEN_MASK);
+	tmp <<= 1;
+	/* Enable as specified */
+	tmp |= (uint32_t) (enable);
 
-  /* LF register about to be modified require sync. busy check */
-  LEUART_Sync(leuart, LEUART_SYNCBUSY_CMD);
+	/* LF register about to be modified require sync. busy check */
+	LEUART_Sync(leuart, LEUART_SYNCBUSY_CMD);
 
-  leuart->CMD = tmp;
+	leuart->CMD = tmp;
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -399,30 +379,25 @@ void LEUART_Enable(LEUART_TypeDef *leuart, LEUART_Enable_TypeDef enable)
  *   @li false - disables freeze, modified registers are propagated to LF
  *       domain
  ******************************************************************************/
-void LEUART_FreezeEnable(LEUART_TypeDef *leuart, bool enable)
-{
-  if (enable)
-  {
-    /*
-     * Wait for any ongoing LF synchronization to complete. This is just to
-     * protect against the rare case when a user
-     * - modifies a register requiring LF sync
-     * - then enables freeze before LF sync completed
-     * - then modifies the same register again
-     * since modifying a register while it is in sync progress should be
-     * avoided.
-     */
-    while (leuart->SYNCBUSY)
-      ;
+void LEUART_FreezeEnable(LEUART_TypeDef *leuart, bool enable) {
+	if (enable) {
+		/*
+		 * Wait for any ongoing LF synchronization to complete. This is just to
+		 * protect against the rare case when a user
+		 * - modifies a register requiring LF sync
+		 * - then enables freeze before LF sync completed
+		 * - then modifies the same register again
+		 * since modifying a register while it is in sync progress should be
+		 * avoided.
+		 */
+		while (leuart->SYNCBUSY)
+			;
 
-    leuart->FREEZE = LEUART_FREEZE_REGFREEZE;
-  }
-  else
-  {
-    leuart->FREEZE = 0;
-  }
+		leuart->FREEZE = LEUART_FREEZE_REGFREEZE;
+	} else {
+		leuart->FREEZE = 0;
+	}
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -455,37 +430,34 @@ void LEUART_FreezeEnable(LEUART_TypeDef *leuart, bool enable)
  * @param[in] init
  *   Pointer to initialization structure used to configure basic async setup.
  ******************************************************************************/
-void LEUART_Init(LEUART_TypeDef *leuart, LEUART_Init_TypeDef const *init)
-{
-  /* Make sure the module exists on the selected chip */
-  EFM_ASSERT(LEUART_REF_VALID(leuart));
+void LEUART_Init(LEUART_TypeDef *leuart, LEUART_Init_TypeDef const *init) {
+	/* Make sure the module exists on the selected chip */
+	EFM_ASSERT(LEUART_REF_VALID(leuart));
 
-  /* LF register about to be modified require sync. busy check */
-  LEUART_Sync(leuart, LEUART_SYNCBUSY_CMD);
+	/* LF register about to be modified require sync. busy check */
+	LEUART_Sync(leuart, LEUART_SYNCBUSY_CMD);
 
-  /* Ensure disabled while doing config */
-  leuart->CMD = LEUART_CMD_RXDIS | LEUART_CMD_TXDIS;
+	/* Ensure disabled while doing config */
+	leuart->CMD = LEUART_CMD_RXDIS | LEUART_CMD_TXDIS;
 
-  /* Freeze registers to avoid stalling for LF synchronization */
-  LEUART_FreezeEnable(leuart, true);
+	/* Freeze registers to avoid stalling for LF synchronization */
+	LEUART_FreezeEnable(leuart, true);
 
-  /* Configure databits and stopbits */
-  leuart->CTRL = (leuart->CTRL & ~(_LEUART_CTRL_PARITY_MASK |
-                                   _LEUART_CTRL_STOPBITS_MASK)) |
-                 (uint32_t)(init->databits) |
-                 (uint32_t)(init->parity) |
-                 (uint32_t)(init->stopbits);
+	/* Configure databits and stopbits */
+	leuart->CTRL = (leuart->CTRL
+			& ~(_LEUART_CTRL_PARITY_MASK | _LEUART_CTRL_STOPBITS_MASK))
+			| (uint32_t) (init->databits) | (uint32_t) (init->parity)
+			| (uint32_t) (init->stopbits);
 
-  /* Configure baudrate */
-  LEUART_BaudrateSet(leuart, init->refFreq, init->baudrate);
+	/* Configure baudrate */
+	LEUART_BaudrateSet(leuart, init->refFreq, init->baudrate);
 
-  /* Finally enable (as specified) */
-  leuart->CMD = (uint32_t)(init->enable);
+	/* Finally enable (as specified) */
+	leuart->CMD = (uint32_t) (init->enable);
 
-  /* Unfreeze registers, pass new settings on to LEUART */
-  LEUART_FreezeEnable(leuart, false);
+	/* Unfreeze registers, pass new settings on to LEUART */
+	LEUART_FreezeEnable(leuart, false);
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -494,30 +466,28 @@ void LEUART_Init(LEUART_TypeDef *leuart, LEUART_Init_TypeDef const *init)
  * @param[in] leuart
  *   Pointer to LEUART peripheral register block.
  ******************************************************************************/
-void LEUART_Reset(LEUART_TypeDef *leuart)
-{
-  /* Make sure the module exists on the selected chip */
-  EFM_ASSERT(LEUART_REF_VALID(leuart));
+void LEUART_Reset(LEUART_TypeDef *leuart) {
+	/* Make sure the module exists on the selected chip */
+	EFM_ASSERT(LEUART_REF_VALID(leuart));
 
-  /* Freeze registers to avoid stalling for LF synchronization */
-  LEUART_FreezeEnable(leuart, true);
+	/* Freeze registers to avoid stalling for LF synchronization */
+	LEUART_FreezeEnable(leuart, true);
 
-  /* Make sure disabled first, before resetting other registers */
-  leuart->CMD = LEUART_CMD_RXDIS | LEUART_CMD_TXDIS | LEUART_CMD_RXBLOCKDIS |
-                LEUART_CMD_CLEARTX | LEUART_CMD_CLEARRX;
-  leuart->CTRL       = _LEUART_CTRL_RESETVALUE;
-  leuart->CLKDIV     = _LEUART_CLKDIV_RESETVALUE;
-  leuart->STARTFRAME = _LEUART_STARTFRAME_RESETVALUE;
-  leuart->SIGFRAME   = _LEUART_SIGFRAME_RESETVALUE;
-  leuart->IEN        = _LEUART_IEN_RESETVALUE;
-  leuart->IFC        = _LEUART_IFC_MASK;
-  leuart->PULSECTRL  = _LEUART_PULSECTRL_RESETVALUE;
-  leuart->ROUTE      = _LEUART_ROUTE_RESETVALUE;
+	/* Make sure disabled first, before resetting other registers */
+	leuart->CMD = LEUART_CMD_RXDIS | LEUART_CMD_TXDIS | LEUART_CMD_RXBLOCKDIS
+			| LEUART_CMD_CLEARTX | LEUART_CMD_CLEARRX;
+	leuart->CTRL = _LEUART_CTRL_RESETVALUE;
+	leuart->CLKDIV = _LEUART_CLKDIV_RESETVALUE;
+	leuart->STARTFRAME = _LEUART_STARTFRAME_RESETVALUE;
+	leuart->SIGFRAME = _LEUART_SIGFRAME_RESETVALUE;
+	leuart->IEN = _LEUART_IEN_RESETVALUE;
+	leuart->IFC = _LEUART_IFC_MASK;
+	leuart->PULSECTRL = _LEUART_PULSECTRL_RESETVALUE;
+	leuart->ROUTE = _LEUART_ROUTE_RESETVALUE;
 
-  /* Unfreeze registers, pass new settings on to LEUART */
-  LEUART_FreezeEnable(leuart, false);
+	/* Unfreeze registers, pass new settings on to LEUART */
+	LEUART_FreezeEnable(leuart, false);
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -540,14 +510,12 @@ void LEUART_Reset(LEUART_TypeDef *leuart)
  * @return
  *   Data received.
  ******************************************************************************/
-uint8_t LEUART_Rx(LEUART_TypeDef *leuart)
-{
-  while (!(leuart->STATUS & LEUART_STATUS_RXDATAV))
-    ;
+uint8_t LEUART_Rx(LEUART_TypeDef *leuart) {
+	while (!(leuart->STATUS & LEUART_STATUS_RXDATAV))
+		;
 
-  return (uint8_t)(leuart->RXDATA);
+	return (uint8_t) (leuart->RXDATA);
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -566,14 +534,12 @@ uint8_t LEUART_Rx(LEUART_TypeDef *leuart)
  * @return
  *   Data received.
  ******************************************************************************/
-uint16_t LEUART_RxExt(LEUART_TypeDef *leuart)
-{
-  while (!(leuart->STATUS & LEUART_STATUS_RXDATAV))
-    ;
+uint16_t LEUART_RxExt(LEUART_TypeDef *leuart) {
+	while (!(leuart->STATUS & LEUART_STATUS_RXDATAV))
+		;
 
-  return (uint16_t)(leuart->RXDATAX);
+	return (uint16_t) (leuart->RXDATAX);
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -598,18 +564,16 @@ uint16_t LEUART_RxExt(LEUART_TypeDef *leuart)
  * @param[in] data
  *   Data to transmit. See details above for further info.
  ******************************************************************************/
-void LEUART_Tx(LEUART_TypeDef *leuart, uint8_t data)
-{
-  /* Check that transmit buffer is empty */
-  while (!(leuart->STATUS & LEUART_STATUS_TXBL))
-    ;
+void LEUART_Tx(LEUART_TypeDef *leuart, uint8_t data) {
+	/* Check that transmit buffer is empty */
+	while (!(leuart->STATUS & LEUART_STATUS_TXBL))
+		;
 
-  /* LF register about to be modified require sync. busy check */
-  LEUART_Sync(leuart, LEUART_SYNCBUSY_TXDATA);
+	/* LF register about to be modified require sync. busy check */
+	LEUART_Sync(leuart, LEUART_SYNCBUSY_TXDATA);
 
-  leuart->TXDATA = (uint32_t)data;
+	leuart->TXDATA = (uint32_t) data;
 }
-
 
 /***************************************************************************//**
  * @brief
@@ -630,16 +594,15 @@ void LEUART_Tx(LEUART_TypeDef *leuart, uint8_t data)
  *   frame bits, and additional control bits are available as documented in
  *   the EFM32 reference manual (set to 0 if not used).
  ******************************************************************************/
-void LEUART_TxExt(LEUART_TypeDef *leuart, uint16_t data)
-{
-  /* Check that transmit buffer is empty */
-  while (!(leuart->STATUS & LEUART_STATUS_TXBL))
-    ;
+void LEUART_TxExt(LEUART_TypeDef *leuart, uint16_t data) {
+	/* Check that transmit buffer is empty */
+	while (!(leuart->STATUS & LEUART_STATUS_TXBL))
+		;
 
-  /* LF register about to be modified require sync. busy check */
-  LEUART_Sync(leuart, LEUART_SYNCBUSY_TXDATAX);
+	/* LF register about to be modified require sync. busy check */
+	LEUART_Sync(leuart, LEUART_SYNCBUSY_TXDATAX);
 
-  leuart->TXDATAX = (uint32_t)data;
+	leuart->TXDATAX = (uint32_t) data;
 }
 
 /***************************************************************************//**
@@ -654,19 +617,15 @@ void LEUART_TxExt(LEUART_TypeDef *leuart, uint16_t data)
  *   false - disables functionality
  *
  ******************************************************************************/
-void LEUART_TxDmaInEM2Enable(LEUART_TypeDef *leuart, bool enable)
-{
-  /* LF register about to be modified require sync. busy check */
-  LEUART_Sync(leuart, LEUART_SYNCBUSY_CTRL);
+void LEUART_TxDmaInEM2Enable(LEUART_TypeDef *leuart, bool enable) {
+	/* LF register about to be modified require sync. busy check */
+	LEUART_Sync(leuart, LEUART_SYNCBUSY_CTRL);
 
-  if (enable)
-  {
-    leuart->CTRL |= LEUART_CTRL_TXDMAWU;
-  }
-  else
-  {
-    leuart->CTRL &= ~LEUART_CTRL_TXDMAWU;
-  }
+	if (enable) {
+		leuart->CTRL |= LEUART_CTRL_TXDMAWU;
+	} else {
+		leuart->CTRL &= ~LEUART_CTRL_TXDMAWU;
+	}
 }
 
 /***************************************************************************//**
@@ -681,21 +640,16 @@ void LEUART_TxDmaInEM2Enable(LEUART_TypeDef *leuart, bool enable)
  *   false - disables functionality
  *
  ******************************************************************************/
-void LEUART_RxDmaInEM2Enable(LEUART_TypeDef *leuart, bool enable)
-{
-  /* LF register about to be modified require sync. busy check */
-  LEUART_Sync(leuart, LEUART_SYNCBUSY_CTRL);
+void LEUART_RxDmaInEM2Enable(LEUART_TypeDef *leuart, bool enable) {
+	/* LF register about to be modified require sync. busy check */
+	LEUART_Sync(leuart, LEUART_SYNCBUSY_CTRL);
 
-  if (enable)
-  {
-    leuart->CTRL |= LEUART_CTRL_RXDMAWU;
-  }
-  else
-  {
-    leuart->CTRL &= ~LEUART_CTRL_RXDMAWU;
-  }
+	if (enable) {
+		leuart->CTRL |= LEUART_CTRL_RXDMAWU;
+	} else {
+		leuart->CTRL &= ~LEUART_CTRL_RXDMAWU;
+	}
 }
-
 
 /** @} (end addtogroup LEUART) */
 /** @} (end addtogroup EM_Library) */

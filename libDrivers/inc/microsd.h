@@ -13,7 +13,6 @@
  *
  ******************************************************************************/
 
-
 #ifndef __MICROSD_H
 #define __MICROSD_H
 
@@ -21,7 +20,6 @@
 #include "microsdconfig.h"
 #include "em_gpio.h"
 #include "integer.h"
-
 
 /***************************************************************************//**
  * @addtogroup Drivers
@@ -57,27 +55,26 @@ extern "C" {
 #define CMD55     (55)        /**< APP_CMD */
 #define CMD58     (58)        /**< READ_OCR */
 
+void MICROSD_Init(void);
+void MICROSD_Deinit(void);
 
-void      MICROSD_Init(void);
-void      MICROSD_Deinit(void);
+int MICROSD_Select(void);
+void MICROSD_Deselect(void);
 
-int       MICROSD_Select(void);
-void      MICROSD_Deselect(void);
+void MICROSD_PowerOn(void);
+void MICROSD_PowerOff(void);
 
-void      MICROSD_PowerOn(void);
-void      MICROSD_PowerOff(void);
+int MICROSD_BlockRx(uint8_t *buff, uint32_t btr);
+int MICROSD_BlockTx(const uint8_t *buff, uint8_t token);
 
-int       MICROSD_BlockRx(uint8_t *buff, uint32_t btr);
-int       MICROSD_BlockTx(const uint8_t *buff, uint8_t token);
+uint8_t MICROSD_SendCmd(uint8_t cmd, DWORD arg);
+uint8_t MICROSD_XferSpi(uint8_t data);
 
-uint8_t   MICROSD_SendCmd(uint8_t cmd, DWORD arg);
-uint8_t   MICROSD_XferSpi(uint8_t data);
+void MICROSD_SpiClkFast(void);
+void MICROSD_SpiClkSlow(void);
 
-void      MICROSD_SpiClkFast(void);
-void      MICROSD_SpiClkSlow(void);
-
-bool      MICROSD_TimeOutElapsed(void);
-void      MICROSD_TimeOutSet(uint32_t msec);
+bool MICROSD_TimeOutElapsed(void);
+void MICROSD_TimeOutSet(uint32_t msec);
 
 #ifdef __cplusplus
 }

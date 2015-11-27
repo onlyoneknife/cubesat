@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk) 
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk) 
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -30,7 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <csp/arch/csp_time.h>
 
-int csp_ping(uint8_t node, uint32_t timeout, unsigned int size, uint8_t conn_options) {
+int csp_ping(uint8_t node, uint32_t timeout, unsigned int size,
+		uint8_t conn_options) {
 
 	unsigned int i;
 	uint32_t start, time, status = 0;
@@ -39,14 +40,15 @@ int csp_ping(uint8_t node, uint32_t timeout, unsigned int size, uint8_t conn_opt
 	start = csp_get_ms();
 
 	/* Open connection */
-	csp_conn_t * conn = csp_connect(CSP_PRIO_NORM, node, CSP_PING, timeout, conn_options);
-	if (conn == NULL)
+	csp_conn_t * conn = csp_connect(CSP_PRIO_NORM, node, CSP_PING, timeout,
+			conn_options);
+	if (conn == NULL )
 		return -1;
 
 	/* Prepare data */
 	csp_packet_t * packet;
 	packet = csp_buffer_get(size);
-	if (packet == NULL)
+	if (packet == NULL )
 		goto out;
 
 	/* Set data to increasing numbers */
@@ -60,7 +62,7 @@ int csp_ping(uint8_t node, uint32_t timeout, unsigned int size, uint8_t conn_opt
 
 	/* Read incoming frame */
 	packet = csp_read(conn, timeout);
-	if (packet == NULL)
+	if (packet == NULL )
 		goto out;
 
 	/* Ensure that the data was actually echoed */
@@ -70,9 +72,9 @@ int csp_ping(uint8_t node, uint32_t timeout, unsigned int size, uint8_t conn_opt
 
 	status = 1;
 
-out:
+	out:
 	/* Clean up */
-	if (packet != NULL)
+	if (packet != NULL )
 		csp_buffer_free(packet);
 	csp_close(conn);
 
@@ -94,12 +96,12 @@ void csp_ping_noreply(uint8_t node) {
 	packet = csp_buffer_get(1);
 
 	/* Check malloc */
-	if (packet == NULL)
+	if (packet == NULL )
 		return;
 
 	/* Open connection */
 	csp_conn_t * conn = csp_connect(CSP_PRIO_NORM, node, CSP_PING, 0, 0);
-	if (conn == NULL) {
+	if (conn == NULL ) {
 		csp_buffer_free(packet);
 		return;
 	}
@@ -119,19 +121,21 @@ void csp_ping_noreply(uint8_t node) {
 
 void csp_reboot(uint8_t node) {
 	uint32_t magic_word = csp_hton32(CSP_REBOOT_MAGIC);
-	csp_transaction(CSP_PRIO_NORM, node, CSP_REBOOT, 0, &magic_word, sizeof(magic_word), NULL, 0);
+	csp_transaction(CSP_PRIO_NORM, node, CSP_REBOOT, 0, &magic_word,
+			sizeof(magic_word), NULL, 0);
 }
 
 void csp_shutdown(uint8_t node) {
 	uint32_t magic_word = csp_hton32(CSP_REBOOT_SHUTDOWN_MAGIC);
-	csp_transaction(CSP_PRIO_NORM, node, CSP_REBOOT, 0, &magic_word, sizeof(magic_word), NULL, 0);
+	csp_transaction(CSP_PRIO_NORM, node, CSP_REBOOT, 0, &magic_word,
+			sizeof(magic_word), NULL, 0);
 }
 
 void csp_ps(uint8_t node, uint32_t timeout) {
 
 	/* Open connection */
 	csp_conn_t * conn = csp_connect(CSP_PRIO_NORM, node, CSP_PS, 0, 0);
-	if (conn == NULL)
+	if (conn == NULL )
 		return;
 
 	/* Prepare data */
@@ -139,7 +143,7 @@ void csp_ps(uint8_t node, uint32_t timeout) {
 	packet = csp_buffer_get(95);
 
 	/* Check malloc */
-	if (packet == NULL)
+	if (packet == NULL )
 		goto out;
 
 	packet->data[0] = 0x55;
@@ -151,11 +155,11 @@ void csp_ps(uint8_t node, uint32_t timeout) {
 	if (!csp_send(conn, packet, 0))
 		goto out;
 
-	while(1) {
+	while (1) {
 
 		/* Read incoming frame */
 		packet = csp_read(conn, timeout);
-		if (packet == NULL)
+		if (packet == NULL )
 			break;
 
 		/* We have a reply, add our own NULL char */
@@ -167,8 +171,7 @@ void csp_ps(uint8_t node, uint32_t timeout) {
 	printf("\r\n");
 
 	/* Clean up */
-out:
-	if (packet != NULL)
+	out: if (packet != NULL )
 		csp_buffer_free(packet);
 	csp_close(conn);
 
@@ -178,7 +181,8 @@ void csp_memfree(uint8_t node, uint32_t timeout) {
 
 	uint32_t memfree;
 
-	int status = csp_transaction(CSP_PRIO_NORM, node, CSP_MEMFREE, timeout, NULL, 0, &memfree, sizeof(memfree));
+	int status = csp_transaction(CSP_PRIO_NORM, node, CSP_MEMFREE, timeout,
+			NULL, 0, &memfree, sizeof(memfree));
 	if (status == 0) {
 		printf("Network error\r\n");
 		return;
@@ -187,7 +191,8 @@ void csp_memfree(uint8_t node, uint32_t timeout) {
 	/* Convert from network to host order */
 	memfree = csp_ntoh32(memfree);
 
-	printf("Free Memory at node %"PRIu8" is %"PRIu32" bytes\r\n", node, memfree);
+	printf("Free Memory at node %"PRIu8" is %"PRIu32" bytes\r\n", node,
+			memfree);
 
 }
 
@@ -195,7 +200,8 @@ void csp_buf_free(uint8_t node, uint32_t timeout) {
 
 	uint32_t size = 0;
 
-	int status = csp_transaction(CSP_PRIO_NORM, node, CSP_BUF_FREE, timeout, NULL, 0, &size, sizeof(size));
+	int status = csp_transaction(CSP_PRIO_NORM, node, CSP_BUF_FREE, timeout,
+			NULL, 0, &size, sizeof(size));
 	if (status == 0) {
 		printf("Network error\r\n");
 		return;
@@ -209,7 +215,8 @@ void csp_uptime(uint8_t node, uint32_t timeout) {
 
 	uint32_t uptime = 0;
 
-	int status = csp_transaction(CSP_PRIO_NORM, node, CSP_UPTIME, timeout, NULL, 0, &uptime, sizeof(uptime));
+	int status = csp_transaction(CSP_PRIO_NORM, node, CSP_UPTIME, timeout, NULL,
+			0, &uptime, sizeof(uptime));
 	if (status == 0) {
 		printf("Network error\r\n");
 		return;
@@ -219,10 +226,12 @@ void csp_uptime(uint8_t node, uint32_t timeout) {
 
 }
 
-int csp_cmp(uint8_t node, uint32_t timeout, uint8_t code, int membsize, struct csp_cmp_message * msg) {
+int csp_cmp(uint8_t node, uint32_t timeout, uint8_t code, int membsize,
+		struct csp_cmp_message * msg) {
 	msg->type = CSP_CMP_REQUEST;
 	msg->code = code;
-	int status = csp_transaction(CSP_PRIO_NORM, node, CSP_CMP, timeout, msg, membsize, msg, membsize);
+	int status = csp_transaction(CSP_PRIO_NORM, node, CSP_CMP, timeout, msg,
+			membsize, msg, membsize);
 	if (status == 0)
 		return CSP_ERR_TIMEDOUT;
 

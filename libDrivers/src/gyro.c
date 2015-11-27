@@ -46,12 +46,12 @@
 uint8_t GYRO_ReadReg(uint8_t reg, uint8_t* data) {
 	reg |= 0x01 << 7;	// Set READ bit
 
-	GPIO->P[GYRO_CS_PORT].DOUTCLR = 1 << GYRO_CS_PIN; // Set CS low
+	GPIO ->P[GYRO_CS_PORT].DOUTCLR = 1 << GYRO_CS_PIN; // Set CS low
 
 	USART_SpiTransfer(GYRO_SPI, reg);
-	* data = USART_SpiTransfer(GYRO_SPI, 0x00);	// Send dummy data while receiving data response
+	*data = USART_SpiTransfer(GYRO_SPI, 0x00);// Send dummy data while receiving data response
 
-	GPIO->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN; // Set CS high
+	GPIO ->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN; // Set CS high
 
 	return 1;
 }
@@ -66,16 +66,15 @@ uint8_t GYRO_ReadReg(uint8_t reg, uint8_t* data) {
  *******************************************************************************/
 uint8_t GYRO_WriteReg(uint8_t reg, uint8_t data) {
 
-	GPIO->P[GYRO_CS_PORT].DOUTCLR = 1 << GYRO_CS_PIN; // Set CS low
+	GPIO ->P[GYRO_CS_PORT].DOUTCLR = 1 << GYRO_CS_PIN; // Set CS low
 
 	USART_SpiTransfer(GYRO_SPI, reg);
 	USART_SpiTransfer(GYRO_SPI, data);
 
-	GPIO->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN; // Set CS high
+	GPIO ->P[GYRO_CS_PORT].DOUTSET = 1 << GYRO_CS_PIN; // Set CS high
 
 	return 1;
 }
-
 
 /*******************************************************************************
  * Function Name  : GYRO_SetODR

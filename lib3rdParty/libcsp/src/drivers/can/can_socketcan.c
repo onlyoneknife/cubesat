@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 /* SocketCAN driver */
 
@@ -62,12 +62,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 /* These constants are not defined for Blackfin */
 #if !defined(PF_CAN) && !defined(AF_CAN)
-	#define PF_CAN 29
-	#define AF_CAN PF_CAN
+#define PF_CAN 29
+#define AF_CAN PF_CAN
 #endif
 
 int can_socket; /** SocketCAN socket handle */
-sem_t mbox_sem;	/** Mailbox pool semaphore */
+sem_t mbox_sem; /** Mailbox pool semaphore */
 
 /** Callback functions */
 can_tx_callback_t txcb;
@@ -75,15 +75,14 @@ can_rx_callback_t rxcb;
 
 /* Mailbox pool */
 typedef enum {
-	MBOX_FREE = 0,
-	MBOX_USED = 1,
+	MBOX_FREE = 0, MBOX_USED = 1,
 } mbox_state_t;
 
 typedef struct {
-	pthread_t thread;  		/** Thread handle */
-	sem_t signal_sem;   	/** Signalling semaphore */
-	mbox_state_t state;		/** Thread state */
-	struct can_frame frame;	/** CAN Frame */
+	pthread_t thread; /** Thread handle */
+	sem_t signal_sem; /** Signalling semaphore */
+	mbox_state_t state; /** Thread state */
+	struct can_frame frame; /** CAN Frame */
 } mbox_t;
 
 /* List of mailboxes */
@@ -93,7 +92,7 @@ static mbox_t mbox[MBOX_NUM];
 static void * mbox_tx_thread(void * parameters) {
 
 	/* Set thread parameters */
-	mbox_t * m = (mbox_t *)parameters;
+	mbox_t * m = (mbox_t *) parameters;
 
 	uint32_t id;
 
@@ -104,7 +103,8 @@ static void * mbox_tx_thread(void * parameters) {
 
 		/* Send frame */
 		int tries = 0, error = CAN_NO_ERROR;
-		while (write(can_socket, &m->frame, sizeof(m->frame)) != sizeof(m->frame)) {
+		while (write(can_socket, &m->frame, sizeof(m->frame))
+				!= sizeof(m->frame)) {
 			if (++tries < 1000 && errno == ENOBUFS) {
 				/* Wait 10 ms and try again */
 				usleep(10000);
@@ -121,14 +121,15 @@ static void * mbox_tx_thread(void * parameters) {
 		sem_wait(&mbox_sem);
 		m->state = MBOX_FREE;
 		sem_post(&mbox_sem);
-		
+
 		/* Call tx callback */
-		if (txcb) txcb(id, error, NULL);
+		if (txcb)
+			txcb(id, error, NULL );
 
 	}
 
 	/* We should never reach this point */
-	pthread_exit(NULL);
+	pthread_exit(NULL );
 
 }
 
@@ -141,10 +142,10 @@ static void * mbox_rx_thread(void * parameters) {
 		/* Read CAN frame */
 		nbytes = read(can_socket, &frame, sizeof(frame));
 
-	if (nbytes < 0) {
-		csp_log_error("read: %s", strerror(errno));
-		break;
-	}
+		if (nbytes < 0) {
+			csp_log_error("read: %s", strerror(errno));
+			break;
+		}
 
 		if (nbytes != sizeof(frame)) {
 			csp_log_warn("Read incomplete CAN frame");
@@ -152,7 +153,8 @@ static void * mbox_rx_thread(void * parameters) {
 		}
 
 		/* Frame type */
-		if (frame.can_id & (CAN_ERR_FLAG | CAN_RTR_FLAG) || !(frame.can_id & CAN_EFF_FLAG)) {
+		if (frame.can_id & (CAN_ERR_FLAG | CAN_RTR_FLAG)
+				|| !(frame.can_id & CAN_EFF_FLAG)) {
 			/* Drop error and remote frames */
 			csp_log_warn("Discarding ERR/RTR/SFF frame");
 		} else {
@@ -161,11 +163,12 @@ static void * mbox_rx_thread(void * parameters) {
 		}
 
 		/* Call RX callback */
-		if (rxcb) rxcb((can_frame_t *)&frame, NULL);
+		if (rxcb)
+			rxcb((can_frame_t *) &frame, NULL );
 	}
 
 	/* We should never reach this point */
-	pthread_exit(NULL);
+	pthread_exit(NULL );
 
 }
 
@@ -188,7 +191,7 @@ int can_mbox_init(void) {
 		}
 
 		/* Create mailbox */
-		if (pthread_create(&m->thread, NULL, mbox_tx_thread, (void *)m) != 0) {
+		if (pthread_create(&m->thread, NULL, mbox_tx_thread, (void *) m) != 0) {
 			csp_log_error("pthread_create: %s", strerror(errno));
 			return -1;
 		}
@@ -201,7 +204,8 @@ int can_mbox_init(void) {
 
 }
 
-int can_send(can_id_t id, uint8_t data[], uint8_t dlc, CSP_BASE_TYPE * task_woken) {
+int can_send(can_id_t id, uint8_t data[], uint8_t dlc,
+		CSP_BASE_TYPE * task_woken) {
 
 	int i, found = 0;
 	mbox_t * m;
@@ -213,14 +217,14 @@ int can_send(can_id_t id, uint8_t data[], uint8_t dlc, CSP_BASE_TYPE * task_woke
 	sem_wait(&mbox_sem);
 	for (i = 0; i < MBOX_NUM; i++) {
 		m = &mbox[i];
-		if(m->state == MBOX_FREE) {
+		if (m->state == MBOX_FREE) {
 			m->state = MBOX_USED;
 			found = 1;
 			break;
 		}
 	}
 	sem_post(&mbox_sem);
-	
+
 	if (!found)
 		return -1;
 
@@ -241,7 +245,8 @@ int can_send(can_id_t id, uint8_t data[], uint8_t dlc, CSP_BASE_TYPE * task_woke
 
 }
 
-int can_init(uint32_t id, uint32_t mask, can_tx_callback_t atxcb, can_rx_callback_t arxcb, struct csp_can_config *conf) {
+int can_init(uint32_t id, uint32_t mask, can_tx_callback_t atxcb,
+		can_rx_callback_t arxcb, struct csp_can_config *conf) {
 
 	struct ifreq ifr;
 	struct sockaddr_can addr;
@@ -277,7 +282,7 @@ int can_init(uint32_t id, uint32_t mask, can_tx_callback_t atxcb, can_rx_callbac
 	/* Bind the socket to CAN interface */
 	addr.can_family = AF_CAN;
 	addr.can_ifindex = ifr.ifr_ifindex;
-	if (bind(can_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+	if (bind(can_socket, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
 		csp_log_error("bind: %s", strerror(errno));
 		return -1;
 	}
@@ -285,16 +290,17 @@ int can_init(uint32_t id, uint32_t mask, can_tx_callback_t atxcb, can_rx_callbac
 	/* Set promiscuous mode */
 	if (mask) {
 		struct can_filter filter;
-		filter.can_id   = id;
+		filter.can_id = id;
 		filter.can_mask = mask;
-		if (setsockopt(can_socket, SOL_CAN_RAW, CAN_RAW_FILTER, &filter, sizeof(filter)) < 0) {
+		if (setsockopt(can_socket, SOL_CAN_RAW, CAN_RAW_FILTER, &filter,
+				sizeof(filter)) < 0) {
 			csp_log_error("setsockopt: %s", strerror(errno));
 			return -1;
 		}
 	}
 
 	/* Create receive thread */
-	if (pthread_create(&rx_thread, NULL, mbox_rx_thread, NULL) != 0) {
+	if (pthread_create(&rx_thread, NULL, mbox_rx_thread, NULL ) != 0) {
 		csp_log_error("pthread_create: %s", strerror(errno));
 		return -1;
 	}

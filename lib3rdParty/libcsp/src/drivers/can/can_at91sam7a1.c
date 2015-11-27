@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 /* AT91SAM7A1 driver */
 
@@ -50,8 +50,7 @@ uint32_t can_mask;
 
 /** Mailbox */
 typedef enum {
-	MBOX_FREE = 0,
-	MBOX_USED = 1,
+	MBOX_FREE = 0, MBOX_USED = 1,
 } mbox_t;
 
 /** List of mobs */
@@ -72,9 +71,8 @@ static void can_init_interrupt(uint32_t id, uint32_t mask) {
 	uint8_t mbox;
 
 	/* Configure ISR */
-	AT91F_AIC_ConfigureIt(AT91C_BASE_AIC, AT91C_ID_CAN,
-			AT91C_AIC_PRIOR_HIGHEST, AT91C_AIC_SRCTYPE_INT_POSITIVE_EDGE,
-			(void(*)(void)) can_isr);
+	AT91F_AIC_ConfigureIt(AT91C_BASE_AIC, AT91C_ID_CAN, AT91C_AIC_PRIOR_HIGHEST,
+			AT91C_AIC_SRCTYPE_INT_POSITIVE_EDGE, (void (*)(void)) can_isr);
 
 	/* Switch off interrupts */
 	CAN_CTRL->IDR = (BUSOFF | ERPAS | ENDINIT);
@@ -92,10 +90,12 @@ static void can_init_interrupt(uint32_t id, uint32_t mask) {
 			CAN_CTRL->CHANNEL[mbox].CR = (CHANEN | IDE | DLC);
 
 			/* setup the wanted interrupt mask in the EIR register */
-			CAN_CTRL->CHANNEL[mbox].IER = (ACK | FRAME | CRC | STUFF | BUS | RXOK);
+			CAN_CTRL->CHANNEL[mbox].IER = (ACK | FRAME | CRC | STUFF | BUS
+					| RXOK);
 		} else {
 			/* Setup the wanted interrupt mask in the EIR register */
-			CAN_CTRL->CHANNEL[mbox].IER = (ACK | FRAME | CRC | STUFF | BUS | TXOK);
+			CAN_CTRL->CHANNEL[mbox].IER = (ACK | FRAME | CRC | STUFF | BUS
+					| TXOK);
 		}
 
 		/* Enable the interrupt in the SIER register */
@@ -107,7 +107,8 @@ static void can_init_interrupt(uint32_t id, uint32_t mask) {
 
 }
 
-int can_init(uint32_t id, uint32_t mask, can_tx_callback_t atxcb, can_rx_callback_t arxcb, struct csp_can_config *conf) {
+int can_init(uint32_t id, uint32_t mask, can_tx_callback_t atxcb,
+		can_rx_callback_t arxcb, struct csp_can_config *conf) {
 
 	int i;
 
@@ -145,18 +146,19 @@ int can_init(uint32_t id, uint32_t mask, can_tx_callback_t atxcb, can_rx_callbac
 
 }
 
-int can_send(can_id_t id, uint8_t data[], uint8_t dlc, CSP_BASE_TYPE * task_woken) {
+int can_send(can_id_t id, uint8_t data[], uint8_t dlc,
+		CSP_BASE_TYPE * task_woken) {
 
 	int i, m = -1;
 	uint32_t temp[2];
 
 	/* Disable interrupts while looping mailboxes */
-	if (task_woken == NULL) {
+	if (task_woken == NULL ) {
 		portENTER_CRITICAL();
 	}
 
 	/* Find free mailbox */
-	for(i = 0; i < CAN_TX_MBOX; i++) {
+	for (i = 0; i < CAN_TX_MBOX; i++) {
 		if (mbox[i] == MBOX_FREE && !(CAN_CTRL->CHANNEL[i].CR & CHANEN)) {
 			mbox[i] = MBOX_USED;
 			m = i;
@@ -165,7 +167,7 @@ int can_send(can_id_t id, uint8_t data[], uint8_t dlc, CSP_BASE_TYPE * task_woke
 	}
 
 	/* Enable interrupts */
-	if (task_woken == NULL) {
+	if (task_woken == NULL ) {
 		portEXIT_CRITICAL();
 	}
 
@@ -181,24 +183,24 @@ int can_send(can_id_t id, uint8_t data[], uint8_t dlc, CSP_BASE_TYPE * task_woke
 
 	/* Copy data to CAN mailbox DRAx and DRBx registers */
 	switch (dlc) {
-		case 8:
-			*(((uint8_t *) &(temp[1])) + 3) = data[7];
-		case 7:
-			*(((uint8_t *) &(temp[1])) + 2) = data[6];
-		case 6:
-			*(((uint8_t *) &(temp[1])) + 1) = data[5];
-		case 5:
-			*(((uint8_t *) &(temp[1])) + 0) = data[4];
-		case 4:
-			*(((uint8_t *) &(temp[0])) + 3) = data[3];
-		case 3:
-			*(((uint8_t *) &(temp[0])) + 2) = data[2];
-		case 2:
-			*(((uint8_t *) &(temp[0])) + 1) = data[1];
-		case 1:
-			*(((uint8_t *) &(temp[0])) + 0) = data[0];
-		default:
-			break;
+	case 8:
+		*(((uint8_t *) &(temp[1])) + 3) = data[7];
+	case 7:
+		*(((uint8_t *) &(temp[1])) + 2) = data[6];
+	case 6:
+		*(((uint8_t *) &(temp[1])) + 1) = data[5];
+	case 5:
+		*(((uint8_t *) &(temp[1])) + 0) = data[4];
+	case 4:
+		*(((uint8_t *) &(temp[0])) + 3) = data[3];
+	case 3:
+		*(((uint8_t *) &(temp[0])) + 2) = data[2];
+	case 2:
+		*(((uint8_t *) &(temp[0])) + 1) = data[1];
+	case 1:
+		*(((uint8_t *) &(temp[0])) + 0) = data[0];
+	default:
+		break;
 	}
 
 	CAN_CTRL->CHANNEL[m].DRA = temp[0];
@@ -229,7 +231,7 @@ static void __attribute__ ((noinline)) can_dsr(void) {
 				can_frame_t frame;
 
 				/* Read DLC */
-				frame.dlc = (uint8_t)CAN_CTRL->CHANNEL[m].CR & 0x0F;
+				frame.dlc = (uint8_t) CAN_CTRL->CHANNEL[m].CR & 0x0F;
 
 				/* Read data */
 				frame.data32[0] = CAN_CTRL->CHANNEL[m].DRA;
@@ -240,7 +242,7 @@ static void __attribute__ ((noinline)) can_dsr(void) {
 						| ((CAN_CTRL->CHANNEL[m].IR & 0x1FFFF800) >> 11);
 
 				/* Call RX callback */
-				if (rxcb != NULL)
+				if (rxcb != NULL )
 					rxcb(&frame, &task_woken);
 
 				/* Clear status register before enabling */
@@ -263,7 +265,7 @@ static void __attribute__ ((noinline)) can_dsr(void) {
 						| ((CAN_CTRL->CHANNEL[m].IR & 0x1FFFF800) >> 11);
 
 				/* Call TX callback with no error */
-				if (txcb != NULL)
+				if (txcb != NULL )
 					txcb(id, CAN_NO_ERROR, &task_woken);
 
 				/* Disable mailbox */
@@ -277,8 +279,8 @@ static void __attribute__ ((noinline)) can_dsr(void) {
 
 			} else if (CAN_CTRL->CHANNEL[m].SR != 0) {
 				/* Error */
-				csp_log_error("mbox %d failed with SR=%#"PRIx32,
-						m, CAN_CTRL->CHANNEL[m].SR);
+				csp_log_error("mbox %d failed with SR=%#"PRIx32, m,
+						CAN_CTRL->CHANNEL[m].SR);
 
 				/* Get identifier */
 				can_id_t id = ((CAN_CTRL->CHANNEL[m].IR & 0x7FF) << 18)
@@ -291,7 +293,7 @@ static void __attribute__ ((noinline)) can_dsr(void) {
 				CAN_CTRL->CISR = (1 << m);
 
 				/* Call TX callback with error flag set */
-				if (txcb != NULL)
+				if (txcb != NULL )
 					txcb(id, CAN_ERROR, &task_woken);
 
 				/* Disable mailbox */
@@ -305,7 +307,7 @@ static void __attribute__ ((noinline)) can_dsr(void) {
 	}
 
 	/* Yield if required */
-	if (task_woken == pdTRUE)
+	if (task_woken == pdTRUE )
 		portYIELD_FROM_ISR();
 
 }
