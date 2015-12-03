@@ -21,7 +21,6 @@
 #include <inttypes.h>
 #include <stdint.h>
 
-#include <i2c.h>
 #include <csp/csp.h>
 #include <csp/csp_endian.h>
 #include <csp/csp_interface.h>
