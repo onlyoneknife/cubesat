@@ -12,7 +12,7 @@
 #ifndef __SHARED__TYPES
 #define __SHARED__TYPES
 
-/* --Shared includers -- */
+/* --Shared includes -- */
 #include <stdint.h>
 #include <stdbool.h>
 
