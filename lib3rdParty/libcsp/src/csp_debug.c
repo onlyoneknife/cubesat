@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 Gomspace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk) 
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 Gomspace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk) 
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 #include <stdint.h>
 #include <stdio.h>
@@ -36,15 +36,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 csp_debug_hook_func_t csp_debug_hook_func = NULL;
 
 /* Debug levels */
-unsigned char csp_debug_level_enabled[] = {
-	[CSP_ERROR]		= true,
-	[CSP_WARN]		= true,
-	[CSP_INFO]		= false,
-	[CSP_BUFFER]	= false,
-	[CSP_PACKET]	= false,
-	[CSP_PROTOCOL]	= false,
-	[CSP_LOCK]		= false,
-};
+unsigned char csp_debug_level_enabled[] = { [CSP_ERROR]= true, [CSP_WARN]= true,
+		[CSP_INFO] = false, [CSP_BUFFER] = false, [CSP_PACKET] = false,
+		[CSP_PROTOCOL] = false, [CSP_LOCK] = false, };
 
 /* Some compilers do not support weak symbols, so this function
  * can be used instead to set a custom debug hook */
@@ -61,7 +55,7 @@ void do_csp_debug(csp_debug_level_t level, const char * format, ...) {
 	if (level > CSP_LOCK || !csp_debug_level_enabled[level])
 		return;
 
-	switch(level) {
+	switch (level) {
 	case CSP_INFO:
 		color = COLOR_GREEN | COLOR_BOLD;
 		break;
@@ -86,7 +80,7 @@ void do_csp_debug(csp_debug_level_t level, const char * format, ...) {
 	default:
 		return;
 	}
-	
+
 	va_start(args, format);
 
 	/* If csp_debug_hook symbol is defined, pass on the message.
@@ -125,6 +119,7 @@ void csp_debug_toggle_level(csp_debug_level_t level) {
 		printf("Max level is 6\r\n");
 		return;
 	}
-	csp_debug_level_enabled[level] = (csp_debug_level_enabled[level]) ? false : true;
+	csp_debug_level_enabled[level] =
+			(csp_debug_level_enabled[level]) ? false : true;
 	printf("Level %u: value %u\r\n", level, csp_debug_level_enabled[level]);
 }

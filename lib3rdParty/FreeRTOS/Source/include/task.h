@@ -1,74 +1,73 @@
 /*
-    FreeRTOS V8.1.2 - Copyright (C) 2014 Real Time Engineers Ltd.
-    All rights reserved
+ FreeRTOS V8.1.2 - Copyright (C) 2014 Real Time Engineers Ltd.
+ All rights reserved
 
-    VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
+ VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
 
-    ***************************************************************************
-     *                                                                       *
-     *    FreeRTOS provides completely free yet professionally developed,    *
-     *    robust, strictly quality controlled, supported, and cross          *
-     *    platform software that has become a de facto standard.             *
-     *                                                                       *
-     *    Help yourself get started quickly and support the FreeRTOS         *
-     *    project by purchasing a FreeRTOS tutorial book, reference          *
-     *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
-     *                                                                       *
-     *    Thank you!                                                         *
-     *                                                                       *
-    ***************************************************************************
+ ***************************************************************************
+ *                                                                       *
+ *    FreeRTOS provides completely free yet professionally developed,    *
+ *    robust, strictly quality controlled, supported, and cross          *
+ *    platform software that has become a de facto standard.             *
+ *                                                                       *
+ *    Help yourself get started quickly and support the FreeRTOS         *
+ *    project by purchasing a FreeRTOS tutorial book, reference          *
+ *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
+ *                                                                       *
+ *    Thank you!                                                         *
+ *                                                                       *
+ ***************************************************************************
 
-    This file is part of the FreeRTOS distribution.
+ This file is part of the FreeRTOS distribution.
 
-    FreeRTOS is free software; you can redistribute it and/or modify it under
-    the terms of the GNU General Public License (version 2) as published by the
-    Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+ FreeRTOS is free software; you can redistribute it and/or modify it under
+ the terms of the GNU General Public License (version 2) as published by the
+ Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
 
-    >>!   NOTE: The modification to the GPL is included to allow you to     !<<
-    >>!   distribute a combined work that includes FreeRTOS without being   !<<
-    >>!   obliged to provide the source code for proprietary components     !<<
-    >>!   outside of the FreeRTOS kernel.                                   !<<
+ >>!   NOTE: The modification to the GPL is included to allow you to     !<<
+ >>!   distribute a combined work that includes FreeRTOS without being   !<<
+ >>!   obliged to provide the source code for proprietary components     !<<
+ >>!   outside of the FreeRTOS kernel.                                   !<<
 
-    FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
-    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-    FOR A PARTICULAR PURPOSE.  Full license text is available from the following
-    link: http://www.freertos.org/a00114.html
+ FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE.  Full license text is available from the following
+ link: http://www.freertos.org/a00114.html
 
-    1 tab == 4 spaces!
+ 1 tab == 4 spaces!
 
-    ***************************************************************************
-     *                                                                       *
-     *    Having a problem?  Start by reading the FAQ "My application does   *
-     *    not run, what could be wrong?"                                     *
-     *                                                                       *
-     *    http://www.FreeRTOS.org/FAQHelp.html                               *
-     *                                                                       *
-    ***************************************************************************
+ ***************************************************************************
+ *                                                                       *
+ *    Having a problem?  Start by reading the FAQ "My application does   *
+ *    not run, what could be wrong?"                                     *
+ *                                                                       *
+ *    http://www.FreeRTOS.org/FAQHelp.html                               *
+ *                                                                       *
+ ***************************************************************************
 
-    http://www.FreeRTOS.org - Documentation, books, training, latest versions,
-    license and Real Time Engineers Ltd. contact details.
+ http://www.FreeRTOS.org - Documentation, books, training, latest versions,
+ license and Real Time Engineers Ltd. contact details.
 
-    http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
-    including FreeRTOS+Trace - an indispensable productivity tool, a DOS
-    compatible FAT file system, and our tiny thread aware UDP/IP stack.
+ http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
+ including FreeRTOS+Trace - an indispensable productivity tool, a DOS
+ compatible FAT file system, and our tiny thread aware UDP/IP stack.
 
-    http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
-    Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
-    licenses offer ticketed support, indemnification and middleware.
+ http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+ Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
+ licenses offer ticketed support, indemnification and middleware.
 
-    http://www.SafeRTOS.com - High Integrity Systems also provide a safety
-    engineered and independently SIL3 certified version for use in safety and
-    mission critical applications that require provable dependability.
+ http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+ engineered and independently SIL3 certified version for use in safety and
+ mission critical applications that require provable dependability.
 
-    1 tab == 4 spaces!
-*/
-
+ 1 tab == 4 spaces!
+ */
 
 #ifndef INC_TASK_H
 #define INC_TASK_H
 
 #ifndef INC_FREERTOS_H
-	#error "include FreeRTOS.h must appear in source files before include task.h"
+#error "include FreeRTOS.h must appear in source files before include task.h"
 #endif
 
 #include "list.h"
@@ -102,32 +101,29 @@ typedef void * TaskHandle_t;
  * Defines the prototype to which the application task hook function must
  * conform.
  */
-typedef BaseType_t (*TaskHookFunction_t)( void * );
+typedef BaseType_t (*TaskHookFunction_t)(void *);
 
 /* Task states returned by eTaskGetState. */
-typedef enum
-{
-	eRunning = 0,	/* A task is querying the state of itself, so must be running. */
-	eReady,			/* The task being queried is in a read or pending ready list. */
-	eBlocked,		/* The task being queried is in the Blocked state. */
-	eSuspended,		/* The task being queried is in the Suspended state, or is in the Blocked state with an infinite time out. */
-	eDeleted		/* The task being queried has been deleted, but its TCB has not yet been freed. */
+typedef enum {
+	eRunning = 0, /* A task is querying the state of itself, so must be running. */
+	eReady, /* The task being queried is in a read or pending ready list. */
+	eBlocked, /* The task being queried is in the Blocked state. */
+	eSuspended, /* The task being queried is in the Suspended state, or is in the Blocked state with an infinite time out. */
+	eDeleted /* The task being queried has been deleted, but its TCB has not yet been freed. */
 } eTaskState;
 
 /*
  * Used internally only.
  */
-typedef struct xTIME_OUT
-{
+typedef struct xTIME_OUT {
 	BaseType_t xOverflowCount;
-	TickType_t  xTimeOnEntering;
+	TickType_t xTimeOnEntering;
 } TimeOut_t;
 
 /*
  * Defines the memory ranges allocated to the task when an MPU is used.
  */
-typedef struct xMEMORY_REGION
-{
+typedef struct xMEMORY_REGION {
 	void *pvBaseAddress;
 	uint32_t ulLengthInBytes;
 	uint32_t ulParameters;
@@ -136,39 +132,35 @@ typedef struct xMEMORY_REGION
 /*
  * Parameters required to create an MPU protected task.
  */
-typedef struct xTASK_PARAMETERS
-{
+typedef struct xTASK_PARAMETERS {
 	TaskFunction_t pvTaskCode;
-	const char * const pcName;	/*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+	const char * const pcName; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 	uint16_t usStackDepth;
 	void *pvParameters;
 	UBaseType_t uxPriority;
 	StackType_t *puxStackBuffer;
-	MemoryRegion_t xRegions[ portNUM_CONFIGURABLE_REGIONS ];
+	MemoryRegion_t xRegions[portNUM_CONFIGURABLE_REGIONS];
 } TaskParameters_t;
 
 /* Used with the uxTaskGetSystemState() function to return the state of each task
-in the system. */
-typedef struct xTASK_STATUS
-{
-	TaskHandle_t xHandle;			/* The handle of the task to which the rest of the information in the structure relates. */
-	const char *pcTaskName;			/* A pointer to the task's name.  This value will be invalid if the task was deleted since the structure was populated! */ /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
-	UBaseType_t xTaskNumber;		/* A number unique to the task. */
-	eTaskState eCurrentState;		/* The state in which the task existed when the structure was populated. */
-	UBaseType_t uxCurrentPriority;	/* The priority at which the task was running (may be inherited) when the structure was populated. */
-	UBaseType_t uxBasePriority;		/* The priority to which the task will return if the task's current priority has been inherited to avoid unbounded priority inversion when obtaining a mutex.  Only valid if configUSE_MUTEXES is defined as 1 in FreeRTOSConfig.h. */
-	uint32_t ulRunTimeCounter;		/* The total run time allocated to the task so far, as defined by the run time stats clock.  See http://www.freertos.org/rtos-run-time-stats.html.  Only valid when configGENERATE_RUN_TIME_STATS is defined as 1 in FreeRTOSConfig.h. */
-	uint16_t usStackHighWaterMark;	/* The minimum amount of stack space that has remained for the task since the task was created.  The closer this value is to zero the closer the task has come to overflowing its stack. */
+ in the system. */
+typedef struct xTASK_STATUS {
+	TaskHandle_t xHandle; /* The handle of the task to which the rest of the information in the structure relates. */
+	const char *pcTaskName; /* A pointer to the task's name.  This value will be invalid if the task was deleted since the structure was populated! *//*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+	UBaseType_t xTaskNumber; /* A number unique to the task. */
+	eTaskState eCurrentState; /* The state in which the task existed when the structure was populated. */
+	UBaseType_t uxCurrentPriority; /* The priority at which the task was running (may be inherited) when the structure was populated. */
+	UBaseType_t uxBasePriority; /* The priority to which the task will return if the task's current priority has been inherited to avoid unbounded priority inversion when obtaining a mutex.  Only valid if configUSE_MUTEXES is defined as 1 in FreeRTOSConfig.h. */
+	uint32_t ulRunTimeCounter; /* The total run time allocated to the task so far, as defined by the run time stats clock.  See http://www.freertos.org/rtos-run-time-stats.html.  Only valid when configGENERATE_RUN_TIME_STATS is defined as 1 in FreeRTOSConfig.h. */
+	uint16_t usStackHighWaterMark; /* The minimum amount of stack space that has remained for the task since the task was created.  The closer this value is to zero the closer the task has come to overflowing its stack. */
 } TaskStatus_t;
 
 /* Possible return values for eTaskConfirmSleepModeStatus(). */
-typedef enum
-{
-	eAbortSleep = 0,		/* A task has been made ready or a context switch pended since portSUPPORESS_TICKS_AND_SLEEP() was called - abort entering a sleep mode. */
-	eStandardSleep,			/* Enter a sleep mode that will not last any longer than the expected idle time. */
-	eNoTasksWaitingTimeout	/* No tasks are waiting for a timeout so it is safe to enter a sleep mode that can only be exited by an external interrupt. */
+typedef enum {
+	eAbortSleep = 0, /* A task has been made ready or a context switch pended since portSUPPORESS_TICKS_AND_SLEEP() was called - abort entering a sleep mode. */
+	eStandardSleep, /* Enter a sleep mode that will not last any longer than the expected idle time. */
+	eNoTasksWaitingTimeout /* No tasks are waiting for a timeout so it is safe to enter a sleep mode that can only be exited by an external interrupt. */
 } eSleepModeStatus;
-
 
 /**
  * Defines the priority used by the idle task.  This must not be modified.
@@ -236,12 +228,11 @@ typedef enum
 #define taskENABLE_INTERRUPTS()		portENABLE_INTERRUPTS()
 
 /* Definitions returned by xTaskGetSchedulerState().  taskSCHEDULER_SUSPENDED is
-0 to generate more optimal code when configASSERT() is defined as the constant
-is used in assert() statements. */
+ 0 to generate more optimal code when configASSERT() is defined as the constant
+ is used in assert() statements. */
 #define taskSCHEDULER_SUSPENDED		( ( BaseType_t ) 0 )
 #define taskSCHEDULER_NOT_STARTED	( ( BaseType_t ) 1 )
 #define taskSCHEDULER_RUNNING		( ( BaseType_t ) 2 )
-
 
 /*-----------------------------------------------------------
  * TASK CREATION API
@@ -251,13 +242,13 @@ is used in assert() statements. */
  * task. h
  *<pre>
  BaseType_t xTaskCreate(
-							  TaskFunction_t pvTaskCode,
-							  const char * const pcName,
-							  uint16_t usStackDepth,
-							  void *pvParameters,
-							  UBaseType_t uxPriority,
-							  TaskHandle_t *pvCreatedTask
-						  );</pre>
+ TaskFunction_t pvTaskCode,
+ const char * const pcName,
+ uint16_t usStackDepth,
+ void *pvParameters,
+ UBaseType_t uxPriority,
+ TaskHandle_t *pvCreatedTask
+ );</pre>
  *
  * Create a new task and add it to the list of tasks that are ready to run.
  *
@@ -294,14 +285,14 @@ is used in assert() statements. */
  * list, otherwise an error code defined in the file projdefs.h
  *
  * Example usage:
-   <pre>
+ <pre>
  // Task to be created.
  void vTaskCode( void * pvParameters )
  {
-	 for( ;; )
-	 {
-		 // Task code goes here.
-	 }
+ for( ;; )
+ {
+ // Task code goes here.
+ }
  }
 
  // Function that creates a task.
@@ -310,20 +301,20 @@ is used in assert() statements. */
  static uint8_t ucParameterToPass;
  TaskHandle_t xHandle = NULL;
 
-	 // Create the task, storing the handle.  Note that the passed parameter ucParameterToPass
-	 // must exist for the lifetime of the task, so in this case is declared static.  If it was just an
-	 // an automatic stack variable it might no longer exist, or at least have been corrupted, by the time
-	 // the new task attempts to access it.
-	 xTaskCreate( vTaskCode, "NAME", STACK_SIZE, &ucParameterToPass, tskIDLE_PRIORITY, &xHandle );
-     configASSERT( xHandle );
+ // Create the task, storing the handle.  Note that the passed parameter ucParameterToPass
+ // must exist for the lifetime of the task, so in this case is declared static.  If it was just an
+ // an automatic stack variable it might no longer exist, or at least have been corrupted, by the time
+ // the new task attempts to access it.
+ xTaskCreate( vTaskCode, "NAME", STACK_SIZE, &ucParameterToPass, tskIDLE_PRIORITY, &xHandle );
+ configASSERT( xHandle );
 
-	 // Use the handle to delete the task.
-     if( xHandle != NULL )
-     {
-	     vTaskDelete( xHandle );
-     }
+ // Use the handle to delete the task.
+ if( xHandle != NULL )
+ {
+ vTaskDelete( xHandle );
  }
-   </pre>
+ }
+ </pre>
  * \defgroup xTaskCreate xTaskCreate
  * \ingroup Tasks
  */
@@ -353,46 +344,46 @@ is used in assert() statements. */
  * list, otherwise an error code defined in the file projdefs.h
  *
  * Example usage:
-   <pre>
-// Create an TaskParameters_t structure that defines the task to be created.
-static const TaskParameters_t xCheckTaskParameters =
-{
-	vATask,		// pvTaskCode - the function that implements the task.
-	"ATask",	// pcName - just a text name for the task to assist debugging.
-	100,		// usStackDepth	- the stack size DEFINED IN WORDS.
-	NULL,		// pvParameters - passed into the task function as the function parameters.
-	( 1UL | portPRIVILEGE_BIT ),// uxPriority - task priority, set the portPRIVILEGE_BIT if the task should run in a privileged state.
-	cStackBuffer,// puxStackBuffer - the buffer to be used as the task stack.
+ <pre>
+ // Create an TaskParameters_t structure that defines the task to be created.
+ static const TaskParameters_t xCheckTaskParameters =
+ {
+ vATask,		// pvTaskCode - the function that implements the task.
+ "ATask",	// pcName - just a text name for the task to assist debugging.
+ 100,		// usStackDepth	- the stack size DEFINED IN WORDS.
+ NULL,		// pvParameters - passed into the task function as the function parameters.
+ ( 1UL | portPRIVILEGE_BIT ),// uxPriority - task priority, set the portPRIVILEGE_BIT if the task should run in a privileged state.
+ cStackBuffer,// puxStackBuffer - the buffer to be used as the task stack.
 
-	// xRegions - Allocate up to three separate memory regions for access by
-	// the task, with appropriate access permissions.  Different processors have
-	// different memory alignment requirements - refer to the FreeRTOS documentation
-	// for full information.
-	{
-		// Base address					Length	Parameters
-        { cReadWriteArray,				32,		portMPU_REGION_READ_WRITE },
-        { cReadOnlyArray,				32,		portMPU_REGION_READ_ONLY },
-        { cPrivilegedOnlyAccessArray,	128,	portMPU_REGION_PRIVILEGED_READ_WRITE }
-	}
-};
+ // xRegions - Allocate up to three separate memory regions for access by
+ // the task, with appropriate access permissions.  Different processors have
+ // different memory alignment requirements - refer to the FreeRTOS documentation
+ // for full information.
+ {
+ // Base address					Length	Parameters
+ { cReadWriteArray,				32,		portMPU_REGION_READ_WRITE },
+ { cReadOnlyArray,				32,		portMPU_REGION_READ_ONLY },
+ { cPrivilegedOnlyAccessArray,	128,	portMPU_REGION_PRIVILEGED_READ_WRITE }
+ }
+ };
 
-int main( void )
-{
-TaskHandle_t xHandle;
+ int main( void )
+ {
+ TaskHandle_t xHandle;
 
-	// Create a task from the const structure defined above.  The task handle
-	// is requested (the second parameter is not NULL) but in this case just for
-	// demonstration purposes as its not actually used.
-	xTaskCreateRestricted( &xRegTest1Parameters, &xHandle );
+ // Create a task from the const structure defined above.  The task handle
+ // is requested (the second parameter is not NULL) but in this case just for
+ // demonstration purposes as its not actually used.
+ xTaskCreateRestricted( &xRegTest1Parameters, &xHandle );
 
-	// Start the scheduler.
-	vTaskStartScheduler();
+ // Start the scheduler.
+ vTaskStartScheduler();
 
-	// Will only get here if there was insufficient memory to create the idle
-	// and/or timer task.
-	for( ;; );
-}
-   </pre>
+ // Will only get here if there was insufficient memory to create the idle
+ // and/or timer task.
+ for( ;; );
+ }
+ </pre>
  * \defgroup xTaskCreateRestricted xTaskCreateRestricted
  * \ingroup Tasks
  */
@@ -413,38 +404,40 @@ TaskHandle_t xHandle;
  * new memory region definitions.
  *
  * Example usage:
-   <pre>
-// Define an array of MemoryRegion_t structures that configures an MPU region
-// allowing read/write access for 1024 bytes starting at the beginning of the
-// ucOneKByte array.  The other two of the maximum 3 definable regions are
-// unused so set to zero.
-static const MemoryRegion_t xAltRegions[ portNUM_CONFIGURABLE_REGIONS ] =
-{
-	// Base address		Length		Parameters
-	{ ucOneKByte,		1024,		portMPU_REGION_READ_WRITE },
-	{ 0,				0,			0 },
-	{ 0,				0,			0 }
-};
+ <pre>
+ // Define an array of MemoryRegion_t structures that configures an MPU region
+ // allowing read/write access for 1024 bytes starting at the beginning of the
+ // ucOneKByte array.  The other two of the maximum 3 definable regions are
+ // unused so set to zero.
+ static const MemoryRegion_t xAltRegions[ portNUM_CONFIGURABLE_REGIONS ] =
+ {
+ // Base address		Length		Parameters
+ { ucOneKByte,		1024,		portMPU_REGION_READ_WRITE },
+ { 0,				0,			0 },
+ { 0,				0,			0 }
+ };
 
-void vATask( void *pvParameters )
-{
-	// This task was created such that it has access to certain regions of
-	// memory as defined by the MPU configuration.  At some point it is
-	// desired that these MPU regions are replaced with that defined in the
-	// xAltRegions const struct above.  Use a call to vTaskAllocateMPURegions()
-	// for this purpose.  NULL is used as the task handle to indicate that this
-	// function should modify the MPU regions of the calling task.
-	vTaskAllocateMPURegions( NULL, xAltRegions );
+ void vATask( void *pvParameters )
+ {
+ // This task was created such that it has access to certain regions of
+ // memory as defined by the MPU configuration.  At some point it is
+ // desired that these MPU regions are replaced with that defined in the
+ // xAltRegions const struct above.  Use a call to vTaskAllocateMPURegions()
+ // for this purpose.  NULL is used as the task handle to indicate that this
+ // function should modify the MPU regions of the calling task.
+ vTaskAllocateMPURegions( NULL, xAltRegions );
 
-	// Now the task can continue its function, but from this point on can only
-	// access its stack and the ucOneKByte array (unless any other statically
-	// defined or shared regions have been declared elsewhere).
-}
-   </pre>
+ // Now the task can continue its function, but from this point on can only
+ // access its stack and the ucOneKByte array (unless any other statically
+ // defined or shared regions have been declared elsewhere).
+ }
+ </pre>
  * \defgroup xTaskCreateRestricted xTaskCreateRestricted
  * \ingroup Tasks
  */
-void vTaskAllocateMPURegions( TaskHandle_t xTask, const MemoryRegion_t * const pxRegions ) PRIVILEGED_FUNCTION;
+void vTaskAllocateMPURegions(TaskHandle_t xTask,
+		const MemoryRegion_t * const pxRegions)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -470,22 +463,23 @@ void vTaskAllocateMPURegions( TaskHandle_t xTask, const MemoryRegion_t * const p
  * cause the calling task to be deleted.
  *
  * Example usage:
-   <pre>
+ <pre>
  void vOtherFunction( void )
  {
  TaskHandle_t xHandle;
 
-	 // Create the task, storing the handle.
-	 xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, &xHandle );
+ // Create the task, storing the handle.
+ xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, &xHandle );
 
-	 // Use the handle to delete the task.
-	 vTaskDelete( xHandle );
+ // Use the handle to delete the task.
+ vTaskDelete( xHandle );
  }
-   </pre>
+ </pre>
  * \defgroup vTaskDelete vTaskDelete
  * \ingroup Tasks
  */
-void vTaskDelete( TaskHandle_t xTaskToDelete ) PRIVILEGED_FUNCTION;
+void vTaskDelete(TaskHandle_t xTaskToDelete)
+PRIVILEGED_FUNCTION;
 
 /*-----------------------------------------------------------
  * TASK CONTROL API
@@ -526,18 +520,19 @@ void vTaskDelete( TaskHandle_t xTaskToDelete ) PRIVILEGED_FUNCTION;
  // Block for 500ms.
  const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
 
-	 for( ;; )
-	 {
-		 // Simply toggle the LED every 500ms, blocking between each toggle.
-		 vToggleLED();
-		 vTaskDelay( xDelay );
-	 }
+ for( ;; )
+ {
+ // Simply toggle the LED every 500ms, blocking between each toggle.
+ vToggleLED();
+ vTaskDelay( xDelay );
+ }
  }
 
  * \defgroup vTaskDelay vTaskDelay
  * \ingroup TaskCtrl
  */
-void vTaskDelay( const TickType_t xTicksToDelay ) PRIVILEGED_FUNCTION;
+void vTaskDelay(const TickType_t xTicksToDelay)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -575,28 +570,30 @@ void vTaskDelay( const TickType_t xTicksToDelay ) PRIVILEGED_FUNCTION;
  * a fixed interface period.
  *
  * Example usage:
-   <pre>
+ <pre>
  // Perform an action every 10 ticks.
  void vTaskFunction( void * pvParameters )
  {
  TickType_t xLastWakeTime;
  const TickType_t xFrequency = 10;
 
-	 // Initialise the xLastWakeTime variable with the current time.
-	 xLastWakeTime = xTaskGetTickCount ();
-	 for( ;; )
-	 {
-		 // Wait for the next cycle.
-		 vTaskDelayUntil( &xLastWakeTime, xFrequency );
+ // Initialise the xLastWakeTime variable with the current time.
+ xLastWakeTime = xTaskGetTickCount ();
+ for( ;; )
+ {
+ // Wait for the next cycle.
+ vTaskDelayUntil( &xLastWakeTime, xFrequency );
 
-		 // Perform action here.
-	 }
+ // Perform action here.
  }
-   </pre>
+ }
+ </pre>
  * \defgroup vTaskDelayUntil vTaskDelayUntil
  * \ingroup TaskCtrl
  */
-void vTaskDelayUntil( TickType_t * const pxPreviousWakeTime, const TickType_t xTimeIncrement ) PRIVILEGED_FUNCTION;
+void vTaskDelayUntil(TickType_t * const pxPreviousWakeTime,
+		const TickType_t xTimeIncrement)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -613,37 +610,38 @@ void vTaskDelayUntil( TickType_t * const pxPreviousWakeTime, const TickType_t xT
  * @return The priority of xTask.
  *
  * Example usage:
-   <pre>
+ <pre>
  void vAFunction( void )
  {
  TaskHandle_t xHandle;
 
-	 // Create a task, storing the handle.
-	 xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, &xHandle );
+ // Create a task, storing the handle.
+ xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, &xHandle );
 
-	 // ...
+ // ...
 
-	 // Use the handle to obtain the priority of the created task.
-	 // It was created with tskIDLE_PRIORITY, but may have changed
-	 // it itself.
-	 if( uxTaskPriorityGet( xHandle ) != tskIDLE_PRIORITY )
-	 {
-		 // The task has changed it's priority.
-	 }
-
-	 // ...
-
-	 // Is our priority higher than the created task?
-	 if( uxTaskPriorityGet( xHandle ) < uxTaskPriorityGet( NULL ) )
-	 {
-		 // Our priority (obtained using NULL handle) is higher.
-	 }
+ // Use the handle to obtain the priority of the created task.
+ // It was created with tskIDLE_PRIORITY, but may have changed
+ // it itself.
+ if( uxTaskPriorityGet( xHandle ) != tskIDLE_PRIORITY )
+ {
+ // The task has changed it's priority.
  }
-   </pre>
+
+ // ...
+
+ // Is our priority higher than the created task?
+ if( uxTaskPriorityGet( xHandle ) < uxTaskPriorityGet( NULL ) )
+ {
+ // Our priority (obtained using NULL handle) is higher.
+ }
+ }
+ </pre>
  * \defgroup uxTaskPriorityGet uxTaskPriorityGet
  * \ingroup TaskCtrl
  */
-UBaseType_t uxTaskPriorityGet( TaskHandle_t xTask ) PRIVILEGED_FUNCTION;
+UBaseType_t uxTaskPriorityGet(TaskHandle_t xTask)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -661,7 +659,8 @@ UBaseType_t uxTaskPriorityGet( TaskHandle_t xTask ) PRIVILEGED_FUNCTION;
  * state of the task might change between the function being called, and the
  * functions return value being tested by the calling task.
  */
-eTaskState eTaskGetState( TaskHandle_t xTask ) PRIVILEGED_FUNCTION;
+eTaskState eTaskGetState(TaskHandle_t xTask)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -681,29 +680,30 @@ eTaskState eTaskGetState( TaskHandle_t xTask ) PRIVILEGED_FUNCTION;
  * @param uxNewPriority The priority to which the task will be set.
  *
  * Example usage:
-   <pre>
+ <pre>
  void vAFunction( void )
  {
  TaskHandle_t xHandle;
 
-	 // Create a task, storing the handle.
-	 xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, &xHandle );
+ // Create a task, storing the handle.
+ xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, &xHandle );
 
-	 // ...
+ // ...
 
-	 // Use the handle to raise the priority of the created task.
-	 vTaskPrioritySet( xHandle, tskIDLE_PRIORITY + 1 );
+ // Use the handle to raise the priority of the created task.
+ vTaskPrioritySet( xHandle, tskIDLE_PRIORITY + 1 );
 
-	 // ...
+ // ...
 
-	 // Use a NULL handle to raise our priority to the same value.
-	 vTaskPrioritySet( NULL, tskIDLE_PRIORITY + 1 );
+ // Use a NULL handle to raise our priority to the same value.
+ vTaskPrioritySet( NULL, tskIDLE_PRIORITY + 1 );
  }
-   </pre>
+ </pre>
  * \defgroup vTaskPrioritySet vTaskPrioritySet
  * \ingroup TaskCtrl
  */
-void vTaskPrioritySet( TaskHandle_t xTask, UBaseType_t uxNewPriority ) PRIVILEGED_FUNCTION;
+void vTaskPrioritySet(TaskHandle_t xTask, UBaseType_t uxNewPriority)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -723,38 +723,39 @@ void vTaskPrioritySet( TaskHandle_t xTask, UBaseType_t uxNewPriority ) PRIVILEGE
  * handle will cause the calling task to be suspended.
  *
  * Example usage:
-   <pre>
+ <pre>
  void vAFunction( void )
  {
  TaskHandle_t xHandle;
 
-	 // Create a task, storing the handle.
-	 xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, &xHandle );
+ // Create a task, storing the handle.
+ xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, &xHandle );
 
-	 // ...
+ // ...
 
-	 // Use the handle to suspend the created task.
-	 vTaskSuspend( xHandle );
+ // Use the handle to suspend the created task.
+ vTaskSuspend( xHandle );
 
-	 // ...
+ // ...
 
-	 // The created task will not run during this period, unless
-	 // another task calls vTaskResume( xHandle ).
+ // The created task will not run during this period, unless
+ // another task calls vTaskResume( xHandle ).
 
-	 //...
+ //...
 
 
-	 // Suspend ourselves.
-	 vTaskSuspend( NULL );
+ // Suspend ourselves.
+ vTaskSuspend( NULL );
 
-	 // We cannot get here unless another task calls vTaskResume
-	 // with our handle as the parameter.
+ // We cannot get here unless another task calls vTaskResume
+ // with our handle as the parameter.
  }
-   </pre>
+ </pre>
  * \defgroup vTaskSuspend vTaskSuspend
  * \ingroup TaskCtrl
  */
-void vTaskSuspend( TaskHandle_t xTaskToSuspend ) PRIVILEGED_FUNCTION;
+void vTaskSuspend(TaskHandle_t xTaskToSuspend)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -772,38 +773,39 @@ void vTaskSuspend( TaskHandle_t xTaskToSuspend ) PRIVILEGED_FUNCTION;
  * @param xTaskToResume Handle to the task being readied.
  *
  * Example usage:
-   <pre>
+ <pre>
  void vAFunction( void )
  {
  TaskHandle_t xHandle;
 
-	 // Create a task, storing the handle.
-	 xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, &xHandle );
+ // Create a task, storing the handle.
+ xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, &xHandle );
 
-	 // ...
+ // ...
 
-	 // Use the handle to suspend the created task.
-	 vTaskSuspend( xHandle );
+ // Use the handle to suspend the created task.
+ vTaskSuspend( xHandle );
 
-	 // ...
+ // ...
 
-	 // The created task will not run during this period, unless
-	 // another task calls vTaskResume( xHandle ).
+ // The created task will not run during this period, unless
+ // another task calls vTaskResume( xHandle ).
 
-	 //...
+ //...
 
 
-	 // Resume the suspended task ourselves.
-	 vTaskResume( xHandle );
+ // Resume the suspended task ourselves.
+ vTaskResume( xHandle );
 
-	 // The created task will once again get microcontroller processing
-	 // time in accordance with its priority within the system.
+ // The created task will once again get microcontroller processing
+ // time in accordance with its priority within the system.
  }
-   </pre>
+ </pre>
  * \defgroup vTaskResume vTaskResume
  * \ingroup TaskCtrl
  */
-void vTaskResume( TaskHandle_t xTaskToResume ) PRIVILEGED_FUNCTION;
+void vTaskResume(TaskHandle_t xTaskToResume)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -832,7 +834,8 @@ void vTaskResume( TaskHandle_t xTaskToResume ) PRIVILEGED_FUNCTION;
  * \defgroup vTaskResumeFromISR vTaskResumeFromISR
  * \ingroup TaskCtrl
  */
-BaseType_t xTaskResumeFromISR( TaskHandle_t xTaskToResume ) PRIVILEGED_FUNCTION;
+BaseType_t xTaskResumeFromISR(TaskHandle_t xTaskToResume)
+PRIVILEGED_FUNCTION;
 
 /*-----------------------------------------------------------
  * SCHEDULER CONTROL
@@ -849,23 +852,24 @@ BaseType_t xTaskResumeFromISR( TaskHandle_t xTaskToResume ) PRIVILEGED_FUNCTION;
  * tasks and starting the kernel.
  *
  * Example usage:
-   <pre>
+ <pre>
  void vAFunction( void )
  {
-	 // Create at least one task before starting the kernel.
-	 xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+ // Create at least one task before starting the kernel.
+ xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 
-	 // Start the real time kernel with preemption.
-	 vTaskStartScheduler ();
+ // Start the real time kernel with preemption.
+ vTaskStartScheduler ();
 
-	 // Will not get here unless a task calls vTaskEndScheduler ()
+ // Will not get here unless a task calls vTaskEndScheduler ()
  }
-   </pre>
+ </pre>
  *
  * \defgroup vTaskStartScheduler vTaskStartScheduler
  * \ingroup SchedulerControl
  */
-void vTaskStartScheduler( void ) PRIVILEGED_FUNCTION;
+void vTaskStartScheduler(void)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -891,37 +895,38 @@ void vTaskStartScheduler( void ) PRIVILEGED_FUNCTION;
  * tasks.
  *
  * Example usage:
-   <pre>
+ <pre>
  void vTaskCode( void * pvParameters )
  {
-	 for( ;; )
-	 {
-		 // Task code goes here.
+ for( ;; )
+ {
+ // Task code goes here.
 
-		 // At some point we want to end the real time kernel processing
-		 // so call ...
-		 vTaskEndScheduler ();
-	 }
+ // At some point we want to end the real time kernel processing
+ // so call ...
+ vTaskEndScheduler ();
+ }
  }
 
  void vAFunction( void )
  {
-	 // Create at least one task before starting the kernel.
-	 xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+ // Create at least one task before starting the kernel.
+ xTaskCreate( vTaskCode, "NAME", STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 
-	 // Start the real time kernel with preemption.
-	 vTaskStartScheduler ();
+ // Start the real time kernel with preemption.
+ vTaskStartScheduler ();
 
-	 // Will only get here when the vTaskCode () task has called
-	 // vTaskEndScheduler ().  When we get here we are back to single task
-	 // execution.
+ // Will only get here when the vTaskCode () task has called
+ // vTaskEndScheduler ().  When we get here we are back to single task
+ // execution.
  }
-   </pre>
+ </pre>
  *
  * \defgroup vTaskEndScheduler vTaskEndScheduler
  * \ingroup SchedulerControl
  */
-void vTaskEndScheduler( void ) PRIVILEGED_FUNCTION;
+void vTaskEndScheduler(void)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -939,40 +944,41 @@ void vTaskEndScheduler( void ) PRIVILEGED_FUNCTION;
  * is suspended.
  *
  * Example usage:
-   <pre>
+ <pre>
  void vTask1( void * pvParameters )
  {
-	 for( ;; )
-	 {
-		 // Task code goes here.
+ for( ;; )
+ {
+ // Task code goes here.
 
-		 // ...
+ // ...
 
-		 // At some point the task wants to perform a long operation during
-		 // which it does not want to get swapped out.  It cannot use
-		 // taskENTER_CRITICAL ()/taskEXIT_CRITICAL () as the length of the
-		 // operation may cause interrupts to be missed - including the
-		 // ticks.
+ // At some point the task wants to perform a long operation during
+ // which it does not want to get swapped out.  It cannot use
+ // taskENTER_CRITICAL ()/taskEXIT_CRITICAL () as the length of the
+ // operation may cause interrupts to be missed - including the
+ // ticks.
 
-		 // Prevent the real time kernel swapping out the task.
-		 vTaskSuspendAll ();
+ // Prevent the real time kernel swapping out the task.
+ vTaskSuspendAll ();
 
-		 // Perform the operation here.  There is no need to use critical
-		 // sections as we have all the microcontroller processing time.
-		 // During this time interrupts will still operate and the kernel
-		 // tick count will be maintained.
+ // Perform the operation here.  There is no need to use critical
+ // sections as we have all the microcontroller processing time.
+ // During this time interrupts will still operate and the kernel
+ // tick count will be maintained.
 
-		 // ...
+ // ...
 
-		 // The operation is complete.  Restart the kernel.
-		 xTaskResumeAll ();
-	 }
+ // The operation is complete.  Restart the kernel.
+ xTaskResumeAll ();
  }
-   </pre>
+ }
+ </pre>
  * \defgroup vTaskSuspendAll vTaskSuspendAll
  * \ingroup SchedulerControl
  */
-void vTaskSuspendAll( void ) PRIVILEGED_FUNCTION;
+void vTaskSuspendAll(void)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -988,45 +994,46 @@ void vTaskSuspendAll( void ) PRIVILEGED_FUNCTION;
  *		  returned, otherwise pdFALSE is returned.
  *
  * Example usage:
-   <pre>
+ <pre>
  void vTask1( void * pvParameters )
  {
-	 for( ;; )
-	 {
-		 // Task code goes here.
+ for( ;; )
+ {
+ // Task code goes here.
 
-		 // ...
+ // ...
 
-		 // At some point the task wants to perform a long operation during
-		 // which it does not want to get swapped out.  It cannot use
-		 // taskENTER_CRITICAL ()/taskEXIT_CRITICAL () as the length of the
-		 // operation may cause interrupts to be missed - including the
-		 // ticks.
+ // At some point the task wants to perform a long operation during
+ // which it does not want to get swapped out.  It cannot use
+ // taskENTER_CRITICAL ()/taskEXIT_CRITICAL () as the length of the
+ // operation may cause interrupts to be missed - including the
+ // ticks.
 
-		 // Prevent the real time kernel swapping out the task.
-		 vTaskSuspendAll ();
+ // Prevent the real time kernel swapping out the task.
+ vTaskSuspendAll ();
 
-		 // Perform the operation here.  There is no need to use critical
-		 // sections as we have all the microcontroller processing time.
-		 // During this time interrupts will still operate and the real
-		 // time kernel tick count will be maintained.
+ // Perform the operation here.  There is no need to use critical
+ // sections as we have all the microcontroller processing time.
+ // During this time interrupts will still operate and the real
+ // time kernel tick count will be maintained.
 
-		 // ...
+ // ...
 
-		 // The operation is complete.  Restart the kernel.  We want to force
-		 // a context switch - but there is no point if resuming the scheduler
-		 // caused a context switch already.
-		 if( !xTaskResumeAll () )
-		 {
-			  taskYIELD ();
-		 }
-	 }
+ // The operation is complete.  Restart the kernel.  We want to force
+ // a context switch - but there is no point if resuming the scheduler
+ // caused a context switch already.
+ if( !xTaskResumeAll () )
+ {
+ taskYIELD ();
  }
-   </pre>
+ }
+ }
+ </pre>
  * \defgroup xTaskResumeAll xTaskResumeAll
  * \ingroup SchedulerControl
  */
-BaseType_t xTaskResumeAll( void ) PRIVILEGED_FUNCTION;
+BaseType_t xTaskResumeAll(void)
+PRIVILEGED_FUNCTION;
 
 /*-----------------------------------------------------------
  * TASK UTILITIES
@@ -1041,7 +1048,8 @@ BaseType_t xTaskResumeAll( void ) PRIVILEGED_FUNCTION;
  * \defgroup xTaskGetTickCount xTaskGetTickCount
  * \ingroup TaskUtils
  */
-TickType_t xTaskGetTickCount( void ) PRIVILEGED_FUNCTION;
+TickType_t xTaskGetTickCount(void)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -1057,7 +1065,8 @@ TickType_t xTaskGetTickCount( void ) PRIVILEGED_FUNCTION;
  * \defgroup xTaskGetTickCountFromISR xTaskGetTickCountFromISR
  * \ingroup TaskUtils
  */
-TickType_t xTaskGetTickCountFromISR( void ) PRIVILEGED_FUNCTION;
+TickType_t xTaskGetTickCountFromISR(void)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -1071,7 +1080,8 @@ TickType_t xTaskGetTickCountFromISR( void ) PRIVILEGED_FUNCTION;
  * \defgroup uxTaskGetNumberOfTasks uxTaskGetNumberOfTasks
  * \ingroup TaskUtils
  */
-UBaseType_t uxTaskGetNumberOfTasks( void ) PRIVILEGED_FUNCTION;
+UBaseType_t uxTaskGetNumberOfTasks(void)
+PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -1085,7 +1095,8 @@ UBaseType_t uxTaskGetNumberOfTasks( void ) PRIVILEGED_FUNCTION;
  * \defgroup pcTaskGetTaskName pcTaskGetTaskName
  * \ingroup TaskUtils
  */
-char *pcTaskGetTaskName( TaskHandle_t xTaskToQuery ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+char *pcTaskGetTaskName(TaskHandle_t xTaskToQuery)
+PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 
 /**
  * task.h
@@ -1106,34 +1117,35 @@ char *pcTaskGetTaskName( TaskHandle_t xTaskToQuery ) PRIVILEGED_FUNCTION; /*lint
  * actual spaces on the stack rather than bytes) since the task referenced by
  * xTask was created.
  */
-UBaseType_t uxTaskGetStackHighWaterMark( TaskHandle_t xTask ) PRIVILEGED_FUNCTION;
+UBaseType_t uxTaskGetStackHighWaterMark(TaskHandle_t xTask)
+PRIVILEGED_FUNCTION;
 
 /* When using trace macros it is sometimes necessary to include task.h before
-FreeRTOS.h.  When this is done TaskHookFunction_t will not yet have been defined,
-so the following two prototypes will cause a compilation error.  This can be
-fixed by simply guarding against the inclusion of these two prototypes unless
-they are explicitly required by the configUSE_APPLICATION_TASK_TAG configuration
-constant. */
+ FreeRTOS.h.  When this is done TaskHookFunction_t will not yet have been defined,
+ so the following two prototypes will cause a compilation error.  This can be
+ fixed by simply guarding against the inclusion of these two prototypes unless
+ they are explicitly required by the configUSE_APPLICATION_TASK_TAG configuration
+ constant. */
 #ifdef configUSE_APPLICATION_TASK_TAG
-	#if configUSE_APPLICATION_TASK_TAG == 1
-		/**
-		 * task.h
-		 * <pre>void vTaskSetApplicationTaskTag( TaskHandle_t xTask, TaskHookFunction_t pxHookFunction );</pre>
-		 *
-		 * Sets pxHookFunction to be the task hook function used by the task xTask.
-		 * Passing xTask as NULL has the effect of setting the calling tasks hook
-		 * function.
-		 */
-		void vTaskSetApplicationTaskTag( TaskHandle_t xTask, TaskHookFunction_t pxHookFunction ) PRIVILEGED_FUNCTION;
+#if configUSE_APPLICATION_TASK_TAG == 1
+/**
+ * task.h
+ * <pre>void vTaskSetApplicationTaskTag( TaskHandle_t xTask, TaskHookFunction_t pxHookFunction );</pre>
+ *
+ * Sets pxHookFunction to be the task hook function used by the task xTask.
+ * Passing xTask as NULL has the effect of setting the calling tasks hook
+ * function.
+ */
+void vTaskSetApplicationTaskTag( TaskHandle_t xTask, TaskHookFunction_t pxHookFunction ) PRIVILEGED_FUNCTION;
 
-		/**
-		 * task.h
-		 * <pre>void xTaskGetApplicationTaskTag( TaskHandle_t xTask );</pre>
-		 *
-		 * Returns the pxHookFunction value assigned to the task xTask.
-		 */
-		TaskHookFunction_t xTaskGetApplicationTaskTag( TaskHandle_t xTask ) PRIVILEGED_FUNCTION;
-	#endif /* configUSE_APPLICATION_TASK_TAG ==1 */
+/**
+ * task.h
+ * <pre>void xTaskGetApplicationTaskTag( TaskHandle_t xTask );</pre>
+ *
+ * Returns the pxHookFunction value assigned to the task xTask.
+ */
+TaskHookFunction_t xTaskGetApplicationTaskTag( TaskHandle_t xTask ) PRIVILEGED_FUNCTION;
+#endif /* configUSE_APPLICATION_TASK_TAG ==1 */
 #endif /* ifdef configUSE_APPLICATION_TASK_TAG */
 
 /**
@@ -1147,7 +1159,8 @@ constant. */
  * wants.  The return value is the value returned by the task hook function
  * registered by the user.
  */
-BaseType_t xTaskCallApplicationTaskHook( TaskHandle_t xTask, void *pvParameter ) PRIVILEGED_FUNCTION;
+BaseType_t xTaskCallApplicationTaskHook(TaskHandle_t xTask, void *pvParameter)
+PRIVILEGED_FUNCTION;
 
 /**
  * xTaskGetIdleTaskHandle() is only available if
@@ -1156,7 +1169,7 @@ BaseType_t xTaskCallApplicationTaskHook( TaskHandle_t xTask, void *pvParameter )
  * Simply returns the handle of the idle task.  It is not valid to call
  * xTaskGetIdleTaskHandle() before the scheduler has been started.
  */
-TaskHandle_t xTaskGetIdleTaskHandle( void );
+TaskHandle_t xTaskGetIdleTaskHandle(void);
 
 /**
  * configUSE_TRACE_FACILITY must be defined as 1 in FreeRTOSConfig.h for
@@ -1193,69 +1206,70 @@ TaskHandle_t xTaskGetIdleTaskHandle( void );
  * in the uxArraySize parameter was too small.
  *
  * Example usage:
-   <pre>
-    // This example demonstrates how a human readable table of run time stats
-	// information is generated from raw data provided by uxTaskGetSystemState().
-	// The human readable table is written to pcWriteBuffer
-	void vTaskGetRunTimeStats( char *pcWriteBuffer )
-	{
-	TaskStatus_t *pxTaskStatusArray;
-	volatile UBaseType_t uxArraySize, x;
-	uint32_t ulTotalRunTime, ulStatsAsPercentage;
+ <pre>
+ // This example demonstrates how a human readable table of run time stats
+ // information is generated from raw data provided by uxTaskGetSystemState().
+ // The human readable table is written to pcWriteBuffer
+ void vTaskGetRunTimeStats( char *pcWriteBuffer )
+ {
+ TaskStatus_t *pxTaskStatusArray;
+ volatile UBaseType_t uxArraySize, x;
+ uint32_t ulTotalRunTime, ulStatsAsPercentage;
 
-		// Make sure the write buffer does not contain a string.
-		*pcWriteBuffer = 0x00;
+ // Make sure the write buffer does not contain a string.
+ *pcWriteBuffer = 0x00;
 
-		// Take a snapshot of the number of tasks in case it changes while this
-		// function is executing.
-		uxArraySize = uxTaskGetNumberOfTasks();
+ // Take a snapshot of the number of tasks in case it changes while this
+ // function is executing.
+ uxArraySize = uxTaskGetNumberOfTasks();
 
-		// Allocate a TaskStatus_t structure for each task.  An array could be
-		// allocated statically at compile time.
-		pxTaskStatusArray = pvPortMalloc( uxArraySize * sizeof( TaskStatus_t ) );
+ // Allocate a TaskStatus_t structure for each task.  An array could be
+ // allocated statically at compile time.
+ pxTaskStatusArray = pvPortMalloc( uxArraySize * sizeof( TaskStatus_t ) );
 
-		if( pxTaskStatusArray != NULL )
-		{
-			// Generate raw status information about each task.
-			uxArraySize = uxTaskGetSystemState( pxTaskStatusArray, uxArraySize, &ulTotalRunTime );
+ if( pxTaskStatusArray != NULL )
+ {
+ // Generate raw status information about each task.
+ uxArraySize = uxTaskGetSystemState( pxTaskStatusArray, uxArraySize, &ulTotalRunTime );
 
-			// For percentage calculations.
-			ulTotalRunTime /= 100UL;
+ // For percentage calculations.
+ ulTotalRunTime /= 100UL;
 
-			// Avoid divide by zero errors.
-			if( ulTotalRunTime > 0 )
-			{
-				// For each populated position in the pxTaskStatusArray array,
-				// format the raw data as human readable ASCII data
-				for( x = 0; x < uxArraySize; x++ )
-				{
-					// What percentage of the total run time has the task used?
-					// This will always be rounded down to the nearest integer.
-					// ulTotalRunTimeDiv100 has already been divided by 100.
-					ulStatsAsPercentage = pxTaskStatusArray[ x ].ulRunTimeCounter / ulTotalRunTime;
+ // Avoid divide by zero errors.
+ if( ulTotalRunTime > 0 )
+ {
+ // For each populated position in the pxTaskStatusArray array,
+ // format the raw data as human readable ASCII data
+ for( x = 0; x < uxArraySize; x++ )
+ {
+ // What percentage of the total run time has the task used?
+ // This will always be rounded down to the nearest integer.
+ // ulTotalRunTimeDiv100 has already been divided by 100.
+ ulStatsAsPercentage = pxTaskStatusArray[ x ].ulRunTimeCounter / ulTotalRunTime;
 
-					if( ulStatsAsPercentage > 0UL )
-					{
-						sprintf( pcWriteBuffer, "%s\t\t%lu\t\t%lu%%\r\n", pxTaskStatusArray[ x ].pcTaskName, pxTaskStatusArray[ x ].ulRunTimeCounter, ulStatsAsPercentage );
-					}
-					else
-					{
-						// If the percentage is zero here then the task has
-						// consumed less than 1% of the total run time.
-						sprintf( pcWriteBuffer, "%s\t\t%lu\t\t<1%%\r\n", pxTaskStatusArray[ x ].pcTaskName, pxTaskStatusArray[ x ].ulRunTimeCounter );
-					}
+ if( ulStatsAsPercentage > 0UL )
+ {
+ sprintf( pcWriteBuffer, "%s\t\t%lu\t\t%lu%%\r\n", pxTaskStatusArray[ x ].pcTaskName, pxTaskStatusArray[ x ].ulRunTimeCounter, ulStatsAsPercentage );
+ }
+ else
+ {
+ // If the percentage is zero here then the task has
+ // consumed less than 1% of the total run time.
+ sprintf( pcWriteBuffer, "%s\t\t%lu\t\t<1%%\r\n", pxTaskStatusArray[ x ].pcTaskName, pxTaskStatusArray[ x ].ulRunTimeCounter );
+ }
 
-					pcWriteBuffer += strlen( ( char * ) pcWriteBuffer );
-				}
-			}
+ pcWriteBuffer += strlen( ( char * ) pcWriteBuffer );
+ }
+ }
 
-			// The array is no longer needed, free the memory it consumes.
-			vPortFree( pxTaskStatusArray );
-		}
-	}
-	</pre>
+ // The array is no longer needed, free the memory it consumes.
+ vPortFree( pxTaskStatusArray );
+ }
+ }
+ </pre>
  */
-UBaseType_t uxTaskGetSystemState( TaskStatus_t * const pxTaskStatusArray, const UBaseType_t uxArraySize, uint32_t * const pulTotalRunTime );
+UBaseType_t uxTaskGetSystemState(TaskStatus_t * const pxTaskStatusArray,
+		const UBaseType_t uxArraySize, uint32_t * const pulTotalRunTime);
 
 /**
  * task. h
@@ -1302,7 +1316,8 @@ UBaseType_t uxTaskGetSystemState( TaskStatus_t * const pxTaskStatusArray, const 
  * \defgroup vTaskList vTaskList
  * \ingroup TaskUtils
  */
-void vTaskList( char * pcWriteBuffer ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+void vTaskList(char * pcWriteBuffer)
+PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 
 /**
  * task. h
@@ -1356,7 +1371,8 @@ void vTaskList( char * pcWriteBuffer ) PRIVILEGED_FUNCTION; /*lint !e971 Unquali
  * \defgroup vTaskGetRunTimeStats vTaskGetRunTimeStats
  * \ingroup TaskUtils
  */
-void vTaskGetRunTimeStats( char *pcWriteBuffer ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+void vTaskGetRunTimeStats(char *pcWriteBuffer)
+PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 
 /*-----------------------------------------------------------
  * SCHEDULER INTERNALS AVAILABLE FOR PORTING PURPOSES
@@ -1377,7 +1393,8 @@ void vTaskGetRunTimeStats( char *pcWriteBuffer ) PRIVILEGED_FUNCTION; /*lint !e9
  *   + Time slicing is in use and there is a task of equal priority to the
  *     currently running task.
  */
-BaseType_t xTaskIncrementTick( void ) PRIVILEGED_FUNCTION;
+BaseType_t xTaskIncrementTick(void)
+PRIVILEGED_FUNCTION;
 
 /*
  * THIS FUNCTION MUST NOT BE USED FROM APPLICATION CODE.  IT IS AN
@@ -1410,8 +1427,12 @@ BaseType_t xTaskIncrementTick( void ) PRIVILEGED_FUNCTION;
  * portTICK_PERIOD_MS can be used to convert kernel ticks into a real time
  * period.
  */
-void vTaskPlaceOnEventList( List_t * const pxEventList, const TickType_t xTicksToWait ) PRIVILEGED_FUNCTION;
-void vTaskPlaceOnUnorderedEventList( List_t * pxEventList, const TickType_t xItemValue, const TickType_t xTicksToWait ) PRIVILEGED_FUNCTION;
+void vTaskPlaceOnEventList(List_t * const pxEventList,
+		const TickType_t xTicksToWait)
+PRIVILEGED_FUNCTION;
+void vTaskPlaceOnUnorderedEventList(List_t * pxEventList,
+		const TickType_t xItemValue, const TickType_t xTicksToWait)
+PRIVILEGED_FUNCTION;
 
 /*
  * THIS FUNCTION MUST NOT BE USED FROM APPLICATION CODE.  IT IS AN
@@ -1424,7 +1445,9 @@ void vTaskPlaceOnUnorderedEventList( List_t * pxEventList, const TickType_t xIte
  * indefinitely, whereas vTaskPlaceOnEventList() does.
  *
  */
-void vTaskPlaceOnEventListRestricted( List_t * const pxEventList, const TickType_t xTicksToWait ) PRIVILEGED_FUNCTION;
+void vTaskPlaceOnEventListRestricted(List_t * const pxEventList,
+		const TickType_t xTicksToWait)
+PRIVILEGED_FUNCTION;
 
 /*
  * THIS FUNCTION MUST NOT BE USED FROM APPLICATION CODE.  IT IS AN
@@ -1450,8 +1473,11 @@ void vTaskPlaceOnEventListRestricted( List_t * const pxEventList, const TickType
  * @return pdTRUE if the task being removed has a higher priority than the task
  * making the call, otherwise pdFALSE.
  */
-BaseType_t xTaskRemoveFromEventList( const List_t * const pxEventList ) PRIVILEGED_FUNCTION;
-BaseType_t xTaskRemoveFromUnorderedEventList( ListItem_t * pxEventListItem, const TickType_t xItemValue ) PRIVILEGED_FUNCTION;
+BaseType_t xTaskRemoveFromEventList(const List_t * const pxEventList)
+PRIVILEGED_FUNCTION;
+BaseType_t xTaskRemoveFromUnorderedEventList(ListItem_t * pxEventListItem,
+		const TickType_t xItemValue)
+PRIVILEGED_FUNCTION;
 
 /*
  * THIS FUNCTION MUST NOT BE USED FROM APPLICATION CODE.  IT IS ONLY
@@ -1461,70 +1487,87 @@ BaseType_t xTaskRemoveFromUnorderedEventList( ListItem_t * pxEventListItem, cons
  * Sets the pointer to the current TCB to the TCB of the highest priority task
  * that is ready to run.
  */
-void vTaskSwitchContext( void ) PRIVILEGED_FUNCTION;
+void vTaskSwitchContext(void)
+PRIVILEGED_FUNCTION;
 
 /*
  * THESE FUNCTIONS MUST NOT BE USED FROM APPLICATION CODE.  THEY ARE USED BY
  * THE EVENT BITS MODULE.
  */
-TickType_t uxTaskResetEventItemValue( void ) PRIVILEGED_FUNCTION;
+TickType_t uxTaskResetEventItemValue(void)
+PRIVILEGED_FUNCTION;
 
 /*
  * Return the handle of the calling task.
  */
-TaskHandle_t xTaskGetCurrentTaskHandle( void ) PRIVILEGED_FUNCTION;
+TaskHandle_t xTaskGetCurrentTaskHandle(void)
+PRIVILEGED_FUNCTION;
 
 /*
  * Capture the current time status for future reference.
  */
-void vTaskSetTimeOutState( TimeOut_t * const pxTimeOut ) PRIVILEGED_FUNCTION;
+void vTaskSetTimeOutState(TimeOut_t * const pxTimeOut)
+PRIVILEGED_FUNCTION;
 
 /*
  * Compare the time status now with that previously captured to see if the
  * timeout has expired.
  */
-BaseType_t xTaskCheckForTimeOut( TimeOut_t * const pxTimeOut, TickType_t * const pxTicksToWait ) PRIVILEGED_FUNCTION;
+BaseType_t xTaskCheckForTimeOut(TimeOut_t * const pxTimeOut,
+		TickType_t * const pxTicksToWait)
+PRIVILEGED_FUNCTION;
 
 /*
  * Shortcut used by the queue implementation to prevent unnecessary call to
  * taskYIELD();
  */
-void vTaskMissedYield( void ) PRIVILEGED_FUNCTION;
+void vTaskMissedYield(void)
+PRIVILEGED_FUNCTION;
 
 /*
  * Returns the scheduler state as taskSCHEDULER_RUNNING,
  * taskSCHEDULER_NOT_STARTED or taskSCHEDULER_SUSPENDED.
  */
-BaseType_t xTaskGetSchedulerState( void ) PRIVILEGED_FUNCTION;
+BaseType_t xTaskGetSchedulerState(void)
+PRIVILEGED_FUNCTION;
 
 /*
  * Raises the priority of the mutex holder to that of the calling task should
  * the mutex holder have a priority less than the calling task.
  */
-void vTaskPriorityInherit( TaskHandle_t const pxMutexHolder ) PRIVILEGED_FUNCTION;
+void vTaskPriorityInherit(TaskHandle_t const pxMutexHolder)
+PRIVILEGED_FUNCTION;
 
 /*
  * Set the priority of a task back to its proper priority in the case that it
  * inherited a higher priority while it was holding a semaphore.
  */
-BaseType_t xTaskPriorityDisinherit( TaskHandle_t const pxMutexHolder ) PRIVILEGED_FUNCTION;
+BaseType_t xTaskPriorityDisinherit(TaskHandle_t const pxMutexHolder)
+PRIVILEGED_FUNCTION;
 
 /*
  * Generic version of the task creation function which is in turn called by the
  * xTaskCreate() and xTaskCreateRestricted() macros.
  */
-BaseType_t xTaskGenericCreate( TaskFunction_t pxTaskCode, const char * const pcName, const uint16_t usStackDepth, void * const pvParameters, UBaseType_t uxPriority, TaskHandle_t * const pxCreatedTask, StackType_t * const puxStackBuffer, const MemoryRegion_t * const xRegions ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+BaseType_t xTaskGenericCreate(TaskFunction_t pxTaskCode,
+		const char * const pcName, const uint16_t usStackDepth,
+		void * const pvParameters, UBaseType_t uxPriority,
+		TaskHandle_t * const pxCreatedTask, StackType_t * const puxStackBuffer,
+		const MemoryRegion_t * const xRegions)
+PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 
 /*
  * Get the uxTCBNumber assigned to the task referenced by the xTask parameter.
  */
-UBaseType_t uxTaskGetTaskNumber( TaskHandle_t xTask ) PRIVILEGED_FUNCTION;
+UBaseType_t uxTaskGetTaskNumber(TaskHandle_t xTask)
+PRIVILEGED_FUNCTION;
 
 /*
  * Set the uxTaskNumber of the task referenced by the xTask parameter to
  * uxHandle.
  */
-void vTaskSetTaskNumber( TaskHandle_t xTask, const UBaseType_t uxHandle ) PRIVILEGED_FUNCTION;
+void vTaskSetTaskNumber(TaskHandle_t xTask, const UBaseType_t uxHandle)
+PRIVILEGED_FUNCTION;
 
 /*
  * Only available when configUSE_TICKLESS_IDLE is set to 1.
@@ -1534,7 +1577,8 @@ void vTaskSetTaskNumber( TaskHandle_t xTask, const UBaseType_t uxHandle ) PRIVIL
  * to date with the actual execution time by being skipped forward by a time
  * equal to the idle period.
  */
-void vTaskStepTick( const TickType_t xTicksToJump ) PRIVILEGED_FUNCTION;
+void vTaskStepTick(const TickType_t xTicksToJump)
+PRIVILEGED_FUNCTION;
 
 /*
  * Only avilable when configUSE_TICKLESS_IDLE is set to 1.
@@ -1550,18 +1594,17 @@ void vTaskStepTick( const TickType_t xTicksToJump ) PRIVILEGED_FUNCTION;
  * critical section between the timer being stopped and the sleep mode being
  * entered to ensure it is ok to proceed into the sleep mode.
  */
-eSleepModeStatus eTaskConfirmSleepModeStatus( void ) PRIVILEGED_FUNCTION;
+eSleepModeStatus eTaskConfirmSleepModeStatus(void)
+PRIVILEGED_FUNCTION;
 
 /*
  * For internal use only.  Increment the mutex held count when a mutex is
  * taken and return the handle of the task that has taken the mutex.
  */
-void *pvTaskIncrementMutexHeldCount( void );
+void *pvTaskIncrementMutexHeldCount(void);
 
 #ifdef __cplusplus
 }
 #endif
 #endif /* INC_TASK_H */
-
-
 

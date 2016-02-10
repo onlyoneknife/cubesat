@@ -17,14 +17,14 @@ extern "C" {
 #define WINDOWS_QUEUE_OK CSP_QUEUE_OK
 
 typedef struct windows_queue_s {
-    void * buffer;
-    int size;
-    int item_size;
-    int items;
-    int head_idx;
-    CRITICAL_SECTION mutex;
-    CONDITION_VARIABLE cond_full;
-    CONDITION_VARIABLE cond_empty;
+	void * buffer;
+	int size;
+	int item_size;
+	int items;
+	int head_idx;
+	CRITICAL_SECTION mutex;
+	CONDITION_VARIABLE cond_full;
+	CONDITION_VARIABLE cond_empty;
 } windows_queue_t;
 
 windows_queue_t * windows_queue_create(int length, size_t item_size);
@@ -38,4 +38,3 @@ int windows_queue_items(windows_queue_t * queue);
 #endif
 
 #endif // _WINDOWS_QUEUE_H_
-

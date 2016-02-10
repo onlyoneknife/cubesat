@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk) 
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk) 
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 #include <stdint.h>
 
@@ -29,8 +29,7 @@ inline uint16_t __attribute__ ((__const__)) csp_hton16(uint16_t h16) {
 #ifdef CSP_BIG_ENDIAN
 	return h16;
 #else
-	return (((h16 & 0xff00) >> 8) |
-			((h16 & 0x00ff) << 8));
+	return (((h16 & 0xff00) >> 8) | ((h16 & 0x00ff) << 8));
 #endif
 }
 
@@ -44,10 +43,8 @@ inline uint32_t __attribute__ ((__const__)) csp_hton32(uint32_t h32) {
 #ifdef CSP_BIG_ENDIAN
 	return h32;
 #else
-	return (((h32 & 0xff000000) >> 24) |
-			((h32 & 0x000000ff) << 24) |
-			((h32 & 0x0000ff00) <<  8) |
-			((h32 & 0x00ff0000) >>  8));
+	return (((h32 & 0xff000000) >> 24) | ((h32 & 0x000000ff) << 24)
+			| ((h32 & 0x0000ff00) << 8) | ((h32 & 0x00ff0000) >> 8));
 #endif
 }
 
@@ -61,14 +58,14 @@ inline uint64_t __attribute__ ((__const__)) csp_hton64(uint64_t h64) {
 #ifdef CSP_BIG_ENDIAN
 	return h64;
 #else
-	return (((h64 & 0xff00000000000000LL) >> 56) |
-			((h64 & 0x00000000000000ffLL) << 56) |
-			((h64 & 0x00ff000000000000LL) >> 40) |
-			((h64 & 0x000000000000ff00LL) << 40) |
-			((h64 & 0x0000ff0000000000LL) >> 24) |
-			((h64 & 0x0000000000ff0000LL) << 24) |
-			((h64 & 0x000000ff00000000LL) >>  8) |
-			((h64 & 0x00000000ff000000LL) <<  8));
+	return (((h64 & 0xff00000000000000LL) >> 56)
+			| ((h64 & 0x00000000000000ffLL) << 56)
+			| ((h64 & 0x00ff000000000000LL) >> 40)
+			| ((h64 & 0x000000000000ff00LL) << 40)
+			| ((h64 & 0x0000ff0000000000LL) >> 24)
+			| ((h64 & 0x0000000000ff0000LL) << 24)
+			| ((h64 & 0x000000ff00000000LL) >> 8)
+			| ((h64 & 0x00000000ff000000LL) << 8));
 #endif
 }
 
@@ -114,8 +111,8 @@ inline uint32_t __attribute__ ((__const__)) csp_htole32(uint32_t h32) {
 #else
 	return (((h32 & 0xff000000) >> 24) |
 			((h32 & 0x000000ff) << 24) |
-			((h32 & 0x0000ff00) <<  8) |
-			((h32 & 0x00ff0000) >>  8));
+			((h32 & 0x0000ff00) << 8) |
+			((h32 & 0x00ff0000) >> 8));
 #endif
 }
 
@@ -145,8 +142,8 @@ inline uint64_t __attribute__ ((__const__)) csp_htole64(uint64_t h64) {
 			((h64 & 0x000000000000ff00LL) << 40) |
 			((h64 & 0x0000ff0000000000LL) >> 24) |
 			((h64 & 0x0000000000ff0000LL) << 24) |
-			((h64 & 0x000000ff00000000LL) >>  8) |
-			((h64 & 0x00000000ff000000LL) <<  8));
+			((h64 & 0x000000ff00000000LL) >> 8) |
+			((h64 & 0x00000000ff000000LL) << 8));
 #endif
 }
 
@@ -160,15 +157,14 @@ inline uint64_t __attribute__ ((__const__)) csp_letoh64(uint64_t le64) {
 	return csp_htole64(le64);
 }
 
-
 /* Convert float from host byte order to network byte order */
 inline float __attribute__ ((__const__)) csp_htonflt(float f) {
 #ifdef CSP_BIG_ENDIAN
 	return f;
 #else
 	union v {
-		float       f;
-		uint32_t	i;
+		float f;
+		uint32_t i;
 	};
 	union v val;
 	val.f = f;
@@ -188,8 +184,8 @@ inline double __attribute__ ((__const__)) csp_htondbl(double d) {
 	return d;
 #else
 	union v {
-		double       d;
-		uint64_t     i;
+		double d;
+		uint64_t i;
 	};
 	union v val;
 	val.d = d;

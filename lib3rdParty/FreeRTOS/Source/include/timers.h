@@ -1,78 +1,77 @@
 /*
-    FreeRTOS V8.1.2 - Copyright (C) 2014 Real Time Engineers Ltd.
-    All rights reserved
+ FreeRTOS V8.1.2 - Copyright (C) 2014 Real Time Engineers Ltd.
+ All rights reserved
 
-    VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
+ VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
 
-    ***************************************************************************
-     *                                                                       *
-     *    FreeRTOS provides completely free yet professionally developed,    *
-     *    robust, strictly quality controlled, supported, and cross          *
-     *    platform software that has become a de facto standard.             *
-     *                                                                       *
-     *    Help yourself get started quickly and support the FreeRTOS         *
-     *    project by purchasing a FreeRTOS tutorial book, reference          *
-     *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
-     *                                                                       *
-     *    Thank you!                                                         *
-     *                                                                       *
-    ***************************************************************************
+ ***************************************************************************
+ *                                                                       *
+ *    FreeRTOS provides completely free yet professionally developed,    *
+ *    robust, strictly quality controlled, supported, and cross          *
+ *    platform software that has become a de facto standard.             *
+ *                                                                       *
+ *    Help yourself get started quickly and support the FreeRTOS         *
+ *    project by purchasing a FreeRTOS tutorial book, reference          *
+ *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
+ *                                                                       *
+ *    Thank you!                                                         *
+ *                                                                       *
+ ***************************************************************************
 
-    This file is part of the FreeRTOS distribution.
+ This file is part of the FreeRTOS distribution.
 
-    FreeRTOS is free software; you can redistribute it and/or modify it under
-    the terms of the GNU General Public License (version 2) as published by the
-    Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+ FreeRTOS is free software; you can redistribute it and/or modify it under
+ the terms of the GNU General Public License (version 2) as published by the
+ Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
 
-    >>!   NOTE: The modification to the GPL is included to allow you to     !<<
-    >>!   distribute a combined work that includes FreeRTOS without being   !<<
-    >>!   obliged to provide the source code for proprietary components     !<<
-    >>!   outside of the FreeRTOS kernel.                                   !<<
+ >>!   NOTE: The modification to the GPL is included to allow you to     !<<
+ >>!   distribute a combined work that includes FreeRTOS without being   !<<
+ >>!   obliged to provide the source code for proprietary components     !<<
+ >>!   outside of the FreeRTOS kernel.                                   !<<
 
-    FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
-    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-    FOR A PARTICULAR PURPOSE.  Full license text is available from the following
-    link: http://www.freertos.org/a00114.html
+ FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE.  Full license text is available from the following
+ link: http://www.freertos.org/a00114.html
 
-    1 tab == 4 spaces!
+ 1 tab == 4 spaces!
 
-    ***************************************************************************
-     *                                                                       *
-     *    Having a problem?  Start by reading the FAQ "My application does   *
-     *    not run, what could be wrong?"                                     *
-     *                                                                       *
-     *    http://www.FreeRTOS.org/FAQHelp.html                               *
-     *                                                                       *
-    ***************************************************************************
+ ***************************************************************************
+ *                                                                       *
+ *    Having a problem?  Start by reading the FAQ "My application does   *
+ *    not run, what could be wrong?"                                     *
+ *                                                                       *
+ *    http://www.FreeRTOS.org/FAQHelp.html                               *
+ *                                                                       *
+ ***************************************************************************
 
-    http://www.FreeRTOS.org - Documentation, books, training, latest versions,
-    license and Real Time Engineers Ltd. contact details.
+ http://www.FreeRTOS.org - Documentation, books, training, latest versions,
+ license and Real Time Engineers Ltd. contact details.
 
-    http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
-    including FreeRTOS+Trace - an indispensable productivity tool, a DOS
-    compatible FAT file system, and our tiny thread aware UDP/IP stack.
+ http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
+ including FreeRTOS+Trace - an indispensable productivity tool, a DOS
+ compatible FAT file system, and our tiny thread aware UDP/IP stack.
 
-    http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
-    Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
-    licenses offer ticketed support, indemnification and middleware.
+ http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+ Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
+ licenses offer ticketed support, indemnification and middleware.
 
-    http://www.SafeRTOS.com - High Integrity Systems also provide a safety
-    engineered and independently SIL3 certified version for use in safety and
-    mission critical applications that require provable dependability.
+ http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+ engineered and independently SIL3 certified version for use in safety and
+ mission critical applications that require provable dependability.
 
-    1 tab == 4 spaces!
-*/
-
+ 1 tab == 4 spaces!
+ */
 
 #ifndef TIMERS_H
 #define TIMERS_H
 
 #ifndef INC_FREERTOS_H
-	#error "include FreeRTOS.h must appear in source files before include timers.h"
+#error "include FreeRTOS.h must appear in source files before include timers.h"
 #endif
 
 /*lint -e537 This headers are only multiply included if the application code
-happens to also be including task.h. */
+ happens to also be including task.h. */
 #include "task.h"
 /*lint +e956 */
 
@@ -85,10 +84,10 @@ extern "C" {
  *----------------------------------------------------------*/
 
 /* IDs for commands that can be sent/received on the timer queue.  These are to
-be used solely through the macros that make up the public software timer API,
-as defined below.  The commands that are sent from interrupts must use the
-highest numbers as tmrFIRST_FROM_ISR_COMMAND is used to determine if the task
-or interrupt version of the queue send function should be used. */
+ be used solely through the macros that make up the public software timer API,
+ as defined below.  The commands that are sent from interrupts must use the
+ highest numbers as tmrFIRST_FROM_ISR_COMMAND is used to determine if the task
+ or interrupt version of the queue send function should be used. */
 #define tmrCOMMAND_EXECUTE_CALLBACK_FROM_ISR 	( ( BaseType_t ) -2 )
 #define tmrCOMMAND_EXECUTE_CALLBACK				( ( BaseType_t ) -1 )
 #define tmrCOMMAND_START_DONT_TRACE				( ( BaseType_t ) 0 )
@@ -104,7 +103,6 @@ or interrupt version of the queue send function should be used. */
 #define tmrCOMMAND_STOP_FROM_ISR				( ( BaseType_t ) 8 )
 #define tmrCOMMAND_CHANGE_PERIOD_FROM_ISR		( ( BaseType_t ) 9 )
 
-
 /**
  * Type by which software timers are referenced.  For example, a call to
  * xTimerCreate() returns an TimerHandle_t variable that can then be used to
@@ -116,13 +114,13 @@ typedef void * TimerHandle_t;
 /*
  * Defines the prototype to which timer callback functions must conform.
  */
-typedef void (*TimerCallbackFunction_t)( TimerHandle_t xTimer );
+typedef void (*TimerCallbackFunction_t)(TimerHandle_t xTimer);
 
 /*
  * Defines the prototype to which functions used with the
  * xTimerPendFunctionCallFromISR() function must conform.
  */
-typedef void (*PendedFunction_t)( void *, uint32_t );
+typedef void (*PendedFunction_t)(void *, uint32_t);
 
 /**
  * TimerHandle_t xTimerCreate( 	const char * const pcTimerName,
@@ -253,7 +251,10 @@ typedef void (*PendedFunction_t)( void *, uint32_t );
  * }
  * @endverbatim
  */
-TimerHandle_t xTimerCreate( const char * const pcTimerName, const TickType_t xTimerPeriodInTicks, const UBaseType_t uxAutoReload, void * const pvTimerID, TimerCallbackFunction_t pxCallbackFunction ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+TimerHandle_t xTimerCreate(const char * const pcTimerName,
+		const TickType_t xTimerPeriodInTicks, const UBaseType_t uxAutoReload,
+		void * const pvTimerID, TimerCallbackFunction_t pxCallbackFunction)
+PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 
 /**
  * void *pvTimerGetTimerID( TimerHandle_t xTimer );
@@ -275,7 +276,8 @@ TimerHandle_t xTimerCreate( const char * const pcTimerName, const TickType_t xTi
  *
  * See the xTimerCreate() API function example usage scenario.
  */
-void *pvTimerGetTimerID( TimerHandle_t xTimer ) PRIVILEGED_FUNCTION;
+void *pvTimerGetTimerID(TimerHandle_t xTimer)
+PRIVILEGED_FUNCTION;
 
 /**
  * BaseType_t xTimerIsTimerActive( TimerHandle_t xTimer );
@@ -312,7 +314,8 @@ void *pvTimerGetTimerID( TimerHandle_t xTimer ) PRIVILEGED_FUNCTION;
  * }
  * @endverbatim
  */
-BaseType_t xTimerIsTimerActive( TimerHandle_t xTimer ) PRIVILEGED_FUNCTION;
+BaseType_t xTimerIsTimerActive(TimerHandle_t xTimer)
+PRIVILEGED_FUNCTION;
 
 /**
  * TaskHandle_t xTimerGetTimerDaemonTaskHandle( void );
@@ -323,7 +326,7 @@ BaseType_t xTimerIsTimerActive( TimerHandle_t xTimer ) PRIVILEGED_FUNCTION;
  * Simply returns the handle of the timer service/daemon task.  It it not valid
  * to call xTimerGetTimerDaemonTaskHandle() before the scheduler has been started.
  */
-TaskHandle_t xTimerGetTimerDaemonTaskHandle( void );
+TaskHandle_t xTimerGetTimerDaemonTaskHandle(void);
 
 /**
  * BaseType_t xTimerStart( TimerHandle_t xTimer, TickType_t xTicksToWait );
@@ -497,7 +500,7 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void );
  * }
  * @endverbatim
  */
- #define xTimerChangePeriod( xTimer, xNewPeriod, xTicksToWait ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_CHANGE_PERIOD, ( xNewPeriod ), NULL, ( xTicksToWait ) )
+#define xTimerChangePeriod( xTimer, xNewPeriod, xTicksToWait ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_CHANGE_PERIOD, ( xNewPeriod ), NULL, ( xTicksToWait ) )
 
 /**
  * BaseType_t xTimerDelete( TimerHandle_t xTimer, TickType_t xTicksToWait );
@@ -969,7 +972,6 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void );
  */
 #define xTimerResetFromISR( xTimer, pxHigherPriorityTaskWoken ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_RESET_FROM_ISR, ( xTaskGetTickCountFromISR() ), ( pxHigherPriorityTaskWoken ), 0U )
 
-
 /**
  * BaseType_t xTimerPendFunctionCallFromISR( PendedFunction_t xFunctionToPend,
  *                                          void *pvParameter1,
@@ -1058,41 +1060,44 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void );
  *	}
  * @endverbatim
  */
-BaseType_t xTimerPendFunctionCallFromISR( PendedFunction_t xFunctionToPend, void *pvParameter1, uint32_t ulParameter2, BaseType_t *pxHigherPriorityTaskWoken );
+BaseType_t xTimerPendFunctionCallFromISR(PendedFunction_t xFunctionToPend,
+		void *pvParameter1, uint32_t ulParameter2,
+		BaseType_t *pxHigherPriorityTaskWoken);
 
- /**
-  * BaseType_t xTimerPendFunctionCall( PendedFunction_t xFunctionToPend,
-  *                                    void *pvParameter1,
-  *                                    uint32_t ulParameter2,
-  *                                    TickType_t xTicksToWait );
-  *
-  *
-  * Used to defer the execution of a function to the RTOS daemon task (the timer
-  * service task, hence this function is implemented in timers.c and is prefixed
-  * with 'Timer').
-  *
-  * @param xFunctionToPend The function to execute from the timer service/
-  * daemon task.  The function must conform to the PendedFunction_t
-  * prototype.
-  *
-  * @param pvParameter1 The value of the callback function's first parameter.
-  * The parameter has a void * type to allow it to be used to pass any type.
-  * For example, unsigned longs can be cast to a void *, or the void * can be
-  * used to point to a structure.
-  *
-  * @param ulParameter2 The value of the callback function's second parameter.
-  *
-  * @param xTicksToWait Calling this function will result in a message being
-  * sent to the timer daemon task on a queue.  xTicksToWait is the amount of
-  * time the calling task should remain in the Blocked state (so not using any
-  * processing time) for space to become available on the timer queue if the
-  * queue is found to be full.
-  *
-  * @return pdPASS is returned if the message was successfully sent to the
-  * timer daemon task, otherwise pdFALSE is returned.
-  *
-  */
-BaseType_t xTimerPendFunctionCall( PendedFunction_t xFunctionToPend, void *pvParameter1, uint32_t ulParameter2, TickType_t xTicksToWait );
+/**
+ * BaseType_t xTimerPendFunctionCall( PendedFunction_t xFunctionToPend,
+ *                                    void *pvParameter1,
+ *                                    uint32_t ulParameter2,
+ *                                    TickType_t xTicksToWait );
+ *
+ *
+ * Used to defer the execution of a function to the RTOS daemon task (the timer
+ * service task, hence this function is implemented in timers.c and is prefixed
+ * with 'Timer').
+ *
+ * @param xFunctionToPend The function to execute from the timer service/
+ * daemon task.  The function must conform to the PendedFunction_t
+ * prototype.
+ *
+ * @param pvParameter1 The value of the callback function's first parameter.
+ * The parameter has a void * type to allow it to be used to pass any type.
+ * For example, unsigned longs can be cast to a void *, or the void * can be
+ * used to point to a structure.
+ *
+ * @param ulParameter2 The value of the callback function's second parameter.
+ *
+ * @param xTicksToWait Calling this function will result in a message being
+ * sent to the timer daemon task on a queue.  xTicksToWait is the amount of
+ * time the calling task should remain in the Blocked state (so not using any
+ * processing time) for space to become available on the timer queue if the
+ * queue is found to be full.
+ *
+ * @return pdPASS is returned if the message was successfully sent to the
+ * timer daemon task, otherwise pdFALSE is returned.
+ *
+ */
+BaseType_t xTimerPendFunctionCall(PendedFunction_t xFunctionToPend,
+		void *pvParameter1, uint32_t ulParameter2, TickType_t xTicksToWait);
 
 /**
  * const char * const pcTimerGetTimerName( TimerHandle_t xTimer );
@@ -1103,19 +1108,22 @@ BaseType_t xTimerPendFunctionCall( PendedFunction_t xFunctionToPend, void *pvPar
  *
  * @return The name assigned to the timer specified by the xTimer parameter.
  */
-const char * pcTimerGetTimerName( TimerHandle_t xTimer ); /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+const char * pcTimerGetTimerName(TimerHandle_t xTimer); /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 
 /*
  * Functions beyond this part are not part of the public API and are intended
  * for use by the kernel only.
  */
-BaseType_t xTimerCreateTimerTask( void ) PRIVILEGED_FUNCTION;
-BaseType_t xTimerGenericCommand( TimerHandle_t xTimer, const BaseType_t xCommandID, const TickType_t xOptionalValue, BaseType_t * const pxHigherPriorityTaskWoken, const TickType_t xTicksToWait ) PRIVILEGED_FUNCTION;
+BaseType_t xTimerCreateTimerTask(void)
+PRIVILEGED_FUNCTION;
+BaseType_t xTimerGenericCommand(TimerHandle_t xTimer,
+		const BaseType_t xCommandID, const TickType_t xOptionalValue,
+		BaseType_t * const pxHigherPriorityTaskWoken,
+		const TickType_t xTicksToWait)
+PRIVILEGED_FUNCTION;
 
 #ifdef __cplusplus
 }
 #endif
 #endif /* TIMERS_H */
-
-
 

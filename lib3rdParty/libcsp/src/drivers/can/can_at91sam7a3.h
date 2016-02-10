@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 #ifndef _CAN_AT91SAM7A3_H_
 #define _CAN_AT91SAM7A3_H_
@@ -33,32 +33,32 @@ extern "C" {
 
 /** CAN Channel Structure */
 typedef struct {
-   uint32_t	 MMR;	 		 	/* Mailbox Mode Register				*/
-   uint32_t	 MAM;				/* Mailbox Acceptance Mask Register	 */
-   uint32_t	 MID;				/* Mailbox ID Register			 		*/
-   uint32_t	 MFID;			   /* Mailbox Family ID Register			*/
-   uint32_t	 MSR;		  		/* Mailbox Status Register				*/
-   uint32_t	 MDL;				/* Mailbox Data Low Register		 	*/
-   uint32_t	 MDH;				/* Mailbox Date High Register		  	*/
-   uint32_t	 MCR;		  		/* Mailbox Control Register				*/
-} volatile can_channel_t;
+	uint32_t MMR; /* Mailbox Mode Register				*/
+	uint32_t MAM; /* Mailbox Acceptance Mask Register	 */
+	uint32_t MID; /* Mailbox ID Register			 		*/
+	uint32_t MFID; /* Mailbox Family ID Register			*/
+	uint32_t MSR; /* Mailbox Status Register				*/
+	uint32_t MDL; /* Mailbox Data Low Register		 	*/
+	uint32_t MDH; /* Mailbox Date High Register		  	*/
+	uint32_t MCR; /* Mailbox Control Register				*/
+}volatile can_channel_t;
 
 /** CAN Controller Structure 16 Channels */
 typedef struct {
-   uint32_t  MR;					/* Mode Register					   	*/
-   uint32_t  IER;					/* Interrupt Enable Register		  	*/
-   uint32_t  IDR;					/* Interrupt Disable Register		 	*/
-   uint32_t  IMR;					/* Interrupt Mask Register				*/
-   uint32_t  SR;			 		/* Status Register				  	*/
-   uint32_t  BR;			 		/* Baudrate Register					*/
-   uint32_t  TIM;					/* Timer Register					  	*/
-   uint32_t  TIMESTP;		  		/* Timestamp Register			   	*/
-   uint32_t  ECR;			 		/* Error Counter Register		 		*/
-   uint32_t  TCR;					/* Tranfer Counter Register				*/
-   uint32_t  ACR;					/* Abort Command Register		   	*/
-   uint32_t  Reserved[117];		 /* Reserved		 					*/
-   can_channel_t CHANNEL[16]; 		/* CAN Channels					   	*/
-} volatile can_controller_t;
+	uint32_t MR; /* Mode Register					   	*/
+	uint32_t IER; /* Interrupt Enable Register		  	*/
+	uint32_t IDR; /* Interrupt Disable Register		 	*/
+	uint32_t IMR; /* Interrupt Mask Register				*/
+	uint32_t SR; /* Status Register				  	*/
+	uint32_t BR; /* Baudrate Register					*/
+	uint32_t TIM; /* Timer Register					  	*/
+	uint32_t TIMESTP; /* Timestamp Register			   	*/
+	uint32_t ECR; /* Error Counter Register		 		*/
+	uint32_t TCR; /* Tranfer Counter Register				*/
+	uint32_t ACR; /* Abort Command Register		   	*/
+	uint32_t Reserved[117]; /* Reserved		 					*/
+	can_channel_t CHANNEL[16]; /* CAN Channels					   	*/
+}volatile can_controller_t;
 
 /** CAN Mode Register: MR */
 #define  CANEN		(0x01 << 0)   	/* CAN Controller Enable				*/
@@ -139,7 +139,7 @@ typedef struct {
 #define  MFID 		(0x7FFFFFF << 0)  /* Family ID */
 
 /** CAN Message Status Register: MSR */
-/* MTIMESTAMP defined in TIMSTP */  /* Timer value 						*/
+/* MTIMESTAMP defined in TIMSTP *//* Timer value 						*/
 #define  MDLC		(0x0F << 16)	/* Mailbox Data Length Code 		*/
 #define  MRTR		(0x01 << 20)	/* Mailbox Remote Transmission Request */
 #define  MABT		(0x01 << 22)	/* Mailbox Message Abort */
@@ -148,10 +148,8 @@ typedef struct {
 
 /** CAN Message Data Low Register: MDL */
 //#define  MDL		(0xFFFFFFFF << 0)   /* Message Data Low Value */
-
 /** CAN Message Data High Register: MDH */
 //#define  MDH		(0xFFFFFFFF << 0)   /* Message Data High Value */
-
 /** CAN Message Control Register: MCR */
 #define  MACR		(0x01 << 22)   	/* Mailbox Abort Request */
 #define  MTCR		(0x01 << 23) 	/* Mailbox Transfer Command */

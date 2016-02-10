@@ -27,5 +27,4 @@
 #define MICROSD_GPIOPORT        gpioPortB
 #define MICROSD_CSPIN           11
 
-
 #endif /* __MICROSDCONFIG_H */

@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 /* Code originally from Python's SHA1 Module, who based it on libtom.org */
 
@@ -72,7 +72,7 @@ static void csp_sha1_compress(csp_sha1_state * sha1, const uint8_t * buf) {
 
 	/* Copy the state into 512-bits into W[0..15] */
 	for (i = 0; i < 16; i++)
-		LOAD32H(W[i], buf + (4*i));
+	LOAD32H(W[i], buf + (4*i));
 
 	/* Copy state */
 	a = sha1->state[0];
@@ -83,45 +83,45 @@ static void csp_sha1_compress(csp_sha1_state * sha1, const uint8_t * buf) {
 
 	/* Expand it */
 	for (i = 16; i < 80; i++)
-		W[i] = ROL(W[i-3] ^ W[i-8] ^ W[i-14] ^ W[i-16], 1);
+	W[i] = ROL(W[i-3] ^ W[i-8] ^ W[i-14] ^ W[i-16], 1);
 
 	/* Compress */
 	i = 0;
 
 	/* Round one */
 	for (; i < 20;) {
-	   FF_0(a, b, c, d, e, i++);
-	   FF_0(e, a, b, c, d, i++);
-	   FF_0(d, e, a, b, c, i++);
-	   FF_0(c, d, e, a, b, i++);
-	   FF_0(b, c, d, e, a, i++);
+		FF_0(a, b, c, d, e, i++);
+		FF_0(e, a, b, c, d, i++);
+		FF_0(d, e, a, b, c, i++);
+		FF_0(c, d, e, a, b, i++);
+		FF_0(b, c, d, e, a, i++);
 	}
 
 	/* Round two */
-	for (; i < 40;)  {
-	   FF_1(a, b, c, d, e, i++);
-	   FF_1(e, a, b, c, d, i++);
-	   FF_1(d, e, a, b, c, i++);
-	   FF_1(c, d, e, a, b, i++);
-	   FF_1(b, c, d, e, a, i++);
+	for (; i < 40;) {
+		FF_1(a, b, c, d, e, i++);
+		FF_1(e, a, b, c, d, i++);
+		FF_1(d, e, a, b, c, i++);
+		FF_1(c, d, e, a, b, i++);
+		FF_1(b, c, d, e, a, i++);
 	}
 
 	/* Round three */
-	for (; i < 60;)  {
-	   FF_2(a, b, c, d, e, i++);
-	   FF_2(e, a, b, c, d, i++);
-	   FF_2(d, e, a, b, c, i++);
-	   FF_2(c, d, e, a, b, i++);
-	   FF_2(b, c, d, e, a, i++);
+	for (; i < 60;) {
+		FF_2(a, b, c, d, e, i++);
+		FF_2(e, a, b, c, d, i++);
+		FF_2(d, e, a, b, c, i++);
+		FF_2(c, d, e, a, b, i++);
+		FF_2(b, c, d, e, a, i++);
 	}
 
 	/* Round four */
-	for (; i < 80;)  {
-	   FF_3(a, b, c, d, e, i++);
-	   FF_3(e, a, b, c, d, i++);
-	   FF_3(d, e, a, b, c, i++);
-	   FF_3(c, d, e, a, b, i++);
-	   FF_3(b, c, d, e, a, i++);
+	for (; i < 80;) {
+		FF_3(a, b, c, d, e, i++);
+		FF_3(e, a, b, c, d, i++);
+		FF_3(d, e, a, b, c, i++);
+		FF_3(c, d, e, a, b, i++);
+		FF_3(b, c, d, e, a, i++);
 	}
 
 	/* Store */
@@ -135,13 +135,13 @@ static void csp_sha1_compress(csp_sha1_state * sha1, const uint8_t * buf) {
 
 void csp_sha1_init(csp_sha1_state * sha1) {
 
-   sha1->state[0] = 0x67452301UL;
-   sha1->state[1] = 0xefcdab89UL;
-   sha1->state[2] = 0x98badcfeUL;
-   sha1->state[3] = 0x10325476UL;
-   sha1->state[4] = 0xc3d2e1f0UL;
-   sha1->curlen = 0;
-   sha1->length = 0;
+	sha1->state[0] = 0x67452301UL;
+	sha1->state[1] = 0xefcdab89UL;
+	sha1->state[2] = 0x98badcfeUL;
+	sha1->state[3] = 0x10325476UL;
+	sha1->state[4] = 0xc3d2e1f0UL;
+	sha1->curlen = 0;
+	sha1->length = 0;
 
 }
 
@@ -150,22 +150,22 @@ void csp_sha1_process(csp_sha1_state * sha1, const uint8_t * in, uint32_t inlen)
 	uint32_t n;
 	while (inlen > 0) {
 		if (sha1->curlen == 0 && inlen >= SHA1_BLOCKSIZE) {
-		   csp_sha1_compress(sha1, in);
-		   sha1->length += SHA1_BLOCKSIZE * 8;
-		   in += SHA1_BLOCKSIZE;
-		   inlen -= SHA1_BLOCKSIZE;
+			csp_sha1_compress(sha1, in);
+			sha1->length += SHA1_BLOCKSIZE * 8;
+			in += SHA1_BLOCKSIZE;
+			inlen -= SHA1_BLOCKSIZE;
 		} else {
-		   n = MIN(inlen, (SHA1_BLOCKSIZE - sha1->curlen));
-		   memcpy(sha1->buf + sha1->curlen, in, (size_t)n);
-		   sha1->curlen += n;
-		   in += n;
-		   inlen -= n;
-		   if (sha1->curlen == SHA1_BLOCKSIZE) {
-			  csp_sha1_compress(sha1, sha1->buf);
-			  sha1->length += 8*SHA1_BLOCKSIZE;
-			  sha1->curlen = 0;
-		   }
-	   }
+			n = MIN(inlen, (SHA1_BLOCKSIZE - sha1->curlen));
+			memcpy(sha1->buf + sha1->curlen, in, (size_t)n);
+			sha1->curlen += n;
+			in += n;
+			inlen -= n;
+			if (sha1->curlen == SHA1_BLOCKSIZE) {
+				csp_sha1_compress(sha1, sha1->buf);
+				sha1->length += 8*SHA1_BLOCKSIZE;
+				sha1->curlen = 0;
+			}
+		}
 	}
 
 }
@@ -186,14 +186,14 @@ void csp_sha1_done(csp_sha1_state * sha1, uint8_t * out) {
 	 */
 	if (sha1->curlen > 56) {
 		while (sha1->curlen < 64)
-			sha1->buf[sha1->curlen++] = 0;
+		sha1->buf[sha1->curlen++] = 0;
 		csp_sha1_compress(sha1, sha1->buf);
 		sha1->curlen = 0;
 	}
 
 	/* Pad up to 56 bytes of zeroes */
 	while (sha1->curlen < 56)
-		sha1->buf[sha1->curlen++] = 0;
+	sha1->buf[sha1->curlen++] = 0;
 
 	/* Store length */
 	STORE64H(sha1->length, sha1->buf + 56);
@@ -201,7 +201,7 @@ void csp_sha1_done(csp_sha1_state * sha1, uint8_t * out) {
 
 	/* Copy output */
 	for (i = 0; i < 5; i++)
-		STORE32H(sha1->state[i], out + (4 * i));
+	STORE32H(sha1->state[i], out + (4 * i));
 
 }
 

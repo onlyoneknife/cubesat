@@ -7,6 +7,4 @@
 #ifndef CODEFLASH_H_
 #define CODEFLASH_H_
 
-
-
 #endif /* CODEFLASH_H_ */

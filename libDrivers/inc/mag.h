@@ -1,26 +1,26 @@
 /******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
-* File Name          : mag.h
-* Author             : MSH Application Team
-* Author             : Fabio Tota
-* Version            : $Revision:$
-* Date               : $Date:$
-* Description        : LSM303D driver file
-*
-* HISTORY:
-* Date               |	Modification                    |	Author
-* 02/08/2011         |	Initial Revision                |	abio Tota
-* 07/03/2015		|	Modified to LSM303D 			|   Peng Zhang
-********************************************************************************
-* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-* WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
-* AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
-* INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
-* CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
-* INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
-*
-* THIS SOFTWARE IS SPECIFICALLY DESIGNED FOR EXCLUSIVE USE WITH ST PARTS.
-*
-*******************************************************************************/
+ * File Name          : mag.h
+ * Author             : MSH Application Team
+ * Author             : Fabio Tota
+ * Version            : $Revision:$
+ * Date               : $Date:$
+ * Description        : LSM303D driver file
+ *
+ * HISTORY:
+ * Date               |	Modification                    |	Author
+ * 02/08/2011         |	Initial Revision                |	abio Tota
+ * 07/03/2015		|	Modified to LSM303D 			|   Peng Zhang
+ ********************************************************************************
+ * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+ * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+ * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+ * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+ * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+ * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+ *
+ * THIS SOFTWARE IS SPECIFICALLY DESIGNED FOR EXCLUSIVE USE WITH ST PARTS.
+ *
+ *******************************************************************************/
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef MAG__H
@@ -41,133 +41,121 @@ typedef uint8_t IntConf_t;
 
 // TODO check ODR_t enum
 typedef enum {
-  ODR_1Hz		        =		0x01,
-  ODR_10Hz                      =		0x02,
-  ODR_25Hz		        =		0x03,
-  ODR_50Hz		        =		0x04,
-  ODR_100Hz		        =		0x06,
-  ODR_200Hz		        =		0x06,
-  ODR_400Hz		        =		0x07,
-  ODR_1620Hz_LP		        =		0x08,
-  ODR_1344Hz_NP_5367HZ_LP       =		0x09
+	ODR_1Hz = 0x01,
+	ODR_10Hz = 0x02,
+	ODR_25Hz = 0x03,
+	ODR_50Hz = 0x04,
+	ODR_100Hz = 0x06,
+	ODR_200Hz = 0x06,
+	ODR_400Hz = 0x07,
+	ODR_1620Hz_LP = 0x08,
+	ODR_1344Hz_NP_5367HZ_LP = 0x09
 } ODR_t;
 
 typedef enum {
-  ODR_3_125Hz_M		        =		0x00,
-  ODR_6_25Hz_M              =		0x01,
-  ODR_12_5Hz_M		        =		0x02,
-  ODR_25Hz_M		        =		0x03,
-  ODR_50Hz_M		        =		0x04,
-  ODR_100Hz_M		        =		0x05
+	ODR_3_125Hz_M = 0x00,
+	ODR_6_25Hz_M = 0x01,
+	ODR_12_5Hz_M = 0x02,
+	ODR_25Hz_M = 0x03,
+	ODR_50Hz_M = 0x04,
+	ODR_100Hz_M = 0x05
 } ODR_M_t;
 
 typedef enum {
-  GAIN_1100_M		        =		0x01,
-  GAIN_855_M                    =		0x02,
-  GAIN_670_M		        =		0x03,
-  GAIN_450_M		        =		0x04,
-  GAIN_400_M		        =		0x05,
-  GAIN_330_M		        =		0x06,
-  GAIN_230_M		        =		0x07
+	GAIN_1100_M = 0x01,
+	GAIN_855_M = 0x02,
+	GAIN_670_M = 0x03,
+	GAIN_450_M = 0x04,
+	GAIN_400_M = 0x05,
+	GAIN_330_M = 0x06,
+	GAIN_230_M = 0x07
 } GAIN_M_t;
 
 typedef enum {
-  CONTINUOUS_MODE               =		0x00,
-  SINGLE_MODE 			=		0x01,
-  SLEEP_MODE			=		0x02
+	CONTINUOUS_MODE = 0x00, SINGLE_MODE = 0x01, SLEEP_MODE = 0x02
 } Mode_M_t;
 
 typedef enum {
-  POWER_DOWN                    =		0x00,
-  LOW_POWER 			=		0x01,
-  NORMAL			=		0x02
+	POWER_DOWN = 0x00, LOW_POWER = 0x01, NORMAL = 0x02
 } Mode_t;
 
 typedef enum {
-  HPM_NORMAL_MODE_RES           =               0x00,
-  HPM_REF_SIGNAL                =               0x01,
-  HPM_NORMAL_MODE               =               0x02,
-  HPM_AUTORESET_INT             =               0x03
+	HPM_NORMAL_MODE_RES = 0x00,
+	HPM_REF_SIGNAL = 0x01,
+	HPM_NORMAL_MODE = 0x02,
+	HPM_AUTORESET_INT = 0x03
 } HPFMode_t;
 
 typedef enum {
-  HPFCF_0                       =               0x00,
-  HPFCF_1                       =               0x01,
-  HPFCF_2                       = 		0x02,
-  HPFCF_3                       =               0x03
+	HPFCF_0 = 0x00, HPFCF_1 = 0x01, HPFCF_2 = 0x02, HPFCF_3 = 0x03
 } HPFCutOffFreq_t;
 
 typedef struct {
-  int16_t AXIS_X;
-  int16_t AXIS_Y;
-  int16_t AXIS_Z;
+	int16_t AXIS_X;
+	int16_t AXIS_Y;
+	int16_t AXIS_Z;
 } AccAxesRaw_t;
 
 typedef struct {
-  int16_t AXIS_X;
-  int16_t AXIS_Y;
-  int16_t AXIS_Z;
+	int16_t AXIS_X;
+	int16_t AXIS_Y;
+	int16_t AXIS_Z;
 } MagAxesRaw_t;
 
 typedef enum {
-  FULLSCALE_2                   =               0x00,
-  FULLSCALE_4                   =               0x01,
-  FULLSCALE_8                   =               0x02,
-  FULLSCALE_16                  =               0x03
+	FULLSCALE_2 = 0x00,
+	FULLSCALE_4 = 0x01,
+	FULLSCALE_8 = 0x02,
+	FULLSCALE_16 = 0x03
 } Fullscale_t;
 
 typedef enum {
-  SELF_TEST_DISABLE             =               0x00,
-  SELF_TEST_ENABLE              =               0x01
+	SELF_TEST_DISABLE = 0x00, SELF_TEST_ENABLE = 0x01
 } SelfTest_t;
 
 typedef enum {
-  FIFO_BYPASS_MODE              =               0x00,
-  FIFO_MODE                     =               0x01,
-  FIFO_STREAM_MODE              =               0x02,
-  FIFO_TRIGGER_MODE             =               0x03,
-  FIFO_DISABLE                  =               0x04
+	FIFO_BYPASS_MODE = 0x00,
+	FIFO_MODE = 0x01,
+	FIFO_STREAM_MODE = 0x02,
+	FIFO_TRIGGER_MODE = 0x03,
+	FIFO_DISABLE = 0x04
 } FifoMode_t;
 
 typedef enum {
-  TRIG_INT1                     =		0x00,
-  TRIG_INT2 			=		0x01
+	TRIG_INT1 = 0x00, TRIG_INT2 = 0x01
 } TrigInt_t;
 
 typedef enum {
-  SPI_4_WIRE                    =               0x00,
-  SPI_3_WIRE                    =               0x01
+	SPI_4_WIRE = 0x00, SPI_3_WIRE = 0x01
 } SPIMode_t;
 
 typedef enum {
-  X_ENABLE                      =               0x01,
-  X_DISABLE                     =               0x00,
-  Y_ENABLE                      =               0x02,
-  Y_DISABLE                     =               0x00,
-  Z_ENABLE                      =               0x04,
-  Z_DISABLE                     =               0x00
+	X_ENABLE = 0x01,
+	X_DISABLE = 0x00,
+	Y_ENABLE = 0x02,
+	Y_DISABLE = 0x00,
+	Z_ENABLE = 0x04,
+	Z_DISABLE = 0x00
 } AXISenable_t;
 
 typedef enum {
-  INT1_6D_4D_DISABLE            =               0x00,
-  INT1_6D_ENABLE                =               0x01,
-  INT1_4D_ENABLE                =               0x02
+	INT1_6D_4D_DISABLE = 0x00, INT1_6D_ENABLE = 0x01, INT1_4D_ENABLE = 0x02
 } INT_6D_4D_t;
 
 typedef enum {
-  UP_SX                         =               0x44,
-  UP_DX                         =               0x42,
-  DW_SX                         =               0x41,
-  DW_DX                         =               0x48,
-  TOP                           =               0x60,
-  BOTTOM                        =               0x50
+	UP_SX = 0x44,
+	UP_DX = 0x42,
+	DW_SX = 0x41,
+	DW_DX = 0x48,
+	TOP = 0x60,
+	BOTTOM = 0x50
 } POSITION_6D_t;
 
 typedef enum {
-  INT_MODE_OR                   =               0x00,
-  INT_MODE_6D_MOVEMENT          =               0x01,
-  INT_MODE_AND                  =               0x02,
-  INT_MODE_6D_POSITION          =               0x03
+	INT_MODE_OR = 0x00,
+	INT_MODE_6D_MOVEMENT = 0x01,
+	INT_MODE_AND = 0x02,
+	INT_MODE_6D_POSITION = 0x03
 } Int1Mode_t;
 
 #define	I2C_AUTO_INCREMENT	(0x80)
@@ -310,7 +298,6 @@ typedef enum {
 
 #define INT_PIN_CONF_MASK	(0x10)
 #define INT_POLARITY_MASK	(0x80)
-
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -509,21 +496,20 @@ typedef enum {
 
 //STATUS REGISTER bit mask
 #define STATUS_REG_ZYXOR                        0x80    // 1	:	new data set has over written the previous one
-							// 0	:	no overrun has occurred (default)
+// 0	:	no overrun has occurred (default)
 #define STATUS_REG_ZOR                          0x40    // 0	:	no overrun has occurred (default)
-							// 1	:	new Z-axis data has over written the previous one
+// 1	:	new Z-axis data has over written the previous one
 #define STATUS_REG_YOR                          0x20    // 0	:	no overrun has occurred (default)
-							// 1	:	new Y-axis data has over written the previous one
+// 1	:	new Y-axis data has over written the previous one
 #define STATUS_REG_XOR                          0x10    // 0	:	no overrun has occurred (default)
-							// 1	:	new X-axis data has over written the previous one
+// 1	:	new X-axis data has over written the previous one
 #define STATUS_REG_ZYXDA                        0x08    // 0	:	a new set of data is not yet avvious one
-                                                        // 1	:	a new set of data is available
+// 1	:	a new set of data is available
 #define STATUS_REG_ZDA                          0x04    // 0	:	a new data for the Z-Axis is not availvious one
-                                                        // 1	:	a new data for the Z-Axis is available
+// 1	:	a new data for the Z-Axis is available
 #define STATUS_REG_YDA                          0x02    // 0	:	a new data for the Y-Axis is not available
-                                                        // 1	:	a new data for the Y-Axis is available
+// 1	:	a new data for the Y-Axis is available
 #define STATUS_REG_XDA                          0x01    // 0	:	a new data for the X-Axis is not available
-
 #define DATAREADY_BIT_A                         STATUS_REG_ZYXDA
 
 /**************MAGNETOMETER REGISTER*****************/
@@ -544,8 +530,6 @@ typedef enum {
 #define TEMP_OUT_H_M                            0x06
 //LSB of 12bit (4 bit) TEMP_OUT
 #define TEMP_OUT_L_M                            0x05
-
-
 
 /* Exported macro ------------------------------------------------------------*/
 #define ValBit(VAR,Place)         (VAR & (1<<Place))
@@ -609,7 +593,6 @@ status_t GetMagAxesRaw(MagAxesRaw_t* buff);
 
 uint8_t MagReadReg(uint8_t Reg, uint8_t* Data);
 uint8_t MagWriteReg(uint8_t Reg, uint8_t Data);
-
 
 #endif
 

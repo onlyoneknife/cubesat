@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 #include <csp/drivers/usart.h>
 
@@ -143,24 +143,52 @@ void usart_init(struct usart_conf * conf) {
 	}
 
 	int brate = 0;
-    switch(conf->baudrate) {
-    case 4800:    brate=B4800;    break;
-    case 9600:    brate=B9600;    break;
-    case 19200:   brate=B19200;   break;
-    case 38400:   brate=B38400;   break;
-    case 57600:   brate=B57600;   break;
-    case 115200:  brate=B115200;  break;
+	switch (conf->baudrate) {
+	case 4800:
+		brate = B4800;
+		break;
+	case 9600:
+		brate = B9600;
+		break;
+	case 19200:
+		brate = B19200;
+		break;
+	case 38400:
+		brate = B38400;
+		break;
+	case 57600:
+		brate = B57600;
+		break;
+	case 115200:
+		brate = B115200;
+		break;
 #ifndef CSP_MACOSX
-    case 460800:  brate=B460800;  break;
-    case 500000:  brate=B500000;  break;
-    case 921600:  brate=B921600;  break;
-    case 1000000: brate=B1000000; break;
-    case 1500000: brate=B1500000; break;
-    case 2000000: brate=B2000000; break;
-    case 2500000: brate=B2500000; break;
-    case 3000000: brate=B3000000; break;
+	case 460800:
+		brate = B460800;
+		break;
+	case 500000:
+		brate = B500000;
+		break;
+	case 921600:
+		brate = B921600;
+		break;
+	case 1000000:
+		brate = B1000000;
+		break;
+	case 1500000:
+		brate = B1500000;
+		break;
+	case 2000000:
+		brate = B2000000;
+		break;
+	case 2500000:
+		brate = B2500000;
+		break;
+	case 3000000:
+		brate = B3000000;
+		break;
 #endif
-    }
+	}
 
 	tcgetattr(fd, &options);
 	cfsetispeed(&options, brate);
@@ -171,7 +199,8 @@ void usart_init(struct usart_conf * conf) {
 	options.c_cflag &= ~CSIZE;
 	options.c_cflag |= CS8;
 	options.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
-	options.c_iflag &= ~(IGNBRK | BRKINT | ICRNL | INLCR | PARMRK | INPCK | ISTRIP | IXON);
+	options.c_iflag &= ~(IGNBRK | BRKINT | ICRNL | INLCR | PARMRK | INPCK
+			| ISTRIP | IXON);
 	options.c_oflag &= ~(OCRNL | ONLCR | ONLRET | ONOCR | OFILL | OPOST);
 	options.c_cc[VTIME] = 0;
 	options.c_cc[VMIN] = 1;
@@ -182,9 +211,10 @@ void usart_init(struct usart_conf * conf) {
 
 	/* Flush old transmissions */
 	if (tcflush(fd, TCIOFLUSH) == -1)
-		printf("Error flushing serial port - %s(%d).\n", strerror(errno), errno);
+		printf("Error flushing serial port - %s(%d).\n", strerror(errno),
+				errno);
 
-	if (pthread_create(&rx_thread, NULL, serial_rx_thread, NULL) != 0)
+	if (pthread_create(&rx_thread, NULL, serial_rx_thread, NULL ) != 0)
 		return;
 
 }
@@ -209,19 +239,20 @@ void usart_putc(char c) {
 
 char usart_getc(void) {
 	char c;
-	if (read(fd, &c, 1) != 1) return 0;
+	if (read(fd, &c, 1) != 1)
+		return 0;
 	return c;
 }
 
 int usart_messages_waiting(int handle) {
-  struct timeval tv;
-  fd_set fds;
-  tv.tv_sec = 0;
-  tv.tv_usec = 0;
-  FD_ZERO(&fds);
-  FD_SET(STDIN_FILENO, &fds);
-  select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
-  return (FD_ISSET(0, &fds));
+	struct timeval tv;
+	fd_set fds;
+	tv.tv_sec = 0;
+	tv.tv_usec = 0;
+	FD_ZERO(&fds);
+	FD_SET(STDIN_FILENO, &fds);
+	select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
+	return (FD_ISSET(0, &fds));
 }
 
 static void *serial_rx_thread(void *vptr_args) {
@@ -236,7 +267,7 @@ static void *serial_rx_thread(void *vptr_args) {
 			exit(1);
 		}
 		if (usart_callback)
-			usart_callback(cbuf, length, NULL);
+			usart_callback(cbuf, length, NULL );
 	}
-	return NULL;
+	return NULL ;
 }

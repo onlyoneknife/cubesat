@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk) 
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk) 
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -48,7 +48,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * @param packet pointer to packet
  * @return -1 Missing feature, -2 XTEA error, -3 CRC error, -4 HMAC error, 0 = OK.
  */
-static int csp_route_security_check(uint32_t security_opts, csp_iface_t * interface, csp_packet_t * packet) {
+static int csp_route_security_check(uint32_t security_opts,
+		csp_iface_t * interface, csp_packet_t * packet) {
 
 	/* XTEA encrypted packet */
 	if (packet->id.flags & CSP_FXTEA) {
@@ -74,7 +75,8 @@ static int csp_route_security_check(uint32_t security_opts, csp_iface_t * interf
 		interface->autherr++;
 		return CSP_ERR_XTEA;
 #else
-		csp_log_error("Received XTEA encrypted packet, but CSP was compiled without XTEA support. Discarding packet");
+		csp_log_error(
+				"Received XTEA encrypted packet, but CSP was compiled without XTEA support. Discarding packet");
 		interface->autherr++;
 		return CSP_ERR_NOTSUP;
 #endif
@@ -84,7 +86,7 @@ static int csp_route_security_check(uint32_t security_opts, csp_iface_t * interf
 	if (packet->id.flags & CSP_FCRC32) {
 #ifdef CSP_USE_CRC32
 		if (packet->length < 4)
-			csp_log_error("Too short packet for CRC32, %u", packet->length);
+		csp_log_error("Too short packet for CRC32, %u", packet->length);
 		/* Verify CRC32  */
 		if (csp_crc32_verify(packet) != 0) {
 			/* Checksum failed */
@@ -96,7 +98,8 @@ static int csp_route_security_check(uint32_t security_opts, csp_iface_t * interf
 		csp_log_warn("Received packet without CRC32. Accepting packet");
 #else
 		/* Strip CRC32 field and accept the packet */
-		csp_log_warn("Received packet with CRC32, but CSP was compiled without CRC32 support. Accepting packet");
+		csp_log_warn(
+				"Received packet with CRC32, but CSP was compiled without CRC32 support. Accepting packet");
 		packet->length -= sizeof(uint32_t);
 #endif
 	}
@@ -116,7 +119,8 @@ static int csp_route_security_check(uint32_t security_opts, csp_iface_t * interf
 		interface->autherr++;
 		return CSP_ERR_HMAC;
 #else
-		csp_log_error("Received packet with HMAC, but CSP was compiled without HMAC support. Discarding packet");
+		csp_log_error(
+				"Received packet with HMAC, but CSP was compiled without HMAC support. Discarding packet");
 		interface->autherr++;
 		return CSP_ERR_NOTSUP;
 #endif
@@ -144,9 +148,11 @@ int csp_route_work(uint32_t timeout) {
 
 	packet = input.packet;
 
-	csp_log_packet("INP: S %u, D %u, Dp %u, Sp %u, Pr %u, Fl 0x%02X, Sz %"PRIu16" VIA: %s",
-			packet->id.src, packet->id.dst, packet->id.dport,
-			packet->id.sport, packet->id.pri, packet->id.flags, packet->length, input.interface->name);
+	csp_log_packet(
+			"INP: S %u, D %u, Dp %u, Sp %u, Pr %u, Fl 0x%02X, Sz %"PRIu16" VIA: %s",
+			packet->id.src, packet->id.dst, packet->id.dport, packet->id.sport,
+			packet->id.pri, packet->id.flags, packet->length,
+			input.interface->name);
 
 	/* Here there be promiscuous mode */
 #ifdef CSP_USE_PROMISC
@@ -164,16 +170,17 @@ int csp_route_work(uint32_t timeout) {
 #endif
 
 	/* If the message is not to me, route the message to the correct interface */
-	if ((packet->id.dst != my_address) && (packet->id.dst != CSP_BROADCAST_ADDR)) {
+	if ((packet->id.dst != my_address)
+			&& (packet->id.dst != CSP_BROADCAST_ADDR)) {
 
 		/* Find the destination interface */
 		csp_iface_t * dstif = csp_rtable_find_iface(packet->id.dst);
 
 		/* If the message resolves to the input interface, don't loop it back out */
-		if ((dstif == NULL) || ((dstif == input.interface) && (input.interface->split_horizon_off == 0))) {
-			csp_buffer_free(packet);
-			return 0;
-		}
+		if ((dstif == NULL )|| ((dstif == input.interface) && (input.interface->split_horizon_off == 0))){
+		csp_buffer_free(packet);
+		return 0;
+	}
 
 		/* Otherwise, actually send the message */
 		if (csp_send_direct(packet->id, packet, dstif, 0) != CSP_ERR_NONE) {
@@ -190,7 +197,8 @@ int csp_route_work(uint32_t timeout) {
 
 	/* If the socket is connection-less, deliver now */
 	if (socket && (socket->opts & CSP_SO_CONN_LESS)) {
-		if (csp_route_security_check(socket->opts, input.interface, packet) < 0) {
+		if (csp_route_security_check(socket->opts, input.interface, packet)
+				< 0) {
 			csp_buffer_free(packet);
 			return 0;
 		}
@@ -206,7 +214,7 @@ int csp_route_work(uint32_t timeout) {
 	conn = csp_conn_find(packet->id.ext, CSP_ID_CONN_MASK);
 
 	/* If this is an incoming packet on a new connection */
-	if (conn == NULL) {
+	if (conn == NULL ) {
 
 		/* Reject packet if no matching socket is found */
 		if (!socket) {
@@ -215,17 +223,18 @@ int csp_route_work(uint32_t timeout) {
 		}
 
 		/* Run security check on incoming packet */
-		if (csp_route_security_check(socket->opts, input.interface, packet) < 0) {
+		if (csp_route_security_check(socket->opts, input.interface, packet)
+				< 0) {
 			csp_buffer_free(packet);
 			return 0;
 		}
 
 		/* New incoming connection accepted */
 		csp_id_t idout;
-		idout.pri   = packet->id.pri;
-		idout.src   = my_address;
+		idout.pri = packet->id.pri;
+		idout.src = my_address;
 
-		idout.dst   = packet->id.src;
+		idout.dst = packet->id.src;
 		idout.dport = packet->id.sport;
 		idout.sport = packet->id.dport;
 		idout.flags = packet->id.flags;
@@ -243,7 +252,7 @@ int csp_route_work(uint32_t timeout) {
 		conn->socket = socket->socket;
 		conn->opts = socket->opts;
 
-	/* Packet to existing connection */
+		/* Packet to existing connection */
 	} else {
 
 		/* Run security check on incoming packet */
@@ -263,7 +272,8 @@ int csp_route_work(uint32_t timeout) {
 		input.interface->rx_error++;
 		csp_buffer_free(packet);
 #else
-		csp_log_error("Received RDP packet, but CSP was compiled without RDP support. Discarding packet");
+		csp_log_error(
+				"Received RDP packet, but CSP was compiled without RDP support. Discarding packet");
 		input.interface->rx_error++;
 		csp_buffer_free(packet);
 #endif
@@ -286,7 +296,8 @@ CSP_DEFINE_TASK(csp_task_router) {
 int csp_route_start_task(unsigned int task_stack_size, unsigned int priority) {
 
 	static csp_thread_handle_t handle_router;
-	int ret = csp_thread_create(csp_task_router, (signed char *) "RTE", task_stack_size, NULL, priority, &handle_router);
+	int ret = csp_thread_create(csp_task_router, (signed char *) "RTE",
+			task_stack_size, NULL, priority, &handle_router);
 
 	if (ret != 0) {
 		csp_log_error("Failed to start router task");

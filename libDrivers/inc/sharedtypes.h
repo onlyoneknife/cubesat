@@ -12,6 +12,10 @@
 #ifndef __SHARED__TYPES
 #define __SHARED__TYPES
 
+/* --Shared includes -- */
+#include <stdint.h>
+#include <stdbool.h>
+
 typedef enum {
 	MEMS_SUCCESS = 0x01, MEMS_ERROR = 0x00
 } status_t;

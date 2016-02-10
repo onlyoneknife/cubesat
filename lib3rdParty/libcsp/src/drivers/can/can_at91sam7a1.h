@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 #ifndef _CAN_AT91SAM7A1_H_
 #define _CAN_AT91SAM7A1_H_
@@ -32,43 +32,43 @@ extern "C" {
 
 /** CAN Channel Structure */
 typedef struct {
-   uint32_t  ReservedA[5];   		/* Reserved						   	*/
-   uint32_t  DRA;					/* Data Register A					  */
-   uint32_t  DRB;					/* Data Register B					  */
-   uint32_t  MSK;					/* Mask Register						*/
-   uint32_t  IR;			 		/* Identifier Register				  */
-   uint32_t  CR;			 		/* Control Register					 */
-   uint32_t  STP;					/* Stamp Register					   */
-   uint32_t  CSR;					/* Clear Status Register				*/
-   uint32_t  SR;			 		/* Status Register					  */
-   uint32_t  IER;					/* Interrupt Enable Register			*/
-   uint32_t  IDR;					/* Interrupt Disable Register		   */
-   uint32_t  IMR;					/* Interrupt Mask Register		 		*/
-} volatile can_channel_t;
+	uint32_t ReservedA[5]; /* Reserved						   	*/
+	uint32_t DRA; /* Data Register A					  */
+	uint32_t DRB; /* Data Register B					  */
+	uint32_t MSK; /* Mask Register						*/
+	uint32_t IR; /* Identifier Register				  */
+	uint32_t CR; /* Control Register					 */
+	uint32_t STP; /* Stamp Register					   */
+	uint32_t CSR; /* Clear Status Register				*/
+	uint32_t SR; /* Status Register					  */
+	uint32_t IER; /* Interrupt Enable Register			*/
+	uint32_t IDR; /* Interrupt Disable Register		   */
+	uint32_t IMR; /* Interrupt Mask Register		 		*/
+}volatile can_channel_t;
 
 /** CAN Controller Structure 16 Channels */
 typedef struct {
-   uint32_t	 ReservedA[20];	  /* Reserved								*/
-   uint32_t	 ECR;				/* Enable Clock Register			   	*/
-   uint32_t	 DCR;				/* Disable Clock Register			  	*/
-   uint32_t	 PMSR;			   /* Power Management Status Register		*/
-   uint32_t	 ReservedB;		  /* Reserved								*/
-   uint32_t	 CR;				 /* Control Register						*/
-   uint32_t	 MR;				 /* Mode Register						*/
-   uint32_t	 ReservedC;		  /* Reserved							 */
-   uint32_t	 CSR;				/* Clear Status Register				*/
-   uint32_t	 SR;				 /* Status Register					  */
-   uint32_t	 IER;				/* Interrupt Enable Register			*/
-   uint32_t	 IDR;				/* Interrupt Disable Register		   */
-   uint32_t	 IMR;			   	/* Interrupt Mask Register			  */
-   uint32_t	 CISR;			  	/* Clear Interrupt Source Register	  */
-   uint32_t	 ISSR;			  	/* Interrupt Source Status Register	 */
-   uint32_t	 SIER;			  	/* Source Interrupt Enable Register	 */
-   uint32_t	 SIDR;			  	/* Source Interrupt Disable Register	*/
-   uint32_t	 SIMR;		  		/* Source Interrupt Mask Register	   */
-   uint32_t	 ReservedD[22];	 	/* Reserved							 */
-   can_channel_t CHANNEL[16]; 		/* CAN Channels					   	*/
-} volatile can_controller_t;
+	uint32_t ReservedA[20]; /* Reserved								*/
+	uint32_t ECR; /* Enable Clock Register			   	*/
+	uint32_t DCR; /* Disable Clock Register			  	*/
+	uint32_t PMSR; /* Power Management Status Register		*/
+	uint32_t ReservedB; /* Reserved								*/
+	uint32_t CR; /* Control Register						*/
+	uint32_t MR; /* Mode Register						*/
+	uint32_t ReservedC; /* Reserved							 */
+	uint32_t CSR; /* Clear Status Register				*/
+	uint32_t SR; /* Status Register					  */
+	uint32_t IER; /* Interrupt Enable Register			*/
+	uint32_t IDR; /* Interrupt Disable Register		   */
+	uint32_t IMR; /* Interrupt Mask Register			  */
+	uint32_t CISR; /* Clear Interrupt Source Register	  */
+	uint32_t ISSR; /* Interrupt Source Status Register	 */
+	uint32_t SIER; /* Source Interrupt Enable Register	 */
+	uint32_t SIDR; /* Source Interrupt Disable Register	*/
+	uint32_t SIMR; /* Source Interrupt Mask Register	   */
+	uint32_t ReservedD[22]; /* Reserved							 */
+	can_channel_t CHANNEL[16]; /* CAN Channels					   	*/
+}volatile can_controller_t;
 
 /** CAB Clock Registers:  ECR, DCR, PMSR */
 #define  CAN	  	(0x01 << 1)   	/* CAN Clock						 	*/

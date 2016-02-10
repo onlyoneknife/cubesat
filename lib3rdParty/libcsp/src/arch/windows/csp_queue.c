@@ -15,8 +15,9 @@ int csp_queue_enqueue(csp_queue_handle_t handle, void *value, uint32_t timeout) 
 	return windows_queue_enqueue(handle, value, timeout);
 }
 
-int csp_queue_enqueue_isr(csp_queue_handle_t handle, void * value, CSP_BASE_TYPE * task_woken) {
-	if( task_woken != NULL )
+int csp_queue_enqueue_isr(csp_queue_handle_t handle, void * value,
+		CSP_BASE_TYPE * task_woken) {
+	if (task_woken != NULL )
 		*task_woken = 0;
 	return windows_queue_enqueue(handle, value, 0);
 }
@@ -25,8 +26,9 @@ int csp_queue_dequeue(csp_queue_handle_t handle, void *buf, uint32_t timeout) {
 	return windows_queue_dequeue(handle, buf, timeout);
 }
 
-int csp_queue_dequeue_isr(csp_queue_handle_t handle, void * buf, CSP_BASE_TYPE * task_woken) {
-	if( task_woken != NULL )
+int csp_queue_dequeue_isr(csp_queue_handle_t handle, void * buf,
+		CSP_BASE_TYPE * task_woken) {
+	if (task_woken != NULL )
 		*task_woken = 0;
 	return windows_queue_dequeue(handle, buf, 0);
 }

@@ -1,22 +1,22 @@
 /*
-Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
-Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
+ Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
+ Copyright (C) 2012 GomSpace ApS (http://www.gomspace.com)
+ Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 #include <stdio.h>
 #include <csp/csp.h>
@@ -29,7 +29,7 @@ typedef struct __attribute__((__packed__)) csp_rtable_s {
 } csp_rtable_t;
 
 /* Static storage context for routing table */
-static csp_rtable_t routes[CSP_ROUTE_COUNT] = {};
+static csp_rtable_t routes[CSP_ROUTE_COUNT] = { };
 
 /**
  * Find entry in static routing table
@@ -42,25 +42,25 @@ static csp_rtable_t routes[CSP_ROUTE_COUNT] = {};
  */
 static csp_rtable_t * csp_rtable_find(uint8_t id) {
 
-	if (routes[id].interface != NULL) {
+	if (routes[id].interface != NULL ) {
 		return &routes[id];
-	} else if (routes[CSP_DEFAULT_ROUTE].interface != NULL) {
+	} else if (routes[CSP_DEFAULT_ROUTE].interface != NULL ) {
 		return &routes[CSP_DEFAULT_ROUTE];
 	}
-	return NULL;
+	return NULL ;
 
 }
 
 csp_iface_t * csp_rtable_find_iface(uint8_t id) {
 	csp_rtable_t * route = csp_rtable_find(id);
-	if (route == NULL)
-		return NULL;
+	if (route == NULL )
+		return NULL ;
 	return route->interface;
 }
 
 uint8_t csp_rtable_find_mac(uint8_t id) {
 	csp_rtable_t * route = csp_rtable_find(id);
-	if (route == NULL)
+	if (route == NULL )
 		return 255;
 	return route->mac;
 }
@@ -80,7 +80,7 @@ void csp_route_table_save(uint8_t route_table_out[CSP_ROUTE_TABLE_SIZE]) {
 int csp_rtable_set(uint8_t node, uint8_t mask, csp_iface_t *ifc, uint8_t mac) {
 
 	/* Don't add nothing */
-	if (ifc == NULL)
+	if (ifc == NULL )
 		return CSP_ERR_INVAL;
 
 	/**
@@ -111,11 +111,11 @@ void csp_rtable_print(void) {
 	int i;
 	printf("Node  Interface  Address\r\n");
 	for (i = 0; i < CSP_DEFAULT_ROUTE; i++)
-		if (routes[i].interface != NULL)
-			printf("%4u  %-9s  %u\r\n", i,
-				routes[i].interface->name,
-				routes[i].mac == CSP_NODE_MAC ? i : routes[i].mac);
-	printf("   *  %-9s  %u\r\n", routes[CSP_DEFAULT_ROUTE].interface->name, routes[CSP_DEFAULT_ROUTE].mac);
+		if (routes[i].interface != NULL )
+			printf("%4u  %-9s  %u\r\n", i, routes[i].interface->name,
+					routes[i].mac == CSP_NODE_MAC ? i : routes[i].mac);
+	printf("   *  %-9s  %u\r\n", routes[CSP_DEFAULT_ROUTE].interface->name,
+			routes[CSP_DEFAULT_ROUTE].mac);
 
 }
 #endif
