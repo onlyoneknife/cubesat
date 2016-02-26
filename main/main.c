@@ -29,22 +29,10 @@
 #include "em_gpio.h"
 
 /* EFM32 Driver Includes */
-#include "diskio.h"
-#include "microsd.h"
-#include "ff.h"
-#include "fatfs.h"
 #include "sleep.h"
-#include "i2c.h"
-#include "spi.h"
 
 /* Other Driver Includes */
 #include "sharedtypes.h"
-#include "gyro.h"
-#include "rtc.h"
-#include "fram.h"
-#include "mag.h"
-#include "tempsense.h"
-#include "spi.h"
 
 /* FreeRTOS Includes */
 #include "FreeRTOSConfig.h"
@@ -57,33 +45,10 @@
 #define LEDBLINK_STACK_SIZE        (configMINIMAL_STACK_SIZE + 10)
 #define LEDBLINK_TASK_PRIORITY     (tskIDLE_PRIORITY + 1)
 
-#define SPI2RECEIVE_STACK_SIZE     (configMINIMAL_STACK_SIZE + 100)
-#define SPI2RECEIVE_TASK_PRIORITY  (tskIDLE_PRIORITY + 1)
+#define LED_DELAY                  (100 / portTICK_RATE_MS)
+#define LED_PORT                   (gpioPortE)
+#define LED_PIN                    (2)
 
-#define LED_DELAY                  (50 / portTICK_RATE_MS)
-#define LED_PORT                   (gpioPortA)
-#define LED_PIN                    (9)
-
-/* Ram buffers
- * BUFFERSIZE should be between 512 and 1024, depending on available ram *****/
-#define BUFFERSIZE      1024
-
-char   receiveBuffer[BUFFERSIZE];
-
-/***************************************************************************//**
- * @brief
- *   This function is required by the FAT file system in order to provide
- *   timestamps for created files. Since this example does not include a
- *   reliable clock we hardcode a value here.
- *
- *   Refer to drivers/fatfs/doc/en/fattime.html for the format of this DWORD.
- * @return
- *    A DWORD containing the current time and date as a packed datastructure.
- ******************************************************************************/
-DWORD get_fattime(void)
-{
-  return (28 << 25) | (2 << 21) | (1 << 16);
-}
 
 /**************************************************************************//**
  * @brief Initialize drivers
@@ -91,30 +56,8 @@ DWORD get_fattime(void)
 void DRIVERS_Init(void)
 {
 
-  /* Enable I2C0 is slave mode */
-  //I2C0_setup();
 
-  /* Initialize chip select lines
-   * 	D3 -> Accel/Mag
-   * 	B5 -> Gyro
-   * 	F6 -> RTC (Active High)
-   * 	B6 -> FRAM
-   * 	B11-> SD Card
-   * 	B12-> Breakout
-   */
-  GPIO->P[gpioPortD].DOUTSET = 1 << 3;
-  GPIO->P[gpioPortB].DOUTSET = 1 << 5;
-  GPIO->P[gpioPortF].DOUTSET = 0 << 6;
-  GPIO->P[gpioPortB].DOUTSET = 1 << 6;
-  GPIO->P[gpioPortB].DOUTSET = 1 << 11;
-  GPIO->P[gpioPortB].DOUTSET = 1 << 12;
-
-  //FATFS_Init();
-
-  /* Enable USART2 in SPI slave mode */
-  SPI_setup(USART2, LOCATION(0), SLAVE);
 }
-
 
 
 /**************************************************************************//**
@@ -128,33 +71,12 @@ static void LedBlink(void *pParameters)
   for (;;)
   {
     /* Set LSB of count value on LED */
-  GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
+	GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
     vTaskDelay(LED_DELAY);
     GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
     vTaskDelay(LED_DELAY);
   }
 }
-
-
-
-/**************************************************************************//**
- * @brief Simple task which is receiving as a slave on USART2
- *****************************************************************************/
-static void SPI2Receive(void *pParameters)
-{
-
-  pParameters = pParameters;   /* to quiet warnings */
-
-  for (;;)
-  {
-  /* Data reception as slave */
-  /* *********************** */
-  /*Setting up both RX and TX interrupts for slave */
-  SPI2_setupSlaveInt(receiveBuffer, BUFFERSIZE, NO_TX, NO_TX);
-  vTaskDelay(50 / portTICK_RATE_MS);
-  }
-}
-
 
 
 /**************************************************************************//**
@@ -171,8 +93,6 @@ int main(void)
   /* Initialize Hardware Drivers */
   DRIVERS_Init();
 
-  //FATFS_Write( "Hello!", "hello.txt");
-
 
   /* Create task for blinking leds */
   xTaskCreate( LedBlink,
@@ -182,13 +102,6 @@ int main(void)
            LEDBLINK_TASK_PRIORITY,
            NULL );
 
-  /* Create task for receiving on USART2 */
-  xTaskCreate( SPI2Receive,
-           (const char *) "SPI2Receive",
-           SPI2RECEIVE_STACK_SIZE,
-           NULL,
-           SPI2RECEIVE_TASK_PRIORITY,
-           NULL );
 
   /*Start FreeRTOS Scheduler*/
   vTaskStartScheduler();
