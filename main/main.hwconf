@@ -13,7 +13,8 @@
     <property object="PB5" propertyId="ports.settings.pinmode" value="Push-pull"/>
     <property object="PB6" propertyId="ports.settings.custompinname" value="CS3"/>
     <property object="PB6" propertyId="ports.settings.pinmode" value="Push-pull"/>
-    <property object="PC2" propertyId="ports.settings.custompinname" value="MOSI"/>
+    <property object="PC2" propertyId="ports.settings.custompinname" value="LED"/>
+    <property object="PC2" propertyId="ports.settings.pinmode" value="Push-pull"/>
     <property object="PC3" propertyId="ports.settings.custompinname" value="MISO"/>
     <property object="PC4" propertyId="ports.settings.custompinname" value="CLK"/>
     <property object="PC5" propertyId="ports.settings.custompinname" value="CS"/>

@@ -518,6 +518,10 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 	// [Port B Configuration]$
 
 	// $[Port C Configuration]
+
+	/* Pin PC2 is configured to Push-pull */
+	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE2_MASK)
+			| GPIO_P_MODEL_MODE2_PUSHPULL;
 	// [Port C Configuration]$
 
 	// $[Port D Configuration]
