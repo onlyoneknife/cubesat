@@ -32,8 +32,6 @@
 #include "sleep.h"
 
 
-/* Other Driver Includes */
-#include "sharedtypes.h"
 
 
 /* FreeRTOS Includes */
@@ -44,12 +42,38 @@
 #include "semphr.h"
 #include "croutine.h"
 
+ #define VOLTAGE V
+ #define Max_Voltage 5
+ #define Min_Voltage 4
+#define VOLTAGE_DELAY 
+ #define VOLTAGE_PORT (gpioPortD)
+ #define VOLTAGE_PIN (2U)
+
+ #define Current C
+ #define Max_Current 1
+ #define Min_Current .5
+ #define CURRENT_DELAY (100 / portTICK_RATE_MS)
+ #define CURRENT_PORT (gpioPortD)
+ #define CURRENT_PIN (0U)
+
+
 #define LEDBLINK_STACK_SIZE        (configMINIMAL_STACK_SIZE + 10)
 #define LEDBLINK_TASK_PRIORITY     (tskIDLE_PRIORITY + 1)
-
 #define LED_DELAY                  (100 / portTICK_RATE_MS)
 #define LED_PORT                   (gpioPortC)
-#define LED_PIN                    (2U)
+#define LED_PIN                    (4U)
+
+ #define ALARM_PORT (gpioPortD)
+ #define ALARM_PIN (10U)
+ #define ALARM_DELAY (100 / portTICK_RATE_MS)
+ #define ALARM_TIME (300 / portTICK_RATE_MS)
+ #define ALARM_ON 1
+ #define ALARM_OFF 0
+ 
+ #define Error_Check_STACK_SIZE (configMINIMAL_STACK_SIZE + 10)
+ #define Error_Check_TASK_PRIORITY (tskIDLE_PRIORITY + 1)
+
+
 
 /* Ram buffers
  * BUFFERSIZE should be between 512 and 1024, depending on available ram *****/
@@ -69,17 +93,57 @@ char   receiveBuffer[BUFFERSIZE];
  ******************************************************************************/
 
 
+
 /**************************************************************************//**
- * @brief Simple task which is blinking led
+ * @brief Pull current
  *****************************************************************************/
+static int Current(void *pParameters)
+{
+  pParameters = pParameters;   /* to quiet warnings */
+
+  C = /*-----Check CURRENT_PORT on CURRENT_PIN for analog current read out-----*/
+  vTaskDelay(CURRENT_DELAY);
 
 
+}
+
+
+/**************************************************************************//**
+ * @brief Pull current
+ *****************************************************************************/
+static int Voltage(void *pParameters)
+{
+  pParameters = pParameters;   /* to quiet warnings */
+
+  V = /*-----Check VOLTAGE_PORT on VOLTAGE_PIN for analog voltage read out-----*/
+  vTaskDelay(VOLTAGE_DELAY);
+
+
+}
+
+/**************************************************************************//**
+ * @brief Simple task which is sounding alarm
+ *****************************************************************************/
+static void Alarm(void *pParameters)
+{
+
+  pParameters = pParameters;   /* to quiet warnings */
+
+  GPIO->P[ALARM_PORT].DOUTSET = 1 << ALARM_PIN;
+  vTaskDelay(ALARM_TIME);
+  GPIO->P[ALARM_PORT].DOUTCLR = 1 << ALARM_PIN;
+  vTaskDelay(ALARM_DELAY);
+}
+
+  
+}
 
 /**************************************************************************//**
  * @brief Simple task which is blinking led
  *****************************************************************************/
 static void LedBlink(void *pParameters)
 {
+  if(v > )
 
   pParameters = pParameters;   /* to quiet warnings */
 
@@ -91,6 +155,18 @@ static void LedBlink(void *pParameters)
     GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
     vTaskDelay(LED_DELAY);
   }
+}
+
+
+static void Error_Check(void *pParameters)
+{
+
+  for(C > Max_Current | C < Min_Current && V > Max_Voltage | V < Min_Voltage)
+  {
+    LedBlink();
+    Alarm();
+  }
+
 }
 
 /**************************************************************************//**
@@ -105,6 +181,10 @@ int main(void)
   enter_DefaultMode_from_RESET();
 
 
+GPIO_DriveModeSet(ALARM_PORT, GPIO_P_CTRL_DRIVEMODE_HIGH);
+
+xTaskCreate(Error_Check, (const char *) "Error_Check", Error_Check_STACK_SIZE, NULL, Error_Check_TASK_PRIORITY, NULL );
+
 
   /* Create task for blinking leds */
   xTaskCreate( LedBlink,
@@ -113,6 +193,8 @@ int main(void)
            NULL,
            LEDBLINK_TASK_PRIORITY,
            NULL );
+
+
 
 
   /*Start FreeRTOS Scheduler*/
