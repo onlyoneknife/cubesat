@@ -58,13 +58,9 @@
 #define LEDBLINK_STACK_SIZE        	(configMINIMAL_STACK_SIZE + 10)
 #define LEDBLINK_TASK_PRIORITY     	(tskIDLE_PRIORITY + 1)
 #define LED_DELAY                  	(100 / portTICK_RATE_MS)
-#define LED_PORT                   	(gpioPortC)
-#define LED_PIN                    	(4U)
 
- #define ALARM_PORT 				(gpioPortD)
- #define ALARM_PIN 					(10U)
  #define ALARM_DELAY 				(100 / portTICK_RATE_MS)
- #define ALARM_TIME 				(300 / portTICK_RATE_MS)
+ #define ALARM_TIME 				(100 / portTICK_RATE_MS)
  #define ALARM_ON 					(true)
  #define ALARM_OFF 					(false)
  
@@ -92,46 +88,6 @@ char   receiveBuffer[BUFFERSIZE];
 
 
 
-/**************************************************************************//**
- * @brief Pull current
- *****************************************************************************/
-static int Current(void *pParameters)
-{
-  pParameters = pParameters;   /* to quiet warnings */
-
-  //TODO C = /*-----Check CURRENT_PORT on CURRENT_PIN for analog current read out-----*/
-  vTaskDelay(CURRENT_DELAY);
-
-
-}
-
-
-/**************************************************************************//**
- * @brief Pull current
- *****************************************************************************/
-static int Voltage(void *pParameters)
-{
-  pParameters = pParameters;   /* to quiet warnings */
-
-  // TODO V = /*-----Check VOLTAGE_PORT on VOLTAGE_PIN for analog voltage read out-----*/
-  vTaskDelay(VOLTAGE_DELAY);
-
-
-}
-
-/**************************************************************************//**
- * @brief Simple task which is sounding alarm
- *****************************************************************************/
-static void Alarm(void *pParameters)
-{
-
-  pParameters = pParameters;   /* to quiet warnings */
-
-  GPIO->P[ALARM_PORT].DOUTSET = 1 << ALARM_PIN;
-  vTaskDelay(ALARM_TIME);
-  GPIO->P[ALARM_PORT].DOUTCLR = 1 << ALARM_PIN;
-  vTaskDelay(ALARM_DELAY);
-}
 
 
 
@@ -147,10 +103,10 @@ static void LedBlink(void *pParameters)
   for (;;)
   {
     /* Set LSB of count value on LED */
-  GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
-    vTaskDelay(LED_DELAY);
-    GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
-    vTaskDelay(LED_DELAY);
+	  GPIO->P[BUZZER_PORT].DOUTSET = 1 << BUZZER_PIN;
+	  vTaskDelay(ALARM_TIME);
+	  GPIO->P[BUZZER_PORT].DOUTCLR = 1 << BUZZER_PIN;
+	  vTaskDelay(ALARM_DELAY);
   }
 }
 
@@ -178,9 +134,8 @@ int main(void)
   enter_DefaultMode_from_RESET();
 
 
-GPIO_DriveModeSet(ALARM_PORT, GPIO_P_CTRL_DRIVEMODE_HIGH);
+GPIO_DriveModeSet(BUZZER_PORT, GPIO_P_CTRL_DRIVEMODE_HIGH);
 
-xTaskCreate(Error_Check, (const char *) "Error_Check", Error_Check_STACK_SIZE, NULL, Error_Check_TASK_PRIORITY, NULL );
 
 
   /* Create task for blinking leds */

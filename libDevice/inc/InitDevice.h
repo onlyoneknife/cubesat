@@ -43,6 +43,7 @@ extern void TIMER0_enter_DefaultMode_from_RESET(void);
 extern void TIMER1_enter_DefaultMode_from_RESET(void);
 extern void TIMER2_enter_DefaultMode_from_RESET(void);
 extern void TIMER3_enter_DefaultMode_from_RESET(void);
+extern void LETIMER0_enter_DefaultMode_from_RESET(void);
 extern void PCNT0_enter_DefaultMode_from_RESET(void);
 extern void PCNT1_enter_DefaultMode_from_RESET(void);
 extern void PCNT2_enter_DefaultMode_from_RESET(void);
@@ -53,4 +54,14 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void);
 // [Config(Per-Module Mode)Transition Prototypes]$
 
 #endif
+
+// $[User-defined pin name abstraction]
+
+#define BUZZER_PIN      (10)
+#define BUZZER_PORT     (gpioPortD)
+
+#define LED_PIN         (4)
+#define LED_PORT        (gpioPortC)
+
+// [User-defined pin name abstraction]$
 

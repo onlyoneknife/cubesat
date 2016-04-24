@@ -26,11 +26,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>EFM32GG</name>
-			<type>2</type>
-			<locationURI>STUDIO_SDK_LOC/Device/SiliconLabs/EFM32GG/Source</locationURI>
-		</link>
-		<link>
 			<name>FatFS</name>
 			<type>2</type>
 			<locationURI>WORKSPACE_LOC/lib3rdParty/FatFS</locationURI>

@@ -19,7 +19,6 @@
 #include "em_device.h"
 #include "em_chip.h"
 #include "em_gpio.h"
-#include "em_usart.h"
 // [Library includes]$
 
 //==============================================================================
@@ -28,7 +27,6 @@
 extern void enter_DefaultMode_from_RESET(void) {
 	// $[Config Calls]
 	CMU_enter_DefaultMode_from_RESET();
-	USART1_enter_DefaultMode_from_RESET();
 	PORTIO_enter_DefaultMode_from_RESET();
 	// [Config Calls]$
 
@@ -41,15 +39,16 @@ extern void CMU_enter_DefaultMode_from_RESET(void) {
 	// $[High Frequency Clock select]
 	/* Using HFRCO at 14MHz as high frequency clock, HFCLK */
 	CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFRCO);
+
+	/* Enable peripheral clock */
+	CMU_ClockEnable(cmuClock_HFPER, true);
+
 	// [High Frequency Clock select]$
 
 	// $[LFACLK Setup]
 	// [LFACLK Setup]$
 
 	// $[Peripheral Clock enables]
-	/* Enable clock for USART1 */
-	CMU_ClockEnable(cmuClock_USART1, true);
-
 	/* Enable clock for GPIO by default */
 	CMU_ClockEnable(cmuClock_GPIO, true);
 
@@ -61,6 +60,9 @@ extern void CMU_enter_DefaultMode_from_RESET(void) {
 	// $[HFXO enable]
 	// [HFXO enable]$
 
+	// $[LF clock tree setup]
+	/* No LF peripherals enabled */
+	// [LF clock tree setup]$
 }
 
 //================================================================================
@@ -230,30 +232,9 @@ extern void USART1_enter_DefaultMode_from_RESET(void) {
 	// [USART_InitAsync]$
 
 	// $[USART_InitSync]
-	USART_InitSync_TypeDef initsync = USART_INITSYNC_DEFAULT;
-
-	initsync.baudrate = 115200;
-	initsync.databits = usartDatabits8;
-	initsync.master = 1;
-	initsync.msbf = 1;
-	initsync.clockMode = usartClockMode0;
-#if defined( USART_INPUT_RXPRS ) && defined( USART_TRIGCTRL_AUTOTXTEN )
-	initsync.prsRxEnable = 0;
-	initsync.prsRxCh = 0;
-	initsync.autoTx = 0;
-#endif
-
-	USART_InitSync(USART1, &initsync);
 	// [USART_InitSync]$
 
 	// $[USART_InitPrsTrigger]
-	USART_PrsTriggerInit_TypeDef initprs = USART_INITPRSTRIGGER_DEFAULT;
-
-	initprs.rxTriggerEnable = 0;
-	initprs.txTriggerEnable = 0;
-	initprs.prsTriggerChannel = usartPrsTriggerCh0;
-
-	USART_InitPrsTrigger(USART1, &initprs);
 	// [USART_InitPrsTrigger]$
 
 }
@@ -492,81 +473,40 @@ extern void EBI_enter_DefaultMode_from_RESET(void) {
 extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 
 	// $[Port A Configuration]
-
-	/* Pin PA9 is configured to Push-pull */
-	GPIO->P[0].MODEH = (GPIO->P[0].MODEH & ~_GPIO_P_MODEH_MODE9_MASK)
-			| GPIO_P_MODEH_MODE9_PUSHPULL;
 	// [Port A Configuration]$
 
 	// $[Port B Configuration]
-
-	/* Pin PB5 is configured to Push-pull */
-	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE5_MASK)
-			| GPIO_P_MODEL_MODE5_PUSHPULL;
-
-	/* Pin PB6 is configured to Push-pull */
-	GPIO->P[1].MODEL = (GPIO->P[1].MODEL & ~_GPIO_P_MODEL_MODE6_MASK)
-			| GPIO_P_MODEL_MODE6_PUSHPULL;
-
-	/* Pin PB11 is configured to Push-pull */
-	GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE11_MASK)
-			| GPIO_P_MODEH_MODE11_PUSHPULL;
-
-	/* Pin PB12 is configured to Push-pull */
-	GPIO->P[1].MODEH = (GPIO->P[1].MODEH & ~_GPIO_P_MODEH_MODE12_MASK)
-			| GPIO_P_MODEH_MODE12_PUSHPULL;
 	// [Port B Configuration]$
 
 	// $[Port C Configuration]
 
-	/* Pin PC2 is configured to Push-pull */
-	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE2_MASK)
-			| GPIO_P_MODEL_MODE2_PUSHPULL;
+	/* Pin PC4 is configured to Push-pull */
+	GPIO->P[2].MODEL = (GPIO->P[2].MODEL & ~_GPIO_P_MODEL_MODE4_MASK)
+			| GPIO_P_MODEL_MODE4_PUSHPULL;
 	// [Port C Configuration]$
 
 	// $[Port D Configuration]
 
-	/* Pin PD0 is configured to Push-pull */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE0_MASK)
-			| GPIO_P_MODEL_MODE0_PUSHPULL;
-
-	/* Pin PD1 is configured to Input enabled */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE1_MASK)
-			| GPIO_P_MODEL_MODE1_INPUT;
-
-	/* Pin PD2 is configured to Push-pull */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE2_MASK)
-			| GPIO_P_MODEL_MODE2_PUSHPULL;
-
-	/* Pin PD3 is configured to Push-pull */
-	GPIO->P[3].MODEL = (GPIO->P[3].MODEL & ~_GPIO_P_MODEL_MODE3_MASK)
-			| GPIO_P_MODEL_MODE3_PUSHPULL;
+	/* Pin PD10 is configured to Push-pull with alt. drive strength */
+	GPIO->P[3].MODEH = (GPIO->P[3].MODEH & ~_GPIO_P_MODEH_MODE10_MASK)
+			| GPIO_P_MODEH_MODE10_PUSHPULLDRIVE;
 	// [Port D Configuration]$
 
 	// $[Port E Configuration]
 	// [Port E Configuration]$
 
 	// $[Port F Configuration]
-
-	/* Pin PF6 is configured to Push-pull */
-	GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE6_MASK)
-			| GPIO_P_MODEL_MODE6_PUSHPULL;
 	// [Port F Configuration]$
 
 	// $[Route Configuration]
-
-	/* Module PCNT0 is configured to location 0 */
-	PCNT0->ROUTE = (PCNT0->ROUTE & ~_PCNT_ROUTE_LOCATION_MASK)
-			| PCNT_ROUTE_LOCATION_LOC0;
-
-	/* Module USART1 is configured to location 1 */
-	USART1->ROUTE = (USART1->ROUTE & ~_USART_ROUTE_LOCATION_MASK)
-			| USART_ROUTE_LOCATION_LOC1;
-
-	/* Enable signals CLK, CS, RX, TX */
-	USART1->ROUTE |= USART_ROUTE_CLKPEN | USART_ROUTE_CSPEN | USART_ROUTE_RXPEN
-			| USART_ROUTE_TXPEN;
 	// [Route Configuration]$
+
+}
+
+extern void LETIMER0_enter_DefaultMode_from_RESET(void) {
+
+	// $[LETIMER0_Init]
+	// [LETIMER0_Init]$
 
 }
 
