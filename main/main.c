@@ -42,33 +42,31 @@
 #include "semphr.h"
 #include "croutine.h"
 
- #define VOLTAGE V
- #define Max_Voltage 5
- #define Min_Voltage 4
-#define VOLTAGE_DELAY 
- #define VOLTAGE_PORT (gpioPortD)
- #define VOLTAGE_PIN (2U)
+ #define Max_Voltage 				(5)
+ #define Min_Voltage 				(4)
+ #define VOLTAGE_DELAY 				(100 / portTICK_RATE_MS)
+ #define VOLTAGE_PORT 				(gpioPortD)
+ #define VOLTAGE_PIN 				(2U)
 
- #define Current C
- #define Max_Current 1
- #define Min_Current .5
- #define CURRENT_DELAY (100 / portTICK_RATE_MS)
- #define CURRENT_PORT (gpioPortD)
- #define CURRENT_PIN (0U)
+ #define Max_Current 				(1000)
+ #define Min_Current 				(500)
+ #define CURRENT_DELAY 				(100 / portTICK_RATE_MS)
+ #define CURRENT_PORT 				(gpioPortD)
+ #define CURRENT_PIN 				(0U)
 
 
-#define LEDBLINK_STACK_SIZE        (configMINIMAL_STACK_SIZE + 10)
-#define LEDBLINK_TASK_PRIORITY     (tskIDLE_PRIORITY + 1)
-#define LED_DELAY                  (100 / portTICK_RATE_MS)
-#define LED_PORT                   (gpioPortC)
-#define LED_PIN                    (4U)
+#define LEDBLINK_STACK_SIZE        	(configMINIMAL_STACK_SIZE + 10)
+#define LEDBLINK_TASK_PRIORITY     	(tskIDLE_PRIORITY + 1)
+#define LED_DELAY                  	(100 / portTICK_RATE_MS)
+#define LED_PORT                   	(gpioPortC)
+#define LED_PIN                    	(4U)
 
- #define ALARM_PORT (gpioPortD)
- #define ALARM_PIN (10U)
- #define ALARM_DELAY (100 / portTICK_RATE_MS)
- #define ALARM_TIME (300 / portTICK_RATE_MS)
- #define ALARM_ON 1
- #define ALARM_OFF 0
+ #define ALARM_PORT 				(gpioPortD)
+ #define ALARM_PIN 					(10U)
+ #define ALARM_DELAY 				(100 / portTICK_RATE_MS)
+ #define ALARM_TIME 				(300 / portTICK_RATE_MS)
+ #define ALARM_ON 					(true)
+ #define ALARM_OFF 					(false)
  
  #define Error_Check_STACK_SIZE (configMINIMAL_STACK_SIZE + 10)
  #define Error_Check_TASK_PRIORITY (tskIDLE_PRIORITY + 1)
@@ -101,7 +99,7 @@ static int Current(void *pParameters)
 {
   pParameters = pParameters;   /* to quiet warnings */
 
-  C = /*-----Check CURRENT_PORT on CURRENT_PIN for analog current read out-----*/
+  //TODO C = /*-----Check CURRENT_PORT on CURRENT_PIN for analog current read out-----*/
   vTaskDelay(CURRENT_DELAY);
 
 
@@ -115,7 +113,7 @@ static int Voltage(void *pParameters)
 {
   pParameters = pParameters;   /* to quiet warnings */
 
-  V = /*-----Check VOLTAGE_PORT on VOLTAGE_PIN for analog voltage read out-----*/
+  // TODO V = /*-----Check VOLTAGE_PORT on VOLTAGE_PIN for analog voltage read out-----*/
   vTaskDelay(VOLTAGE_DELAY);
 
 
@@ -135,15 +133,14 @@ static void Alarm(void *pParameters)
   vTaskDelay(ALARM_DELAY);
 }
 
-  
-}
+
 
 /**************************************************************************//**
  * @brief Simple task which is blinking led
  *****************************************************************************/
 static void LedBlink(void *pParameters)
 {
-  if(v > )
+  //TODO if(v > )
 
   pParameters = pParameters;   /* to quiet warnings */
 
@@ -160,13 +157,13 @@ static void LedBlink(void *pParameters)
 
 static void Error_Check(void *pParameters)
 {
-
+/* TODO
   for(C > Max_Current | C < Min_Current && V > Max_Voltage | V < Min_Voltage)
   {
     LedBlink();
     Alarm();
   }
-
+*/
 }
 
 /**************************************************************************//**
