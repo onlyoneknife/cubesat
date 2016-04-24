@@ -26,9 +26,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>CMSIS</name>
+			<name>EFM32GG</name>
 			<type>2</type>
-			<locationURI>WORKSPACE_LOC/lib3rdParty/CMSIS</locationURI>
+			<locationURI>STUDIO_SDK_LOC/Device/SiliconLabs/EFM32GG/Source</locationURI>
 		</link>
 		<link>
 			<name>FatFS</name>
@@ -38,12 +38,12 @@
 		<link>
 			<name>FreeRTOS</name>
 			<type>2</type>
-			<locationURI>WORKSPACE_LOC/lib3rdParty/FreeRTOS/Source</locationURI>
+			<locationURI>STUDIO_SDK_LOC/reptile/FreeRTOS/Source</locationURI>
 		</link>
 		<link>
 			<name>emlib</name>
 			<type>2</type>
-			<locationURI>WORKSPACE_LOC/lib3rdParty/SiliconLabs/EFM32/emlib/src</locationURI>
+			<locationURI>STUDIO_SDK_LOC/emlib/src</locationURI>
 		</link>
 		<link>
 			<name>inc</name>

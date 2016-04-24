@@ -10,6 +10,8 @@
 #include "em_chip.h"
 #include "em_gpio.h"
 
+#include "FreeRTOS.h"
+
 #define LCD_Port gpioPortD
 #define LCD_Control_Port gpioPortB
 #define MPU_Interface_Port gpioPortF
@@ -53,6 +55,7 @@ void LCD_Data_String(char *i)
 	while(*i > 0)
 	{
 	LCD_Data(*i++);
+	}
 };
 
 void LCD_Int(void)
@@ -64,7 +67,7 @@ void LCD_Int(void)
    LCD_Command(0x01);
    LCD_Command(0x80);
    LCD_Command(0x0C);
-   vTaskDelay(Blink_DELAY)
+   vTaskDelay(Blink_DELAY);
 }
 
 
