@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015  Brandon Borden, Stefan Damkjar, Taeho Kang, and Peng Zhang
+ * Copyright (C) 2015  Stefan Damkjar, Zack Cooper-Black
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -12,11 +12,16 @@
  * GNU General Public License for more details.
  */
 
+
 /**
  * @file main.c
- * @author Brandon Borden, Stefan Damkjar
+ * @author Stefan Damkjar, Zack Cooper-Black
  * @date 2015-02-20
  */
+
+/*******************************************************************************
+ ******************************   INCLUDES   ***********************************
+ ******************************************************************************/
 
 /* System Includes */
 #include <stdio.h>
@@ -27,12 +32,13 @@
 #include "em_device.h"
 #include "em_chip.h"
 #include "em_gpio.h"
+#include "em_adc.h"
+#include "em_dma.h"
 
-/* EFM32 Driver Includes */
+/* Driver Includes */
 #include "sleep.h"
-
 #include "LCD.h"
-
+#include "dmactrl.h"
 
 /* FreeRTOS Includes */
 #include "FreeRTOSConfig.h"
@@ -42,13 +48,17 @@
 #include "semphr.h"
 #include "croutine.h"
 
- #define Max_Voltage 				(5)
- #define Min_Voltage 				(4)
+/*******************************************************************************
+ *******************************   DEFINES   ***********************************
+ ******************************************************************************/
+
+ #define Max_Voltage 				(5)							// [V]
+ #define Min_Voltage 				(4)							// [V]
  #define VOLTAGE_DELAY 				(100 / portTICK_RATE_MS)
 
 
- #define Max_Current 				(1000)
- #define Min_Current 				(500)
+ #define Max_Current 				(1000)						// [mA]
+ #define Min_Current 				(500)						// [mA]
  #define CURRENT_DELAY 				(100 / portTICK_RATE_MS)
 
 
@@ -60,6 +70,10 @@
  #define ALARM_TIME 				(100 / portTICK_RATE_MS)
  #define ALARM_ON 					(true)
  #define ALARM_OFF 					(false)
+
+/** DMA channel used for scan sequence sampling adc channel 0, and 2. */
+#define DMA_CHANNEL    0
+#define NUM_SAMPLES    2
  
  #define Error_Check_STACK_SIZE (configMINIMAL_STACK_SIZE + 10)
  #define Error_Check_TASK_PRIORITY (tskIDLE_PRIORITY + 1)
@@ -87,8 +101,70 @@ char   receiveBuffer[BUFFERSIZE];
  ******************************************************************************/
 
 
+/*******************************************************************************
+ ***************************   LOCAL FUNCTIONS   *******************************
+ ******************************************************************************/
 
+/***************************************************************************//**
+* @brief
+*   Configure ADC for scan mode.
+*******************************************************************************/
+static void ADCConfig(int* errataShift)
+{
 
+	SYSTEM_ChipRevision_TypeDef chipRev;
+
+	ADC_InitScan_TypeDef scanInit = ADC_INITSCAN_DEFAULT;
+
+	/* ADC errata for rev B when using VDD as reference, need to multiply */
+	/* result by 2 */
+	SYSTEM_ChipRevisionGet(&chipRev);
+	if ((chipRev.major == 1) && (chipRev.minor == 1))
+	{
+		*errataShift = 1;
+	}
+	else
+	{
+		*errataShift = 0;
+	}
+
+	/* Init for scan sequence use. */
+	scanInit.reference = adcRefVDD;
+	scanInit.input     = ADC_SCANCTRL_INPUTMASK_CH0 |
+	                     ADC_SCANCTRL_INPUTMASK_CH2;
+	ADC_InitScan(ADC0, &scanInit);
+
+}
+
+/***************************************************************************//**
+* @brief
+*   Configure DMA usage for this application.
+*******************************************************************************/
+static void DMAConfig(void)
+{
+  DMA_Init_TypeDef       dmaInit;
+  DMA_CfgDescr_TypeDef   descrCfg;
+  DMA_CfgChannel_TypeDef chnlCfg;
+
+  /* Configure general DMA issues */
+  dmaInit.hprot        = 0;
+  dmaInit.controlBlock = dmaControlBlock;
+  DMA_Init(&dmaInit);
+
+  /* Configure DMA channel used */
+  chnlCfg.highPri   = false;
+  chnlCfg.enableInt = false;
+  chnlCfg.select    = DMAREQ_ADC0_SCAN;
+  chnlCfg.cb        = NULL;
+  DMA_CfgChannel(DMA_CHANNEL, &chnlCfg);
+
+  descrCfg.dstInc  = dmaDataInc4;
+  descrCfg.srcInc  = dmaDataIncNone;
+  descrCfg.size    = dmaDataSize4;
+  descrCfg.arbRate = dmaArbitrate1;
+  descrCfg.hprot   = 0;
+  DMA_CfgDescr(DMA_CHANNEL, true, &descrCfg);
+}
 
 
 /**************************************************************************//**
@@ -96,7 +172,6 @@ char   receiveBuffer[BUFFERSIZE];
  *****************************************************************************/
 static void LedBlink(void *pParameters)
 {
-
 
   pParameters = pParameters;   /* to quiet warnings */
 
@@ -107,9 +182,16 @@ static void LedBlink(void *pParameters)
   GPIO->P[BUZZER_PORT].DOUTCLR = 1 << BUZZER_PIN;
   vTaskDelay(ALARM_DELAY);
 
+  uint32_t samples[NUM_SAMPLES];
+  int      i;
+
+  int errataShift = 0;
+
+  ADCConfig(&errataShift);
+  DMAConfig();
+
   for (;;)
   {
-
 
 	  //vTaskDelay(10000 / portTICK_RATE_MS);
     /* Set LSB of count value on LED */
@@ -117,6 +199,36 @@ static void LedBlink(void *pParameters)
 	  vTaskDelay(ALARM_TIME);
 	  GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
 	  vTaskDelay(ALARM_DELAY);
+
+
+	  DMA_ActivateBasic(DMA_CHANNEL,
+	                      true,
+	                      false,
+	                      samples,
+	                      (void *)((uint32_t) &(ADC0->SCANDATA)),
+	                      NUM_SAMPLES - 1);
+
+	  /* Start Scan */
+	  ADC_Start(ADC0, adcStartScan);
+
+	  /* Poll for scan comversion complete */
+	  while (ADC0->STATUS & ADC_STATUS_SCANACT);
+
+	  if (errataShift)
+	  {
+	      for (i = 0; i < NUM_SAMPLES; i++)
+	      {
+	        samples[i] <<= errataShift;
+	      }
+	  }
+
+	  /* Format numbers and write to LCD */
+	  char buffer[20];
+	  sprintf(buffer,"Current:\t%5d\tmA",(unsigned int)(samples[0]*1.61));
+	  output(buffer,2,false);
+	  sprintf(buffer,"Voltage:\t%5d\tmV",(unsigned int)(samples[1]*2.14));
+	  output(buffer,3,false);
+
   }
 }
 

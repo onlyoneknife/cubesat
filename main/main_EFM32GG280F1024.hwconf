@@ -6,16 +6,17 @@
     <property object="ADC0" propertyId="adc.inputsettings.ch0" value="Enabled"/>
     <property object="ADC0" propertyId="adc.inputsettings.ch2" value="Enabled"/>
     <property object="ADC0" propertyId="scanmode.scanmodesettings.scaninput" value="ADC_SCANCTRL_INPUTMASK_CH0&#xA;     | ADC_SCANCTRL_INPUTMASK_CH2"/>
+    <property object="DMA" propertyId="ABPeripheral.included" value="true"/>
     <property object="DefaultMode" propertyId="mode.diagramLocation" value="100, 100"/>
     <property object="GPIO" propertyId="ABPeripheral.included" value="true"/>
-    <property object="PA10" propertyId="ports.settings.custompinname" value="Charge"/>
+    <property object="PA10" propertyId="ports.settings.custompinname" value="CHARGE"/>
     <property object="PA10" propertyId="ports.settings.pinmode" value="Push-pull"/>
     <property object="PC4" propertyId="ports.settings.custompinname" value="LED"/>
     <property object="PC4" propertyId="ports.settings.pinmode" value="Push-pull"/>
-    <property object="PD0" propertyId="ports.settings.custompinname" value="CURRENT"/>
+    <property object="PD0" propertyId="ports.settings.custompinname" value="Current"/>
     <property object="PD10" propertyId="ports.settings.custompinname" value="Buzzer"/>
     <property object="PD10" propertyId="ports.settings.pinmode" value="Push-pull drive"/>
-    <property object="PD2" propertyId="ports.settings.custompinname" value="VOLTAGE"/>
+    <property object="PD2" propertyId="ports.settings.custompinname" value="Voltage"/>
     <property object="PE0" propertyId="ports.settings.custompinname" value="DB0"/>
     <property object="PE0" propertyId="ports.settings.pinmode" value="Push-pull"/>
     <property object="PE1" propertyId="ports.settings.custompinname" value="DB1"/>
@@ -48,7 +49,6 @@
     <property object="PF8" propertyId="ports.settings.pinmode" value="Push-pull"/>
     <property object="PF9" propertyId="ports.settings.custompinname" value="RES"/>
     <property object="PF9" propertyId="ports.settings.pinmode" value="Push-pull"/>
-    <property object="PORTIO" propertyId="portio.acmp0.location.acmp0" value="2"/>
     <property object="PORTIO" propertyId="portio.adc0.enable.ch0" value="Enabled"/>
     <property object="PORTIO" propertyId="portio.adc0.enable.ch2" value="Enabled"/>
   </mode>

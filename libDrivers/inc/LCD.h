@@ -40,9 +40,26 @@ void LCD_Data(char i)
 void output(char* message, int line, bool clear)
 {
 	int i;
-	char arr[20] = {' '};
-	sprintf(arr,"%20s",message);
-	if (clear) LCD_Command(0x01);		//clear display
+	int len;
+	char arr[20] = {0};
+	if (clear)
+	{
+		LCD_Command(0x01);		//clear display
+	}
+	if (strlen((char*)message)>20)
+	{
+		len=20;
+	}
+	else
+	{
+		len=strlen((char*)message);
+	}
+	for(i = 0; i < 20; ++i)
+	{
+		arr[i] = ' ';
+	}
+	sprintf(arr,"%s",message);
+	arr[len] = ' ';
 	LCD_Command(0x02);		//return home
 	switch(line){
 		case 1:

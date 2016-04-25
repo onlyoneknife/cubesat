@@ -19,6 +19,7 @@
 #include "em_device.h"
 #include "em_chip.h"
 #include "em_adc.h"
+#include "em_dma.h"
 #include "em_gpio.h"
 // [Library includes]$
 
@@ -53,6 +54,9 @@ extern void CMU_enter_DefaultMode_from_RESET(void) {
 	// $[Peripheral Clock enables]
 	/* Enable clock for ADC0 */
 	CMU_ClockEnable(cmuClock_ADC0, true);
+
+	/* Enable clock for DMA */
+	CMU_ClockEnable(cmuClock_DMA, true);
 
 	/* Enable clock for GPIO by default */
 	CMU_ClockEnable(cmuClock_GPIO, true);
