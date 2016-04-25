@@ -1,12 +1,56 @@
 <?xml version="1.0" encoding="ASCII"?>
 <device:XMLDevice xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:device="http://www.silabs.com/sls/hc/document/device.ecore" name="EFM32GG280F1024" partId="com.silabs.mcu.si32.efm32.efm32gg.efm32gg280f1024">
   <mode name="DefaultMode">
+    <property object="ADC0" propertyId="ABPeripheral.included" value="true"/>
+    <property object="ADC0" propertyId="adc.adcsettings.lowpassfiltermode" value="On-chip RC filter"/>
+    <property object="ADC0" propertyId="adc.inputsettings.ch0" value="Enabled"/>
+    <property object="ADC0" propertyId="adc.inputsettings.ch2" value="Enabled"/>
+    <property object="ADC0" propertyId="scanmode.scanmodesettings.scaninput" value="ADC_SCANCTRL_INPUTMASK_CH0&#xA;     | ADC_SCANCTRL_INPUTMASK_CH2"/>
     <property object="DefaultMode" propertyId="mode.diagramLocation" value="100, 100"/>
     <property object="GPIO" propertyId="ABPeripheral.included" value="true"/>
+    <property object="PA10" propertyId="ports.settings.custompinname" value="Charge"/>
+    <property object="PA10" propertyId="ports.settings.pinmode" value="Push-pull"/>
     <property object="PC4" propertyId="ports.settings.custompinname" value="LED"/>
     <property object="PC4" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PD0" propertyId="ports.settings.custompinname" value="CURRENT"/>
     <property object="PD10" propertyId="ports.settings.custompinname" value="Buzzer"/>
     <property object="PD10" propertyId="ports.settings.pinmode" value="Push-pull drive"/>
+    <property object="PD2" propertyId="ports.settings.custompinname" value="VOLTAGE"/>
+    <property object="PE0" propertyId="ports.settings.custompinname" value="DB0"/>
+    <property object="PE0" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PE1" propertyId="ports.settings.custompinname" value="DB1"/>
+    <property object="PE1" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PE2" propertyId="ports.settings.custompinname" value="DB2"/>
+    <property object="PE2" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PE3" propertyId="ports.settings.custompinname" value="DB3"/>
+    <property object="PE3" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PE4" propertyId="ports.settings.custompinname" value="DB4"/>
+    <property object="PE4" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PE5" propertyId="ports.settings.custompinname" value="DB5"/>
+    <property object="PE5" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PE6" propertyId="ports.settings.custompinname" value="DB6"/>
+    <property object="PE6" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PE7" propertyId="ports.settings.custompinname" value="DB7"/>
+    <property object="PE7" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PF2" propertyId="ports.settings.custompinname" value="BS0"/>
+    <property object="PF2" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PF3" propertyId="ports.settings.custompinname" value="BS1"/>
+    <property object="PF3" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PF4" propertyId="ports.settings.custompinname" value="BS2"/>
+    <property object="PF4" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PF5" propertyId="ports.settings.custompinname" value="DC"/>
+    <property object="PF5" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PF6" propertyId="ports.settings.custompinname" value="RW"/>
+    <property object="PF6" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PF7" propertyId="ports.settings.custompinname" value="E"/>
+    <property object="PF7" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PF8" propertyId="ports.settings.custompinname" value="CS"/>
+    <property object="PF8" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PF9" propertyId="ports.settings.custompinname" value="RES"/>
+    <property object="PF9" propertyId="ports.settings.pinmode" value="Push-pull"/>
+    <property object="PORTIO" propertyId="portio.acmp0.location.acmp0" value="2"/>
+    <property object="PORTIO" propertyId="portio.adc0.enable.ch0" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.adc0.enable.ch2" value="Enabled"/>
   </mode>
   <modeTransition>
     <property object="RESET &#x2192; DefaultMode" propertyId="modeTransition.target" value="DefaultMode"/>

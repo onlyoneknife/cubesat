@@ -57,11 +57,74 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void);
 
 // $[User-defined pin name abstraction]
 
-#define BUZZER_PIN      (10)
-#define BUZZER_PORT     (gpioPortD)
+#define ADC0_CH0_PIN        (0)
+#define ADC0_CH0_PORT       (gpioPortD)
 
-#define LED_PIN         (4)
-#define LED_PORT        (gpioPortC)
+#define ADC0_CH2_PIN        (2)
+#define ADC0_CH2_PORT       (gpioPortD)
+
+#define BS0_PIN             (2)
+#define BS0_PORT            (gpioPortF)
+
+#define BS1_PIN             (3)
+#define BS1_PORT            (gpioPortF)
+
+#define BS2_PIN             (4)
+#define BS2_PORT            (gpioPortF)
+
+#define BUZZER_PIN          (10)
+#define BUZZER_PORT         (gpioPortD)
+
+#define CHARGE_PIN          (10)
+#define CHARGE_PORT         (gpioPortA)
+
+#define CS_PIN              (8)
+#define CS_PORT             (gpioPortF)
+
+#define CURRENT_PIN         (0)
+#define CURRENT_PORT        (gpioPortD)
+
+#define DB0_PIN             (0)
+#define DB0_PORT            (gpioPortE)
+
+#define DB1_PIN             (1)
+#define DB1_PORT            (gpioPortE)
+
+#define DB2_PIN             (2)
+#define DB2_PORT            (gpioPortE)
+
+#define DB3_PIN             (3)
+#define DB3_PORT            (gpioPortE)
+
+#define DB4_PIN             (4)
+#define DB4_PORT            (gpioPortE)
+
+#define DB5_PIN             (5)
+#define DB5_PORT            (gpioPortE)
+
+#define DB6_PIN             (6)
+#define DB6_PORT            (gpioPortE)
+
+#define DB7_PIN             (7)
+#define DB7_PORT            (gpioPortE)
+
+#define DC_PIN              (5)
+#define DC_PORT             (gpioPortF)
+
+#define E_PIN               (7)
+#define E_PORT              (gpioPortF)
+
+#define LED_PIN             (4)
+#define LED_PORT            (gpioPortC)
+
+#define RES_PIN             (9)
+#define RES_PORT            (gpioPortF)
+
+#define RW_PIN              (6)
+#define RW_PORT             (gpioPortF)
+
+#define VOLTAGE_PIN         (2)
+#define VOLTAGE_PORT        (gpioPortD)
 
 // [User-defined pin name abstraction]$
 

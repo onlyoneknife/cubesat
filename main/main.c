@@ -31,7 +31,7 @@
 /* EFM32 Driver Includes */
 #include "sleep.h"
 
-
+#include "LCD.h"
 
 
 /* FreeRTOS Includes */
@@ -45,14 +45,11 @@
  #define Max_Voltage 				(5)
  #define Min_Voltage 				(4)
  #define VOLTAGE_DELAY 				(100 / portTICK_RATE_MS)
- #define VOLTAGE_PORT 				(gpioPortD)
- #define VOLTAGE_PIN 				(2U)
+
 
  #define Max_Current 				(1000)
  #define Min_Current 				(500)
  #define CURRENT_DELAY 				(100 / portTICK_RATE_MS)
- #define CURRENT_PORT 				(gpioPortD)
- #define CURRENT_PIN 				(0U)
 
 
 #define LEDBLINK_STACK_SIZE        	(configMINIMAL_STACK_SIZE + 10)
@@ -66,6 +63,9 @@
  
  #define Error_Check_STACK_SIZE (configMINIMAL_STACK_SIZE + 10)
  #define Error_Check_TASK_PRIORITY (tskIDLE_PRIORITY + 1)
+
+char  message[12];
+
 
 
 
@@ -96,31 +96,32 @@ char   receiveBuffer[BUFFERSIZE];
  *****************************************************************************/
 static void LedBlink(void *pParameters)
 {
-  //TODO if(v > )
+
 
   pParameters = pParameters;   /* to quiet warnings */
 
+  init();
+  output("Hello world!",1,true);
+  GPIO->P[BUZZER_PORT].DOUTSET = 1 << BUZZER_PIN;
+  vTaskDelay(ALARM_TIME);
+  GPIO->P[BUZZER_PORT].DOUTCLR = 1 << BUZZER_PIN;
+  vTaskDelay(ALARM_DELAY);
+
   for (;;)
   {
+
+
+	  //vTaskDelay(10000 / portTICK_RATE_MS);
     /* Set LSB of count value on LED */
-	  GPIO->P[BUZZER_PORT].DOUTSET = 1 << BUZZER_PIN;
+	  GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
 	  vTaskDelay(ALARM_TIME);
-	  GPIO->P[BUZZER_PORT].DOUTCLR = 1 << BUZZER_PIN;
+	  GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
 	  vTaskDelay(ALARM_DELAY);
   }
 }
 
 
-static void Error_Check(void *pParameters)
-{
-/* TODO
-  for(C > Max_Current | C < Min_Current && V > Max_Voltage | V < Min_Voltage)
-  {
-    LedBlink();
-    Alarm();
-  }
-*/
-}
+
 
 /**************************************************************************//**
  * @brief  Main function
@@ -134,7 +135,7 @@ int main(void)
   enter_DefaultMode_from_RESET();
 
 
-GPIO_DriveModeSet(BUZZER_PORT, GPIO_P_CTRL_DRIVEMODE_HIGH);
+  GPIO_DriveModeSet(BUZZER_PORT, GPIO_P_CTRL_DRIVEMODE_HIGH);
 
 
 

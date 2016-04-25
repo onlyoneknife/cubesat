@@ -18,6 +18,7 @@
 #include "em_cmu.h"
 #include "em_device.h"
 #include "em_chip.h"
+#include "em_adc.h"
 #include "em_gpio.h"
 // [Library includes]$
 
@@ -27,6 +28,7 @@
 extern void enter_DefaultMode_from_RESET(void) {
 	// $[Config Calls]
 	CMU_enter_DefaultMode_from_RESET();
+	ADC0_enter_DefaultMode_from_RESET();
 	PORTIO_enter_DefaultMode_from_RESET();
 	// [Config Calls]$
 
@@ -49,6 +51,9 @@ extern void CMU_enter_DefaultMode_from_RESET(void) {
 	// [LFACLK Setup]$
 
 	// $[Peripheral Clock enables]
+	/* Enable clock for ADC0 */
+	CMU_ClockEnable(cmuClock_ADC0, true);
+
 	/* Enable clock for GPIO by default */
 	CMU_ClockEnable(cmuClock_GPIO, true);
 
@@ -70,6 +75,16 @@ extern void CMU_enter_DefaultMode_from_RESET(void) {
 //================================================================================
 extern void ADC0_enter_DefaultMode_from_RESET(void) {
 	// $[ADC_Init]
+	ADC_Init_TypeDef init = ADC_INIT_DEFAULT;
+
+	init.ovsRateSel = adcOvsRateSel2;
+	init.lpfMode = adcLPFilterRC;
+	init.warmUpMode = adcWarmupNormal;
+	init.timebase = ADC_TimebaseCalc(0);
+	init.prescale = ADC_PrescaleCalc(7000000, 0);
+	init.tailgate = 0;
+
+	ADC_Init(ADC0, &init);
 	// [ADC_Init]$
 
 	// $[ADC_InitSingle]
@@ -473,6 +488,10 @@ extern void EBI_enter_DefaultMode_from_RESET(void) {
 extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 
 	// $[Port A Configuration]
+
+	/* Pin PA10 is configured to Push-pull */
+	GPIO->P[0].MODEH = (GPIO->P[0].MODEH & ~_GPIO_P_MODEH_MODE10_MASK)
+			| GPIO_P_MODEH_MODE10_PUSHPULL;
 	// [Port A Configuration]$
 
 	// $[Port B Configuration]
@@ -493,9 +512,73 @@ extern void PORTIO_enter_DefaultMode_from_RESET(void) {
 	// [Port D Configuration]$
 
 	// $[Port E Configuration]
+
+	/* Pin PE0 is configured to Push-pull */
+	GPIO->P[4].MODEL = (GPIO->P[4].MODEL & ~_GPIO_P_MODEL_MODE0_MASK)
+			| GPIO_P_MODEL_MODE0_PUSHPULL;
+
+	/* Pin PE1 is configured to Push-pull */
+	GPIO->P[4].MODEL = (GPIO->P[4].MODEL & ~_GPIO_P_MODEL_MODE1_MASK)
+			| GPIO_P_MODEL_MODE1_PUSHPULL;
+
+	/* Pin PE2 is configured to Push-pull */
+	GPIO->P[4].MODEL = (GPIO->P[4].MODEL & ~_GPIO_P_MODEL_MODE2_MASK)
+			| GPIO_P_MODEL_MODE2_PUSHPULL;
+
+	/* Pin PE3 is configured to Push-pull */
+	GPIO->P[4].MODEL = (GPIO->P[4].MODEL & ~_GPIO_P_MODEL_MODE3_MASK)
+			| GPIO_P_MODEL_MODE3_PUSHPULL;
+
+	/* Pin PE4 is configured to Push-pull */
+	GPIO->P[4].MODEL = (GPIO->P[4].MODEL & ~_GPIO_P_MODEL_MODE4_MASK)
+			| GPIO_P_MODEL_MODE4_PUSHPULL;
+
+	/* Pin PE5 is configured to Push-pull */
+	GPIO->P[4].MODEL = (GPIO->P[4].MODEL & ~_GPIO_P_MODEL_MODE5_MASK)
+			| GPIO_P_MODEL_MODE5_PUSHPULL;
+
+	/* Pin PE6 is configured to Push-pull */
+	GPIO->P[4].MODEL = (GPIO->P[4].MODEL & ~_GPIO_P_MODEL_MODE6_MASK)
+			| GPIO_P_MODEL_MODE6_PUSHPULL;
+
+	/* Pin PE7 is configured to Push-pull */
+	GPIO->P[4].MODEL = (GPIO->P[4].MODEL & ~_GPIO_P_MODEL_MODE7_MASK)
+			| GPIO_P_MODEL_MODE7_PUSHPULL;
 	// [Port E Configuration]$
 
 	// $[Port F Configuration]
+
+	/* Pin PF2 is configured to Push-pull */
+	GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE2_MASK)
+			| GPIO_P_MODEL_MODE2_PUSHPULL;
+
+	/* Pin PF3 is configured to Push-pull */
+	GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE3_MASK)
+			| GPIO_P_MODEL_MODE3_PUSHPULL;
+
+	/* Pin PF4 is configured to Push-pull */
+	GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE4_MASK)
+			| GPIO_P_MODEL_MODE4_PUSHPULL;
+
+	/* Pin PF5 is configured to Push-pull */
+	GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE5_MASK)
+			| GPIO_P_MODEL_MODE5_PUSHPULL;
+
+	/* Pin PF6 is configured to Push-pull */
+	GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE6_MASK)
+			| GPIO_P_MODEL_MODE6_PUSHPULL;
+
+	/* Pin PF7 is configured to Push-pull */
+	GPIO->P[5].MODEL = (GPIO->P[5].MODEL & ~_GPIO_P_MODEL_MODE7_MASK)
+			| GPIO_P_MODEL_MODE7_PUSHPULL;
+
+	/* Pin PF8 is configured to Push-pull */
+	GPIO->P[5].MODEH = (GPIO->P[5].MODEH & ~_GPIO_P_MODEH_MODE8_MASK)
+			| GPIO_P_MODEH_MODE8_PUSHPULL;
+
+	/* Pin PF9 is configured to Push-pull */
+	GPIO->P[5].MODEH = (GPIO->P[5].MODEH & ~_GPIO_P_MODEH_MODE9_MASK)
+			| GPIO_P_MODEH_MODE9_PUSHPULL;
 	// [Port F Configuration]$
 
 	// $[Route Configuration]

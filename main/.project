@@ -33,7 +33,7 @@
 		<link>
 			<name>FreeRTOS</name>
 			<type>2</type>
-			<locationURI>STUDIO_SDK_LOC/reptile/FreeRTOS/Source</locationURI>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/FreeRTOS</locationURI>
 		</link>
 		<link>
 			<name>emlib</name>
