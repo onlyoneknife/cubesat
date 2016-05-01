@@ -224,9 +224,9 @@ static void LedBlink(void *pParameters)
 
 	  /* Format numbers and write to LCD */
 	  char buffer[20];
-	  sprintf(buffer,"Current:\t%5d\tmA",(unsigned int)(samples[0]*1.61));
+	  sprintf(buffer,"Current:\t%5d\tmA",(int)((samples[0])*0.27-30));
 	  output(buffer,2,false);
-	  sprintf(buffer,"Voltage:\t%5d\tmV",(unsigned int)(samples[1]*2.14));
+	  sprintf(buffer,"Voltage:\t%5d\tmV",(int)((samples[1])*2.0-300));
 	  output(buffer,3,false);
 
   }
@@ -249,6 +249,7 @@ int main(void)
 
   GPIO_DriveModeSet(BUZZER_PORT, GPIO_P_CTRL_DRIVEMODE_HIGH);
 
+  //GPIO->P[CHARGE_PORT].DOUTSET = 1 << CHARGE_PIN;
 
 
   /* Create task for blinking leds */
