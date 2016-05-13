@@ -22,7 +22,7 @@ void LCD_Command(char i)
 	GPIO_PinOutClear(DC_PORT,DC_PIN);			//	DC  = 0
 	GPIO_PinOutClear(RW_PORT,RW_PIN);			//	RW  = 0
 	GPIO_PinOutSet(E_PORT,E_PIN);				//	E   = 1
-	vTaskDelay(1/portTICK_RATE_MS);				//	delayms(1)
+	vTaskDelay((const TickType_t)(1/portTICK_RATE_MS));				//	delayms(1)
 	GPIO_PinOutClear(E_PORT,E_PIN);				//  E	= 0
 }
 
@@ -33,7 +33,7 @@ void LCD_Data(char i)
 	GPIO_PinOutSet(DC_PORT,DC_PIN);				//	DC  = 1
 	GPIO_PinOutClear(RW_PORT,RW_PIN);			//	RW  = 0
 	GPIO_PinOutSet(E_PORT,E_PIN);				//	E   = 1
-	vTaskDelay(1/portTICK_RATE_MS);				//	delayms(1)
+	vTaskDelay((const TickType_t)(1/portTICK_RATE_MS));				//	delayms(1)
 	GPIO_PinOutClear(E_PORT,E_PIN);				//  E	= 0
 }
 
@@ -46,7 +46,7 @@ void output(char* message, int line, bool clear)
 	{
 		LCD_Command(0x01);		//clear display
 	}
-	if (strlen((char*)message)>20)
+	if (strlen((char*)message)>(size_t)20)
 	{
 		len=20;
 	}
