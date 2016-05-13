@@ -260,6 +260,14 @@ int main(void)
            LEDBLINK_TASK_PRIORITY,
            NULL );
 
+  /* Configure PB9 as an input for PB0 button with filter enable (out = 1)*/
+  GPIO_PinModeSet(gpioPortB, 9, gpioModeInput, 1);
+
+  /* Enable GPIO_ODD interrupt vector in NVIC */
+  NVIC_EnableIRQ(GPIO_ODD_IRQn);
+
+  /* Configure PB9 interrupt on falling edge */
+  GPIO_IntConfig(gpioPortB, 9, false, true, true);
 
 
 
