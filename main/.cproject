@@ -62,6 +62,8 @@
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libcsp/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libcsp/src}&quot;"/>
 								</option>
 								<inputType id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.609027315" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -89,6 +91,8 @@
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/Device/SiliconLabs/EFM32GG/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${StudioSdkPath}/kits/common/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libcsp/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/main/libcsp/src}&quot;"/>
 								</option>
 								<option id="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols.1721453679" name="Defined symbols (-D)" superClass="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.as.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="EFM32GG280F1024=1"/>
@@ -109,7 +113,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="emdrv/emwin|emlib/em_i2c.c|emlib/em_usart.c|libDrivers/src/sd.c|FreeRTOS2" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="libcsp/src/rtable/csp_rtable_cidr.c|libcsp/src/arch/macosx|libcsp/src/arch/posix|libcsp/src/arch/windows|libcsp/src/interfaces/csp_if_zmqhub.c|libcsp/src/drivers/usart|libcsp/src/drivers/can|emdrv/emwin|emlib/em_i2c.c|emlib/em_usart.c|libDrivers/src/sd.c|FreeRTOS2" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

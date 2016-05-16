@@ -51,6 +51,11 @@
 			<locationURI>WORKSPACE_LOC/libDrivers</locationURI>
 		</link>
 		<link>
+			<name>libcsp</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/lib3rdParty/libcsp</locationURI>
+		</link>
+		<link>
 			<name>src</name>
 			<type>2</type>
 			<locationURI>WORKSPACE_LOC/libDevice/src</locationURI>

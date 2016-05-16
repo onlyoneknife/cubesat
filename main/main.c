@@ -37,7 +37,6 @@
 
 /* Driver Includes */
 #include "sleep.h"
-#include "LCD.h"
 #include "dmactrl.h"
 
 /* FreeRTOS Includes */
