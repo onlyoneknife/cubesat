@@ -104,11 +104,11 @@ static void LedBlink(void *pParameters)
   for (;;)
   {
 
-    /* Set LSB of count value on LED */
+    /* Set LSB of count value on LED */ /*
 	GPIO->P[LED_PORT].DOUTSET = 1 << LED_PIN;
 	vTaskDelay(LED_DELAY);
 	GPIO->P[LED_PORT].DOUTCLR = 1 << LED_PIN;
-	vTaskDelay(LED_DELAY);
+	vTaskDelay(LED_DELAY);*/
 
   }
 }
@@ -126,11 +126,6 @@ int main(void)
 
   /* Transition to Default Mode */
   enter_DefaultMode_from_RESET();
-
-
-  GPIO_DriveModeSet(BUZZER_PORT, GPIO_P_CTRL_DRIVEMODE_HIGH);
-
-  //GPIO->P[CHARGE_PORT].DOUTSET = 1 << CHARGE_PIN;
 
 
   /* Create task for blinking leds */
