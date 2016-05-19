@@ -4,6 +4,8 @@
     <property object="DefaultMode" propertyId="mode.diagramLocation" value="100, 100"/>
     <property object="GPIO" propertyId="ABPeripheral.included" value="true"/>
     <property object="I2C0" propertyId="ABPeripheral.included" value="true"/>
+    <property object="I2C0" propertyId="i2c.settings.i2cmaxbusfrequency" value="400 kHz (fast mode)"/>
+    <property object="I2C0" propertyId="i2c.settings.lowhighratio" value="6:3 clock ratio"/>
     <property object="PA10" propertyId="ports.settings.custompinname" value=""/>
     <property object="PC4" propertyId="ports.settings.custompinname" value=""/>
     <property object="PD0" propertyId="ports.settings.custompinname" value=""/>
