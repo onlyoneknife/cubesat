@@ -19,9 +19,11 @@
  *
  ******************************************************************************/
 
+
 /*******************************************************************************
  *******************************  INCLUDES   ***********************************
  ******************************************************************************/
+
 
 /* System Includes */
 #include <stdint.h> 
@@ -39,6 +41,7 @@
 #include "sharedtypes.h"
 #include "i2c.h"
 
+
 /*******************************************************************************
  *******************************   GLOBALS   ***********************************
  ******************************************************************************/
@@ -55,6 +58,7 @@ device_object_t device[1] = {
     .callback = NULL,
   },
 };
+
 
 /*******************************************************************************
  *******************************  FUNCTIONS  ***********************************
@@ -107,6 +111,7 @@ void I2C_init(int handle, int mode, uint8_t addr, uint16_t speed,
 
 }
 
+
 /*****************************************************************************
  * @breif   Send I2C frame via the selected device
  *
@@ -121,6 +126,41 @@ int I2C_send(int handle, i2c_frame_t * frame, uint16_t timeout) {
     return E_TIMEOUT;
 
   return E_NO_ERR;
+
+}
+
+
+/*****************************************************************************
+ * @brief  Pick up a transmission from scratch or continue an on-going
+ *         transmission (Context: ISR ONLY)
+ * @param  handle Handle to device
+ *****************************************************************************/
+static void I2C_try_tx_from_isr(I2C_TypeDef *i2c, int handle,
+  portBASE_TYPE * pxTaskWoken)
+{
+
+  uint8_t flags = 0;
+
+  if (device[handle].is_initialised == 0)
+    return;
+
+  if (uxQueueMessagesWaitingFromISR(device[handle].tx.queue) > 0 ||
+    device[handle].tx.frame != NULL)
+  {
+    device[handle].is_busy = 1;
+    flags |= I2C_CMD_START;
+  }
+  else
+  {
+    device[handle].is_busy = 0;
+    flags |= I2C_CMD_STOP;
+  }
+
+  flags |= I2C_CMD_ACK;
+
+  /* Send the start/stop/restart condition */
+  device[handle].mode = DEVICE_MODE_M_T;
+  pca9665_write_reg(&(i2c0->CMD), flags);
 
 }
 
@@ -187,8 +227,8 @@ void I2C0_IRQHandler(void)
 
       if (device[handle].tx.frame == NULL)
       {
-        pca9665_try_tx_from_isr(handle, task_woken);
-        break;
+        I2C_try_tx_from_isr(I2C0, handle, task_woken);
+        /* TODO: Possibly should add i2cErrorAbort here */
       }
     }
   }
