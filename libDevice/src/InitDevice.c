@@ -18,6 +18,7 @@
 #include "em_cmu.h"
 #include "em_device.h"
 #include "em_chip.h"
+#include "em_dma.h"
 #include "em_gpio.h"
 #include "em_i2c.h"
 // [Library includes]$
@@ -51,6 +52,9 @@ extern void CMU_enter_DefaultMode_from_RESET(void) {
 	// [LFACLK Setup]$
 
 	// $[Peripheral Clock enables]
+	/* Enable clock for DMA */
+	CMU_ClockEnable(cmuClock_DMA, true);
+
 	/* Enable clock for I2C0 */
 	CMU_ClockEnable(cmuClock_I2C0, true);
 
