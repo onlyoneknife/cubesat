@@ -7,9 +7,9 @@
  * Description        : Descriptor Header for l3gd20(H) driver file
  *
  * HISTORY:
- * Date        	| 	Modification                                	|	Author
- * 22/03/2011  	| 	Initial Revision                            	|	Andrea Labombarda
- * 07/03/2015	|	Modified to L3GD20H driver for EFM32GG280F1024	|	Brandon Borden
+ * Date        	| 	Modification                        |	Author
+ * 22/03/2011  	| 	Initial Revision                    |	Andrea Labombarda
+ * 07/03/2015	|	Modified for EFM32GG280F1024		|	Brandon Borden
  ********************************************************************************
  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.

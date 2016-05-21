@@ -9,8 +9,8 @@
  * HISTORY:
  * Date              |	Modification                    				|	Author
  * 25/01/2012        |	Initial Revision                				|	Andrea Labombarda
- * 27/08/2012		|	Modified to support multiple drivers in the same program                |	Antonio Micali
- * 07/03/2015		|	Modified to L3GD20H driver for EFM32GG280F1024	|	Brandon Borden
+ * 27/08/2012		 |	Modified to support multiple drivers in the same program                |	Antonio Micali
+ * 07/03/2015		 |	Modified to L3GD20H driver for EFM32GG280F1024	|	Brandon Borden
  ********************************************************************************
  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.

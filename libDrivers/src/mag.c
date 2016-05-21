@@ -9,7 +9,7 @@
 * HISTORY:
 * Date               |	Modification                    |	Author
 * 02/08/2011         |	Initial Revision                |	abio Tota
-* 07/03/2015		 |	Modified to LSM303D 			|   Peng Zhang
+* 07/03/2015         |  Modified for EFM32GG280F1024    | Peng Zhang
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
