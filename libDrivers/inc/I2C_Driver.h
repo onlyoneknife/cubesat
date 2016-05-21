@@ -19,50 +19,55 @@
  *
  ******************************************************************************/
 
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef I2C_DRIVER_H_
 #define I2C_DRIVER_H_
 
+
 /*******************************************************************************
  *******************************  INCLUDES   ***********************************
  ******************************************************************************/
+
 
 /* System Includes */
 #include <stdint.h>
 
 /* FreeRTOS Includes */
 #include "FreeRTOS.h"
-#include "task.h"
-#include "semphr.h"
 
-/* Other Includes */
-#include <sharedtypes.h>
 
 /*******************************************************************************
  *******************************   DEFINES   ***********************************
  ******************************************************************************/
 
-#define MAX_DEVICES				(2)
+
+/* CSP status values for error checking and interrupt handling */
+#define MAX_DEVICES				(1)
 #define DEVICE_MODE_M_T			(0)
 #define DEVICE_MODE_M_R			(1)
+#define DEVICE_MODE_ERR			(2)
 
+/* I2C configuration. */
 #define I2C_ADDRESS         	(98)
 #define I2C_MAX_TX_BUFFER_SIZE 	((uint8_t)200)
 #define I2C_MAX_RX_BUFFER_SIZE 	((uint8_t)200)
 
-void I2C0_setup(void);
+/* The I2C read bit is OR'ed with the address for a read operation */
+#define I2C_READ_BIT 			(0x01)
 
-void I2C0_IRQHandler(void);
+/* DMA channels */
+#define DMA_CHANNEL_I2C_TX 		(0)
+#define DMA_CHANNEL_I2C_RX 		(1)
 
-status_t commandRdy(void);
-status_t writeI2C(uint8_t*);
-status_t readI2C(uint8_t*);
+/* Maximum number of DMA transfer elements (minus 1) to transfer (<= 1023) */
+#define DMA_MAX_MINUS_1	((_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT)))
 
-#endif /* I2C_DRIVER_H_ */
 
 /*******************************************************************************
  *******************************   STRUCTS   ***********************************
  ******************************************************************************/
+
 
 /**
  * Data structure for I2C frames
@@ -77,6 +82,7 @@ typedef struct __attribute__((packed)) i2c_frame_s {
 	uint8_t data[I2C_MTU];
 } i2c_frame_t;
 
+
 /**
  * Data structure for buffering frames on I2C
  */
@@ -85,6 +91,7 @@ typedef struct transmission_object_s {
 	i2c_frame_t * frame;
 	uint16_t next_byte;
 } transmission_object_t;
+
 
 /**
  * Details and status of I2C transactions
@@ -101,11 +108,23 @@ typedef struct device_object_s {
 	i2c_callback_t callback;
 } device_object_t;
 
+
 /*******************************************************************************
  *****************************   PROTOTYPES   **********************************
  ******************************************************************************/
+
 
 void I2C_init(int handle, int mode, uint8_t addr, uint16_t speed,
   int queue_len_tx, int queue_len_rx, i2c_callback_t callback);
 
  int I2C_send(int handle, i2c_frame_t * frame, uint16_t timeout);
+
+ void I2C0_setup(void);
+
+void I2C0_IRQHandler(void);
+
+status_t commandRdy(void);
+status_t writeI2C(uint8_t*);
+status_t readI2C(uint8_t*);
+
+ #endif /* I2C_DRIVER_H_ */
