@@ -46,12 +46,17 @@
 #define MAX_DEVICES				(1)
 #define DEVICE_MODE_M_T			(0)
 #define DEVICE_MODE_M_R			(1)
-#define DEVICE_MODE_ERR			(2)
+#define DEVICE_MODE_IDLE		(2)
 
 /* I2C configuration. */
 #define I2C_ADDRESS         	(98)
 #define I2C_MAX_TX_BUFFER_SIZE 	((uint8_t)200)
 #define I2C_MAX_RX_BUFFER_SIZE 	((uint8_t)200)
+#define I2C_MTU 				(256)
+
+/* I2C device modes. */
+#define I2C_MASTER 				(0)
+#define I2C_SLAVE 				(1)
 
 /* The I2C read bit is OR'ed with the address for a read operation */
 #define I2C_READ_BIT 			(0x01)
@@ -61,7 +66,7 @@
 #define DMA_CHANNEL_I2C_RX 		(1)
 
 /* Maximum number of DMA transfer elements (minus 1) to transfer (<= 1023) */
-#define DMA_MAX_MINUS_1	((_DMA_CTRL_N_MINUS_1_MASK >> _DMA_CTRL_N_MINUS_1_SHIFT)))
+#define DMA_MAX_MINUS_1			(67)
 
 
 /*******************************************************************************

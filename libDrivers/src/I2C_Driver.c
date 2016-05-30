@@ -86,6 +86,32 @@ static uint8_t bytesLeft;
 
 
 /*****************************************************************************
+ * @brief  Called when DMA transfer is complete
+ * Enables interrupts to finish the transfer.
+ *****************************************************************************/
+void I2C_transferComplete(unsigned int channel, bool primary, void *user)
+{
+  /* Ignore unused parameters */
+  (void) primary;
+  (void) user;
+ 
+  if ( channel == DMA_CHANNEL_I2C_TX )
+  {
+    /* Enable MSTOP interrupt */
+    I2C0->IEN |= I2C_IEN_MSTOP;
+  }
+  else if ( channel == DMA_CHANNEL_I2C_RX )
+  {
+    /* Stop automatick ACK'ing bytes */
+    I2C0->CTRL &= ~I2C_CTRL_AUTOACK;
+    
+    /* Enable RX and MSTOP interrupt */
+    I2C0->IEN |= I2C_IEN_RXDATAV | I2C_IEN_MSTOP;
+  }
+}
+
+
+/*****************************************************************************
  * @brief  Aborts the current transfer and sets the error flag
  *****************************************************************************/
 void I2C_ErrorAbort(I2C_TypeDef *i2c)
@@ -93,6 +119,22 @@ void I2C_ErrorAbort(I2C_TypeDef *i2c)
   i2c->CMD = I2C_CMD_ABORT;
   transferActive = false;
   i2cError = true;  
+}
+
+
+void I2C_CleanupTxRx(int handle)
+{
+  /* Clean up RX */
+  if (device[handle].rx.frame != NULL) {
+    csp_buffer_free_isr(device[handle].rx.frame);
+    device[handle].rx.frame = NULL;
+  }
+
+  /* Clean up TX */
+  if (device[handle].tx.frame != NULL) {
+    csp_buffer_free_isr(device[handle].tx.frame);
+    device[handle].tx.frame = NULL;
+  }
 }
 
 
@@ -109,19 +151,18 @@ void I2C0_setup(int handle, int mode, uint8_t addr, uint16_t speed,
   int queue_len_tx, int queue_len_rx, i2c_callback_t callback) 
 {
 
-  /* Exit the BUSY state. The I2C will be in this state out of RESET. */
-  if (I2C0->STATE & I2C_STATE_BUSY)
-  {
-    I2C0->CMD = I2C_CMD_ABORT;
-  }
-  
-  /* Enable the Clock Low Timeout counter */
-  I2C0->CTRL = (I2C0->CTRL & ~_I2C_CTRL_CLTO_MASK) | I2C_CTRL_CLTO_160PCC;
-  
-  /* Enable error interrupts */
-  I2C0->IEN |= I2C_IEN_ARBLOST | I2C_IEN_BUSERR | I2C_IEN_CLTO;
+  /* Error checking */
+  if (handle >= efm32_device_count)
+    return E_NO_DEVICE;
 
-  NVIC_EnableIRQ(I2C0_IRQn);
+  if (device[handle].is_initialised)
+    return E_NO_ERR;
+
+  if (queue_len_tx <= 0)
+    return E_INVALID_PARAM;
+
+  if (mode != I2C_MASTER)
+    return E_INVALID_PARAM;
 
   /** Setup FreeRTOS semaphore and queues */
 
@@ -131,14 +172,50 @@ void I2C0_setup(int handle, int mode, uint8_t addr, uint16_t speed,
     return E_NO_BUFFER;
 
   /* TX Queue */
-  if (device[handle].tx.queue == NULL) {
+  if (device[handle].tx.queue == NULL)
     device[handle].tx.queue = xQueueCreate(queue_len_tx, sizeof(i2c_frame_t *));
-  }
 
   /* RX Queue */
-  if ((device[handle].rx.queue == NULL) && (queue_len_rx > 0)) {
+  if ((device[handle].rx.queue == NULL) && (queue_len_rx > 0))
     device[handle].rx.queue = xQueueCreate(queue_len_rx, sizeof(i2c_frame_t *));
+
+  /* Callback */
+  if (callback != NULL) 
+    device[handle].callback = callback;
+
+  /* Remember chip memory address, and I2C node address */
+  device[handle].slave_addr = addr;
+  device[handle].speed = speed;
+
+  I2C_Init_TypeDef init = I2C_INIT_DEFAULT;
+
+  init.enable = true;
+  init.master = true;
+  init.freq = speed * 1000;
+  init.clhr = i2cClockHLRAsymetric;
+  I2C_Init(I2C0, &init);
+
+  /* Exit the BUSY state. The I2C will be in this state out of RESET. */
+  if (I2C0->STATE & I2C_STATE_BUSY)
+  {
+    I2C0->CMD = I2C_CMD_ABORT;
   }
+
+  I2C0->ROUTE = I2C_ROUTE_SDAPEN | I2C_ROUTE_SCLPEN |
+    (1 << _I2C_ROUTE_LOCATION_SHIFT);
+
+  /* Setting up to slave address */
+  I2C0->SADDR = device[handle].slave_addr << 1;
+
+  /* Enable the Clock Low Timeout counter */
+  I2C0->CTRL = (I2C0->CTRL & ~_I2C_CTRL_CLTO_MASK) | I2C_CTRL_CLTO_160PCC;
+  
+  /* Enable error interrupts */
+  I2C0->IEN |= I2C_IEN_ARBLOST | I2C_IEN_BUSERR | I2C_IEN_CLTO;
+
+  NVIC_EnableIRQ(I2C0_IRQn);
+
+  device[handle].is_initialised = true;
 }
 
 
@@ -161,7 +238,7 @@ void I2C0_dmaInit(void)
   DMA_Init(&dmaInit);
   
   /* Setup call-back function */  
-  dmaCallback.cbFunc  = transferComplete;
+  dmaCallback.cbFunc  = I2C_transferComplete;
   dmaCallback.userPtr = NULL;
 
   /* Setting up TX channel */
@@ -204,7 +281,8 @@ void I2C0_dmaInit(void)
  * @param   timeout Ticks to wait
  * @return  Error code as per error.h
  *****************************************************************************/
-int I2C_send(int handle, i2c_frame_t * frame, uint16_t timeout) {
+int I2C_send(int handle, i2c_frame_t * frame, uint16_t timeout)
+{
 
   if (xQueueSendToBack(device[handle].tx.queue, &frame, timeout) == pdFALSE)
     return E_TIMEOUT;
@@ -216,16 +294,26 @@ int I2C_send(int handle, i2c_frame_t * frame, uint16_t timeout) {
 /*****************************************************************************
  * @brief   Send I2C address and checks for Ack
  *****************************************************************************/
-void I2C_sendAddr(I2C_TypeDef *i2c, uint8_t deviceAddress) {
+void I2C_sendAddr(I2C_TypeDef *i2c, uint8_t deviceAddress)
+{
+
+  /* Abort if an error has been detected */
+  if ( i2cError )
+  {
+    return;
+  }  
+
   /* Send the address */
   i2c->TXDATA     = deviceAddress;
-  i2c->CMD        = I2C_CMD_START;
+  //i2c->CMD        = I2C_CMD_START;
 
+  /*
   if ( !i2cWaitForAckNack() )
   {
     I2C_ErrorAbort();
     return;
   }
+  */
 }
 
 
@@ -243,6 +331,12 @@ void I2C_sendAddr(I2C_TypeDef *i2c, uint8_t deviceAddress) {
  *****************************************************************************/
 void I2C_dmaWrite(I2C_TypeDef *i2c, uint8_t *data, uint8_t length)
 { 
+
+  /* Wait for any previous transfer to finish */
+  while ( transferActive )
+  {
+    EMU_EnterEM1();
+  }
 
   /* Abort if an error has been detected */
   if ( i2cError )
@@ -282,7 +376,7 @@ void I2C_dmaWrite(I2C_TypeDef *i2c, uint8_t *data, uint8_t length)
  * @param length
  *      Number of bytes to read
  *****************************************************************************/
-void I2C_dmaRead(I2C_TypeDef *i2c, uint8_t *data, uint8_t length)
+void I2C_dmaRead(I2C_TypeDef *i2c, int handle , uint8_t *data, uint8_t length)
 { 
   
   /* Abort if an error has occured */
@@ -290,15 +384,31 @@ void I2C_dmaRead(I2C_TypeDef *i2c, uint8_t *data, uint8_t length)
   {
     return;
   }
-  
+
+  if (device[handle].rx.frame == NULL)
+  {
+    return;
+  }
+
+  /* Check buffer allocation */
+  if (length + device[handle].rx.next_byte > I2C_MTU)
+  {
+    return;
+  }
+
   /* These are used by the RX interrupt handler
    * to fetch the last two bytes of the transaction */
   rxPointer = data + length - 2;
   bytesLeft = 2;
+
+  /* Automatically ACK received bytes */
+  I2C0->CTRL |= I2C_CTRL_AUTOACK;
   
   /* Set transfer active flag. Cleared by interrupt handler
    * when STOP condition has been sent. */
   transferActive = true;
+
+  device[handle].rx.next_byte += count;
   
   /* Activate DMA */
   DMA_ActivateBasic(DMA_CHANNEL_I2C_RX,         /* RX DMA channel */
@@ -306,7 +416,7 @@ void I2C_dmaRead(I2C_TypeDef *i2c, uint8_t *data, uint8_t length)
                     false,                      /* No burst */
                     (void *)data,               /* Write to rx buffer */        
                     (void *)&(i2c->RXDATA),     /* Read from RXDATA */
-                    length - 3 );               /* Number of transfers */
+                    length );               /* Number of transfers */
 }
 
 
@@ -333,12 +443,11 @@ static void I2C_try_tx_from_isr(I2C_TypeDef *i2c, int handle,
   else
   {
     device[handle].is_busy = 0;
+    device[handle].mode = DEVICE_MODE_IDLE;
     flags |= I2C_CMD_STOP;
   }
 
   flags |= I2C_CMD_ACK;
-
-  device[handle].mode = DEVICE_MODE_M_T;
 
   i2c->CMD = flags;
 }
@@ -366,10 +475,13 @@ static void I2C_try_tx_from_isr(I2C_TypeDef *i2c, int handle,
  *****************************************************************************/
 void I2C0_IRQHandler(void)
 {
-  static int handle, len;
-  static uint8_t dest;
-
-  bool no_err = true;
+  static int      handle      = 0;
+  static int      len         = 0;
+  static int      remaining   = 0;
+  static uint8_t  dest        = 0;
+  static bool     readAdrSent = false;
+  static bool     slaveAdrRec = false;
+  static bool     no_err      = true;
 
   /* Save the interrupt flag and state registers */
   uint32_t flags  = I2C0->IF;
@@ -378,7 +490,7 @@ void I2C0_IRQHandler(void)
   
   /* Check for error flags from I2C peripheral */
   /* TODO: Error handling might conflict with GomSpace hardware */
-  if ( flags & (I2C_IF_BUSERR | I2C_IF_CLTO | flags & I2C_IF_ARBLOST )
+  if ( flags & (I2C_IF_BUSERR | I2C_IF_CLTO) )
   {
     /* Restart transmission by resetting next_byte and saving tx_frame pointer */
     device[handle].tx.next_byte = 0;
@@ -420,13 +532,13 @@ void I2C0_IRQHandler(void)
     }
   }
   /* Check for start condition indicating outgoing frames */
-  else if ( flags & (I2C_IF_RSTART | I2C_IF_START) )
+  else if ( flags & I2C_IF_START )
   {
     /* Mark as busy, so start flag is not sent from task context while
      * transmission is active */
-    device[handle].is_busy = 1;
+    device[handle].is_busy = true;
 
-    /* If this is the beginning of a new frame, dequeue */
+    /* If this is the beginning of a new frame, dequeue and decide TX or RX*/
     if (device[handle].tx.frame == NULL && device[handle].rx.frame == NULL)
     {
       /* Try do dequeue element, if it fails, stop transmission */
@@ -462,21 +574,31 @@ void I2C0_IRQHandler(void)
         csp_buffer_free_isr(device[handle].tx.frame);
         device[handle].tx.frame = NULL;
         I2C_try_tx_from_isr(I2C0, handle, task_woken);
-        device[handle].mode = DEVICE_MODE_ERR;
         I2C_ErrorAbort(I2C0);
       }
     }
 
     /* If mode is master receiver then set the read-bit in the address field */
-    if (device[handle].mode == DEVICE_MODE_M_R)
+    if (device[handle].mode == DEVICE_MODE_M_R && !i2cError)
     {
       dest = (device[handle].rx.frame->dest << 1) | I2C_READ_BIT;
       device[handle].rx.next_byte = 0;
 
+      /* Set length of frame to receive */
+      if (device[handle].rx.frame->len > DMA_MAX_MINUS_1 + 1) {
+        len = DMA_MAX_MINUS_1 + 1;
+      } else {
+        len = device[handle].rx.frame->len;
+      }
+      
+      /* Clear all pending interrupts prior to starting transfer. */
+      I2C0->IFC = _I2C_IFC_MASK;
+      
       I2C_sendAddr(I2C0, dest);
+      readAdrSent = true;
     }
     /* If mode is master transmit then don't set read-bit in the address field */
-    else if (defive[handle.mode == DEVICE_MODE_M_T])
+    else if (device[handle].mode == DEVICE_MODE_M_T && !i2cError)
     {
       dest = device[handle].tx.frame->dest << 1;
       device[handle].tx.next_byte = 0;
@@ -500,24 +622,29 @@ void I2C0_IRQHandler(void)
     }
     else
     {
+      csp_buffer_free_isr(device[handle].tx.frame);
+      device[handle].tx.frame = NULL;
+      I2C_try_tx_from_isr(I2C0, handle, task_woken);
       I2C_ErrorAbort(I2C0);
     }
     
-    // TODO: Maybe add I2C0->CMD = I2C_CMD_ACK;
+    I2C0->CMD = I2C_CMD_ACK;
   }
-  /* An ACK is received */
-  else if ( flags & I2C_IF_ACK)
+  /* Master transmit mode */
+  if ( device[handle].mode == DEVICE_MODE_M_T )
   {
-    /* ACK received in transmitter mode. A node is ready to be written to */
-    if ( state & I2C_STATE_TRANSMITTER )
+    /* ACK received while in master tx mode. A node is ready to be written to */
+    if ( flags & I2C_IF_ACK )
     {
-
+      
       /* Calculate remaining length */
       len = device[handle].tx.frame->len - device[handle].tx.next_byte;
 
       /* Error if frame is empty */
       if (device[handle].tx.frame == NULL)
       {
+        I2C_try_tx_from_isr(I2C0, handle, task_woken);
+        device[handle].mode = DEVICE_MODE_ERR;
         I2C_ErrorAbort(I2C0);
       }
       /* Continue transmitting */
@@ -533,21 +660,19 @@ void I2C0_IRQHandler(void)
         else
         { 
           I2C_dmaWrite(I2C0,
-            &device[handle].tx.frame->data[device[handle].tx.next_byte],
-            len);
+            &device[handle].tx.frame->data[device[handle].tx.next_byte], len);
           device[handle].tx.next_byte += len;
         }
 
-        // TODO: Maybe add I2C0->CMD = I2C_CMD_ACK;
+        I2C0->CMD = I2C_CMD_ACK;
       }
       /* Or, Change from master transmit, to master read if wanted */
-      }
       else if (device[handle].tx.frame->len_rx)
       {
         device[handle].mode = DEVICE_MODE_M_R;
         device[handle].rx.frame = device[handle].tx.frame;
         device[handle].tx.frame = NULL;
-        device[handle].rx.frame->len = device[handle].rx.frame->len_rx;
+        device[handle].rx.frame->len = device[handle].rx.frame->len_rx; 
 
         /* Send repeated start */
         I2C0->CMD = (I2C_CMD_ACK | I2C_CMD_START);
@@ -557,66 +682,282 @@ void I2C0_IRQHandler(void)
         csp_buffer_free_isr(device[handle].tx.frame);
         device[handle].tx.frame = NULL;
         I2C_try_tx_from_isr(I2C0, handle, task_woken);
+        I2C_ErrorAbort(I2C0);
       }
     }
+    /* ERROR: NACK is received while trying to perform a write in master mode */
+    else if ( flags & I2C_IF_NACK )
+    {
+      if (device[handle].tx.frame != NULL)
+      {
+        csp_buffer_free_isr(device[handle].tx.frame);
+        device[handle].tx.frame = NULL;
+      }
+
+      I2C_try_tx_from_isr(I2C0, handle, task_woken);
+
+      I2C0->IFC = flags;
+      I2C_ErrorAbort(I2C0);
+    }
+    /* ARBITRATION LOST: Start condition failed */
+    else if ( flags & I2C_IF_ARBLOST )
+    {
+      /* Restart transmission by resetting next_byte and saving tx_frame pointer */
+      device[handle].tx.next_byte = 0;
+      I2C_try_tx_from_isr(handle, task_woken);
+
+      I2C0->IFC = flags;
+      I2C_ErrorAbort(I2C0);
+    }
+  }
+  /* Master receiver mode */
+  else if ( device[handle].mode == DEVICE_MODE_M_R )
+  {
+    /* READ ERROR: A read has failed */
+    if ( flags & I2C_NACK && readAdrSent )
+    {
+
+      /* Clear read address sent flag */
+      readAdrSent = false;
+
+      /* Check for errors */
+      if (device[handle].rx.frame == NULL)
+      {
+        I2C_CleanupTxRx(handle);
+        /* Start up again */
+        I2C_try_tx_from_isr(I2C0, handle, task_woken);
+        I2C_ErrorAbort(I2C0);
+      }
+      /* Proceed if no error was found */
+      else
+      {
+        csp_buffer_free_isr(device[handle].rx.frame);
+        device[handle].rx.frame = NULL;
+        /* Start up again */
+        I2C_try_tx_from_isr(I2C0, handle, task_woken);
+      }
+    }
+    /* READ ACK: A node is ready to be read from */
+    else if ( flags & (I2C_IF_ACK | I2C_IF_NACK) )
+    {
+
+      /* Clear read address sent flag */
+      readAdrSent = false;
+
+      /* Check for errors */
+      if ( device[handle].rx.frame == NULL || device[handle].rx.queue == NULL )
+      {
+        I2C_CleanupTxRx(handle);
+        /* Start up again */
+        I2C_try_tx_from_isr(I2C0, handle, task_woken);
+        I2C_ErrorAbort(I2C0);
+      }
+      /* Proceed if no error was found */
+      else {
+
+        I2C_dmaRead(I2C0, handle, 
+          &device[handle].rx.frame->data[device[handle].rx.next_byte], len)
+
+        remaining = device[handle].rx.frame->len - device[handle].rx.next_byte;
+
+        /* If no more to receive */
+        else if (remaining == 0) {
+
+          if (xQueueSendToBackFromISR(device[handle].rx.queue,
+            &device[handle].rx.frame, task_woken)  == pdFALSE)
+          {
+            csp_buffer_free_isr(device[handle].rx.frame);
+          }
+          device[handle].rx.frame = NULL;
+          I2C_try_tx_from_isr(handle, task_woken);
+        }
+
+        else if (remaining > DMA_MAX_MINUS_1 + 1)
+        {
+          len = DMA_MAX_MINUS_1 + 1;
+        }
+        else
+        {
+          len = remaining;
+        }
+
+        I2C0->CMD = I2C_CMD_ACK;
+      }
+    }
+  }
+  /**
+   * SLAVE RECEIVER BUFFERED MODE
+   */
+  else if ( flags & I2C_IF_ADDR )
+  {
+    /* Check if RX frame was started */
+    if (device[handle].rx.frame != NULL)
+    {
+      I2C_CleanupTxRx(handle);
+      /* Start up again */
+      I2C_try_tx_from_isr(I2C0, handle, task_woken);
+      I2C_ErrorAbort(I2C0);
+    }
+    /* Continue if successful */
+    else
+    {
+
+      /* Enable slave address received flag */
+      slaveAdrRec = true;
+
+      /* Allocate new frame */
+      device[handle].rx.frame = csp_buffer_get_isr(I2C_MTU);
+
+      /* Check for failure */
+      if (device[handle].rx.frame == NULL)
+      {
+        I2C_CleanupTxRx(handle);
+        /* Start up again */
+        I2C_try_tx_from_isr(I2C0, handle, task_woken);
+        I2C_ErrorAbort(I2C0);
+      }
+      else
+      /* Continue if successful */
+      {
+        device[handle].is_busy = 1;
+        device[handle].rx.next_byte = 0;
+        device[handle].rx.frame->len = 0;
+        device[handle].rx.frame->dest = device[handle].slave_addr;
+
+        I2C0->CMD = I2C_CMD_ACK;
+      }
+    }
+  }
+  else if ( slaveAdrRec )
+  {
+    if ( flags & I2C_IF_ACK )
+    {
+      /* Check for failure */
+      if (device[handle].rx.frame == NULL)
+      {
+        I2C_CleanupTxRx(handle);
+        /* Start up again */
+        I2C_try_tx_from_isr(I2C0, handle, task_woken);
+        I2C_ErrorAbort(I2C0);
+      }
+      else
+      /* Continue if successful */
+      {
+
+        /* Receive data, if any */
+        pca9665_read_data_to_buffer(handle);
+
+        /* Limit incoming bytes */
+        pca9665_write_reg(handle, I2CCOUNT, (device[handle].rx.next_byte + PCA9665_MAX_BUF > I2C_MTU) ? (I2C_MTU - device[handle].rx.next_byte) | 0x80 : PCA9665_MAX_BUF);
+
+        I2C0->CMD = I2C_CMD_ACK;
+      }
+    }
+    else if ( flags & (I2C_IF_NACK | I2C_IF_SSTOP) )
+    {
+
+      /* Clear slave address received flag */
+      slaveAdrRec = false;
+
+      /* Check for failure */
+      if (device[handle].rx.frame == NULL)
+      {
+        I2C_CleanupTxRx(handle);
+        /* Start up again */
+        I2C_try_tx_from_isr(I2C0, handle, task_woken);
+        I2C_ErrorAbort(I2C0);
+      }
+      else
+      /* Continue if successful */
+      {
+        /* Receive data, if any */
+        pca9665_read_data_to_buffer(handle);
+
+        /* Queue up frame
+         * Callback takes priority over RX queue
+         * I2C master transaction temporarily disables the callback during master transactions in order to
+         * ensure that the message is placed in the RX queue. */
+        device[handle].rx.frame->len = device[handle].rx.next_byte;
+
+        if (device[handle].callback != NULL)
+        {
+          device[handle].callback(device[handle].rx.frame, task_woken);
+        }
+        else if (device[handle].rx.queue != NULL)
+        {
+          if (xQueueSendToBackFromISR(device[handle].rx.queue, &device[handle].rx.frame, task_woken)  == pdFALSE) {
+            driver_debug(DEBUG_I2C, "I2C RX queue full\n\r");
+            csp_buffer_free_isr(device[handle].rx.frame);
+          }
+        }
+        else
+        {
+          csp_buffer_free_isr(device[handle].rx.frame);
+        }
+
+        /* The frame has been freed now */
+        device[handle].rx.frame = NULL;
+
+        /* Set back to master mode */
+        I2C_try_tx_from_isr(I2C0, handle, task_woken);
+      }
+    }
+  }
+  /**
+   * Other IRQ's, typically indicates a hardware or protcol error
+   * IDLE status is error if asserted at same time as Serial Interrupt flag
+   */
+  else
+  {
+    I2C_CleanupTxRx(handle);
+    /* Start up again */
+    I2C_try_tx_from_isr(I2C0, handle, task_woken);
+    I2C_ErrorAbort(I2C0);
+  }
+}
 
 
-    
+  /* ACK received while not in transmitter mode. */
+  else 
+  {
+    /* Safety first */
+    if (device[handle].rx.frame == NULL)
+    {
+      I2C_try_tx_from_isr(I2C0, handle, task_woken);
+      device[handle].mode = DEVICE_MODE_ERR;
+      I2C_ErrorAbort(I2C0);
+    }
+    else
+    {
+      I2C_read_data_to_buffer(handle);
+      int remaining = device[handle].rx.frame->len - device[handle].rx.next_byte;
+
+      /* If no more to receive */
+      if (remaining == 0) {
+        if (xQueueSendToBackFromISR(device[handle].rx.queue,
+          &device[handle].rx.frame, task_woken)  == pdFALSE)
+        {
+          csp_buffer_free_isr(device[handle].rx.frame);
+        }
+        device[handle].rx.frame = NULL;
+        I2C_try_tx_from_isr(handle, task_woken);
+      }
+
+      I2C0->CMD = I2C_CMD_ACK;
+    }
+  }
+
+
 
 
   }
-  /* If an NACK is received while attempting to perform a write */
+  /* NACK is received while attempting to perform a write in master mode */
   else if ( flags & (I2C_IF_NACK) && state & (I2C_STATE_TRANSMITTER) )
   {
-    if (device[handle].tx.frame != NULL)
-    {
-      csp_buffer_free_isr(device[handle].tx.frame);
-      device[handle].tx.frame = NULL;
-    }
 
-    I2C_try_tx_from_isr(I2C0, handle, task_woken);
-
-    I2C0->IFC = flags;
-    I2C_ErrorAbort(I2C0);
   }
   else if ()
 }
 
 
-
-  else if ( flags & I2C_IF_MSTOP )
-  {
-    /* Stop condition has been sent. Transfer is complete. */
-    I2C0->IFC = I2C_IFC_MSTOP;
-    I2C0->IEN &= ~I2C_IEN_MSTOP;
-    transferActive = false;
-        
-    /* Clear AUTOSE if set */
-    if ( I2C0->CTRL & I2C_CTRL_AUTOSE )
-    {
-      I2C0->CTRL &= ~I2C_CTRL_AUTOSE;
-    }
-  }
-  else if ( I2C0->IF & I2C_IF_RXDATAV )
-  {
-    /* Read out the last two bytes here. Reading RXDATA
-     * clears the interrupt flag. */
-    *rxPointer++ = I2C0->RXDATA;
-    /* Try do dequeue element, if it fails, stop transmission */
-        xQueueReceiveFromISR(device[handle].tx.queue, &device[handle].tx.frame, task_woken);
-    
-    if ( --bytesLeft == 0 )
-    {
-      /* Transfer is complete, NACK last byte and send STOP condition */
-      I2C0->CMD = I2C_CMD_NACK;
-      I2C0->IEN &= ~I2C_IEN_RXDATAV;
-      I2C0->CMD = I2C_CMD_STOP;
-    }
-    else
-    {
-      /* ACK the second last byte */
-      I2C0->CMD = I2C_CMD_ACK;
-    }
-  }
-}
 
