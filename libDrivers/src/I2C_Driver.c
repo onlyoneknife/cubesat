@@ -291,6 +291,34 @@ int I2C_send(int handle, i2c_frame_t * frame, uint16_t timeout)
 }
 
 
+/**
+ * receive I2C frame from selected device
+ * Context: Task only
+ *
+ * @param handle Handle to the device
+ * @param frame Pointer to I2C frame (free this when done!!!)
+ * @param timeout Number of ticks to wait for a frame
+ * @return Returns error code: E_NO_ERR if a frame is received, or E_TIMEOUT if timed out, E_NO_DEVICE if handle is not a valid device
+ */
+int i2c_receive(int handle, i2c_frame_t ** frame, uint16_t timeout)
+{
+
+  if (handle >= efm32_device_count)
+    return E_NO_DEVICE;
+
+  if (!device[handle].is_initialised)
+    return E_NO_DEVICE;
+
+  if (device[handle].rx.queue == NULL)
+    return E_NO_DEVICE;
+
+  if (xQueueReceive(device[handle].rx.queue, frame, timeout) == pdFALSE)
+    return E_TIMEOUT;
+
+  return E_NO_ERR;
+}
+
+
 /*****************************************************************************
  * @brief   Send I2C address and checks for Ack
  *****************************************************************************/
@@ -450,6 +478,65 @@ static void I2C_try_tx_from_isr(I2C_TypeDef *i2c, int handle,
   flags |= I2C_CMD_ACK;
 
   i2c->CMD = flags;
+}
+
+
+/**
+ * Context: Task only
+ */
+int I2C_master_transaction(int handle, uint8_t addr, void * txbuf, size_t txlen, void * rxbuf, size_t rxlen, uint16_t timeout) {
+
+  if (handle >= efm32_device_count)
+    return E_NO_DEVICE;
+
+  if (!device[handle].is_initialised)
+    return E_NO_DEVICE;
+
+  if ((txlen > I2C_MTU - 10) || (rxlen > I2C_MTU - 10))
+    return E_INVALID_BUF_SIZE;
+
+  i2c_frame_t * frame = csp_buffer_get(I2C_MTU);
+  if (frame == NULL)
+    return E_NO_BUFFER;
+
+  /* Take the I2C lock */
+  xSemaphoreTake(i2c_lock, 10 * configTICK_RATE_HZ);
+
+  /* Temporarily disable the RX callback, because we wish the received message to go into the I2C queue instead */
+  void * tmp_callback = device[handle].callback;
+  device[handle].callback = NULL;
+
+  frame->dest = addr;
+  memcpy(&frame->data[0], txbuf, txlen);
+  frame->len = txlen;
+  frame->len_rx = rxlen;
+
+  if (I2C_send(handle, frame, 0) != E_NO_ERR) {
+    csp_buffer_free(frame);
+    device[handle].callback = tmp_callback;
+    xSemaphoreGive(i2c_lock);
+    return E_TIMEOUT;
+  }
+
+  if (rxlen == 0) {
+    device[handle].callback = tmp_callback;
+    xSemaphoreGive(i2c_lock);
+    return E_NO_ERR;
+  }
+
+  if (I2C_receive(handle, &frame, timeout) != E_NO_ERR) {
+    device[handle].callback = tmp_callback;
+    xSemaphoreGive(i2c_lock);
+    return E_TIMEOUT;
+  }
+
+  memcpy(rxbuf, &frame->data[0], rxlen);
+
+  csp_buffer_free(frame);
+  device[handle].callback = tmp_callback;
+  xSemaphoreGive(i2c_lock);
+  return E_NO_ERR;
+
 }
 
 
@@ -845,7 +932,8 @@ void I2C0_IRQHandler(void)
       {
 
         /* Receive data, if any */
-        pca9665_read_data_to_buffer(handle);
+        I2C_dmaRead(I2C0, handle, 
+          &device[handle].rx.frame->data[device[handle].rx.next_byte], len)
 
         /* Limit incoming bytes */
         pca9665_write_reg(handle, I2CCOUNT, (device[handle].rx.next_byte + PCA9665_MAX_BUF > I2C_MTU) ? (I2C_MTU - device[handle].rx.next_byte) | 0x80 : PCA9665_MAX_BUF);
@@ -871,7 +959,8 @@ void I2C0_IRQHandler(void)
       /* Continue if successful */
       {
         /* Receive data, if any */
-        pca9665_read_data_to_buffer(handle);
+        I2C_dmaRead(I2C0, handle, 
+          &device[handle].rx.frame->data[device[handle].rx.next_byte], len)
 
         /* Queue up frame
          * Callback takes priority over RX queue
@@ -885,8 +974,8 @@ void I2C0_IRQHandler(void)
         }
         else if (device[handle].rx.queue != NULL)
         {
-          if (xQueueSendToBackFromISR(device[handle].rx.queue, &device[handle].rx.frame, task_woken)  == pdFALSE) {
-            driver_debug(DEBUG_I2C, "I2C RX queue full\n\r");
+          if (xQueueSendToBackFromISR(device[handle].rx.queue, &device[handle].rx.frame, task_woken)  == pdFALSE)
+          {
             csp_buffer_free_isr(device[handle].rx.frame);
           }
         }
@@ -914,49 +1003,6 @@ void I2C0_IRQHandler(void)
     I2C_try_tx_from_isr(I2C0, handle, task_woken);
     I2C_ErrorAbort(I2C0);
   }
-}
-
-
-  /* ACK received while not in transmitter mode. */
-  else 
-  {
-    /* Safety first */
-    if (device[handle].rx.frame == NULL)
-    {
-      I2C_try_tx_from_isr(I2C0, handle, task_woken);
-      device[handle].mode = DEVICE_MODE_ERR;
-      I2C_ErrorAbort(I2C0);
-    }
-    else
-    {
-      I2C_read_data_to_buffer(handle);
-      int remaining = device[handle].rx.frame->len - device[handle].rx.next_byte;
-
-      /* If no more to receive */
-      if (remaining == 0) {
-        if (xQueueSendToBackFromISR(device[handle].rx.queue,
-          &device[handle].rx.frame, task_woken)  == pdFALSE)
-        {
-          csp_buffer_free_isr(device[handle].rx.frame);
-        }
-        device[handle].rx.frame = NULL;
-        I2C_try_tx_from_isr(handle, task_woken);
-      }
-
-      I2C0->CMD = I2C_CMD_ACK;
-    }
-  }
-
-
-
-
-  }
-  /* NACK is received while attempting to perform a write in master mode */
-  else if ( flags & (I2C_IF_NACK) && state & (I2C_STATE_TRANSMITTER) )
-  {
-
-  }
-  else if ()
 }
 
 
